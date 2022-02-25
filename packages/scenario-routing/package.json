@@ -1,0 +1,10 @@
+{
+  "name": "@packages/common-entities",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "main": "./dist/index.js",
+  "dependencies": {
+    "typeorm": "^0.2.43"
+  }
+}
