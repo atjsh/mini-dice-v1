@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "incremental": true,
+    "paths": {
+      "@apps/server": ["packages/server/src"],
+      "@apps/server/*": ["packages/server/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "root",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ATJSH/mini-dice-v1",
+  "author": "ATJSH <letaem77@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
