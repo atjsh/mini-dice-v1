@@ -1,5 +1,6 @@
+import { CompleteSignupUserDto, UserIdType } from '@packages/shared-types';
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity, UserIdType } from './entity/user.entity';
+import { UserEntity } from './entity/user.entity';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -10,14 +11,15 @@ export class UserRepository extends Repository<UserEntity> {
    * @param createUser
    * @returns
    */
-  async signupNewUser(
-    createUser: Pick<UserEntity, 'username' | 'hashedEmail'>,
+  async signUpNewUser(
+    createUser: Pick<UserEntity, 'username' | 'authProvider'> &
+      Partial<Pick<UserEntity, 'email'>>,
   ) {
     return await this.save(
       this.create({
         cash: BigInt(1000),
         username: createUser.username,
-        hashedEmail: createUser.hashedEmail,
+        email: createUser.email,
         submitAllowedMapStop: null,
         isUserDiceTossForbidden: false,
         canTossDiceAfter: new Date(),
@@ -50,15 +52,12 @@ export class UserRepository extends Repository<UserEntity> {
 
   /**
    * 유저를 회원가입 완료처리한다.
-   * @param userId
-   * @param countryCode3
-   * @param username
    */
-  async completeSignup(
-    userId: UserIdType,
-    countryCode3: string,
-    username: string,
-  ) {
+  async completeSignup({
+    id: userId,
+    countryCode3,
+    username,
+  }: CompleteSignupUserDto) {
     return await this.partialUpdateUser(userId, {
       countryCode3,
       username,

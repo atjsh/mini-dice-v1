@@ -4,18 +4,24 @@ import {
   getSequentialPk,
 } from '@apps/server/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import {
+  Exclude,
+  Transform,
+  TransformationType,
+  TransformInstanceToPlain,
+  TransformPlainToInstance,
+} from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import * as _ from 'lodash';
 import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
+import { UserVo } from '@packages/shared-types';
 
 const UserEntityTableName = 'tb_user';
 
 export type UserCashStrType = string;
-export type UserIdType = UserEntity['id'];
 
 @Entity({ name: UserEntityTableName })
-export class UserEntity extends EntityWithTimestamps {
+export class UserEntity extends EntityWithTimestamps implements UserVo {
   /**
    * PK값
    */
@@ -31,7 +37,20 @@ export class UserEntity extends EntityWithTimestamps {
   }
 
   /**
-   * 해시 처리된 유저 이메일값
+   * 유저 이메일값
+   *
+   * @type {string}
+   * @memberof UserEntity
+   */
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    length: 100,
+  })
+  email: string;
+
+  /**
+   * 유저 인증 크리덴셜 제공자 ('google', 'apple', 'hcaptcha')
    *
    * @type {string}
    * @memberof UserEntity
@@ -41,7 +60,7 @@ export class UserEntity extends EntityWithTimestamps {
     nullable: false,
     length: 100,
   })
-  hashedEmail: string;
+  authProvider: string;
 
   /**
    * 유저 닉네임
@@ -62,15 +81,10 @@ export class UserEntity extends EntityWithTimestamps {
    * @type {bigint}
    * @memberof UserEntity
    */
-  @Exclude()
-  @Column('bigint', {
-    transformer: {
-      to: (entityValue: bigint) => entityValue,
-      from: (databaseValue?: string) =>
-        _.isNil(databaseValue) ? undefined : BigInt(databaseValue),
-    },
-    nullable: false,
-  })
+  @Transform(({ type, value }) =>
+    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
+  )
+  @Column('bigint')
   cash: bigint;
 
   /**
@@ -142,15 +156,6 @@ export class UserEntity extends EntityWithTimestamps {
 }
 
 /**
- * 유저의 잔고량을 문자열로 변환함
- * @param user
- * @returns
- */
-export function getUserCash(user: UserEntity): UserCashStrType {
-  return user.cash.toString();
-}
-
-/**
  * 유저 데이터를 JSON으로 변환시킨 데이터 타입.
  * 유저의 잔고량을 문자열로 변환시킨 상태로 데이터가 변환된다.
  */
@@ -159,13 +164,13 @@ export type UserEntityJson = Omit<UserEntity, 'cash' | 'setPk'> & {
 };
 
 /**
- * 유저 데이터를 JSON 형태로 변환시킨다.
+ * 유저 데이터를 JSON 형태로 변환시킨다. 이 때, 유저의 잔고량을 string으로 변환한다.
  * @param user
  * @returns
  */
 export function serializeUserToJson(user: UserEntity): UserEntityJson {
   return {
     ...user,
-    cash: getUserCash(user),
+    cash: user.cash.toString(),
   };
 }

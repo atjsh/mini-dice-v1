@@ -8,7 +8,7 @@ import { AppModule } from './app.module';
 import helmet from 'fastify-helmet';
 import { ConfigService } from '@nestjs/config';
 
-const API_NAME = 'TDOL Server';
+const API_NAME = 'mini-dice Server';
 const API_CURRENT_VERSION = '3.0.0';
 const API_DESCRIPTION = `
 <br> - <a href="/docs/swagger-ui">swagger-ui</a>

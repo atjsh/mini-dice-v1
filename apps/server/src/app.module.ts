@@ -32,6 +32,10 @@ import { UserModule } from './user/user.module';
         REDIS_HOST: Joi.string().required(),
 
         HCAPTCHA_SECRET_KEY: Joi.string().required(),
+
+        GOOGLE_OAUTH_CLIENT_ID: Joi.string().required(),
+        GOOGLE_OAUTH_CLILENT_SECRET: Joi.string().required(),
+        GOOGLE_OAUTH_REDIRECT_URI: Joi.string().required(),
       }),
     }),
 

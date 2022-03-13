@@ -1,11 +1,16 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  ForbiddenException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { v4 as uuid4 } from 'uuid';
 import { REFRESH_TOKEN_EXPIRES_IN } from '../constants';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { RefreshTokenEntity } from './entity/refresh-token.entity';
 import { Response } from 'express';
-import { UserIdType } from '@apps/server/user/entity/user.entity';
+import { UserIdType } from '@packages/shared-types';
 
 @Injectable()
 export class RefreshTokenService {
@@ -19,7 +24,7 @@ export class RefreshTokenService {
     createRefreshTokenDto: CreateRefreshTokenDto,
   ): Promise<RefreshTokenEntity> {
     const tokenValue = uuid4();
-    const result = await this.cacheManager.set(
+    await this.cacheManager.set(
       this.getCacheKey(tokenValue),
       createRefreshTokenDto.userId,
       {
@@ -34,7 +39,7 @@ export class RefreshTokenService {
   }
 
   // Express Response를 사용하여, 유저 cookie에 refreshToken을 설정함
-  async setRefreshTokenOnCookie(
+  public setRefreshTokenOnCookie(
     expressResponse: Response,
     refreshTokenEntity: RefreshTokenEntity,
   ) {
@@ -57,7 +62,7 @@ export class RefreshTokenService {
 
   async findRefreshToken(
     value: RefreshTokenEntity['value'],
-  ): Promise<RefreshTokenEntity | undefined> {
+  ): Promise<RefreshTokenEntity> {
     const refreshTokenUserId = await this.cacheManager.get<UserIdType>(
       this.getCacheKey(value),
     );
@@ -67,6 +72,7 @@ export class RefreshTokenService {
         userId: refreshTokenUserId,
       };
     }
-    return undefined;
+
+    throw new ForbiddenException(`Refresh Token Not Valid: ${value}`);
   }
 }

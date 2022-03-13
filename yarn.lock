@@ -1337,10 +1337,20 @@
     webpack "5.66.0"
     webpack-node-externals "3.0.0"
 
-"@nestjs/common@^8.0.0":
+"@nestjs/common@^8.0.0", "@nestjs/common@^8.3.1":
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-8.3.1.tgz#4d5fcc879865acf012733cc5c0f804a46de89fe3"
   integrity sha512-3kKeaRXn1c2jf0ihVu6bvQ9Ok+7CkqkU0Ggi5NjWXA2oVRs3vPzr2d5DEvqUqY9JZpT5qGvzRDyKzaPlekxD2A==
+  dependencies:
+    axios "0.26.0"
+    iterare "1.2.1"
+    tslib "2.3.1"
+    uuid "8.3.2"
+
+"@nestjs/common@^8.4.0":
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-8.4.0.tgz#b8649836cfe74bc0700eb8a1c2a4d4d7997c66f8"
+  integrity sha512-uvm1Ccw0qRka/Gd5Mo5A2MQo9ItwewPes1fE2SBboennPojoiJ4A3iKirtlPuxsL+HQ4oD5eO02OsDyLYL2z6w==
   dependencies:
     axios "0.26.0"
     iterare "1.2.1"
@@ -1750,6 +1760,11 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/cache-manager@^3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@types/cache-manager/-/cache-manager-3.4.3.tgz#eba99bf795b997ad0c309658101398c34d7faecb"
+  integrity sha512-71aBXoFYXZW4TnDHHH8gExw2lS28BZaWeKefgsiJI7QYZeJfUEbMKw6CQtzGjlYQcGIWwB76hcCrkVA3YHSvsw==
+
 "@types/connect@*":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
@@ -1858,6 +1873,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/lodash@^4.14.179":
+  version "4.14.179"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.179.tgz#490ec3288088c91295780237d2497a3aa9dfb5c5"
+  integrity sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w==
+
 "@types/mime@^1":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
@@ -1935,6 +1955,11 @@
   integrity sha512-uci4Esokrw9qGb9bvhhSVEjd6rkny/dk5PK/Qz4yxKiyppEI+dOPlNrZBahE3i+PoKFYyDxChVXZ/ysS/nrm1Q==
   dependencies:
     "@types/superagent" "*"
+
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
 
 "@types/yargs-parser@*":
   version "20.2.1"
@@ -8502,7 +8527,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeorm@^0.2.44:
+typeorm@^0.2.43, typeorm@^0.2.44:
   version "0.2.44"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.44.tgz#4cc07eb1eb7a0e7f3ec9e65ded9eb3c3aedbb3e1"
   integrity sha512-yFyb9Ts73vGaS/O06TvLpzvT5U/ngO31GeciNc0eoH7P1QcG8kVZdOy9FHJqkTeDmIljMRgWjbYUoMw53ZY7Xw==
