@@ -4,17 +4,10 @@ import {
   getSequentialPk,
 } from '@apps/server/common';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Exclude,
-  Transform,
-  TransformationType,
-  TransformInstanceToPlain,
-  TransformPlainToInstance,
-} from 'class-transformer';
-import { IsIn, MaxLength, MinLength } from 'class-validator';
-import * as _ from 'lodash';
-import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
 import { UserVo } from '@packages/shared-types';
+import { Transform, TransformationType } from 'class-transformer';
+import { IsIn, MaxLength, MinLength } from 'class-validator';
+import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
 
 const UserEntityTableName = 'tb_user';
 
@@ -153,6 +146,11 @@ export class UserEntity extends EntityWithTimestamps implements UserVo {
     default: false,
   })
   signupCompleted: boolean;
+
+  @Column({
+    default: false,
+  })
+  isTerminated: boolean;
 }
 
 /**

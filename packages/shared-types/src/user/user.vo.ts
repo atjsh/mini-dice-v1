@@ -75,4 +75,12 @@ export class UserVo {
    * @memberof UserEntity
    */
   signupCompleted: boolean;
+
+  /**
+   * 탈퇴 / 정식 계정 연동 등으로 인해 비활성화된 유저인지 여부
+   *
+   * @type {boolean}
+   * @memberof UserVo
+   */
+  isTerminated: boolean;
 }
