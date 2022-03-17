@@ -3,7 +3,7 @@ import { getRandomString } from '@apps/server/common/random/random-string';
 import { Injectable } from '@nestjs/common';
 import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 import { GoogleApiService } from './google-api.service';
-import { Response } from 'Express';
+import { Response } from 'express';
 import { UserRepository } from '@apps/server/user/user.repository';
 import { UserEntity } from '@apps/server/user/entity/user.entity';
 
