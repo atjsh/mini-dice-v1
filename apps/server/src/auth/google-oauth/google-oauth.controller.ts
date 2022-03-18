@@ -1,8 +1,8 @@
 import { OAUTH_APIS } from '@apps/server/common';
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { GoogleOAuthService } from './google-oauth.service';
 
 @ApiTags(OAUTH_APIS)
@@ -15,25 +15,31 @@ export class GoogleOAuthController {
 
   @Get('')
   async authUserWithGoogleOauthCode(
-    @Res({ passthrough: true }) response: Response,
+    @Res({ passthrough: true }) response: FastifyReply,
     @Query('code') authCode: string,
+    @Req() request: FastifyRequest,
   ) {
     try {
       const googleOAuthResult =
         await this.googleOAuthService.authUserWithGoogleOauthCode(
           response,
           authCode,
+          request.cookies['refreshToken'],
         );
 
-      return response.redirect(
-        `${this.configService.get('FRONT_URL')}/login-success?isNewUser=${
-          googleOAuthResult.isNewUser
-        }`,
-      );
+      return response
+        .status(302)
+        .redirect(
+          `${this.configService.get('FRONT_URL')}/login-success?isNewUser=${
+            googleOAuthResult.isNewUser
+          }`,
+        );
     } catch (error) {
       console.log(error);
 
-      return response.redirect(`${this.configService.get('FRONT_URL')}/login`);
+      return response
+        .status(302)
+        .redirect(`${this.configService.get('FRONT_URL')}/login`);
     }
   }
 }

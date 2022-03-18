@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Response } from 'express';
+import { FastifyReply } from 'fastify';
 import { RefreshTokenService } from '../auth/local-jwt/refresh-token/refresh-token.service';
 import { HCaptchaService } from '../h-captcha/h-captcha.service';
 import { UserRepository } from '../user/user.repository';
@@ -15,7 +15,7 @@ export class TempSignupService {
   async createUser(
     hCaptchaResponse: string,
     username: string,
-    expressResponse: Response,
+    expressResponse: FastifyReply,
   ) {
     const response = await this.hCaptchaService.verify(hCaptchaResponse);
 

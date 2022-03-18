@@ -9,7 +9,7 @@ import { v4 as uuid4 } from 'uuid';
 import { REFRESH_TOKEN_EXPIRES_IN } from '../constants';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { RefreshTokenEntity } from './entity/refresh-token.entity';
-import { Response } from 'express';
+import { FastifyReply } from 'fastify';
 import { UserIdType } from '@packages/shared-types';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class RefreshTokenService {
 
   // Express Response를 사용하여, 유저 cookie에 refreshToken을 설정함
   public setRefreshTokenOnCookie(
-    expressResponse: Response,
+    expressResponse: FastifyReply,
     refreshTokenEntity: RefreshTokenEntity,
   ) {
     expressResponse.cookie('refreshToken', refreshTokenEntity.value, {
@@ -48,12 +48,13 @@ export class RefreshTokenService {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      path: '/',
       // domain: 'localhost',
     });
   }
 
   async deleteRefreshToken(
-    expressResponse: Response,
+    expressResponse: FastifyReply,
     refreshTokenValue: string,
   ) {
     expressResponse.clearCookie('refreshToken');

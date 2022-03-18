@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { FastifyReply } from 'fastify';
 import { TempSignupService } from './temp-signup.service';
 
 export class TemporarySignUpDto {
@@ -14,7 +14,7 @@ export class TempSignupController {
   @Post('')
   async temporarySignUpUser(
     @Body() dto: TemporarySignUpDto,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) res: FastifyReply,
   ) {
     return await this.tempSignupService.createUser(
       dto.hCaptchaSuccessToken,

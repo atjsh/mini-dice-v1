@@ -20,6 +20,8 @@ export class GoogleApiService {
       ),
     );
 
+    console.log(userInfo);
+
     return plainToClass(GoogleUser, userInfo);
   }
 

@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN_APIS } from '@apps/server/common';
 import { Controller, ForbiddenException, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 import { AccessTokenService } from './access-token.service';
 
 @ApiTags(ACCESS_TOKEN_APIS)
@@ -10,7 +10,7 @@ export class AccessTokenController {
   constructor(private readonly accessTokenService: AccessTokenService) {}
 
   @Get()
-  getAccessToken(@Req() request: Request) {
+  getAccessToken(@Req() request: FastifyRequest) {
     if (request.cookies['refreshToken']) {
       return this.accessTokenService.createNewAccessToken(
         request.cookies['refreshToken'],

@@ -20,6 +20,7 @@ export class UserRepository extends Repository<UserEntity> {
         cash: BigInt(1000),
         username: createUser.username,
         email: createUser.email,
+        authProvider: createUser.authProvider,
         submitAllowedMapStop: null,
         isUserDiceTossForbidden: false,
         canTossDiceAfter: new Date(),
@@ -88,6 +89,19 @@ export class UserRepository extends Repository<UserEntity> {
     return await this.partialUpdateUser(userId, {
       isUserDiceTossForbidden: false,
       canTossDiceAfter: canTossDiceAt,
+      submitAllowedMapStop: null,
+    });
+  }
+
+  /**
+   * 유저를 게임에서 제외 처리한다.
+   * @param userId
+   * @returns
+   */
+  async terminateUser(userId: UserIdType) {
+    return await this.partialUpdateUser(userId, {
+      isTerminated: true,
+      isUserDiceTossForbidden: true,
       submitAllowedMapStop: null,
     });
   }

@@ -1,4 +1,4 @@
-import { UserIdType } from '@apps/server/user/entity/user.entity';
+import { UserIdType } from '@packages/shared-types';
 
 export class UserJwtDto {
   userId: UserIdType;

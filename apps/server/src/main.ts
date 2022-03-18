@@ -1,19 +1,12 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
 import helmet from 'fastify-helmet';
-import { ConfigService } from '@nestjs/config';
-
-const API_NAME = 'mini-dice Server';
-const API_CURRENT_VERSION = '3.0.0';
-const API_DESCRIPTION = `
-<br> - <a href="/docs/swagger-ui">swagger-ui</a>
-`;
-const SWAGGER_URL = 'docs/swagger-ui';
+import { AppModule } from './app.module';
+import fastifyCookie from 'fastify-cookie';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -34,6 +27,10 @@ async function bootstrap() {
     },
   });
 
+  app.register(fastifyCookie, {
+    secret: 'my-secret', // for cookies signature
+  });
+
   app.enableCors({
     credentials: true,
     origin: [
@@ -41,15 +38,6 @@ async function bootstrap() {
       `${configService.get('FRONT_URL')}`,
     ],
   });
-
-  const options = new DocumentBuilder()
-    .setTitle(API_NAME)
-    .setDescription(API_DESCRIPTION)
-    .setVersion(API_CURRENT_VERSION)
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(SWAGGER_URL, app, document);
 
   await app.listen(+configService.get('APP_PORT'));
 }

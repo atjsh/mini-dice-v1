@@ -18,6 +18,14 @@ export class UserVo {
   email: string;
 
   /**
+   * 유저 인증 크리덴셜 제공자 ('google', 'apple', 'hcaptcha')
+   *
+   * @type {string}
+   * @memberof UserEntity
+   */
+  authProvider: string;
+
+  /**
    * 유저 닉네임
    *
    * @type {string}
