@@ -13,8 +13,6 @@ export function getSequentialPk(tableName: string) {
 
   const timestamp = +new Date();
 
-  console.log(timestamp);
-
   const fillingLetterCount =
     20 - shortTableName.length - timestamp.toString().length;
 

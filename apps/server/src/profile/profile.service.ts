@@ -10,7 +10,6 @@ export class ProfileService {
   async getUser(userJwt: UserJwtDto) {
     try {
       const rawUser = await this.usersService.findOneOrFail(userJwt.userId);
-      console.log(rawUser);
 
       return serializeUserToJson(rawUser);
     } catch (error) {

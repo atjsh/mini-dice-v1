@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
-import { AppTestControlelr } from './app-test.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { ProfileModule } from './profile/profile.module';
@@ -66,6 +65,5 @@ import { UserModule } from './user/user.module';
     UserModule,
     ProfileModule,
   ],
-  controllers: [AppTestControlelr],
 })
 export class AppModule {}

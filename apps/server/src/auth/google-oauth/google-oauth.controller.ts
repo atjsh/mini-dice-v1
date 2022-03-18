@@ -35,7 +35,7 @@ export class GoogleOAuthController {
           }`,
         );
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return response
         .status(302)
