@@ -1,6 +1,6 @@
-import { UserRepository } from '@apps/server/user/user.repository';
 import { Injectable } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
+import { UserRepository } from '../../user/user.repository';
 import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 import { OauthAbstractService } from '../oauth-common/oauth.abstract.service';
 import { GoogleApiService } from './google-api.service';

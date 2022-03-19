@@ -1,12 +1,13 @@
-import {
-  EntityWithTimestamps,
-  getSequentialPk,
-} from '@apps/server/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { countryCode3List, CountryCode3Type, UserVo } from '@packages/shared-types';
+import {
+  countryCode3List,
+  CountryCode3Type,
+  UserVo,
+} from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
+import { EntityWithTimestamps, getSequentialPk } from '../../common';
 
 const UserEntityTableName = 'tb_user';
 

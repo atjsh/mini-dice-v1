@@ -1,5 +1,3 @@
-import { UserJwtDto } from '@apps/server/auth/local-jwt/access-token/dto/user-jwt.dto';
-import { JwtAuthGuard } from '@apps/server/auth/local-jwt/jwt.guard';
 import {
   applyDecorators,
   createParamDecorator,
@@ -7,6 +5,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserJwtDto } from '../../auth/local-jwt/access-token/dto/user-jwt.dto';
+import { JwtAuthGuard } from '../../auth/local-jwt/jwt.guard';
 
 export const UserJwt = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): UserJwtDto => {

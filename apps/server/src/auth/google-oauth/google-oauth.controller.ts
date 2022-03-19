@@ -1,8 +1,8 @@
-import { OAUTH_APIS } from '@apps/server/common';
 import { Controller, Get, Query, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { OAUTH_APIS } from '../../common';
 import { GoogleOAuthService } from './google-oauth.service';
 
 @ApiTags(OAUTH_APIS)

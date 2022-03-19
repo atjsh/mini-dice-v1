@@ -1,9 +1,9 @@
-import { getRandomInteger } from '@apps/server/common/random/random-number';
-import { getRandomString } from '@apps/server/common/random/random-string';
-import { UserEntity } from '@apps/server/user/entity/user.entity';
-import { UserRepository } from '@apps/server/user/user.repository';
 import { ForbiddenException } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
+import { getRandomInteger } from '../../common/random/random-number';
+import { getRandomString } from '../../common/random/random-string';
+import { UserEntity } from '../../user/entity/user.entity';
+import { UserRepository } from '../../user/user.repository';
 import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 
 export abstract class OauthAbstractService {
