@@ -1,10 +1,9 @@
 import {
-  countryCode3List,
   EntityWithTimestamps,
   getSequentialPk,
 } from '@apps/server/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserVo } from '@packages/shared-types';
+import { countryCode3List, CountryCode3Type, UserVo } from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
@@ -133,7 +132,7 @@ export class UserEntity extends EntityWithTimestamps implements UserVo {
     length: 10,
     nullable: false,
   })
-  countryCode3: string;
+  countryCode3: CountryCode3Type;
 
   /**
    * 유저가 회원가입을 완료했는지 여부

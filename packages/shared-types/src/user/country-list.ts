@@ -5,7 +5,7 @@ export type CountryMetadataType = {
   number: string;
 };
 
-export const countryMetadataIsoList: CountryMetadataType[] = [
+export const countryMetadataIsoList = [
   { code2: 'AF', code3: 'AFG', name: 'Afghanistan', number: '004' },
   { code2: 'AL', code3: 'ALB', name: 'Albania', number: '008' },
   { code2: 'DZ', code3: 'DZA', name: 'Algeria', number: '012' },
@@ -409,7 +409,9 @@ export const countryMetadataIsoList: CountryMetadataType[] = [
   { code2: 'ZM', code3: 'ZMB', name: 'Zambia', number: '894' },
   { code2: 'ZW', code3: 'ZWE', name: 'Zimbabwe', number: '716' },
   { code2: 'AX', code3: 'ALA', name: 'Åland Islands', number: '248' },
-];
+] as const;
+
+export type CountryCode3Type = typeof countryMetadataIsoList[number]['code3'];
 
 export const countryCode3List = countryMetadataIsoList.map(
   ({ code3 }) => code3,

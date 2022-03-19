@@ -1,7 +1,8 @@
-import { authedAxios, ExposedSkillLogType, UserProfile } from "..";
+import { UserVo } from "@packages/shared-types";
+import { authedAxios, ExposedSkillLogType } from "..";
 
 export class DiceTossResult {
-  user: UserProfile;
+  user: UserVo;
   diceResult: number[];
   skillLog: ExposedSkillLogType;
 }

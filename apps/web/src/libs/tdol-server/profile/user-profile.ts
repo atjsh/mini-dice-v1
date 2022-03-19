@@ -1,32 +1,17 @@
-import { authedAxios } from "..";
+import { authedAxios } from '..';
+import { UserVo } from '@packages/shared-types';
 
-export enum SupportedCountryEnum {
-  SOUTH_KOREA = "skr",
-  UNITED_STATES = "us"
-}
-
-export class UserProfile {
-  email: string;
-  username: string;
-  cash: string;
-  allowedSkillRoute: null | object;
-  isUserDiceTossForbidden: boolean;
-  callCallSkillAfter: null | Date;
-  createdAt: Date;
-  country: SupportedCountryEnum;
-}
-
-export async function getUserProfile(): Promise<UserProfile> {
-  const response = await authedAxios.get<UserProfile>(`/profile/me`);
+export async function getUserProfile(): Promise<UserVo> {
+  const response = await authedAxios.get<UserVo>(`/profile/me`);
   return response.data;
 }
 
 export async function updateUserProfile(
-  partialUser: Partial<UserProfile>
-): Promise<UserProfile> {
-  const response = await authedAxios.patch<Partial<UserProfile>, UserProfile>(
+  partialUser: Partial<UserVo>,
+): Promise<UserVo> {
+  const response = await authedAxios.patch<Partial<UserVo>, UserVo>(
     `/profile/me`,
-    partialUser
+    partialUser,
   );
   return response;
 }

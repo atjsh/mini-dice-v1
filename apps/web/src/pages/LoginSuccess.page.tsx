@@ -1,21 +1,24 @@
-import { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
 import {
-  SupportedCountryEnum,
-  updateUserProfile,
-  useQueryString
-} from "../libs";
+  CountryCode3Type,
+  countryMetadataIsoList,
+  CountryMetadataType,
+} from '@packages/shared-types';
+import { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { updateUserProfile, useQueryString } from '../libs';
 import {
   validateUsername,
-  ValidationError
-} from "../libs/tdol-server/profile/validations";
-import { IndexPageURL } from "./routes";
+  ValidationError,
+} from '../libs/tdol-server/profile/validations';
+import { IndexPageURL } from './routes';
 
 function UsernameUpdateForm() {
-  const [username, setUsername] = useState("");
-  const [country, setCountry] = useState(SupportedCountryEnum.UNITED_STATES);
+  const [username, setUsername] = useState('');
+  const [country, setCountry] = useState(
+    countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
+  );
   const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -28,12 +31,12 @@ function UsernameUpdateForm() {
 
     if (usernameValidationResult == ValidationError.TOOSHORT) {
       setError(
-        `${username}은 너무 짧습니다. 2자~20자 길이의 닉네임을 정하세요.`
+        `${username}은 너무 짧습니다. 2자~20자 길이의 닉네임을 정하세요.`,
       );
     } else if (usernameValidationResult == ValidationError.TOOLONG) {
       setError(`${username}은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`);
     } else {
-      await updateUserProfile({ username, country });
+      await updateUserProfile({ username, countryCode3: country });
       setSuccess(true);
     }
 
@@ -65,27 +68,26 @@ function UsernameUpdateForm() {
           <select
             name="country"
             value={country}
-            onChange={(e) =>
-              setCountry(e.target.value.trim() as SupportedCountryEnum)
-            }
+            onChange={(e) => setCountry(e.target.value as CountryCode3Type)}
             className="border border-gray-500 p-2 w-full rounded-lg"
           >
-            <option value={SupportedCountryEnum.SOUTH_KOREA}>대한민국</option>
-            <option value={SupportedCountryEnum.UNITED_STATES}>
-              United States
-            </option>
+            {countryMetadataIsoList.map((country: CountryMetadataType) => (
+              <option key={country.code3} value={country.code3}>
+                {country.name}
+              </option>
+            ))}
           </select>
         </div>
 
-        {error !== "" ? <div>{error}</div> : <></>}
+        {error !== '' ? <div>{error}</div> : <></>}
         <button
           type="submit"
           disabled={disabled}
           className={
-            "w-full p-4 rounded-2xl transition duration-150 text-base font-semibold select-none mt-5 " +
+            'w-full p-4 rounded-2xl transition duration-150 text-base font-semibold select-none mt-5 ' +
             (disabled
-              ? "text-white bg-gray-600 cursor-not-allowed"
-              : "text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95")
+              ? 'text-white bg-gray-600 cursor-not-allowed'
+              : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
           }
         >
           정보 설정하기
@@ -96,8 +98,8 @@ function UsernameUpdateForm() {
 }
 
 export function LoginSuccessPage() {
-  const isNewUser = useQueryString().get("isNewUser") === "true";
-  const signinFinished = useQueryString().get("signinFinished") === "true";
+  const isNewUser = useQueryString().get('isNewUser') === 'true';
+  const signinFinished = useQueryString().get('signinFinished') === 'true';
 
   if (isNewUser === false) {
     return <Redirect to={IndexPageURL} />;

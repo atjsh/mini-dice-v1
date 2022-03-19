@@ -1,3 +1,5 @@
+import { CountryCode3Type } from "./country-list";
+
 export type UserIdType = string;
 
 /**
@@ -74,7 +76,7 @@ export class UserVo {
    * @type {string}
    * @memberof UserEntity
    */
-  countryCode3: string;
+  countryCode3: CountryCode3Type;
 
   /**
    * 유저가 회원가입을 완료했는지 여부
