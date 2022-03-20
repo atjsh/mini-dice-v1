@@ -1,4 +1,4 @@
-import { useUser } from "../../libs";
+import { useUser } from '../../libs';
 
 export const ProfileWidget: React.FC = () => {
   const { data: user } = useUser();
@@ -13,7 +13,7 @@ export const ProfileWidget: React.FC = () => {
           <div className="flex flex-col gap-2 justify-center pr-4">
             <div className="font-bold text-lg">@{user.username}</div>
             <div className="font-bold text-xs text-gray-500">
-              {new Date(user.createdAt).toLocaleDateString("ko-kr")} 시작
+              {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
             </div>
           </div>
         </div>

@@ -1,18 +1,18 @@
-import { useMutation, useQuery } from "react-query";
-import { updateUserProfile } from ".";
-import { queryClient } from "../../..";
-import { getUserProfile } from "./user-profile";
+import { useMutation, useQuery } from 'react-query';
+import { updateUserVo } from '.';
+import { queryClient } from '../../..';
+import { getUserVo } from './user-profile';
 
-export const UseUserHookKey = getUserProfile.name;
+export const UseUserHookKey = getUserVo.name;
 
 export const useUser = () =>
-  useQuery(UseUserHookKey, getUserProfile, {
-    retry: false
+  useQuery(UseUserHookKey, getUserVo, {
+    retry: false,
   });
 
 export const useMutateUser = () =>
-  useMutation(updateUserProfile, {
+  useMutation(updateUserVo, {
     onSuccess: (data) => {
       queryClient.setQueryData(UseUserHookKey, data);
-    }
+    },
   });

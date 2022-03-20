@@ -1,13 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "outDir": "dist",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -16,13 +13,13 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "noImplicitAny": false,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
-  },
-  "include": [
-    "src"
-  ]
+    "strictPropertyInitialization": false,
+    "composite": false,
+    "incremental": true,
+    "declaration": false,
+    "declarationMap": false
+  }
 }

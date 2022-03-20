@@ -5,7 +5,7 @@ import {
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { updateUserProfile, useQueryString } from '../libs';
+import { updateUserVo, useQueryString } from '../libs';
 import {
   validateUsername,
   ValidationError,
@@ -36,7 +36,7 @@ function UsernameUpdateForm() {
     } else if (usernameValidationResult == ValidationError.TOOLONG) {
       setError(`${username}은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`);
     } else {
-      await updateUserProfile({ username, countryCode3: country });
+      await updateUserVo({ username, countryCode3: country });
       setSuccess(true);
     }
 

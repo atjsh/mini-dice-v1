@@ -1,17 +1,16 @@
-import { useRef, useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { useDisplayingMessages } from "../components/displaying-messages/use-displaying-messages.hook";
-import { MapStatusBar } from "../components/map/map-status-bar.component";
-import { ProfileWidget } from "../components/profile/profile-widget.component";
-import { WalletWidget } from "../components/wallet/wallet-widget.component";
-import { WordmarkComponent } from "../components/wordmark/wordmark.component";
-import { UserProfile, useSkillLogs, useUser, useDiceToss } from "../libs";
-import { latestSkillLogIdState } from "../libs/tdol-server/skill-logs/atoms/latest-skill-log.atom";
+import { UserVo } from '@packages/shared-types';
+import { useEffect, useRef } from 'react';
+import { useDisplayingMessages } from '../components/displaying-messages/use-displaying-messages.hook';
+import { MapStatusBar } from '../components/map/map-status-bar.component';
+import { ProfileWidget } from '../components/profile/profile-widget.component';
+import { WalletWidget } from '../components/wallet/wallet-widget.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
+import { useDiceToss, useSkillLogs, useUser } from '../libs';
 
 const Messages = ({ messages }: { messages: any[] }) => {
   const messagesEndRef: any = useRef(null);
   const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })!;
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })!;
   };
   useEffect(scrollToBottom, [messages]);
 
@@ -26,11 +25,11 @@ const Messages = ({ messages }: { messages: any[] }) => {
 };
 
 const DiceTossButton: React.FC<{
-  isDiceTossForbidden?: UserProfile["isUserDiceTossForbidden"];
+  isDiceTossForbidden?: UserVo['isUserDiceTossForbidden'];
   onClick: () => any;
 }> = ({ isDiceTossForbidden, onClick }) => {
   const baseButtonClassNames =
-    "text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold";
+    'text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold';
   if (isDiceTossForbidden == false) {
     return (
       <div className="">

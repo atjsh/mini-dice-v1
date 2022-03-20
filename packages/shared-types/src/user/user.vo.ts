@@ -1,4 +1,4 @@
-import { CountryCode3Type } from "./country-list";
+import { CountryCode3Type } from './country-list';
 
 export type UserIdType = string;
 
@@ -93,4 +93,8 @@ export class UserVo {
    * @memberof UserVo
    */
   isTerminated: boolean;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 }

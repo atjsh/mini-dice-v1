@@ -1,5 +1,6 @@
+import { UserVo } from "@packages/shared-types";
 import { AxiosResponse } from "axios";
-import { authedAxios, ExposedSkillLogType, UserProfile } from "..";
+import { authedAxios, ExposedSkillLogType } from "..";
 import { SkillRouteType } from "../../skill-draw-ui-ts/types";
 
 class UserInteractionDto {
@@ -8,7 +9,7 @@ class UserInteractionDto {
 }
 
 export class UserInteractionResult {
-  user: UserProfile;
+  user: UserVo;
   skillLog: ExposedSkillLogType;
 }
 
