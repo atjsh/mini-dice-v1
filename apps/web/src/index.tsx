@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import App from './App';
-import './index.css';
+import './styles/index.css';
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 

@@ -31,10 +31,10 @@
     "web-vitals": "^1.0.1",
     "winbox": "^0.2.0"
   },
+  "source": "src/index.html",
   "scripts": {
-    "build": "webpack",
-    "start": "NODE_ENV=production webpack --progress",
-    "dev": "NODE_ENV=development webpack-dev-server"
+    "start": "NODE_ENV=web parcel",
+    "build": "parcel build src/index.html"
   },
   "eslintConfig": {
     "extends": [
