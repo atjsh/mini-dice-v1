@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { DogdripCommonModule } from './common/dogdrip-common.module';
 
-@Module({})
+@Module({ imports: [DogdripCommonModule] })
 export class D1Module {}

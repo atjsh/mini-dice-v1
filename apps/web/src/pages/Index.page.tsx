@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import { useUser } from "../libs";
-import { LinkArrowImage } from "../components/link-arrow/link-box.component";
-import { ProfilePageURL } from "./routes";
+import { Link } from 'react-router-dom';
+import { useUser } from '../libs';
+import { LinkArrowImage } from '../components/link-arrow/link-box.component';
+import { ProfilePageURL } from './routes';
 
 const linkBoxCommonStyle =
-  "rounded-xl w-96 max-w-full h-60 relative font-bold transition-colors mr-2";
+  'rounded-xl w-96 max-w-full h-60 relative font-bold transition-colors mr-2';
 
 export function IndexPage() {
   const { data, isLoading } = useUser();
@@ -29,7 +29,7 @@ export function IndexPage() {
           </Link>
           <hr className="my-6 border-gray-300" />
           {isLoading ? (
-            ""
+            ''
           ) : (
             <Link to={ProfilePageURL} className="w-min inline-block">
               <div

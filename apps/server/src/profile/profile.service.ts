@@ -5,11 +5,11 @@ import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class ProfileService {
-  constructor(private usersService: UserRepository) {}
+  constructor(private userRepository: UserRepository) {}
 
   async getUser(userJwt: UserJwtDto) {
     try {
-      const rawUser = await this.usersService.findOneOrFail(userJwt.userId);
+      const rawUser = await this.userRepository.findOneOrFail(userJwt.userId);
 
       return serializeUserToJson(rawUser);
     } catch (error) {

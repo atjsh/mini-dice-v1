@@ -80,8 +80,8 @@ export abstract class OauthAbstractService {
         if (anonUser.cash > 20000) {
           await this.userRepository.changeUserCash(
             existingOAuthProviderUser.id,
-            existingOAuthProviderUser.cash,
             anonUser.cash,
+            existingOAuthProviderUser.cash,
           );
         }
 

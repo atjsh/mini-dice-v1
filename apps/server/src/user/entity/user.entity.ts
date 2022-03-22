@@ -6,8 +6,15 @@ import {
 } from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
-import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { EntityWithTimestamps, getSequentialPk } from '../../common';
+import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
 
 const UserEntityTableName = 'tb_user';
 
@@ -21,6 +28,7 @@ export class UserEntity extends EntityWithTimestamps implements UserVo {
   @ApiProperty({ readOnly: true })
   @PrimaryColumn({
     length: 20,
+    name: 'userId',
   })
   id: string;
 
@@ -151,6 +159,10 @@ export class UserEntity extends EntityWithTimestamps implements UserVo {
     default: false,
   })
   isTerminated: boolean;
+
+  @ApiProperty({ readOnly: true })
+  @OneToMany(() => LandEntity, (land) => land.user)
+  lands: LandEntity;
 }
 
 /**

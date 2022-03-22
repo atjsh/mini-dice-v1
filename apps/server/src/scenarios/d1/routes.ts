@@ -1,8 +1,41 @@
 import { getScenarioRoute } from '@packages/scenario-routing';
+import { IndexSkill } from '../../skill-group-lib/constants';
 import { SCENARIO_NAMES } from '../scenarios.constants';
 
-export const D1_ROUTES = getScenarioRoute(SCENARIO_NAMES.D1, {});
-
-function getRandomNumber(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+export const DogdripScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
+  defaultStart: [IndexSkill],
+  mapStarter: [IndexSkill],
+  carAccident: [IndexSkill],
+  rps: [IndexSkill, 'submit'],
+  nightFood: [IndexSkill],
+  land1: [IndexSkill, 'submit'],
+  gameDev: [IndexSkill],
+  noBus: [IndexSkill],
+  moneyCollectionHungeum: [IndexSkill],
+  pickedItem: [IndexSkill],
+  fire: [IndexSkill],
+  stock: [IndexSkill],
+  minigameEasy: [IndexSkill],
+  lottery: [IndexSkill],
+  land2: [IndexSkill],
+  thief: [IndexSkill],
+  land3: [IndexSkill],
+  horseGameble: [IndexSkill],
+  earfquake: [IndexSkill],
+  partTimeWork: [IndexSkill],
+  land4: [IndexSkill],
+  zeroWait: [IndexSkill],
+  pickupWallet: [IndexSkill],
+  moneyCollectionHelpingHands: [IndexSkill],
+  book: [IndexSkill],
+  land5: [IndexSkill],
+  dragonMoney: [IndexSkill],
+  fastCar: [IndexSkill],
+  stockDown: [IndexSkill],
+  stockUp: [IndexSkill],
+  minigameHard: [IndexSkill],
+  land6: [IndexSkill],
+  travel: [IndexSkill],
+  witch: [IndexSkill],
+  moneyCollectionBeggers: [IndexSkill],
+} as const);

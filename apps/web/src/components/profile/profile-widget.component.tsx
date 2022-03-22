@@ -8,7 +8,11 @@ export const ProfileWidget: React.FC = () => {
       {user ? (
         <div className="flex gap-4 p-5">
           <div className="w-36">
-            <img src="/logo512.png" className="border-png" alt="" />
+            <img
+              src={new URL('~/src/assets/logo512.png', import.meta.url).href}
+              className="border-png"
+              alt=""
+            />
           </div>
           <div className="flex flex-col gap-2 justify-center pr-4">
             <div className="font-bold text-lg">@{user.username}</div>

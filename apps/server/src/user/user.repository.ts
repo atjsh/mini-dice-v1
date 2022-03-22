@@ -1,3 +1,4 @@
+import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import { CompleteSignupUserDto, UserIdType } from '@packages/shared-types';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
@@ -71,11 +72,18 @@ export class UserRepository extends Repository<UserEntity> {
    */
   async changeUserCash(
     userId: UserIdType,
-    userOriginalCash: bigint,
     cashDifference: bigint | number,
+    userOriginalCash?: bigint,
   ) {
+    if (userOriginalCash) {
+      return await this.partialUpdateUser(userId, {
+        cash: userOriginalCash + BigInt(cashDifference),
+      });
+    }
+
+    const user = await this.findOneOrFail(userId);
     return await this.partialUpdateUser(userId, {
-      cash: userOriginalCash + BigInt(cashDifference),
+      cash: user.cash + BigInt(cashDifference),
     });
   }
 
@@ -90,6 +98,17 @@ export class UserRepository extends Repository<UserEntity> {
       isUserDiceTossForbidden: false,
       canTossDiceAfter: canTossDiceAt,
       submitAllowedMapStop: null,
+    });
+  }
+
+  async setUserAllowedSkillRoute(
+    userId: UserIdType,
+    allowedSkillRouteOrNull: SkillRouteType,
+    isUserDiceTossForbidden: boolean,
+  ) {
+    return await this.partialUpdateUser(userId, {
+      submitAllowedMapStop: getSkillRoutePath(allowedSkillRouteOrNull),
+      isUserDiceTossForbidden,
     });
   }
 

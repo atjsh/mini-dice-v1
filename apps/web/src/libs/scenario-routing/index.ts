@@ -19,19 +19,6 @@ export function getSkillRouteFromSkillRouteURL(
   };
 }
 
-/**
- * SKillRouteType의 객체를 SkillRouteURL 문자열로 변환함.
- */
-export function getSkillRouteURLFromSkillRoute(
-  skillRoute: SkillRouteType,
-  skillCallingClient: SkillCallingClients
-): SkillRouteURLType {
-  return `${skillRoute.scenarioName}/${skillRoute.skillGroupName}/${skillRoute.name}/${skillCallingClient}`;
-}
-
-export function getWebSkillRouteURLFromSkillRoute(skillRoute: SkillRouteType) {
-  return getSkillRouteURLFromSkillRoute(skillRoute, SkillCallingClients.Web);
-}
 
 /**
  * 인자로 받은 SkillGroupType 인자들의 SkillGroup 값이 서로 동일한지 확인한다.

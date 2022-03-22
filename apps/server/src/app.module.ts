@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { ProfileModule } from './profile/profile.module';
+import { D1Module } from './scenarios/d1/d1.module';
 import { TempSignupModule } from './temp-signup/temp-signup.module';
 import { UserModule } from './user/user.module';
 
@@ -64,6 +65,8 @@ import { UserModule } from './user/user.module';
 
     UserModule,
     ProfileModule,
+
+    D1Module,
   ],
 })
 export class AppModule {}
