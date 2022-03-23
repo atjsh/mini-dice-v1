@@ -1,8 +1,8 @@
-import * as _ from "lodash";
-import { useCallback, useEffect, useState } from "react";
-import { MapBlock, useMap } from "../../libs";
-import { SkillRouteType } from "../../libs/skill-draw-ui-ts/types";
-import { useLatestSkillLog } from "../../libs/tdol-server/skill-logs/use-latest-skill-log.hook";
+import * as _ from 'lodash';
+import { useCallback, useEffect, useState } from 'react';
+import { MapBlock, useMap } from '../../libs';
+import { SkillRouteType } from '../../libs/skill-draw-ui-ts/types';
+import { useLatestSkillLog } from '../../libs/tdol-server/skill-logs/use-latest-skill-log.hook';
 
 function endlessSlice(arr: any[], from: number, to: number) {
   if (from >= to) {
@@ -18,20 +18,20 @@ function endlessSlice(arr: any[], from: number, to: number) {
 
 function getSkillRouteIndexBySkillGroup(
   map: MapBlock[],
-  findingSkillRoute: SkillRouteType
+  findingSkillRoute: SkillRouteType,
 ) {
   return _.findIndex(
     map.map((stop) => stop.skillRoute),
     (skillRoute) =>
       skillRoute.scenarioName == findingSkillRoute.scenarioName &&
-      skillRoute.skillGroupName == findingSkillRoute.skillGroupName
+      skillRoute.skillGroupName == findingSkillRoute.skillGroupName,
   );
 }
 
 function getRelativeMovingCount(
   mapLength: number,
   fromIndex: number,
-  toIndex: number
+  toIndex: number,
 ) {
   return fromIndex > toIndex
     ? mapLength + toIndex - fromIndex
@@ -62,20 +62,20 @@ export const MapStatusBar: React.FC = () => {
 
       const currentSkillRouteIndex = getSkillRouteIndexBySkillGroup(
         mapStops,
-        currentSkillRoute.skillRoute
+        currentSkillRoute.skillRoute,
       );
 
       if (isInitalized == true) {
         const prevSkillRoute = zoomedMap[0].skillRoute;
         const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
           mapStops,
-          prevSkillRoute
+          prevSkillRoute,
         );
 
         const relativeMovingCount = getRelativeMovingCount(
           mapStops.length,
           prevSkillRouteIndex,
-          currentSkillRouteIndex
+          currentSkillRouteIndex,
         );
 
         setRelativeMovingCount(relativeMovingCount);
@@ -84,8 +84,8 @@ export const MapStatusBar: React.FC = () => {
           endlessSlice(
             mapStops,
             prevSkillRouteIndex,
-            prevSkillRouteIndex + relativeMovingCount + sliceRange
-          )
+            prevSkillRouteIndex + relativeMovingCount + sliceRange,
+          ),
         );
 
         setTimeout(() => {
@@ -95,8 +95,8 @@ export const MapStatusBar: React.FC = () => {
             endlessSlice(
               mapStops,
               currentSkillRouteIndex,
-              currentSkillRouteIndex + sliceRange
-            )
+              currentSkillRouteIndex + sliceRange,
+            ),
           );
           setLeft(0);
           setTimeout(() => {
@@ -108,8 +108,8 @@ export const MapStatusBar: React.FC = () => {
           endlessSlice(
             mapStops,
             currentSkillRouteIndex,
-            currentSkillRouteIndex + sliceRange
-          )
+            currentSkillRouteIndex + sliceRange,
+          ),
         );
       }
 
@@ -123,17 +123,17 @@ export const MapStatusBar: React.FC = () => {
         className="absolute flex gap-x-8"
         style={{
           left: `-${left}px`,
-          transitionDuration: isTransitioning ? `${TRANSITION}ms` : "0s",
-          transitionProperty: "left",
-          transitionTimingFunction: "ease-in-out"
+          transitionDuration: isTransitioning ? `${TRANSITION}ms` : '0s',
+          transitionProperty: 'left',
+          transitionTimingFunction: 'ease-in-out',
         }}
       >
         {zoomedMap.map((stop, index) => (
           <div
             className={`${
               index == 0
-                ? "font-extrabold text-black"
-                : "font-medium text-gray-700"
+                ? 'font-extrabold text-black'
+                : 'font-medium text-gray-700'
             } whitespace-nowrap`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}

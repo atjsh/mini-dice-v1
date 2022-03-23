@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { ExposedSkillLogType, transformSkillLogToMessage } from '../../libs';
-import { latestSkillLogIdState } from '../../libs/tdol-server/skill-logs/atoms/latest-skill-log.atom';
 import {
-  exposedSkillLogsState,
   displayingMessagesState,
+  exposedSkillLogsState,
 } from './atoms/displaying-messages.atom';
+import { useCurrentSkillLog } from './current-skill-log.hook';
 
 const skillLogsToRenderesMessage = (
   skillLogs: ExposedSkillLogType[],
@@ -30,7 +30,6 @@ const skillLogsToRenderesMessage = (
     .flat();
 
 export const useDisplayingMessages = () => {
-  const skillLogId = useRecoilValue(latestSkillLogIdState);
   const [exposedSkillLogs, setExposedSkillLogs] = useRecoilState(
     exposedSkillLogsState,
   );
@@ -38,6 +37,9 @@ export const useDisplayingMessages = () => {
     displayingMessagesState,
   );
   const [lastExposedSkillLogIndex, setLastExposedSkillLogIndex] = useState(0);
+  const currentSkillLog = useCurrentSkillLog();
+
+  const skillLogId = currentSkillLog?.id ?? '';
 
   useEffect(() => {
     if (lastExposedSkillLogIndex == 0) {

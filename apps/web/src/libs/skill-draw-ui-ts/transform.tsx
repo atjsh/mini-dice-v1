@@ -5,13 +5,13 @@ import {
   LinkGroupMessage,
   LinkGroupType,
   FormMessage,
-  FormMessageType
-} from ".";
+  FormMessageType,
+} from '.';
 
 export function transformSkillLogToMessage(
   skillLog: MessageResponseType,
   isLast: boolean,
-  skillLogId: string
+  skillLogId: string,
 ) {
   return {
     userActivityMessage: (
@@ -20,11 +20,11 @@ export function transformSkillLogToMessage(
     serverMessage: skillLog.actionResultDrawings.map((ard, index) => {
       if (Array.isArray(ard)) {
       } else {
-        if (ard.type == "plainMessage") {
+        if (ard.type == 'plainMessage') {
           return (
             <PlainMessage plainMessage={ard} key={`${skillLogId}${index}`} />
           );
-        } else if (ard.type == "linkGroup") {
+        } else if (ard.type == 'linkGroup') {
           return (
             <div className="overflow-x-auto">
               <LinkGroupMessage
@@ -34,7 +34,7 @@ export function transformSkillLogToMessage(
               />
             </div>
           );
-        } else if (ard.type == "formMessage") {
+        } else if (ard.type == 'formMessage') {
           return (
             <div className="overflow-x-auto">
               <FormMessage
@@ -50,8 +50,10 @@ export function transformSkillLogToMessage(
     }),
     time: (
       <div className="text-gray-400 font-bold text-xs pl-2">
-        {new Date(skillLog.date).toLocaleString("ko-kr")}
+        {new Date(skillLog.date).toLocaleString('ko-kr')}
+        <br />
+        {skillLogId}
       </div>
-    )
+    ),
   };
 }
