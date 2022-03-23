@@ -23,7 +23,7 @@ import {
   WebSkillDraw,
 } from 'apps/server/src/skill-service-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import {
   getRpsMoveAsKoreanText,
   RpsMove,
@@ -35,7 +35,7 @@ class RpsSubmitParamType {
   move: RpsMove;
 }
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.rps)
+@SkillGroup(D1ScenarioRoutes.skillGroups.rps)
 export class RpsController extends SkillGroupController<RpsService> {
   constructor(
     private rpsService: RpsService,
@@ -71,7 +71,7 @@ export class RpsController extends SkillGroupController<RpsService> {
           links: Object.values(RpsMove).map((rpsMove: RpsMove) =>
             Link({
               skillRouteURL: getSkillRoutePath(
-                DogdripScenarioRoutes.skillGroups.rps.skills.submit,
+                D1ScenarioRoutes.skillGroups.rps.skills.submit,
               ),
               displayText: getRpsMoveAsKoreanText(rpsMove),
               param: {
@@ -84,7 +84,7 @@ export class RpsController extends SkillGroupController<RpsService> {
     });
   }
 
-  @WebSkill(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
+  @WebSkill(D1ScenarioRoutes.skillGroups.rps.skills.submit)
   async submit(
     @Body() props: InteractionUserActivity<RpsSubmitParamType>,
     @UserJwt() { userId }: UserJwtDto,
@@ -97,7 +97,7 @@ export class RpsController extends SkillGroupController<RpsService> {
     });
   }
 
-  @WebSkillDraw(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
+  @WebSkillDraw(D1ScenarioRoutes.skillGroups.rps.skills.submit)
   async submitDraw(
     @Body()
     props: InteractionUserActivitySkillDrawPropsType<

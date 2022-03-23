@@ -9,5 +9,5 @@ export class MapBlock {
 }
 
 export async function getMap() {
-  return (await authedAxios.get<MapBlock[]>("/scenarios/dogdrip/map")).data;
+  return (await authedAxios.get<MapBlock[]>("/scenarios/d1/map")).data;
 }

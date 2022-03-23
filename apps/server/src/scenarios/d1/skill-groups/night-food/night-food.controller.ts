@@ -8,12 +8,12 @@ import {
   WebIndexSkillDraw,
   MethodReturnType,
 } from 'apps/server/src/skill-service-lib/skill-service-lib';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { NightFoodService, PROFIT_STATUS } from './night-food.service';
 
 const nightFoodPlainMessageTitle = '야식';
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.nightFood)
+@SkillGroup(D1ScenarioRoutes.skillGroups.nightFood)
 export class NightFoodController extends SkillGroupController<NightFoodService> {
   constructor(nightFoodService: NightFoodService) {
     super(nightFoodService);

@@ -8,10 +8,10 @@ import {
   SkillGroupAlias,
   WebIndexSkillDraw,
 } from 'apps/server/src/skill-service-lib/skill-service-lib';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { CarAccidentService } from './car-accident.service';
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.carAccident)
+@SkillGroup(D1ScenarioRoutes.skillGroups.carAccident)
 export class CarAccidentController extends SkillGroupController<CarAccidentService> {
   constructor(carAccidentService: CarAccidentService) {
     super(carAccidentService);

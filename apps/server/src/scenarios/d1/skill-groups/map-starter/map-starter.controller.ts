@@ -15,10 +15,10 @@ import {
   WebIndexSkillDraw,
   MethodReturnType,
 } from 'apps/server/src/skill-service-lib/skill-service-lib';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { MapStarterService } from './map-starter.service';
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.mapStarter)
+@SkillGroup(D1ScenarioRoutes.skillGroups.mapStarter)
 export class MapStarterController extends SkillGroupController<MapStarterService> {
   constructor(mapStarterService: MapStarterService) {
     super(mapStarterService);

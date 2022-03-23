@@ -4,7 +4,7 @@ import { UserRepository } from 'apps/server/src/user/user.repository';
 import { Cache } from 'cache-manager';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 
 const LAST_RPS_LOG_CACHE_KEY_PREFIX = 'rp:lastRpsLog';
 
@@ -91,7 +91,7 @@ export class RpsService {
   public async index(props: SkillServiceProps) {
     await this.userRepository.setUserAllowedSkillRoute(
       props.userId,
-      DogdripScenarioRoutes.skillGroups.rps.skills.submit,
+      D1ScenarioRoutes.skillGroups.rps.skills.submit,
       true,
     );
     return null;

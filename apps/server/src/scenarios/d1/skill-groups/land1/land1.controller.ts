@@ -28,14 +28,14 @@ import {
   LandBuyableByUserEnum,
   LandBuyingResult,
 } from '../../common/land/land.service';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { Land1Service } from './land1.service';
 
 class LandButmitParamType {
   landName: string;
 }
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.land1)
+@SkillGroup(D1ScenarioRoutes.skillGroups.land1)
 export class Land1Controller extends SkillGroupController<Land1Service> {
   constructor(land1Service: Land1Service) {
     super(land1Service);
@@ -85,7 +85,7 @@ export class Land1Controller extends SkillGroupController<Land1Service> {
         ],
         submitButtonLabel: '구매하기',
         submitSkillRouteURL: getSkillRoutePath(
-          DogdripScenarioRoutes.skillGroups.land1.skills.submit,
+          D1ScenarioRoutes.skillGroups.land1.skills.submit,
         ),
       }),
     ];
@@ -158,7 +158,7 @@ export class Land1Controller extends SkillGroupController<Land1Service> {
     });
   }
 
-  @WebSkill(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
+  @WebSkill(D1ScenarioRoutes.skillGroups.land1.skills.submit)
   async submit(
     @Body() props: InteractionUserActivity<LandButmitParamType>,
     @UserJwt() { userId }: UserJwtDto,
@@ -169,7 +169,7 @@ export class Land1Controller extends SkillGroupController<Land1Service> {
     });
   }
 
-  @WebSkillDraw(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
+  @WebSkillDraw(D1ScenarioRoutes.skillGroups.land1.skills.submit)
   async webSubmitDraw(
     @Body()
     props: InteractionUserActivitySkillDrawPropsType<
