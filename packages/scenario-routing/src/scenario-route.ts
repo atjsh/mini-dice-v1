@@ -79,3 +79,15 @@ export function getSkillGroupPath(
 export function getSkillRoutePath(skill: SkillRouteType): SkillRoutePath {
   return `${skill.scenarioName}/${skill.skillGroupName}/${skill.name}`;
 }
+
+export function getSkillRouteFromPath(
+  skillRoutePath: SkillRoutePath,
+): SkillRouteType {
+  const [scenarioName, skillGroupName, skillName] = skillRoutePath.split('/');
+
+  return {
+    scenarioName,
+    skillGroupName,
+    name: skillName,
+  };
+}

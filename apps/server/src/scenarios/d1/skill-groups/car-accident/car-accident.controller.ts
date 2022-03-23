@@ -1,29 +1,33 @@
 import { Body } from '@nestjs/common';
-import { SkillGroup } from '@packages/scenario-routing';
 import { MessageResponseFactory, PlainMessage } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import {
+  SkillGroup,
   MethodReturnType,
-  SkillGroupAlias,
-  WebIndexSkillDraw,
-} from 'apps/server/src/skill-service-lib/skill-service-lib';
+  SkillDraw,
+  drawDiceUserActivityMessage,
+  IndexSkillPropsType,
+  Skill,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
+import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { DogdripScenarioRoutes } from '../../routes';
 import { CarAccidentService } from './car-accident.service';
 
 @SkillGroup(DogdripScenarioRoutes.skillGroups.carAccident)
-export class CarAccidentController extends SkillGroupController<CarAccidentService> {
-  constructor(carAccidentService: CarAccidentService) {
-    super(carAccidentService);
-  }
+export class CarAccidentController implements SkillGroupController {
+  constructor(private skillService: CarAccidentService) {}
 
-  @SkillGroupAlias()
   getSkillGroupAlias() {
     return '교통사고';
   }
 
-  @WebIndexSkillDraw()
-  async webIndexDraw(
+  @Skill(DogdripScenarioRoutes.skillGroups.carAccident.skills.index)
+  async index(indexSkillProps: IndexSkillPropsType) {
+    return await this.skillService.index(indexSkillProps);
+  }
+
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.carAccident.skills.index)
+  async indexDraw(
     @Body()
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<CarAccidentService, 'index'>
@@ -32,9 +36,7 @@ export class CarAccidentController extends SkillGroupController<CarAccidentServi
     return props.skillServiceResult.accident == 'safe'
       ? MessageResponseFactory({
           date: props.date,
-          userRequestDrawings: this.drawDiceUserActivityMessage(
-            props.userActivity,
-          ),
+          userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
           actionResultDrawings: [
             PlainMessage({
               title: '교통 사고',
@@ -44,9 +46,7 @@ export class CarAccidentController extends SkillGroupController<CarAccidentServi
         })
       : MessageResponseFactory({
           date: props.date,
-          userRequestDrawings: this.drawDiceUserActivityMessage(
-            props.userActivity,
-          ),
+          userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
           actionResultDrawings: [
             PlainMessage({
               title: '교통 사고',

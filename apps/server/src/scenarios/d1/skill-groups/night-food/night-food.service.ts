@@ -5,7 +5,7 @@ import {
   selectEventCaseRandomly,
 } from 'apps/server/src/common/random/event-case-processing';
 import { selectRandomItemFromList } from 'apps/server/src/common/random/random-item-from-array';
-import { SkillServiceProps } from 'apps/server/src/skill-service-lib/skill-service-lib';
+import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 
 export enum PROFIT_STATUS {

@@ -1,5 +1,5 @@
 import { Body } from '@nestjs/common';
-import { getSkillRoutePath, SkillGroup } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
   MessageResponseFactory,
   PlainMessage,
@@ -11,17 +11,18 @@ import { UserJwtDto } from 'apps/server/src/auth/local-jwt/access-token/dto/user
 import { UserJwt } from 'apps/server/src/profile/decorators/user.decorator';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
+  drawDiceUserActivityMessage,
+  IndexSkillPropsType,
+  MethodReturnType,
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
+import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
-import {
-  SkillGroupAlias,
-  WebIndexSkillDraw,
-  MethodReturnType,
-  WebSkill,
-  WebSkillDraw,
-} from 'apps/server/src/skill-service-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 import { DogdripScenarioRoutes } from '../../routes';
 import {
@@ -36,21 +37,23 @@ class RpsSubmitParamType {
 }
 
 @SkillGroup(DogdripScenarioRoutes.skillGroups.rps)
-export class RpsController extends SkillGroupController<RpsService> {
+export class RpsController implements SkillGroupController {
   constructor(
-    private rpsService: RpsService,
+    private skillService: RpsService,
     private userRepository: UserRepository,
-  ) {
-    super(rpsService);
-  }
+  ) {}
 
-  @SkillGroupAlias()
   getSkillGroupAlias() {
     return '가위바위보';
   }
 
-  @WebIndexSkillDraw()
-  async webIndexDraw(
+  @Skill(DogdripScenarioRoutes.skillGroups.rps.skills.index)
+  async index(indexSkillProps: IndexSkillPropsType) {
+    return await this.skillService.index(indexSkillProps);
+  }
+
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.rps.skills.index)
+  async indexDraw(
     @Body()
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<RpsService, 'index'>
@@ -58,7 +61,7 @@ export class RpsController extends SkillGroupController<RpsService> {
   ) {
     return MessageResponseFactory({
       date: props.date,
-      userRequestDrawings: this.drawDiceUserActivityMessage(props.userActivity),
+      userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
           title: `${this.getSkillGroupAlias()} 칸`,
@@ -84,20 +87,20 @@ export class RpsController extends SkillGroupController<RpsService> {
     });
   }
 
-  @WebSkill(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
+  @Skill(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
   async submit(
     @Body() props: InteractionUserActivity<RpsSubmitParamType>,
     @UserJwt() { userId }: UserJwtDto,
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
-    return this.rpsService.submit({
+    return this.skillService.submit({
       userId: userId,
       rpsMove: props.params.move,
       username: user.username,
     });
   }
 
-  @WebSkillDraw(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
   async submitDraw(
     @Body()
     props: InteractionUserActivitySkillDrawPropsType<

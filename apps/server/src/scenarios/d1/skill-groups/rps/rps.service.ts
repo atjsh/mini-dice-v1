@@ -1,5 +1,8 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { SkillServiceProps } from 'apps/server/src/skill-service-lib/skill-service-lib';
+import {
+  SkillService,
+  SkillServiceProps,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 import { Cache } from 'cache-manager';
 import { getUserCanTossDice } from '../../../scenarios.commons';
@@ -57,7 +60,7 @@ export type RpsLog = {
 };
 
 @Injectable()
-export class RpsService {
+export class RpsService implements SkillService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private userRepository: UserRepository,

@@ -1,32 +1,33 @@
 import { Body } from '@nestjs/common';
-import { getSkillRoutePath, SkillGroup } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
-  PlainMessage,
-  FormMessage,
   DataField,
+  FormMessage,
   InputField,
   MessageResponseFactory,
+  PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
 import { UserJwtDto } from 'apps/server/src/auth/local-jwt/access-token/dto/user-jwt.dto';
 import { UserJwt } from 'apps/server/src/profile/decorators/user.decorator';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
+  drawDiceUserActivityMessage,
+  IndexSkillPropsType,
+  MethodReturnType,
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
+import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
 import {
-  SkillGroupAlias,
-  WebIndexSkillDraw,
-  MethodReturnType,
-  WebSkill,
-  WebSkillDraw,
-} from 'apps/server/src/skill-service-lib/skill-service-lib';
-import {
-  LandStatus,
   LandBuyableByUserEnum,
   LandBuyingResult,
+  LandStatus,
 } from '../../common/land/land.service';
 import { DogdripScenarioRoutes } from '../../routes';
 import { Land1Service } from './land1.service';
@@ -36,17 +37,19 @@ class LandButmitParamType {
 }
 
 @SkillGroup(DogdripScenarioRoutes.skillGroups.land1)
-export class Land1Controller extends SkillGroupController<Land1Service> {
-  constructor(land1Service: Land1Service) {
-    super(land1Service);
-  }
+export class Land1Controller implements SkillGroupController {
+  constructor(private skillService: Land1Service) {}
 
-  @SkillGroupAlias()
   async getSkillGroupAlias() {
     const landStatus = await this.skillService.getCurrentLandStatus();
     return `${landStatus.landOwnedBy?.username || '운영자'}의 ${
       landStatus.landName
     } 토지`;
+  }
+
+  @Skill(DogdripScenarioRoutes.skillGroups.land1.skills.index)
+  async index(indexSkillProps: IndexSkillPropsType) {
+    return await this.skillService.index(indexSkillProps);
   }
 
   landBuyableByUserMessage(landStatus: LandStatus) {
@@ -122,16 +125,15 @@ export class Land1Controller extends SkillGroupController<Land1Service> {
     ];
   }
 
-  @WebIndexSkillDraw()
-  async webIndexDraw(
-    @Body()
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.land1.skills.index)
+  async indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<Land1Service, 'index'>
     >,
   ) {
     return MessageResponseFactory({
       date: props.date,
-      userRequestDrawings: this.drawDiceUserActivityMessage(props.userActivity),
+      userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
           title: '토지 칸',
@@ -158,7 +160,7 @@ export class Land1Controller extends SkillGroupController<Land1Service> {
     });
   }
 
-  @WebSkill(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
+  @Skill(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
   async submit(
     @Body() props: InteractionUserActivity<LandButmitParamType>,
     @UserJwt() { userId }: UserJwtDto,
@@ -169,7 +171,7 @@ export class Land1Controller extends SkillGroupController<Land1Service> {
     });
   }
 
-  @WebSkillDraw(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
   async webSubmitDraw(
     @Body()
     props: InteractionUserActivitySkillDrawPropsType<

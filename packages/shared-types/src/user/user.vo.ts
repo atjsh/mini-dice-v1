@@ -41,7 +41,7 @@ export class UserVo {
    * @type {bigint}
    * @memberof UserEntity
    */
-  cash: bigint;
+  cash: string;
 
   /**
    * 유저가 submit할 수 있도록 허용된 맵 칸.

@@ -1,36 +1,40 @@
 import { Body } from '@nestjs/common';
-import { SkillGroup } from '@packages/scenario-routing';
 import {
   MessageResponseFactory,
-  UserActivityMessage,
   PlainMessage,
+  UserActivityMessage,
 } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
+import {
+  drawDiceUserActivityMessage,
+  IndexSkillPropsType,
+  MethodReturnType,
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
   GameStartUserAcitvitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import {
-  SkillGroupAlias,
-  WebIndexSkillDraw,
-  MethodReturnType,
-} from 'apps/server/src/skill-service-lib/skill-service-lib';
 import { DogdripScenarioRoutes } from '../../routes';
 import { MapStarterService } from './map-starter.service';
 
 @SkillGroup(DogdripScenarioRoutes.skillGroups.mapStarter)
-export class MapStarterController extends SkillGroupController<MapStarterService> {
-  constructor(mapStarterService: MapStarterService) {
-    super(mapStarterService);
-  }
+export class MapStarterController implements SkillGroupController {
+  constructor(private skillService: MapStarterService) {}
 
-  @SkillGroupAlias()
   getSkillGroupAlias() {
     return '시작';
   }
 
-  @WebIndexSkillDraw()
-  async webIndexDraw(
+  @Skill(DogdripScenarioRoutes.skillGroups.mapStarter.skills.index)
+  async index(indexSkillProps: IndexSkillPropsType) {
+    return await this.skillService.index(indexSkillProps);
+  }
+
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.mapStarter.skills.index)
+  async indexDraw(
     @Body()
     props:
       | DiceUserActivitySkillDrawPropsType<
@@ -57,9 +61,7 @@ export class MapStarterController extends SkillGroupController<MapStarterService
       >;
 
       return MessageResponseFactory({
-        userRequestDrawings: this.drawDiceUserActivityMessage(
-          props.userActivity,
-        ),
+        userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [
           PlainMessage({
             title: `${this.getSkillGroupAlias()} 칸`,

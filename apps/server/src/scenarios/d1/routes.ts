@@ -1,4 +1,4 @@
-import { getScenarioRoute } from '@packages/scenario-routing';
+import { getScenarioRoute, SkillRouteType } from '@packages/scenario-routing';
 import { IndexSkill } from '../../skill-group-lib/constants';
 import { SCENARIO_NAMES } from '../scenarios.constants';
 
@@ -39,3 +39,11 @@ export const DogdripScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
   witch: [IndexSkill],
   moneyCollectionBeggers: [IndexSkill],
 } as const);
+
+export const OrderedDogdripScenarioRoutes: SkillRouteType[] = [
+  DogdripScenarioRoutes.skillGroups.mapStarter,
+  DogdripScenarioRoutes.skillGroups.carAccident,
+  DogdripScenarioRoutes.skillGroups.rps,
+  DogdripScenarioRoutes.skillGroups.nightFood,
+  DogdripScenarioRoutes.skillGroups.land1,
+].map((skillGroup) => skillGroup.skills[IndexSkill]);

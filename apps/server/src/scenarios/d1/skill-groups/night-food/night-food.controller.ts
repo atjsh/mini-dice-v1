@@ -1,31 +1,35 @@
 import { Body } from '@nestjs/common';
-import { SkillGroup } from '@packages/scenario-routing';
 import { MessageResponseFactory, PlainMessage } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import {
-  SkillGroupAlias,
-  WebIndexSkillDraw,
+  SkillGroup,
   MethodReturnType,
-} from 'apps/server/src/skill-service-lib/skill-service-lib';
+  SkillDraw,
+  IndexSkillPropsType,
+  Skill,
+  drawDiceUserActivityMessage,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
+import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { DogdripScenarioRoutes } from '../../routes';
 import { NightFoodService, PROFIT_STATUS } from './night-food.service';
 
 const nightFoodPlainMessageTitle = '야식';
 
 @SkillGroup(DogdripScenarioRoutes.skillGroups.nightFood)
-export class NightFoodController extends SkillGroupController<NightFoodService> {
-  constructor(nightFoodService: NightFoodService) {
-    super(nightFoodService);
-  }
+export class NightFoodController implements SkillGroupController {
+  constructor(private skillService: NightFoodService) {}
 
-  @SkillGroupAlias()
   getSkillGroupAlias() {
     return '야식';
   }
 
-  @WebIndexSkillDraw()
-  async webIndexDraw(
+  @Skill(DogdripScenarioRoutes.skillGroups.nightFood.skills.index)
+  async index(indexSkillProps: IndexSkillPropsType) {
+    return await this.skillService.index(indexSkillProps);
+  }
+
+  @SkillDraw(DogdripScenarioRoutes.skillGroups.nightFood.skills.index)
+  async indexDraw(
     @Body()
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<NightFoodService, 'index'>
@@ -33,7 +37,7 @@ export class NightFoodController extends SkillGroupController<NightFoodService> 
   ) {
     return MessageResponseFactory({
       date: props.date,
-      userRequestDrawings: this.drawDiceUserActivityMessage(props.userActivity),
+      userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
           title: `${this.getSkillGroupAlias()} 칸`,

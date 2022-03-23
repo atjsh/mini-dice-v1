@@ -4,7 +4,7 @@ import {
   DynamicValueEventCase,
   selectEventCaseRandomly,
 } from 'apps/server/src/common/random/event-case-processing';
-import { SkillServiceProps } from 'apps/server/src/skill-service-lib/skill-service-lib';
+import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 
 @Injectable()

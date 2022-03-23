@@ -1,9 +1,6 @@
+import { ForbiddenException } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  countryCode3List,
-  CountryCode3Type,
-  UserVo,
-} from '@packages/shared-types';
+import { countryCode3List, CountryCode3Type } from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
@@ -21,7 +18,7 @@ const UserEntityTableName = 'tb_user';
 export type UserCashStrType = string;
 
 @Entity({ name: UserEntityTableName })
-export class UserEntity extends EntityWithTimestamps implements UserVo {
+export class UserEntity extends EntityWithTimestamps {
   /**
    * PK값
    */
@@ -183,4 +180,16 @@ export function serializeUserToJson(user: UserEntity): UserEntityJson {
     ...user,
     cash: user.cash.toString(),
   };
+}
+
+export function isUserThrowingDiceTossAllowedOrThrow(user: UserEntity) {
+  if (
+    user.canTossDiceAfter != null &&
+    user.isUserDiceTossForbidden == false &&
+    user.canTossDiceAfter < new Date()
+  ) {
+    return true;
+  }
+
+  throw new ForbiddenException(`user dice toss forbidden; ${user.id}`);
 }

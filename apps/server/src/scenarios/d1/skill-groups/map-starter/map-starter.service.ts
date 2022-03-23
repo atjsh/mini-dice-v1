@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SkillServiceProps } from 'apps/server/src/skill-service-lib/skill-service-lib';
+import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 
 export const MAP_STARTER_REWARD_CASH = 10000;

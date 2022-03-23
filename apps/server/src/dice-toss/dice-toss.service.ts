@@ -1,0 +1,173 @@
+import { Injectable } from '@nestjs/common';
+import {
+  getSkillRouteFromPath,
+  getSkillRoutePath,
+  SkillRouteType,
+} from '@packages/scenario-routing';
+import { MessageResponseType, UserIdType } from '@packages/shared-types';
+import * as _ from 'lodash';
+import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import { getAuthorizationHeaderField } from '../auth/local-jwt/local-jwt.service';
+import { getRandomInteger } from '../common/random/random-number';
+import {
+  DogdripScenarioRoutes,
+  OrderedDogdripScenarioRoutes,
+} from '../scenarios/d1/routes';
+import { SkillLogService } from '../skill-log/skill-log.service';
+import { SkillDrawPropsType } from '../skill-log/types/skill-draw-props.dto';
+import {
+  GameStartUserAcitvity,
+  DiceUserActivity,
+} from '../skill-log/types/user-activity.dto';
+import {
+  isUserThrowingDiceTossAllowedOrThrow,
+  serializeUserToJson,
+} from '../user/entity/user.entity';
+import { UserRepository } from '../user/user.repository';
+import { DiceTossOutputDto } from './interface';
+
+@Injectable()
+export class DiceTossService {
+  constructor(
+    private userRepository: UserRepository,
+    private skillLogService: SkillLogService,
+  ) {}
+
+  private throwDices(dices: number): number[] {
+    return Array(dices)
+      .fill(0)
+      .map(() => getRandomInteger(1, 2));
+  }
+
+  private moveUserForward(
+    currentSkillRoute: SkillRouteType,
+    movingCount: number,
+    orderedSkillRoutes: SkillRouteType[],
+  ): SkillRouteType {
+    const currentSkillRouteIndex = _.findIndex(
+      orderedSkillRoutes,
+      (skillRoute) =>
+        skillRoute.skillGroupName == currentSkillRoute.skillGroupName &&
+        skillRoute.scenarioName == currentSkillRoute.scenarioName &&
+        skillRoute.name == currentSkillRoute.name,
+    );
+
+    const nextSkillRouteIndex =
+      (currentSkillRouteIndex + movingCount) % orderedSkillRoutes.length;
+
+    return orderedSkillRoutes[nextSkillRouteIndex];
+  }
+
+  private createChangeOnStock(
+    diceResult: number[],
+    userId: UserIdType,
+  ): number | undefined {
+    const uniqueDiceResult = _.uniq(diceResult);
+    const isDiceResultEqual = uniqueDiceResult.length == 1;
+
+    if (isDiceResultEqual == false) {
+      return undefined;
+    }
+
+    return;
+  }
+
+  async tossDiceAndGetWebMessageResponse(
+    userJwt: UserJwtDto,
+    authorizationValue: string,
+  ): Promise<DiceTossOutputDto> {
+    const user = await this.userRepository.findOneOrFail(userJwt.userId);
+
+    isUserThrowingDiceTossAllowedOrThrow(user);
+
+    const diceResult = this.throwDices(1);
+
+    const lastSkillLog = await this.skillLogService.getLastLogOrCreateOne({
+      userId: userJwt.userId,
+      skillRoute: getSkillRoutePath(
+        DogdripScenarioRoutes.skillGroups.mapStarter.skills.index,
+      ),
+      skillServiceResult: undefined,
+      userActivity: {
+        type: 'gameStart',
+      },
+    });
+
+    if (lastSkillLog.isCreated == true) {
+      const skillDrawResult =
+        await this.scenarioRoutingService.callSkillDrawBySkillRoute<
+          SkillDrawPropsType<GameStartUserAcitvity, null>,
+          MessageResponseType
+        >(
+          {
+            date: lastSkillLog.log.date,
+            skillServiceResult: null,
+            userActivity: {
+              type: 'gameStart',
+            },
+          },
+          lastSkillLog.log.skillRoute,
+        );
+
+      return {
+        user: serializeUserToJson(user),
+        skillLog: {
+          skillDrawResult: skillDrawResult,
+          id: lastSkillLog.log.id,
+        },
+        diceResult: diceResult,
+      };
+    }
+
+    const nextSkillRoute = this.moveUserForward(
+      getSkillRouteFromPath(lastSkillLog.log.skillRoute),
+      _.sum(diceResult),
+      OrderedDogdripScenarioRoutes,
+    );
+
+    const diceUserActivity: DiceUserActivity = {
+      type: 'dice',
+      diceResult,
+      stockChangeAmount: this.createChangeOnStock(diceResult, userJwt.userId),
+    };
+
+    const skillServiceResult =
+      await this.scenarioRoutingService.callSkillBySkillRoute<
+        DiceUserActivity,
+        any
+      >(
+        diceUserActivity,
+        nextSkillRoute,
+        getAuthorizationHeaderField(authorizationValue),
+      );
+
+    const skillServiceLog = await this.skillLogService.createLog({
+      userId: userJwt.userId,
+      skillRoute: getSkillRoutePath(nextSkillRoute),
+      skillServiceResult: skillServiceResult,
+      userActivity: diceUserActivity,
+    });
+
+    const skillDrawResult =
+      await this.scenarioRoutingService.callSkillDrawBySkillRoute<
+        SkillDrawPropsType<DiceUserActivity, any>,
+        MessageResponseType
+      >(
+        {
+          date: skillServiceLog.date,
+          skillServiceResult: skillServiceResult,
+          userActivity: diceUserActivity,
+        },
+        nextSkillRoute,
+      );
+
+    return {
+      user: serializeUserToJson(user),
+      skillLog: {
+        skillDrawResult: skillDrawResult,
+        id: skillServiceLog.id,
+      },
+      diceResult: diceResult,
+    };
+  }
+}
