@@ -225,7 +225,7 @@ export const FormMessage: React.FC<{
           mutate={() => {
             mutate.mutate({
               callingSkillParam: formParam,
-              callingSkillRoute: form.skillRouteURL,
+              callingSkillRoute: form.submitSkillRouteURL,
             });
           }}
           isButtonActive={true}

@@ -36,12 +36,13 @@ export class Land1Service {
         D1ScenarioRoutes.skillGroups.land1.skills.submit,
         false,
       );
-    } else {
-      await this.userRepository.setUserCanTossDice(
-        props.userId,
-        getUserCanTossDice(SCENARIO_NAMES.D1),
-      );
     }
+
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1),
+    );
+
     return {
       landStatus,
       landBuyableByUserStatus,
@@ -49,11 +50,6 @@ export class Land1Service {
   }
 
   async submit(props: SkillServiceProps<{ landName: string }>) {
-    await this.userRepository.setUserCanTossDice(
-      props.userId,
-      getUserCanTossDice(SCENARIO_NAMES.D1),
-    );
-
     try {
       await this.landService.buyLand(
         LandIdEnum.LAND1,

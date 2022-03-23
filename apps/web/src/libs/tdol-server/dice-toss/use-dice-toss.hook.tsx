@@ -5,6 +5,7 @@ import { tossDice } from '.';
 import { UseUserHookKey, getLatestSkillRoute } from '..';
 import { queryClient } from '../../..';
 import { useDisplayingMessages } from '../../../components/displaying-messages/use-displaying-messages.hook';
+import { getMap } from '../map';
 import { latestSkillLogIdState } from '../skill-logs/atoms/latest-skill-log.atom';
 
 export const useDiceToss = () => {
@@ -16,6 +17,7 @@ export const useDiceToss = () => {
       addExposedSkillLogs([data.skillLog]);
       queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
       queryClient.refetchQueries([getLatestSkillRoute.name]);
+      queryClient.refetchQueries([getMap.name]);
       setSkillLogId(data.skillLog.id);
     },
   });

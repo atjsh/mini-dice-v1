@@ -110,7 +110,7 @@ export class FormMessageType implements BaseMessage {
 
   submitButtonLabel: string;
 
-  skillRouteURL: string;
+  submitSkillRouteURL: string;
 }
 
 export class UserActivityMessageType implements BaseMessage {

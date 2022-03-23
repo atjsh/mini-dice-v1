@@ -95,11 +95,11 @@ export function Ingame() {
   const { data: logs } = useSkillLogs();
   const { data: user } = useUser();
   const mutation = useDiceToss();
-  const { displayingMessages, addExposedSkillLogs } = useDisplayingMessages();
+  const { displayingMessages, initExposedSkillLogs } = useDisplayingMessages();
 
   useEffect(() => {
     if (logs) {
-      addExposedSkillLogs(logs);
+      initExposedSkillLogs(logs);
     }
   }, [logs]);
 
