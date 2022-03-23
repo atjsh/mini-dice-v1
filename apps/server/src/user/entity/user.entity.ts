@@ -6,9 +6,11 @@ import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
   BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { EntityWithTimestamps, getSequentialPk } from '../../common';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
@@ -18,7 +20,7 @@ const UserEntityTableName = 'tb_user';
 export type UserCashStrType = string;
 
 @Entity({ name: UserEntityTableName })
-export class UserEntity extends EntityWithTimestamps {
+export class UserEntity {
   /**
    * PK값
    */
@@ -56,7 +58,7 @@ export class UserEntity extends EntityWithTimestamps {
   @Column({
     type: 'varchar',
     nullable: false,
-    length: 100,
+    length: 10,
   })
   authProvider: string;
 
@@ -135,7 +137,7 @@ export class UserEntity extends EntityWithTimestamps {
    */
   @IsIn(countryCode3List)
   @Column({
-    length: 10,
+    length: 3,
     nullable: false,
   })
   countryCode3: CountryCode3Type;
@@ -160,6 +162,16 @@ export class UserEntity extends EntityWithTimestamps {
   @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
   lands: LandEntity;
+
+  /** 객체가 생성된 날짜 */
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
+  createdAt: Date;
+
+  /** 객체가 업데이트된 날짜 */
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({ type: 'timestamp', comment: '객체가 업데이트된 날짜' })
+  updatedAt: Date;
 }
 
 /**

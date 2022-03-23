@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -52,6 +53,7 @@ export class SkillLogEntity<
   })
   skillServiceResult: T;
 
+  @Index()
   @CreateDateColumn()
   date: Date;
 }
