@@ -29,14 +29,14 @@ import {
   LandBuyingResult,
   LandStatus,
 } from '../../common/land/land.service';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { Land1Service } from './land1.service';
 
 class LandButmitParamType {
   landName: string;
 }
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.land1)
+@SkillGroup(D1ScenarioRoutes.skillGroups.land1)
 export class Land1Controller implements SkillGroupController {
   constructor(private skillService: Land1Service) {}
 
@@ -47,7 +47,7 @@ export class Land1Controller implements SkillGroupController {
     } 토지`;
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.land1.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.land1.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
@@ -88,7 +88,7 @@ export class Land1Controller implements SkillGroupController {
         ],
         submitButtonLabel: '구매하기',
         submitSkillRouteURL: getSkillRoutePath(
-          DogdripScenarioRoutes.skillGroups.land1.skills.submit,
+          D1ScenarioRoutes.skillGroups.land1.skills.submit,
         ),
       }),
     ];

@@ -2,7 +2,7 @@ import { getScenarioRoute, SkillRouteType } from '@packages/scenario-routing';
 import { IndexSkill } from '../../skill-group-lib/constants';
 import { SCENARIO_NAMES } from '../scenarios.constants';
 
-export const DogdripScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
+export const D1ScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
   defaultStart: [IndexSkill],
   mapStarter: [IndexSkill],
   carAccident: [IndexSkill],

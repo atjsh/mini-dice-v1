@@ -4,4 +4,4 @@ import { CommonLandModule } from './land/land.module';
 @Module({
   imports: [CommonLandModule],
 })
-export class DogdripCommonModule {}
+export class D1CommonModule {}

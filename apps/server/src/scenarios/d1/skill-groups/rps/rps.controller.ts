@@ -24,7 +24,7 @@ import {
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
 import { UserRepository } from 'apps/server/src/user/user.repository';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import {
   getRpsMoveAsKoreanText,
   RpsMove,
@@ -74,7 +74,7 @@ export class RpsController implements SkillGroupController {
           links: Object.values(RpsMove).map((rpsMove: RpsMove) =>
             Link({
               skillRouteURL: getSkillRoutePath(
-                DogdripScenarioRoutes.skillGroups.rps.skills.submit,
+                D1ScenarioRoutes.skillGroups.rps.skills.submit,
               ),
               displayText: getRpsMoveAsKoreanText(rpsMove),
               param: {

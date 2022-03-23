@@ -6,6 +6,12 @@ import { NightFoodModule } from './night-food/night-food.module';
 import { Land1Module } from './land1/land1.module';
 
 @Module({
-  imports: [MapStarterModule, CarAccidentModule, RpsModule, NightFoodModule, Land1Module],
+  imports: [
+    MapStarterModule,
+    CarAccidentModule,
+    RpsModule,
+    NightFoodModule,
+    Land1Module,
+  ],
 })
-export class DogdripSkillGroupsModule {}
+export class D1SkillGroupsModule {}

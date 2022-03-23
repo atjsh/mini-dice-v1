@@ -9,7 +9,7 @@ import {
   LandIdEnum,
   LandBuyableByUserEnum,
 } from '../../common/land/land.service';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 
 @Injectable()
 export class Land1Service {
@@ -33,7 +33,7 @@ export class Land1Service {
     if (landBuyableByUserStatus.status == LandBuyableByUserEnum.BUYABLE) {
       await this.userRepository.setUserAllowedSkillRoute(
         props.userId,
-        DogdripScenarioRoutes.skillGroups.land1.skills.submit,
+        D1ScenarioRoutes.skillGroups.land1.skills.submit,
         false,
       );
     }
