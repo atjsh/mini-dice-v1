@@ -3,7 +3,7 @@ import { diceTossButtonState } from '../../../components/dice-toss-button/dice-t
 import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { tossDice } from '.';
-import { UseUserHookKey } from '..';
+import { UseUserHookKey, getLatestSkillRoute } from '..';
 import { queryClient } from '../../..';
 import { useDisplayingMessages } from '../../../components/displaying-messages/use-displaying-messages.hook';
 import { getMap } from '../map';
@@ -18,6 +18,7 @@ export const useDiceToss = () => {
       addExposedSkillLogs([data.skillLog]);
       setDiceTossButton({ isPending: false });
       queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
+      queryClient.refetchQueries([getLatestSkillRoute.name]);
       queryClient.refetchQueries([getMap.name]);
     },
   });
