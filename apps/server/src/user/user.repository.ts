@@ -83,7 +83,7 @@ export class UserRepository extends Repository<UserEntity> {
 
     const user = await this.findOneOrFail(userId);
     return await this.partialUpdateUser(userId, {
-      cash: user.cash + BigInt(cashDifference),
+      cash: BigInt(user.cash) + BigInt(cashDifference),
     });
   }
 

@@ -6,6 +6,8 @@ import {
 } from 'apps/server/src/common/random/event-case-processing';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
+import { getUserCanTossDice } from '../../../scenarios.commons';
+import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
 @Injectable()
 export class CarAccidentService {
@@ -77,11 +79,16 @@ export class CarAccidentService {
     };
   }
 
-  public index(props: SkillServiceProps) {
+  public async index(props: SkillServiceProps) {
     enum SAFE_OR_ACCIDENT {
       SAFE = 'safe',
       ACCIDENT = 'accident',
     }
+
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1),
+    );
 
     return selectEventCaseRandomly([
       {

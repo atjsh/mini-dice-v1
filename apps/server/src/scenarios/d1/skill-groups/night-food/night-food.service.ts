@@ -7,6 +7,8 @@ import {
 import { selectRandomItemFromList } from 'apps/server/src/common/random/random-item-from-array';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
+import { getUserCanTossDice } from '../../../scenarios.commons';
+import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
 export enum PROFIT_STATUS {
   MADE_PROFIT = 'made_profit',
@@ -101,6 +103,11 @@ export class NightFoodService {
         weight: 0.2,
       },
     ]).causeName;
+
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1),
+    );
 
     switch (event) {
       case PROFIT_STATUS.MADE_PROFIT:

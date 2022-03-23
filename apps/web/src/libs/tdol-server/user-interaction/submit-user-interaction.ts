@@ -1,10 +1,9 @@
 import { UserVo } from "@packages/shared-types";
 import { AxiosResponse } from "axios";
 import { authedAxios, ExposedSkillLogType } from "..";
-import { SkillRouteType } from "../../skill-draw-ui-ts/types";
 
 class UserInteractionDto {
-  callingSkillRoute: SkillRouteType;
+  callingSkillRoute: string;
   callingSkillParam: Record<string, string>;
 }
 

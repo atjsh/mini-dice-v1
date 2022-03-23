@@ -1,4 +1,3 @@
-import { Body } from '@nestjs/common';
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
   DataField,
@@ -8,8 +7,6 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { UserJwtDto } from 'apps/server/src/auth/local-jwt/access-token/dto/user-jwt.dto';
-import { UserJwt } from 'apps/server/src/profile/decorators/user.decorator';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
   drawDiceUserActivityMessage,
@@ -18,6 +15,7 @@ import {
   Skill,
   SkillDraw,
   SkillGroup,
+  SkillPropsType,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
@@ -37,7 +35,7 @@ class LandButmitParamType {
 }
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.land1)
-export class Land1Controller implements SkillGroupController {
+export class Land1SkillGroup implements SkillGroupController {
   constructor(private skillService: Land1Service) {}
 
   async getSkillGroupAlias() {
@@ -125,7 +123,7 @@ export class Land1Controller implements SkillGroupController {
     ];
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.land1.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.land1.skills.index)
   async indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<Land1Service, 'index'>
@@ -160,20 +158,19 @@ export class Land1Controller implements SkillGroupController {
     });
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
-  async submit(
-    @Body() props: InteractionUserActivity<LandButmitParamType>,
-    @UserJwt() { userId }: UserJwtDto,
-  ) {
+  @Skill(D1ScenarioRoutes.skillGroups.land1.skills.submit)
+  async submit({
+    userId,
+    userActivity,
+  }: SkillPropsType<InteractionUserActivity<LandButmitParamType>>) {
     return this.skillService.submit({
       userId,
-      landName: props.params.landName,
+      landName: userActivity.params.landName,
     });
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.land1.skills.submit)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.land1.skills.submit)
   async webSubmitDraw(
-    @Body()
     props: InteractionUserActivitySkillDrawPropsType<
       MethodReturnType<Land1Service, 'submit'>
     >,

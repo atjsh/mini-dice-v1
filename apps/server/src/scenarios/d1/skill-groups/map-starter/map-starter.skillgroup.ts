@@ -1,4 +1,3 @@
-import { Body } from '@nestjs/common';
 import {
   MessageResponseFactory,
   PlainMessage,
@@ -17,25 +16,24 @@ import {
   DiceUserActivitySkillDrawPropsType,
   GameStartUserAcitvitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { MapStarterService } from './map-starter.service';
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.mapStarter)
-export class MapStarterController implements SkillGroupController {
+@SkillGroup(D1ScenarioRoutes.skillGroups.mapStarter)
+export class MapStarterSkillGroup implements SkillGroupController {
   constructor(private skillService: MapStarterService) {}
 
   getSkillGroupAlias() {
     return '시작';
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.mapStarter.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.mapStarter.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.mapStarter.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.mapStarter.skills.index)
   async indexDraw(
-    @Body()
     props:
       | DiceUserActivitySkillDrawPropsType<
           MethodReturnType<MapStarterService, 'index'>

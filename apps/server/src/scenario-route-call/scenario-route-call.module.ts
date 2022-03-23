@@ -2,5 +2,9 @@ import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module } from '@nestjs/common';
 import { ScenarioRouteCallService } from './scenario-route-call.service';
 
-@Module({ imports: [DiscoveryModule], providers: [ScenarioRouteCallService] })
+@Module({
+  imports: [DiscoveryModule],
+  providers: [ScenarioRouteCallService],
+  exports: [ScenarioRouteCallService],
+})
 export class ScenarioRouteCallModule {}

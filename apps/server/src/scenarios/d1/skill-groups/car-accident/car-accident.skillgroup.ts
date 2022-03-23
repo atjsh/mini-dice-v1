@@ -1,34 +1,32 @@
-import { Body } from '@nestjs/common';
 import { MessageResponseFactory, PlainMessage } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
-  SkillGroup,
-  MethodReturnType,
-  SkillDraw,
   drawDiceUserActivityMessage,
   IndexSkillPropsType,
+  MethodReturnType,
   Skill,
+  SkillDraw,
+  SkillGroup,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { CarAccidentService } from './car-accident.service';
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.carAccident)
-export class CarAccidentController implements SkillGroupController {
+@SkillGroup(D1ScenarioRoutes.skillGroups.carAccident)
+export class CarAccidentSkillGroup implements SkillGroupController {
   constructor(private skillService: CarAccidentService) {}
 
   getSkillGroupAlias() {
     return '교통사고';
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.carAccident.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.carAccident.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.carAccident.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.carAccident.skills.index)
   async indexDraw(
-    @Body()
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<CarAccidentService, 'index'>
     >,

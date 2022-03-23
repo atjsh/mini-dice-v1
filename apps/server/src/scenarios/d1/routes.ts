@@ -40,10 +40,10 @@ export const D1ScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
   moneyCollectionBeggers: [IndexSkill],
 } as const);
 
-export const OrderedDogdripScenarioRoutes: SkillRouteType[] = [
-  DogdripScenarioRoutes.skillGroups.mapStarter,
-  DogdripScenarioRoutes.skillGroups.carAccident,
-  DogdripScenarioRoutes.skillGroups.rps,
-  DogdripScenarioRoutes.skillGroups.nightFood,
-  DogdripScenarioRoutes.skillGroups.land1,
+export const OrderedD1ScenarioRoutes: SkillRouteType[] = [
+  D1ScenarioRoutes.skillGroups.mapStarter,
+  D1ScenarioRoutes.skillGroups.carAccident,
+  D1ScenarioRoutes.skillGroups.rps,
+  D1ScenarioRoutes.skillGroups.nightFood,
+  D1ScenarioRoutes.skillGroups.land1,
 ].map((skillGroup) => skillGroup.skills[IndexSkill]);

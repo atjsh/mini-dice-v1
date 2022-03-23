@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import {
   DataFieldType,
   FormMessageType,
@@ -7,28 +7,28 @@ import {
   LinkGroupType,
   LinkType,
   PlainMessageType,
-  UserActivityMessageType
-} from "..";
-import { useSubmitUserInteraction } from "../tdol-server/user-interaction";
+  UserActivityMessageType,
+} from '..';
+import { useSubmitUserInteraction } from '../tdol-server/user-interaction';
 
-const MessageWidth = "w-max min-w ";
+const MessageWidth = 'w-max min-w ';
 const MessageCommon = `${MessageWidth} my-1 mx-2`;
 
-const UserActivityMessageRadius = "rounded-xl";
-const UserActivityMessagePadding = "p-5";
+const UserActivityMessageRadius = 'rounded-xl';
+const UserActivityMessagePadding = 'p-5';
 const UserActivityMessageCommon = `${UserActivityMessagePadding} ${UserActivityMessageRadius} bg-gray-800 text-gray-400 font-bold`;
 
 const Text: React.FC<{ t?: string }> = ({ t: text }) => {
   return (
     <>
       {text
-        ? text.split("\n").map((line, index) => (
+        ? text.split('\n').map((line, index) => (
             <div key={index}>
               {line}
               <br />
             </div>
           ))
-        : ""}
+        : ''}
     </>
   );
 };
@@ -63,7 +63,7 @@ export const UserActivityMessage: React.FC<{
 };
 
 export const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
-  plainMessage
+  plainMessage,
 }) => {
   return (
     <div className="flex flex-row">
@@ -90,7 +90,7 @@ export const LinkMessage: React.FC<{
       onClick={() => {
         mutate.mutate({
           callingSkillParam: link.param,
-          callingSkillRoute: link.skillRoute
+          callingSkillRoute: link.skillRouteURL,
         });
       }}
     >
@@ -110,7 +110,7 @@ export const LinkGroupMessage: React.FC<{
   const [issue, setIssue] = useState<null | string>(null);
 
   const mutate = useSubmitUserInteraction((error) => {
-    setIssue("이미 진행했어요! 주사위를 굴리세요.");
+    setIssue('이미 진행했어요! 주사위를 굴리세요.');
     setTimeout(() => {
       setIssue(null);
     }, 3000);
@@ -137,12 +137,12 @@ export const LinkGroupMessage: React.FC<{
 };
 
 export const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
-  dataField
+  dataField,
 }) => {
   return (
     <div
       className={`${
-        dataField.inline ? "inline-block" : "block"
+        dataField.inline ? 'inline-block' : 'block'
       } mr-5 mb-5 rounded-xl `}
     >
       <div className="font-bold text-sm text-gray-600">{dataField.label}</div>
@@ -225,7 +225,7 @@ export const FormMessage: React.FC<{
           mutate={() => {
             mutate.mutate({
               callingSkillParam: formParam,
-              callingSkillRoute: form.submitSkillRoute
+              callingSkillRoute: form.skillRouteURL,
             });
           }}
           isButtonActive={true}

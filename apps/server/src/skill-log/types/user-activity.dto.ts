@@ -16,7 +16,7 @@ export class DiceUserActivity implements UserActivityInterface {
   stockChangeAmount?: number;
 }
 
-export class InteractionUserActivity<T = Record<string, string>>
+export class InteractionUserActivity<T = Record<string, any>>
   implements UserActivityInterface
 {
   type: 'interaction';

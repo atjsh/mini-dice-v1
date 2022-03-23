@@ -1,14 +1,11 @@
-import { Body } from '@nestjs/common';
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
+  Link,
+  LinkGroup,
   MessageResponseFactory,
   PlainMessage,
-  LinkGroup,
-  Link,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { UserJwtDto } from 'apps/server/src/auth/local-jwt/access-token/dto/user-jwt.dto';
-import { UserJwt } from 'apps/server/src/profile/decorators/user.decorator';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
   drawDiceUserActivityMessage,
@@ -17,6 +14,7 @@ import {
   Skill,
   SkillDraw,
   SkillGroup,
+  SkillPropsType,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
@@ -36,8 +34,8 @@ class RpsSubmitParamType {
   move: RpsMove;
 }
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.rps)
-export class RpsController implements SkillGroupController {
+@SkillGroup(D1ScenarioRoutes.skillGroups.rps)
+export class RpsSkillGroup implements SkillGroupController {
   constructor(
     private skillService: RpsService,
     private userRepository: UserRepository,
@@ -47,14 +45,13 @@ export class RpsController implements SkillGroupController {
     return '가위바위보';
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.rps.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.rps.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.rps.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.rps.skills.index)
   async indexDraw(
-    @Body()
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<RpsService, 'index'>
     >,
@@ -87,22 +84,21 @@ export class RpsController implements SkillGroupController {
     });
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
-  async submit(
-    @Body() props: InteractionUserActivity<RpsSubmitParamType>,
-    @UserJwt() { userId }: UserJwtDto,
-  ) {
+  @Skill(D1ScenarioRoutes.skillGroups.rps.skills.submit)
+  async submit({
+    userActivity,
+    userId,
+  }: SkillPropsType<InteractionUserActivity<RpsSubmitParamType>>) {
     const user = await this.userRepository.findOneOrFail(userId);
     return this.skillService.submit({
       userId: userId,
-      rpsMove: props.params.move,
+      rpsMove: userActivity.params.move,
       username: user.username,
     });
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.rps.skills.submit)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.rps.skills.submit)
   async submitDraw(
-    @Body()
     props: InteractionUserActivitySkillDrawPropsType<
       MethodReturnType<RpsService, 'submit'>
     >,

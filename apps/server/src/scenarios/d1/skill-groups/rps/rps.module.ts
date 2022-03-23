@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { RpsService } from './rps.service';
-import { RpsController } from './rps.controller';
+import { RpsSkillGroup } from './rps.skillgroup';
 
 @Module({
-  controllers: [RpsController],
-  providers: [RpsService]
+  providers: [RpsSkillGroup, RpsService],
 })
 export class RpsModule {}

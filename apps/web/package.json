@@ -33,7 +33,7 @@
   },
   "source": "src/index.html",
   "scripts": {
-    "start": "NODE_ENV=web parcel --https",
+    "start": "NODE_ENV=web parcel",
     "build": "parcel build src/index.html"
   },
   "eslintConfig": {

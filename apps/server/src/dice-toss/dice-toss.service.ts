@@ -7,18 +7,14 @@ import {
 import { MessageResponseType, UserIdType } from '@packages/shared-types';
 import * as _ from 'lodash';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { getAuthorizationHeaderField } from '../auth/local-jwt/local-jwt.service';
 import { getRandomInteger } from '../common/random/random-number';
+import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
 import {
-  DogdripScenarioRoutes,
-  OrderedDogdripScenarioRoutes,
+  D1ScenarioRoutes,
+  OrderedD1ScenarioRoutes,
 } from '../scenarios/d1/routes';
 import { SkillLogService } from '../skill-log/skill-log.service';
-import { SkillDrawPropsType } from '../skill-log/types/skill-draw-props.dto';
-import {
-  GameStartUserAcitvity,
-  DiceUserActivity,
-} from '../skill-log/types/user-activity.dto';
+import { DiceUserActivity } from '../skill-log/types/user-activity.dto';
 import {
   isUserThrowingDiceTossAllowedOrThrow,
   serializeUserToJson,
@@ -31,6 +27,7 @@ export class DiceTossService {
   constructor(
     private userRepository: UserRepository,
     private skillLogService: SkillLogService,
+    private scenarioRouteCallService: ScenarioRouteCallService,
   ) {}
 
   private throwDices(dices: number): number[] {
@@ -74,18 +71,17 @@ export class DiceTossService {
 
   async tossDiceAndGetWebMessageResponse(
     userJwt: UserJwtDto,
-    authorizationValue: string,
   ): Promise<DiceTossOutputDto> {
-    const user = await this.userRepository.findOneOrFail(userJwt.userId);
-
-    isUserThrowingDiceTossAllowedOrThrow(user);
+    isUserThrowingDiceTossAllowedOrThrow(
+      await this.userRepository.findOneOrFail(userJwt.userId),
+    );
 
     const diceResult = this.throwDices(1);
 
     const lastSkillLog = await this.skillLogService.getLastLogOrCreateOne({
       userId: userJwt.userId,
       skillRoute: getSkillRoutePath(
-        DogdripScenarioRoutes.skillGroups.mapStarter.skills.index,
+        D1ScenarioRoutes.skillGroups.mapStarter.skills.index,
       ),
       skillServiceResult: undefined,
       userActivity: {
@@ -95,10 +91,8 @@ export class DiceTossService {
 
     if (lastSkillLog.isCreated == true) {
       const skillDrawResult =
-        await this.scenarioRoutingService.callSkillDrawBySkillRoute<
-          SkillDrawPropsType<GameStartUserAcitvity, null>,
-          MessageResponseType
-        >(
+        await this.scenarioRouteCallService.callSkillDraw<MessageResponseType>(
+          getSkillRouteFromPath(lastSkillLog.log.skillRoute),
           {
             date: lastSkillLog.log.date,
             skillServiceResult: null,
@@ -106,11 +100,12 @@ export class DiceTossService {
               type: 'gameStart',
             },
           },
-          lastSkillLog.log.skillRoute,
         );
 
       return {
-        user: serializeUserToJson(user),
+        user: serializeUserToJson(
+          await this.userRepository.findOneOrFail(userJwt.userId),
+        ),
         skillLog: {
           skillDrawResult: skillDrawResult,
           id: lastSkillLog.log.id,
@@ -122,7 +117,7 @@ export class DiceTossService {
     const nextSkillRoute = this.moveUserForward(
       getSkillRouteFromPath(lastSkillLog.log.skillRoute),
       _.sum(diceResult),
-      OrderedDogdripScenarioRoutes,
+      OrderedD1ScenarioRoutes,
     );
 
     const diceUserActivity: DiceUserActivity = {
@@ -132,14 +127,10 @@ export class DiceTossService {
     };
 
     const skillServiceResult =
-      await this.scenarioRoutingService.callSkillBySkillRoute<
-        DiceUserActivity,
-        any
-      >(
-        diceUserActivity,
-        nextSkillRoute,
-        getAuthorizationHeaderField(authorizationValue),
-      );
+      await this.scenarioRouteCallService.callSkill<any>(nextSkillRoute, {
+        userActivity: diceUserActivity,
+        userId: userJwt.userId,
+      });
 
     const skillServiceLog = await this.skillLogService.createLog({
       userId: userJwt.userId,
@@ -149,20 +140,19 @@ export class DiceTossService {
     });
 
     const skillDrawResult =
-      await this.scenarioRoutingService.callSkillDrawBySkillRoute<
-        SkillDrawPropsType<DiceUserActivity, any>,
-        MessageResponseType
-      >(
+      await this.scenarioRouteCallService.callSkillDraw<MessageResponseType>(
+        nextSkillRoute,
         {
           date: skillServiceLog.date,
           skillServiceResult: skillServiceResult,
           userActivity: diceUserActivity,
         },
-        nextSkillRoute,
       );
 
     return {
-      user: serializeUserToJson(user),
+      user: serializeUserToJson(
+        await this.userRepository.findOneOrFail(userJwt.userId),
+      ),
       skillLog: {
         skillDrawResult: skillDrawResult,
         id: skillServiceLog.id,

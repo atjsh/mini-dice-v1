@@ -71,7 +71,7 @@ export function getScenarioRoute<
 }
 
 export function getSkillGroupPath(
-  skillGroup: SkillGroupRouteType,
+  skillGroup: Pick<SkillGroupRouteType, 'scenarioName' | 'skillGroupName'>,
 ): SkillGroupPath {
   return `${skillGroup.scenarioName}/${skillGroup.skillGroupName}`;
 }

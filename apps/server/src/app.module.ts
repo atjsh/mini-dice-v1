@@ -1,12 +1,20 @@
+import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
+import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
+import { DiceTossModule } from './dice-toss/dice-toss.module';
+import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-logger.interceptor';
+import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
+import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
 import { D1Module } from './scenarios/d1/d1.module';
 import { TempSignupModule } from './temp-signup/temp-signup.module';
+import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -58,6 +66,7 @@ import { UserModule } from './user/user.module';
       }),
       inject: [ConfigService],
     }),
+    CacheProxyModule,
 
     LocalJwtModule,
     GoogleOAuthModule,
@@ -65,8 +74,21 @@ import { UserModule } from './user/user.module';
 
     UserModule,
     ProfileModule,
+    UserInteractionWebModule,
+    DiceTossModule,
+    RecentSkillLogsModule,
 
     D1Module,
+
+    DiscoveryModule,
+
+    LoggingModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpRequestResponseLoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}

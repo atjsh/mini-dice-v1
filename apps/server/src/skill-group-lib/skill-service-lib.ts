@@ -1,5 +1,7 @@
 import { applyDecorators, Injectable, SetMetadata } from '@nestjs/common';
 import {
+  getSkillGroupPath,
+  getSkillRoutePath,
   SkillGroupRouteType,
   SkillRouteType,
 } from '@packages/scenario-routing';
@@ -13,8 +15,11 @@ import {
   UserActivityMessageType,
   UserIdType,
 } from '@packages/shared-types';
-import _ from 'lodash';
-import { DiceUserActivity } from '../skill-log/types/user-activity.dto';
+import * as _ from 'lodash';
+import {
+  DiceUserActivity,
+  UserActivityType,
+} from '../skill-log/types/user-activity.dto';
 
 export type BaseSkillServiceProps = {
   userId: UserIdType;
@@ -48,14 +53,22 @@ export type IndexSkillPropsType = {
   userId: UserIdType;
 };
 
+export type SkillPropsType<UserActivity extends UserActivityType> = {
+  userId: UserIdType;
+  userActivity: UserActivity;
+};
+
 export const SkillDraw = (skill: SkillRouteType) =>
-  SetMetadata(SkillDrawMetadataKey, skill);
+  SetMetadata(SkillDrawMetadataKey, getSkillRoutePath(skill));
 
 export const Skill = (skill: SkillRouteType) =>
-  SetMetadata(SkillMetadataKey, skill);
+  SetMetadata(SkillMetadataKey, getSkillRoutePath(skill));
 
 export const SkillGroup = (skillGroup: SkillGroupRouteType) =>
-  applyDecorators(SetMetadata(SkillGroupMetadataKey, skillGroup), Injectable());
+  applyDecorators(
+    SetMetadata(SkillGroupMetadataKey, getSkillGroupPath(skillGroup)),
+    Injectable(),
+  );
 
 export function drawDiceUserActivityMessage(
   diceUserActivity: DiceUserActivity,

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from 'apps/server/src/user/user.module';
-import { MapStarterController } from './map-starter.controller';
+import { MapStarterSkillGroup } from './map-starter.skillgroup';
 import { MapStarterService } from './map-starter.service';
 
 @Module({
   imports: [UserModule],
-  controllers: [MapStarterController],
-  providers: [MapStarterService],
+  providers: [MapStarterSkillGroup, MapStarterService],
 })
 export class MapStarterModule {}

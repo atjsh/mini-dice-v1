@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { NightFoodService } from './night-food.service';
-import { NightFoodController } from './night-food.controller';
+import { NightFoodSkillGroup } from './night-food.skillgroup';
 
 @Module({
-  controllers: [NightFoodController],
-  providers: [NightFoodService]
+  providers: [NightFoodSkillGroup, NightFoodService],
 })
 export class NightFoodModule {}

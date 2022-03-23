@@ -1,36 +1,34 @@
-import { Body } from '@nestjs/common';
 import { MessageResponseFactory, PlainMessage } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
-  SkillGroup,
-  MethodReturnType,
-  SkillDraw,
-  IndexSkillPropsType,
-  Skill,
   drawDiceUserActivityMessage,
+  IndexSkillPropsType,
+  MethodReturnType,
+  Skill,
+  SkillDraw,
+  SkillGroup,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { DogdripScenarioRoutes } from '../../routes';
+import { D1ScenarioRoutes } from '../../routes';
 import { NightFoodService, PROFIT_STATUS } from './night-food.service';
 
 const nightFoodPlainMessageTitle = '야식';
 
-@SkillGroup(DogdripScenarioRoutes.skillGroups.nightFood)
-export class NightFoodController implements SkillGroupController {
+@SkillGroup(D1ScenarioRoutes.skillGroups.nightFood)
+export class NightFoodSkillGroup implements SkillGroupController {
   constructor(private skillService: NightFoodService) {}
 
   getSkillGroupAlias() {
     return '야식';
   }
 
-  @Skill(DogdripScenarioRoutes.skillGroups.nightFood.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.nightFood.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(DogdripScenarioRoutes.skillGroups.nightFood.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.nightFood.skills.index)
   async indexDraw(
-    @Body()
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<NightFoodService, 'index'>
     >,

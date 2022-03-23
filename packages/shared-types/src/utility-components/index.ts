@@ -1,5 +1,5 @@
 import { MessageResponse, MessageResponsePropsType } from '..';
 
 export function MessageResponseFactory(props: MessageResponsePropsType) {
-  return JSON.stringify(MessageResponse(props));
+  return JSON.parse(JSON.stringify(MessageResponse(props)));
 }

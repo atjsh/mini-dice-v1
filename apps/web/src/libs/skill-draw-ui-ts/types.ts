@@ -62,7 +62,7 @@ export class DataFieldType {
 }
 
 export class LinkType<T = Record<string, string>> {
-  skillRoute: SkillRouteType;
+  skillRouteURL: string;
 
   param: T;
 
@@ -110,7 +110,7 @@ export class FormMessageType implements BaseMessage {
 
   submitButtonLabel: string;
 
-  submitSkillRoute: SkillRouteType;
+  skillRouteURL: string;
 }
 
 export class UserActivityMessageType implements BaseMessage {

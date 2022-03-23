@@ -130,7 +130,7 @@ export class RpsService implements SkillService {
 
     await this.userRepository.setUserCanTossDice(
       props.userId,
-      getUserCanTossDice(SCENARIO_NAMES.D1),
+      getUserCanTossDice(SCENARIO_NAMES.D1, true),
     );
 
     return {

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CarAccidentService } from './car-accident.service';
-import { CarAccidentController } from './car-accident.controller';
+import { CarAccidentSkillGroup } from './car-accident.skillgroup';
 
 @Module({
-  controllers: [CarAccidentController],
-  providers: [CarAccidentService]
+  providers: [CarAccidentSkillGroup, CarAccidentService],
 })
 export class CarAccidentModule {}
