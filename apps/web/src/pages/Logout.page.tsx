@@ -1,7 +1,10 @@
-import { useLogout } from "../libs";
+import { useLogout } from '../libs';
 
 export function LogoutPage() {
-  useLogout();
-  window.location.href = "/";
+  const { isSuccess } = useLogout();
+  if (isSuccess) {
+    window.location.href = '/';
+  }
+
   return <></>;
 }
