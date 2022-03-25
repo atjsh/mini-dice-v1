@@ -41,6 +41,7 @@ export class Land1Service {
     await this.userRepository.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
+      false,
     );
 
     return {

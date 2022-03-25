@@ -61,10 +61,12 @@ export const DiceTossButton: React.FC<{
     return (
       <div className="">
         <button
-          className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+          className={`${baseButtonClassNames} cursor-progress bg-gray-500 select-none`}
         >
           🎲 주사위 굴리기
         </button>
+        <br />
+        <br />
       </div>
     );
   }
@@ -80,6 +82,8 @@ export const DiceTossButton: React.FC<{
       >
         🎲 주사위 굴리기
       </button>
+      <br />
+      <br />
     </div>
   );
 };

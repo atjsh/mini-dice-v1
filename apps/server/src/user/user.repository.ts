@@ -77,7 +77,7 @@ export class UserRepository extends Repository<UserEntity> {
   ) {
     if (userOriginalCash) {
       return await this.partialUpdateUser(userId, {
-        cash: userOriginalCash + BigInt(cashDifference),
+        cash: BigInt(userOriginalCash) + BigInt(cashDifference),
       });
     }
 
@@ -93,11 +93,15 @@ export class UserRepository extends Repository<UserEntity> {
    * @param canTossDiceAt
    * @returns
    */
-  async setUserCanTossDice(userId: UserIdType, canTossDiceAt: Date) {
+  async setUserCanTossDice(
+    userId: UserIdType,
+    canTossDiceAt: Date,
+    resetSubmitAllowedMapStop = true,
+  ) {
     return await this.partialUpdateUser(userId, {
       isUserDiceTossForbidden: false,
       canTossDiceAfter: canTossDiceAt,
-      submitAllowedMapStop: null,
+      submitAllowedMapStop: resetSubmitAllowedMapStop ? null : undefined,
     });
   }
 
