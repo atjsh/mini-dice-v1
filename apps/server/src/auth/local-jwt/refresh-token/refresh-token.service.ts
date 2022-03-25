@@ -64,9 +64,12 @@ export class RefreshTokenService {
   async findRefreshToken(
     value: RefreshTokenEntity['value'],
   ): Promise<RefreshTokenEntity> {
+    console.log(`findRefreshToken: ${value}`);
+
     const refreshTokenUserId = await this.cacheManager.get<UserIdType>(
       this.getCacheKey(value),
     );
+    console.log(`refreshTokenUserId: ${refreshTokenUserId}`);
     if (refreshTokenUserId) {
       return {
         value,

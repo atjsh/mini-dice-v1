@@ -1,9 +1,10 @@
 import { useLogout } from '../libs';
 
 export function LogoutPage() {
-  const { isSuccess } = useLogout();
-  if (isSuccess) {
-    window.location.href = '/';
+  const { data } = useLogout();
+
+  if (data?.success == true) {
+    location.href = '/';
   }
 
   return <></>;

@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { queryClient } from '../../..';
+import axios, { AxiosResponse } from 'axios';
 import { ReactQueryAccessTokenKey } from './constants';
 import { RefreshTokenNotFoundException } from './exceptions';
 
@@ -37,6 +36,10 @@ async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
   }
 }
 
+function revokeUserAccessToken() {
+  localStorage.removeItem(LocalStrageAccessTokenKey);
+}
+
 export async function getUserAccessToken(): Promise<AccessTokenType> {
   const accessTokenFromLocalStorage = localStorage.getItem(
     LocalStrageAccessTokenKey,
@@ -47,6 +50,8 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
     isJwtTokenExpired(accessTokenFromLocalStorage) === false
   ) {
     return accessTokenFromLocalStorage;
+  } else {
+    revokeUserAccessToken();
   }
 
   const accessTokenFromServer = await getUserAccessTokenFromServer();
@@ -57,21 +62,17 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
 }
 
 async function revokeUserRefreshToken() {
-  await axios.post(
+  const result = await axios.post<any, AxiosResponse<{ success: boolean }>>(
     `${process.env.REACT_APP_TDOL_SERVER_URL}/auth/logout`,
     {},
     { withCredentials: true },
   );
+  return result.data;
 }
 
-function revokeUserAccessToken() {
-  localStorage.removeItem(LocalStrageAccessTokenKey);
-}
-
-export function logoutUser() {
-  revokeUserRefreshToken();
+export async function logoutUser() {
   revokeUserAccessToken();
-  queryClient.removeQueries(ReactQueryAccessTokenKey, { exact: true });
+  return await revokeUserRefreshToken();
 }
 
 authedAxios.interceptors.request.use(async (config: any) => {
