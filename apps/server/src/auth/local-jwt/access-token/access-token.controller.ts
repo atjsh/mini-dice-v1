@@ -17,6 +17,6 @@ export class AccessTokenController {
       );
     }
 
-    throw new ForbiddenException('refreshToken not found.');
+    throw new ForbiddenException();
   }
 }

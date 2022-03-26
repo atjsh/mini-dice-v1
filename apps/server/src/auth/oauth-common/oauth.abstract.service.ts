@@ -46,7 +46,7 @@ export abstract class OauthAbstractService {
       );
 
       if (anonUser.email != null) {
-        throw new ForbiddenException('이미 연동이 완료된 유저입니다.');
+        throw new ForbiddenException('FYX');
       }
 
       // 기존에 구글 계정으로 가입했는지 체크
@@ -116,6 +116,7 @@ export abstract class OauthAbstractService {
           10000000000,
           99999999999,
         )}${getRandomString(4)}`,
+        signupCompleted: false,
       });
 
       await this.setNewRefreshTokenOnCookie(expressResponse, user);

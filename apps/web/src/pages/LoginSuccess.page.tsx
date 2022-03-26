@@ -5,14 +5,18 @@ import {
 } from '@packages/shared-types';
 import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { revokeUserAccessToken, updateUserVo, useQueryString } from '../libs';
+import {
+  revokeUserAccessToken,
+  userCompleteSignup,
+  useQueryString,
+} from '../libs';
 import {
   validateUsername,
   ValidationError,
 } from '../libs/tdol-server/profile/validations';
 import { IndexPageURL } from './routes';
 
-function UsernameUpdateForm() {
+function UserCompleteSignupForm() {
   const [username, setUsername] = useState('');
   const [country, setCountry] = useState(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
@@ -20,9 +24,6 @@ function UsernameUpdateForm() {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setUsername(e.target.value.trim());
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setDisabled(true);
@@ -36,7 +37,7 @@ function UsernameUpdateForm() {
     } else if (usernameValidationResult == ValidationError.TOOLONG) {
       setError(`${username}은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`);
     } else {
-      await updateUserVo({ username, countryCode3: country });
+      await userCompleteSignup({ username, countryCode3: country });
       setSuccess(true);
     }
 
@@ -115,7 +116,7 @@ export function LoginSuccessPage() {
         <div className="m-auto bg-white p-6 rounded-2xl">
           <h1 className="text-2xl font-bold">사용자 정보 입력</h1>
           <p>새 사용자입니다. 정보를 입력하세요.</p>
-          <UsernameUpdateForm />
+          <UserCompleteSignupForm />
         </div>
       </div>
     );

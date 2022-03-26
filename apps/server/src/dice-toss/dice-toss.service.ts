@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import {
   getSkillRouteFromPath,
   getSkillRoutePath,
@@ -72,9 +72,11 @@ export class DiceTossService {
   async tossDiceAndGetWebMessageResponse(
     userJwt: UserJwtDto,
   ): Promise<DiceTossOutputDto> {
-    isUserThrowingDiceTossAllowedOrThrow(
-      await this.userRepository.findOneOrFail(userJwt.userId),
-    );
+    const user = await this.userRepository.findOneOrFail(userJwt.userId);
+    isUserThrowingDiceTossAllowedOrThrow(user);
+    if (user.signupCompleted == false) {
+      throw new ForbiddenException('finish signup fist');
+    }
 
     const diceResult = this.throwDices(1);
 

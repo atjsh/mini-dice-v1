@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import { MessageResponseType } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
@@ -24,7 +24,10 @@ export class UserInteractionWebService {
     callingSkillParam: Record<string, string>,
     userJwt: UserJwtDto,
   ): Promise<UserInteractionOutputDto> {
-    console.log(callingSkillRoute);
+    const user = await this.userRepository.findOneOrFail(userJwt.userId);
+    if (user.signupCompleted == false) {
+      throw new ForbiddenException('finish signup fist');
+    }
 
     await this.userService.isUserCallingSkillAllowedOrThrow(
       userJwt.userId,
@@ -61,11 +64,10 @@ export class UserInteractionWebService {
         },
       );
 
-    // 유저의 정보를 확인함
-    const user = await this.userRepository.findOneOrFail(userJwt.userId);
+    const updatedUser = await this.userRepository.findOneOrFail(userJwt.userId);
 
     return {
-      user: serializeUserToJson(user),
+      user: serializeUserToJson(updatedUser),
       skillLog: {
         id: skillServiceLog.id,
         skillDrawResult: skillDrawResult,

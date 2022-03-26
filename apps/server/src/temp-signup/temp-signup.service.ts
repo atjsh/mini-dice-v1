@@ -25,6 +25,7 @@ export class TempSignupService {
     const user = await this.userRepository.signUpNewUser({
       username,
       authProvider: 'hcaptcha',
+      signupCompleted: true,
     });
 
     const refreshToken = await this.refreshTokenService.createNewRefreshToken({

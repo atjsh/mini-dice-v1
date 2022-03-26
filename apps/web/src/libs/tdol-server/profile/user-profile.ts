@@ -15,3 +15,13 @@ export async function updateUserVo(
   );
   return response;
 }
+
+export async function userCompleteSignup(
+  partialUser: Partial<UserVo>,
+): Promise<UserVo> {
+  const response = await authedAxios.patch<Partial<UserVo>, UserVo>(
+    `/profile/complete-signup`,
+    partialUser,
+  );
+  return response;
+}

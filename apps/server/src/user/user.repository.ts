@@ -13,7 +13,10 @@ export class UserRepository extends Repository<UserEntity> {
    * @returns
    */
   async signUpNewUser(
-    createUser: Pick<UserEntity, 'username' | 'authProvider'> &
+    createUser: Pick<
+      UserEntity,
+      'username' | 'authProvider' | 'signupCompleted'
+    > &
       Partial<Pick<UserEntity, 'email'>>,
   ) {
     return await this.save(
@@ -26,7 +29,7 @@ export class UserRepository extends Repository<UserEntity> {
         isUserDiceTossForbidden: false,
         canTossDiceAfter: new Date(),
         countryCode3: 'KOR',
-        signupCompleted: false,
+        signupCompleted: createUser.signupCompleted,
       }),
     );
   }
@@ -55,11 +58,10 @@ export class UserRepository extends Repository<UserEntity> {
   /**
    * 유저를 회원가입 완료처리한다.
    */
-  async completeSignup({
-    id: userId,
-    countryCode3,
-    username,
-  }: CompleteSignupUserDto) {
+  async completeSignup(
+    userId: UserIdType,
+    { countryCode3, username }: CompleteSignupUserDto,
+  ) {
     return await this.partialUpdateUser(userId, {
       countryCode3,
       username,

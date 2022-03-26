@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UpdateUserDto } from '@packages/shared-types';
+import { CompleteSignupUserDto, UpdateUserDto } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { USER_PROFILE_APIS } from '../common';
 import { UserRepository } from '../user/user.repository';
@@ -25,5 +25,17 @@ export class ProfileController {
   @Patch('me')
   updateUserById(@UserJwt() userJwt: UserJwtDto, @Body() user: UpdateUserDto) {
     return this.userRepository.partialUpdateUser(userJwt.userId, user);
+  }
+
+  @JwtAuth()
+  @Patch('complete-signup')
+  completeSignup(
+    @UserJwt() userJwt: UserJwtDto,
+    @Body() completeSignupUserDto: CompleteSignupUserDto,
+  ) {
+    return this.userRepository.completeSignup(
+      userJwt.userId,
+      completeSignupUserDto,
+    );
   }
 }
