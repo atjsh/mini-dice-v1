@@ -24,8 +24,6 @@ export class UserInteractionWebController {
     @UserJwt() userJwt: UserJwtDto,
     @Body() userInteraction: UserInteractionDto,
   ): Promise<UserInteractionOutputDto> {
-    console.log(userInteraction);
-
     return await this.userInteractionWebService.callSkillFromWebUserInteraction(
       getSkillRouteFromPath(userInteraction.callingSkillRoute),
       userInteraction.callingSkillParam,

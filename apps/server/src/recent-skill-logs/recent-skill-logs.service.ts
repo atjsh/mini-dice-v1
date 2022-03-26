@@ -33,7 +33,6 @@ export class RecentSkillLogsService {
               userActivity: skillLog.userActivity,
             },
           );
-        console.log(skillDrawResult);
 
         return {
           skillDrawResult: skillDrawResult,

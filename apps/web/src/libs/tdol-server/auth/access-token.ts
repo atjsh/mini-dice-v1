@@ -76,8 +76,6 @@ export async function logoutUser() {
 }
 
 authedAxios.interceptors.request.use(async (config: any) => {
-  console.log('wha2t');
-
   const accessToken = await getUserAccessToken();
 
   config.headers.Authorization = `Bearer ${accessToken}`;
