@@ -33,11 +33,11 @@ export const DiceTossButton: React.FC<{
         <button
           className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
         >
-          🎲 주사위 굴리기
+          🎲 먼저 칸을 마치세요
+          <div className="mt-2 font-normal text-base">
+            칸을 마치세요! 그래야 주사위를 굴릴 수 있어요.
+          </div>
         </button>
-        <div className="mt-2 font-bold text-base">
-          먼저 칸을 마치세요! <br /> 그래야 주사위를 굴릴 수 있어요.
-        </div>
       </div>
     );
   } else if (canTossDiceAfter && canTossDiceAfter > useDateTime) {
@@ -50,20 +50,23 @@ export const DiceTossButton: React.FC<{
         <button
           className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
         >
-          🎲 주사위 굴리기
+          🎲 주사위 기다리기
+          <div className="mt-2 font-normal text-base">
+            <span className="font-bold text-gray-200">{needTime}초</span>{' '}
+            <span className="text-gray-300">
+              후에 주사위를 굴릴 수 있습니다.
+            </span>
+          </div>
         </button>
-        <div className="mt-2 font-bold text-base">
-          {needTime}초 후에 주사위를 굴릴 수 있습니다.
-        </div>
       </div>
     );
   } else if (diceButtonState.isPending) {
     return (
       <div className="">
         <button
-          className={`${baseButtonClassNames} cursor-progress bg-gray-500 select-none`}
+          className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
         >
-          🎲 주사위 굴리기
+          🎲 주사위를 굴리는 중 ...
         </button>
         <br />
         <br />
@@ -75,9 +78,9 @@ export const DiceTossButton: React.FC<{
     <div className="">
       <button
         className={`${baseButtonClassNames} bg-blue-500 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95`}
-        onMouseDown={() => {
-          onClick();
+        onClick={() => {
           setDiceButtonState({ isPending: true });
+          onClick();
         }}
       >
         🎲 주사위 굴리기

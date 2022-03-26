@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ACCESS_TOKEN_EXPIRES_IN } from '../constants';
-import { UserJwtDto } from './dto/user-jwt.dto';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { UserJwtDto } from './dto/user-jwt.dto';
 export type AccessTokenType = string;
 
 @Injectable()
@@ -16,10 +16,6 @@ export class AccessTokenService {
     const refreshTokenEntity = await this.refreshTokenService.findRefreshToken(
       refreshToken,
     );
-
-    if (!refreshTokenEntity) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
 
     const payload: UserJwtDto = {
       userId: refreshTokenEntity.userId,

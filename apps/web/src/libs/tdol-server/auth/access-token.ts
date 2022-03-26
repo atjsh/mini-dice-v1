@@ -36,7 +36,7 @@ async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
   }
 }
 
-function revokeUserAccessToken() {
+export function revokeUserAccessToken() {
   localStorage.removeItem(LocalStrageAccessTokenKey);
 }
 
@@ -76,6 +76,8 @@ export async function logoutUser() {
 }
 
 authedAxios.interceptors.request.use(async (config: any) => {
+  console.log('wha2t');
+
   const accessToken = await getUserAccessToken();
 
   config.headers.Authorization = `Bearer ${accessToken}`;

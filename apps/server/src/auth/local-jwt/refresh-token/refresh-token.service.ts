@@ -53,30 +53,46 @@ export class RefreshTokenService {
     });
   }
 
-  async deleteRefreshToken(
-    expressResponse: FastifyReply,
-    refreshTokenValue: string,
-  ) {
-    expressResponse.clearCookie('refreshToken');
+  async deleteRefreshToken(response: FastifyReply, refreshTokenValue: string) {
+    response.clearCookie('refreshToken', { path: '/' });
     await this.cacheManager.del(this.getCacheKey(refreshTokenValue));
   }
 
   async findRefreshToken(
-    value: RefreshTokenEntity['value'],
+    refreshTokenValue: RefreshTokenEntity['value'],
   ): Promise<RefreshTokenEntity> {
-    console.log(`findRefreshToken: ${value}`);
-
     const refreshTokenUserId = await this.cacheManager.get<UserIdType>(
-      this.getCacheKey(value),
+      this.getCacheKey(refreshTokenValue),
     );
-    console.log(`refreshTokenUserId: ${refreshTokenUserId}`);
     if (refreshTokenUserId) {
       return {
-        value,
+        value: refreshTokenValue,
         userId: refreshTokenUserId,
       };
     }
 
-    throw new ForbiddenException(`Refresh Token Not Valid: ${value}`);
+    throw new ForbiddenException(
+      `Refresh Token Not Valid: ${refreshTokenValue}`,
+    );
+  }
+
+  /**
+   * refreshToken을 찾는다.
+   * 실패한 경우, 1. 쿠키에 할당된 refreshToken을 삭제한다. 2. 예외를 던진다.
+   * 성공한 경우, refreshToken을 반환한다.
+   * @param response
+   * @param refreshTokenValue
+   * @returns
+   */
+  async findRefreshTokenOrRevokeAndThrow(
+    response: FastifyReply,
+    refreshTokenValue: string,
+  ): Promise<RefreshTokenEntity> {
+    try {
+      return await this.findRefreshToken(refreshTokenValue);
+    } catch (error) {
+      await this.deleteRefreshToken(response, refreshTokenValue);
+      throw error;
+    }
   }
 }

@@ -3,9 +3,9 @@ import {
   countryMetadataIsoList,
   CountryMetadataType,
 } from '@packages/shared-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { updateUserVo, useQueryString } from '../libs';
+import { revokeUserAccessToken, updateUserVo, useQueryString } from '../libs';
 import {
   validateUsername,
   ValidationError,
@@ -100,6 +100,10 @@ function UsernameUpdateForm() {
 export function LoginSuccessPage() {
   const isNewUser = useQueryString().get('isNewUser') === 'true';
   const signinFinished = useQueryString().get('signinFinished') === 'true';
+
+  useEffect(() => {
+    revokeUserAccessToken();
+  }, []);
 
   if (isNewUser === false) {
     return <Redirect to={IndexPageURL} />;

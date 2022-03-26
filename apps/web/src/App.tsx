@@ -1,15 +1,16 @@
-import "reflect-metadata";
-import { Helmet } from "react-helmet";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { useAccessToken } from "./libs";
-import { AuthRoute } from "./libs/routes";
-import { routes } from "./pages/routes";
-import smoothscroll from "smoothscroll-polyfill";
+import { Helmet } from 'react-helmet';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import 'reflect-metadata';
+import smoothscroll from 'smoothscroll-polyfill';
+import { useAccessToken } from './libs';
+import { AuthRoute } from './libs/routes';
+import { routes } from './pages/routes';
 
 function App() {
   smoothscroll.polyfill();
 
-  const { data, isLoading } = useAccessToken();
+  const { data: accessToken, isLoading: isAccessTokenLoading } =
+    useAccessToken();
 
   return (
     <>
@@ -17,11 +18,11 @@ function App() {
         <Switch>
           {routes.map((route) =>
             route.authRequired === true ? (
-              isLoading ? (
+              isAccessTokenLoading ? (
                 <></>
               ) : (
                 <AuthRoute
-                  authenticated={data != null}
+                  authenticated={accessToken != null}
                   path={route.path}
                   render={() => (
                     <>
@@ -44,7 +45,7 @@ function App() {
                   </>
                 )}
               />
-            )
+            ),
           )}
         </Switch>
       </BrowserRouter>

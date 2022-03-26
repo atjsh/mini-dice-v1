@@ -1,5 +1,6 @@
-import { Redirect, Route } from "react-router-dom";
-import { LoginPageURL } from "../../pages/routes";
+import { Redirect, Route } from 'react-router-dom';
+import { LoginPageURL } from '../../pages/routes';
+import { useUser } from '../tdol-server';
 
 export function AuthRoute({
   authenticated,
@@ -7,6 +8,8 @@ export function AuthRoute({
   render,
   ...rest
 }: any) {
+  const { data: user, isLoading: isUserLoading } = useUser();
+
   return (
     <Route
       {...rest}

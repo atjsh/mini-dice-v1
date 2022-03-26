@@ -36,7 +36,8 @@ export abstract class OauthAbstractService {
     if (alreadyExistedRefreshToken != undefined) {
       // 익명 유저가 맞는지 체크
       const refreshTokenEntity =
-        await this.refreshTokenService.findRefreshToken(
+        await this.refreshTokenService.findRefreshTokenOrRevokeAndThrow(
+          expressResponse,
           alreadyExistedRefreshToken,
         );
 
@@ -89,6 +90,8 @@ export abstract class OauthAbstractService {
           expressResponse,
           existingOAuthProviderUser,
         );
+
+        await this.userRepository.terminateUser(anonUser.id);
 
         return {
           isNewUser: false,
