@@ -1,6 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { LoginPageURL } from '../../pages/routes';
-import { useUser } from '../tdol-server';
+import { IndexPageURL } from '../../pages/routes';
 
 export function AuthRoute({
   authenticated,
@@ -8,8 +7,6 @@ export function AuthRoute({
   render,
   ...rest
 }: any) {
-  const { data: user, isLoading: isUserLoading } = useUser();
-
   return (
     <Route
       {...rest}
@@ -22,7 +19,7 @@ export function AuthRoute({
           )
         ) : (
           <Redirect
-            to={{ pathname: LoginPageURL, state: { from: props.location } }}
+            to={{ pathname: IndexPageURL, state: { from: props.location } }}
           />
         )
       }

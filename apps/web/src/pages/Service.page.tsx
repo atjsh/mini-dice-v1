@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
 import { useDisplayingMessages } from '../components/displaying-messages/use-displaying-messages.hook';
+import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 import { MapStatusBar } from '../components/map/map-status-bar.component';
 import { ProfileWidget } from '../components/profile/profile-widget.component';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
@@ -70,10 +71,11 @@ export function ServicePage() {
       <div className="px-3 p-2 flex flex-col gap-3 h-screen flex-shrink-0">
         <WordmarkComponent />
 
-        <div className="bg-gray-100 rounded-3xl px-3 h-full overflow-y-auto w-80 p-3 flex flex-col gap-3">
+        <div className="bg-gray-100 rounded-3xl px-3 h-full overflow-y-auto w-96 p-3 flex flex-col gap-3">
           <ProfileWidget />
           <ConnectWithOauthWidget />
           <WalletWidget />
+          <FooterWidgetComponent />
         </div>
       </div>
       <Ingame />

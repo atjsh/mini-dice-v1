@@ -5,16 +5,17 @@ import {
 } from '@packages/shared-types';
 import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { ServiceLayout } from '../layouts/wide-service/service.layout';
 import {
   revokeUserAccessToken,
-  userCompleteSignup,
   useQueryString,
+  userCompleteSignup,
 } from '../libs';
 import {
   validateUsername,
   ValidationError,
 } from '../libs/tdol-server/profile/validations';
-import { IndexPageURL } from './routes';
+import { IndexPageURL, LogoutPageURL, ServicePageURL } from './routes';
 
 function UserCompleteSignupForm() {
   const [username, setUsername] = useState('');
@@ -32,10 +33,12 @@ function UserCompleteSignupForm() {
 
     if (usernameValidationResult == ValidationError.TOOSHORT) {
       setError(
-        `${username}은 너무 짧습니다. 2자~20자 길이의 닉네임을 정하세요.`,
+        `닉네임 '${username}'은 너무 짧습니다. 2자~20자 길이의 닉네임을 정하세요.`,
       );
     } else if (usernameValidationResult == ValidationError.TOOLONG) {
-      setError(`${username}은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`);
+      setError(
+        `닉네임 '${username}'은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`,
+      );
     } else {
       await userCompleteSignup({ username, countryCode3: country });
       setSuccess(true);
@@ -50,51 +53,53 @@ function UserCompleteSignupForm() {
       push={false}
     />
   ) : (
-    <div className="mt-5">
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col">
-          <label htmlFor="username">닉네임</label>
-          <input
-            type="text"
-            name="username"
-            value={username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUsername(e.target.value.trim())
-            }
-            className="border border-gray-500 p-2 w-full rounded-lg"
-          />
-        </div>
-        <div className="flex flex-col mt-5">
-          <label htmlFor="country">국가</label>
-          <select
-            name="country"
-            value={country}
-            onChange={(e) => setCountry(e.target.value as CountryCode3Type)}
-            className="border border-gray-500 p-2 w-full rounded-lg"
-          >
-            {countryMetadataIsoList.map((country: CountryMetadataType) => (
-              <option key={country.code3} value={country.code3}>
-                {country.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {error !== '' ? <div>{error}</div> : <></>}
-        <button
-          type="submit"
-          disabled={disabled}
-          className={
-            'w-full p-4 rounded-2xl transition duration-150 text-base font-semibold select-none mt-5 ' +
-            (disabled
-              ? 'text-white bg-gray-600 cursor-not-allowed'
-              : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
+    <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
+      <div className="flex flex-col items-center gap-2">
+        <div className=" font-medium text-xl">닉네임을 입력하세요.</div>
+        <input
+          type="text"
+          className="border-2 border-black rounded-xl p-2 w-96"
+          placeholder="2자 이상, 20자 미만"
+          value={username}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setUsername(e.target.value.trim())
           }
+        />
+      </div>
+
+      <div className="flex flex-col items-center gap-2 hidden">
+        <div className=" font-medium text-xl">국가를 선택하세요.</div>
+        <select
+          name="country"
+          value={country}
+          className="border-2 border-black rounded-xl p-2 w-96"
+          onChange={(e) => setCountry(e.target.value as CountryCode3Type)}
         >
-          정보 설정하기
-        </button>
-      </form>
-    </div>
+          {countryMetadataIsoList.map((country: CountryMetadataType) => (
+            <option key={country.code3} value={country.code3}>
+              {country.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className=" italic text-red-500">{error}</div>
+
+      <button
+        type="submit"
+        disabled={disabled}
+        className={
+          'inline-block px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
+          (disabled
+            ? 'text-white bg-gray-600 cursor-not-allowed'
+            : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
+        }
+      >
+        회원가입하고 플레이
+      </button>
+      <Link to={LogoutPageURL} className="font-medium">
+        취소
+      </Link>
+    </form>
   );
 }
 
@@ -112,28 +117,17 @@ export function LoginSuccessPage() {
 
   if (signinFinished === false) {
     return (
-      <div className="w-screen h-screen bg-gray-100 text-black flex">
-        <div className="m-auto bg-white p-6 rounded-2xl">
-          <h1 className="text-2xl font-bold">사용자 정보 입력</h1>
-          <p>새 사용자입니다. 정보를 입력하세요.</p>
-          <UserCompleteSignupForm />
+      <ServiceLayout>
+        <div className="text-center">
+          <div className="flex-col flex gap-2">
+            <h1 className="text-5xl font-bold">Mini Dice</h1>
+            <div className="font-medium text-xl">회원가입 완료하기</div>
+          </div>
         </div>
-      </div>
+        <UserCompleteSignupForm />
+      </ServiceLayout>
     );
   }
 
-  return (
-    <div className="w-screen h-screen bg-gray-100 text-black flex">
-      <div className="m-auto bg-white p-6 rounded-2xl">
-        <h1 className="text-2xl font-bold">가입 완료. 게임을 시작합니다!</h1>
-        <Link
-          to={IndexPageURL}
-          replace={true}
-          className="text-white w-full p-4 rounded-2xl transition duration-150 text-base font-semibold bg-blue-500 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95 mt-5 inline-block text-center"
-        >
-          홈으로
-        </Link>
-      </div>
-    </div>
-  );
+  return <Redirect to={ServicePageURL} />;
 }

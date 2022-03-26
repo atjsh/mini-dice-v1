@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { googleOAuthCredential } from '../constants';
+import { ServiceLayout } from '../layouts/wide-service/service.layout';
 import { useUser } from '../libs';
-import { LinkArrowImage } from '../components/link-arrow/link-box.component';
-import { ProfilePageURL } from './routes';
+import { ServicePageURL, TempSignupPageURL } from './routes';
 
 const linkBoxCommonStyle =
   'rounded-xl w-96 max-w-full h-60 relative font-bold transition-colors mr-2';
@@ -9,48 +10,37 @@ const linkBoxCommonStyle =
 export function IndexPage() {
   const { data, isLoading } = useUser();
 
-  return (
-    <div className="bg-gray-100 w-screen h-screen">
-      <div className="max-w-5xl mx-auto px-3">
-        <h1 className="text-6xl font-bold py-16">Mini Dice</h1>
-        <div>
-          <Link to="/service" className="w-min inline-block">
-            <div
-              className={`${linkBoxCommonStyle} bg-white hover:bg-blue-500 hover:text-white`}
-            >
-              <div className="absolute left-4 top-4 text-3xl">🎲🗺 인생게임</div>
-              <div className="absolute bottom-14 right-4 text-xs font-normal">
-                주사위로 전 세계를 탐험하며 돈을 벌어 보세요.
-              </div>
-              <div className="absolute bottom-4 right-4 text-lg">
-                시작하기 {LinkArrowImage}
-              </div>
-            </div>
-          </Link>
-          <hr className="my-6 border-gray-300" />
-          {isLoading ? (
-            ''
-          ) : (
-            <Link to={ProfilePageURL} className="w-min inline-block">
-              <div
-                className={`${linkBoxCommonStyle} bg-white hover:bg-red-500 hover:text-white`}
-              >
-                <div className="absolute left-4 top-4 text-3xl">
-                  🤖 프로필 ({data?.username})
-                </div>
-                <div className="absolute top-20 left-4">
-                  <div>잔고</div>
-                  <div className="text-4xl">{data?.cash}</div>
-                </div>
-
-                <div className="absolute bottom-4 right-4 text-lg">
-                  {LinkArrowImage}
-                </div>
-              </div>
-            </Link>
-          )}
+  return isLoading == true ? (
+    <></>
+  ) : data != null ? (
+    <Redirect to={ServicePageURL} />
+  ) : (
+    <ServiceLayout>
+      <div className="text-center">
+        <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
+        <div className="flex-col flex gap-2">
+          <h1 className="text-5xl font-bold">Mini Dice</h1>
+          <div className="font-medium text-xl">인생게임</div>
         </div>
       </div>
-    </div>
+      <div className=" flex flex-col text-center gap-5">
+        <div>
+          <Link
+            className="inline-block text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold bg-blue-500 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95"
+            to={TempSignupPageURL}
+          >
+            바로 플레이
+          </Link>
+        </div>
+        <div>
+          <a
+            className="inline-block text-xl text-blue-600 hover:underline p-5"
+            href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleOAuthCredential.clientId}&redirect_uri=${process.env.REACT_APP_TDOL_SERVER_URL}${googleOAuthCredential.redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`}
+          >
+            구글 계정으로 플레이 →
+          </a>
+        </div>
+      </div>
+    </ServiceLayout>
   );
 }

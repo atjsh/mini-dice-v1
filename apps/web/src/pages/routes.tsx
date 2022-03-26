@@ -1,10 +1,9 @@
 import { FourOhFourPage } from './404.page';
 import { IndexPage } from './Index.page';
-import { LoginPage } from './Login.page';
 import { LoginSuccessPage } from './LoginSuccess.page';
 import { LogoutPage } from './Logout.page';
-import { ProfilePage } from './Profile.page';
 import { ServicePage } from './Service.page';
+import { TempSignupPage } from './TempSignup.page';
 import { InteractionTestPage } from './TEST/Interactions.page';
 
 export type Route = {
@@ -16,9 +15,9 @@ export type Route = {
 };
 
 export const IndexPageURL = '/';
-export const LoginPageURL = '/login';
 export const LogoutPageURL = '/logout';
-export const ProfilePageURL = '/profile';
+export const TempSignupPageURL = '/anon';
+export const ServicePageURL = '/service';
 
 function getTitle(subTitle: string) {
   return `Mini Dice - ${subTitle}`;
@@ -26,23 +25,16 @@ function getTitle(subTitle: string) {
 
 export const routes: Route[] = [
   {
-    path: IndexPageURL,
+    path: '/',
     component: FourOhFourPage,
     title: getTitle('404'),
     exact: false,
     authRequired: false,
   },
   {
-    path: '/',
+    path: IndexPageURL,
     component: IndexPage,
     title: getTitle('Home'),
-    exact: true,
-    authRequired: false,
-  },
-  {
-    path: LoginPageURL,
-    component: LoginPage,
-    title: getTitle('Login'),
     exact: true,
     authRequired: false,
   },
@@ -61,18 +53,18 @@ export const routes: Route[] = [
     authRequired: true,
   },
   {
-    path: ProfilePageURL,
-    component: ProfilePage,
-    title: getTitle('Profile'),
-    exact: true,
-    authRequired: true,
-  },
-  {
-    path: '/service',
+    path: ServicePageURL,
     component: ServicePage,
     title: getTitle('Service'),
     exact: true,
     authRequired: true,
+  },
+  {
+    path: TempSignupPageURL,
+    component: TempSignupPage,
+    title: getTitle('바로 플레이'),
+    exact: true,
+    authRequired: false,
   },
   {
     path: '/test/interactions',

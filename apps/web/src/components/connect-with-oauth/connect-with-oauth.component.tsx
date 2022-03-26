@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { googleOAuthCredential } from '../../constants';
 import { useUser } from '../../libs';
-import { googleOAuthCredential } from '../../pages/Login.page';
 
 export const ConnectWithOauthWidget: React.FC = () => {
   const { data: user } = useUser();
