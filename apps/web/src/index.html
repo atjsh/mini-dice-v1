@@ -6,6 +6,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      var isIE = /*@cc_on!@*/ false || !!document.documentMode;
+      if (isIE) {
+        document.getElementById('root').innerHTML =
+          '<h1>Sorry, this app is not supported in Internet Explorer. Use Google Chrome or Others instead.<br />당신의 "인터넷 익스플로러" 웹브라우저는 지원되지 않습니다. 구글 크롬 또는 다른 웹브라우저를 사용하여 접속해 주세요.</h1>';
+      }
+    </script>
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
