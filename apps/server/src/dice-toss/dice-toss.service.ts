@@ -45,8 +45,7 @@ export class DiceTossService {
       orderedSkillRoutes,
       (skillRoute) =>
         skillRoute.skillGroupName == currentSkillRoute.skillGroupName &&
-        skillRoute.scenarioName == currentSkillRoute.scenarioName &&
-        skillRoute.name == currentSkillRoute.name,
+        skillRoute.scenarioName == currentSkillRoute.scenarioName,
     );
 
     const nextSkillRouteIndex =
