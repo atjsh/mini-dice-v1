@@ -47,6 +47,11 @@ export function Ingame() {
         </div>
       </div>
       <div className="mx-auto my-0 max-w-5xl">
+        <div className="text-center bg-blue-100 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
+          <p className="text-xl">
+            "🎲 주사위 굴리기" 버튼을 계속 눌러 게임을 진행하세요!
+          </p>
+        </div>
         <Messages messages={displayingMessages} />
 
         <div className="p-7 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15">

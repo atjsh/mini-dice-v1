@@ -28,7 +28,7 @@ export class GoogleOAuthController {
         );
 
       return response
-        .status(302)
+        .status(301)
         .redirect(
           `${this.configService.get('FRONT_URL')}/login-success?isNewUser=${
             googleOAuthResult.isNewUser
@@ -38,8 +38,8 @@ export class GoogleOAuthController {
       console.error(error);
 
       return response
-        .status(302)
-        .redirect(`${this.configService.get('FRONT_URL')}/login`);
+        .status(301)
+        .redirect(`${this.configService.get('FRONT_URL')}`);
     }
   }
 }

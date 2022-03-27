@@ -4,6 +4,7 @@ import { getRandomInteger } from '../../common/random/random-number';
 import { getRandomString } from '../../common/random/random-string';
 import { UserEntity } from '../../user/entity/user.entity';
 import { UserRepository } from '../../user/user.repository';
+import { RefreshTokenEntity } from '../local-jwt/refresh-token/entity/refresh-token.entity';
 import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 
 export abstract class OauthAbstractService {
@@ -26,6 +27,39 @@ export abstract class OauthAbstractService {
     );
   }
 
+  private async signUpNewUser(
+    expressResponse: FastifyReply,
+    email: string,
+    provider: string,
+  ) {
+    const user = await this.userRepository.signUpNewUser({
+      email,
+      authProvider: provider,
+      username: `유저${getRandomInteger(
+        10000000000,
+        99999999999,
+      )}${getRandomString(4)}`,
+      signupCompleted: false,
+    });
+
+    await this.setNewRefreshTokenOnCookie(expressResponse, user);
+
+    return {
+      isNewUser: true,
+    };
+  }
+
+  private async signInExistingUser(
+    expressResponse: FastifyReply,
+    user: UserEntity,
+  ) {
+    await this.setNewRefreshTokenOnCookie(expressResponse, user);
+
+    return {
+      isNewUser: false,
+    };
+  }
+
   protected async authUserWithOauthProvider(
     provider: UserEntity['authProvider'],
     email: UserEntity['email'],
@@ -35,11 +69,25 @@ export abstract class OauthAbstractService {
     // 익명 유저가 구글 계정 연동 버튼을 누른 경우
     if (alreadyExistedRefreshToken != undefined) {
       // 익명 유저가 맞는지 체크
-      const refreshTokenEntity =
-        await this.refreshTokenService.findRefreshTokenOrRevokeAndThrow(
-          expressResponse,
-          alreadyExistedRefreshToken,
-        );
+      let refreshTokenEntity: RefreshTokenEntity;
+      try {
+        refreshTokenEntity =
+          await this.refreshTokenService.findRefreshTokenOrRevokeAndThrow(
+            expressResponse,
+            alreadyExistedRefreshToken,
+          );
+      } catch (e) {
+        const existingUsers = await this.userRepository.find({
+          email: email,
+          authProvider: provider,
+        });
+
+        if (existingUsers.length == 0) {
+          return this.signUpNewUser(expressResponse, email, provider);
+        }
+
+        return this.signInExistingUser(expressResponse, existingUsers[0]);
+      }
 
       const anonUser = await this.userRepository.findOneOrFail(
         refreshTokenEntity.userId,
@@ -106,31 +154,10 @@ export abstract class OauthAbstractService {
       authProvider: provider,
     });
 
-    const isNewUser = existingUsers.length == 0;
-
-    if (isNewUser) {
-      const user = await this.userRepository.signUpNewUser({
-        email,
-        authProvider: provider,
-        username: `유저${getRandomInteger(
-          10000000000,
-          99999999999,
-        )}${getRandomString(4)}`,
-        signupCompleted: false,
-      });
-
-      await this.setNewRefreshTokenOnCookie(expressResponse, user);
-
-      return {
-        isNewUser: true,
-      };
+    if (existingUsers.length == 0) {
+      return this.signUpNewUser(expressResponse, email, provider);
     }
 
-    const [user] = existingUsers;
-    await this.setNewRefreshTokenOnCookie(expressResponse, user);
-
-    return {
-      isNewUser: false,
-    };
+    return this.signInExistingUser(expressResponse, existingUsers[0]);
   }
 }

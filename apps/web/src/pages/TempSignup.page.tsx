@@ -14,11 +14,14 @@ function TempSignupForm() {
   const [username, setUsername] = useState('');
   const [hCaptchaToken, setHCaptchaToken] = useState<false | string>(false);
   const [error, setError] = useState('');
+  const [disabled, setDisabled] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUsername(e.target.value.trim());
 
   const handleSubmit = async () => {
+    setDisabled(true);
+
     const usernameValidationResult = validateUsername(username);
 
     if (hCaptchaToken == false) {
@@ -39,6 +42,8 @@ function TempSignupForm() {
         },
         {
           onSuccess: () => {
+            setDisabled(false);
+
             window.location.href =
               '/login-success?signinFinished=true&isNewUser=true';
           },
@@ -71,7 +76,13 @@ function TempSignupForm() {
 
       <button
         onClick={handleSubmit}
-        className="inline-block text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold bg-blue-500 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95"
+        disabled={disabled}
+        className={
+          'inline-block px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
+          (disabled
+            ? 'text-white bg-gray-600 cursor-progress'
+            : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
+        }
       >
         플레이
       </button>
