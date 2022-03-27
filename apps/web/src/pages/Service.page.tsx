@@ -9,6 +9,8 @@ import { WalletWidget } from '../components/wallet/wallet-widget.component';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { useDiceToss, useSkillLogs, useUser } from '../libs';
 
+const height100 = { height: '100vh, calc(var(--vh, 1vh) * 100)' };
+
 const Messages = ({ messages }: { messages: any[] }) => {
   const messagesEndRef: any = useRef(null);
   const scrollToBottom = () => {
@@ -46,8 +48,7 @@ export function Ingame({
 
   return (
     <div
-      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-      className={`flex-1 overflow-y-auto transition-colors duration-300 ${
+      className={`custom-h-screen flex-1 overflow-y-auto transition-colors duration-300 ${
         isSidebarShowing ? ' bg-gray-300' : 'bg-white'
       } md:bg-white md:transition-none`}
     >
@@ -111,13 +112,9 @@ export function ServicePage() {
   const [isSidebarShowing, setisSidebarShowing] = useState(false);
 
   return (
-    <div
-      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-      className="w-screen text-black flex relative overflow-x-hidden"
-    >
+    <div className="custom-h-screen w-screen text-black flex relative overflow-x-hidden">
       <div
-        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-        className={`px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
+        className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
           isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
         } z-10 bg-gray-100 md:bg-white drop-shadow-2xl md:drop-shadow-none transition-[right] duration-300 md:right-auto md:w-auto backdrop-blur-xl bg-opacity-60 backdrop-filter`}
       >
