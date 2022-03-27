@@ -71,7 +71,7 @@ export function Ingame({
         </div>
         <Messages messages={displayingMessages} />
 
-        <div className="p-7 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-30 flex flex-col gap-3">
+        <div className="md:p-7 p-3 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-30 flex flex-col gap-3">
           <div className=" md:hidden">
             <button
               onClick={() => {

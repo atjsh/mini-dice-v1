@@ -32,7 +32,7 @@ export const DiceTossButton: React.FC<{
     useRecoilState(diceTossButtonState);
 
   const baseButtonClassNames =
-    'text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold';
+    'text-white md:px-5 md:py-7 px-7 py-5 rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold';
 
   if (isDiceTossForbidden == true) {
     return (
