@@ -1,13 +1,13 @@
-import { useUser } from "../../libs";
+import { useUser } from '../../libs';
 
 const ValueDisplay: React.FC<{
   value: string;
   label: string;
-  fontSize: "text-md" | "text-3xl" | "text-4xl";
+  fontSize: 'text-md' | 'text-3xl' | 'text-4xl';
 }> = ({ value, label, fontSize }) => (
   <div className="flex-1">
     <div className="font-extrabold">{label}</div>
-    <div className={fontSize}>{value}</div>
+    <div className={`${fontSize} break-all`}>{value}</div>
   </div>
 );
 
@@ -23,9 +23,9 @@ export const WalletWidget: React.FC = () => {
       <div className="flex gap-4 flex-col">
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString("en-us", {
-              style: "currency",
-              currency: "USD"
+            value={`${BigInt(user.cash).toLocaleString('en-us', {
+              style: 'currency',
+              currency: 'USD',
             })}`}
             label="잔고"
             fontSize="text-4xl"
@@ -33,9 +33,9 @@ export const WalletWidget: React.FC = () => {
         </ValueDisplayContainer>
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString("en-us", {
-              style: "currency",
-              currency: "USD"
+            value={`${BigInt(user.cash).toLocaleString('en-us', {
+              style: 'currency',
+              currency: 'USD',
             })}`}
             label="주식 총평가금액"
             fontSize="text-3xl"
@@ -43,17 +43,17 @@ export const WalletWidget: React.FC = () => {
         </ValueDisplayContainer>
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString("en-us", {
-              style: "currency",
-              currency: "USD"
+            value={`${BigInt(user.cash).toLocaleString('en-us', {
+              style: 'currency',
+              currency: 'USD',
             })}`}
             label="소유중인 주식 종목"
             fontSize="text-md"
           />
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString("en-us", {
-              style: "currency",
-              currency: "USD"
+            value={`${BigInt(user.cash).toLocaleString('en-us', {
+              style: 'currency',
+              currency: 'USD',
             })}`}
             label="더블 시 주가 증감"
             fontSize="text-md"
@@ -61,17 +61,17 @@ export const WalletWidget: React.FC = () => {
         </ValueDisplayContainer>
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString("en-us", {
-              style: "currency",
-              currency: "USD"
+            value={`${BigInt(user.cash).toLocaleString('en-us', {
+              style: 'currency',
+              currency: 'USD',
             })}`}
             label="1주당 금액"
             fontSize="text-md"
           />
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString("en-us", {
-              style: "currency",
-              currency: "USD"
+            value={`${BigInt(user.cash).toLocaleString('en-us', {
+              style: 'currency',
+              currency: 'USD',
             })}`}
             label="평가손익"
             fontSize="text-md"
