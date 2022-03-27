@@ -20,8 +20,6 @@ function TempSignupForm() {
     setUsername(e.target.value.trim());
 
   const handleSubmit = async () => {
-    setDisabled(true);
-
     const usernameValidationResult = validateUsername(username);
 
     if (hCaptchaToken == false) {
@@ -35,6 +33,7 @@ function TempSignupForm() {
         `닉네임 '${username}'은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`,
       );
     } else {
+      setDisabled(true);
       mutation.mutate(
         {
           hCaptchaSuccessToken: hCaptchaToken,
@@ -42,8 +41,6 @@ function TempSignupForm() {
         },
         {
           onSuccess: () => {
-            setDisabled(false);
-
             window.location.href =
               '/login-success?signinFinished=true&isNewUser=true';
           },

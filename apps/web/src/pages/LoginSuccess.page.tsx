@@ -27,7 +27,6 @@ function UserCompleteSignupForm() {
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setDisabled(true);
     e.preventDefault();
     const usernameValidationResult = validateUsername(username);
 
@@ -40,11 +39,10 @@ function UserCompleteSignupForm() {
         `닉네임 '${username}'은 너무 깁니다. 2자~20자 길이의 닉네임을 정하세요.`,
       );
     } else {
+      setDisabled(true);
       await userCompleteSignup({ username, countryCode3: country });
       setSuccess(true);
     }
-
-    setDisabled(false);
   };
 
   return success ? (
