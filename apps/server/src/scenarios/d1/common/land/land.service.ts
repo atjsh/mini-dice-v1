@@ -260,8 +260,8 @@ export class CommonLandService {
       new Date().getTime() + initalLandData.landTTLsecs * 1000,
     );
 
-    const saveObject: Omit<LandEntity, 'isLandExpired'> = {
-      ...land,
+    const saveObject: Omit<LandEntity, 'isLandExpired' | 'user'> = {
+      id: landId,
       userId,
       expiresAt: buyableAt,
       landName,

@@ -20,18 +20,26 @@ export const DiceTossButton: React.FC<{
   isDiceTossForbidden?: UserVo['isUserDiceTossForbidden'];
   canTossDiceAfter?: UserVo['canTossDiceAfter'];
   onClick: () => any;
-}> = ({ isDiceTossForbidden, onClick, canTossDiceAfter }) => {
+  setisSidebarShowing: () => any;
+}> = ({
+  isDiceTossForbidden,
+  onClick,
+  canTossDiceAfter,
+  setisSidebarShowing,
+}) => {
   const useDateTime = DateTime();
   const [diceButtonState, setDiceButtonState] =
     useRecoilState(diceTossButtonState);
 
   const baseButtonClassNames =
     'text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold';
+
   if (isDiceTossForbidden == true) {
     return (
       <div className="">
         <button
           className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+          onClick={setisSidebarShowing}
         >
           🎲 먼저 칸을 마치세요
           <div className="mt-2 font-normal text-base">
@@ -49,6 +57,7 @@ export const DiceTossButton: React.FC<{
       <div className="">
         <button
           className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+          onClick={setisSidebarShowing}
         >
           🎲 주사위 기다리기
           <div className="mt-2 font-normal text-base">
@@ -65,6 +74,7 @@ export const DiceTossButton: React.FC<{
       <div className="">
         <button
           className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
+          onClick={setisSidebarShowing}
         >
           🎲 주사위를 굴리는 중 ...
         </button>
@@ -81,6 +91,7 @@ export const DiceTossButton: React.FC<{
         onClick={() => {
           setDiceButtonState({ isPending: true });
           onClick();
+          setisSidebarShowing();
         }}
       >
         🎲 주사위 굴리기

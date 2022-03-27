@@ -13,7 +13,7 @@ import { SCENARIO_NAMES } from '../../../scenarios.constants';
 export class CarAccidentService {
   constructor(private readonly userRepository: UserRepository) {}
   private safe() {
-    return { accident: 'safe', cacheDeclineAmount: 0 } as const;
+    return { accident: 'safe', cashDeclineAmount: 0 } as const;
   }
 
   private async accident(props: SkillServiceProps) {
@@ -69,13 +69,13 @@ export class CarAccidentService {
     ];
 
     const accident = calcRandomCashChangeEvent(accidents);
-    const { value: cacheDeclineAmount } = accident;
+    const { value: cashDeclineAmount } = accident;
 
-    await this.userRepository.changeUserCash(props.userId, -cacheDeclineAmount);
+    await this.userRepository.changeUserCash(props.userId, -cashDeclineAmount);
 
     return {
       accident: accident.eventCase.causeName,
-      cacheDeclineAmount,
+      cashDeclineAmount: cashDeclineAmount,
     };
   }
 

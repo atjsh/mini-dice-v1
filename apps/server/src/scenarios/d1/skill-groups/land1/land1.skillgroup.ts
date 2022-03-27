@@ -104,9 +104,9 @@ export class Land1SkillGroup implements SkillGroupController {
   landNotBuyableBCOtherUserAlreadyOwns(landStatus: LandStatus) {
     return [
       PlainMessage({
-        description: `아직 ${
+        description: `아직 '${
           landStatus.landOwnedBy?.username
-        }가 이 토지를 소유하고 있습니다. \n 이 토지는 ${
+        }' 유저가 이 토지를 소유하고 있습니다. \n 이 토지는 ${
           landStatus.landExpiresAt
             ? new Date(landStatus.landExpiresAt).toLocaleString('ko-KR')
             : '나중'

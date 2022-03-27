@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
 import { useDisplayingMessages } from '../components/displaying-messages/use-displaying-messages.hook';
@@ -26,7 +26,13 @@ const Messages = ({ messages }: { messages: any[] }) => {
   );
 };
 
-export function Ingame() {
+export function Ingame({
+  isSidebarShowing,
+  setisSidebarShowing,
+}: {
+  isSidebarShowing: boolean;
+  setisSidebarShowing: (param: boolean) => any;
+}) {
   const { data: logs } = useSkillLogs();
   const { data: user } = useUser();
   const mutation = useDiceToss();
@@ -39,10 +45,17 @@ export function Ingame() {
   }, [logs]);
 
   return (
-    <div className="flex-1 overflow-y-auto h-screen">
-      <div className="sticky top-0 box-content w-auto p-5 justify-center flex pr-0 bg-white">
-        <div className="flex gap-x-3 items-center text-xl max-w-5xl w-full">
-          <div className="text-3xl">🗺</div>
+    <div
+      className={`flex-1 overflow-y-auto h-screen transition-colors duration-300 ${
+        isSidebarShowing ? ' bg-gray-300' : 'bg-white'
+      } md:bg-white md:transition-none`}
+    >
+      <div className="sticky top-0 box-content w-auto p-3 justify-center flex flex-col md:flex-row pr-0 backdrop-blur-lg bg-white bg-opacity-75 backdrop-filter gap-3 border-b md:border-b-0">
+        <div className="md:hidden text-center tracking-tighter text-2xl font-bold">
+          Mini Dice
+        </div>
+        <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-5xl w-full">
+          <div className="md:text-3xl text-base">🗺</div>
           <MapStatusBar />
         </div>
       </div>
@@ -54,7 +67,25 @@ export function Ingame() {
         </div>
         <Messages messages={displayingMessages} />
 
-        <div className="p-7 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15">
+        <div className="p-7 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-30 flex flex-col gap-3">
+          <div className=" md:hidden">
+            <button
+              onClick={() => {
+                setisSidebarShowing(!isSidebarShowing);
+              }}
+              className={`${
+                isSidebarShowing == false
+                  ? 'border-gray-300 bg-white hover:bg-gray-100 active:bg-gray-300'
+                  : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white'
+              } border-2 px-4 py-2 rounded-xl transition duration-150 text-base font-semibold select-none transform active:scale-95`}
+            >
+              💵{' '}
+              {`${BigInt(user?.cash ?? 0).toLocaleString('en-us', {
+                style: 'currency',
+                currency: 'KRW',
+              })}`}
+            </button>
+          </div>
           <DiceTossButton
             canTossDiceAfter={
               user?.canTossDiceAfter
@@ -62,7 +93,10 @@ export function Ingame() {
                 : undefined
             }
             isDiceTossForbidden={user?.isUserDiceTossForbidden}
-            onClick={() => mutation.mutate()}
+            onClick={() => {
+              mutation.mutate();
+            }}
+            setisSidebarShowing={() => setisSidebarShowing(false)}
           />
         </div>
       </div>
@@ -71,19 +105,28 @@ export function Ingame() {
 }
 
 export function ServicePage() {
+  const [isSidebarShowing, setisSidebarShowing] = useState(false);
+
   return (
-    <div className="w-screen h-screen bg-white text-black flex">
-      <div className="px-3 p-2 flex flex-col gap-3 h-screen flex-shrink-0">
+    <div className="w-screen h-screen text-black flex relative overflow-x-hidden">
+      <div
+        className={`px-3 p-2 flex-col gap-1 md:gap-3 h-screen flex-shrink-0 flex md:relative absolute w-screen ${
+          isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
+        } z-10 bg-gray-100 md:bg-white drop-shadow-2xl md:drop-shadow-none transition-[right] duration-300 md:right-auto md:w-auto backdrop-blur-xl bg-opacity-60 backdrop-filter`}
+      >
         <WordmarkComponent />
 
-        <div className="bg-gray-100 rounded-3xl px-3 h-full overflow-y-auto w-96 p-3 flex flex-col gap-3">
+        <div className="md:bg-gray-100 rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-48 md:pb-3">
           <ProfileWidget />
           <ConnectWithOauthWidget />
           <WalletWidget />
           <FooterWidgetComponent />
         </div>
       </div>
-      <Ingame />
+      <Ingame
+        isSidebarShowing={isSidebarShowing}
+        setisSidebarShowing={setisSidebarShowing}
+      />
     </div>
   );
 }
