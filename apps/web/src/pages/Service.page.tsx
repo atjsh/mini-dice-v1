@@ -46,7 +46,7 @@ export function Ingame({
 
   return (
     <div
-      className={`flex-1 overflow-y-auto screen transition-colors duration-300 ${
+      className={`flex-1 overflow-y-auto h-screen transition-colors duration-300 ${
         isSidebarShowing ? ' bg-gray-300' : 'bg-white'
       } md:bg-white md:transition-none`}
     >
