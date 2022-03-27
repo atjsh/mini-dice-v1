@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import App from './App';
 import './styles/index.css';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 

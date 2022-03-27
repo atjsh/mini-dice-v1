@@ -18,6 +18,7 @@
     "lodash": "^4.17.21",
     "parcel": "^2.3.2",
     "react": "^17.0.2",
+    "react-app-polyfill": "^3.0.0",
     "react-countup": "^6.0.0",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
@@ -42,7 +43,19 @@
       "react-app/jest"
     ]
   },
-  "browserslist": "IE 11",
+  "browserslist": {
+    "production": [
+      "ie 11",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "ie 11",
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",
