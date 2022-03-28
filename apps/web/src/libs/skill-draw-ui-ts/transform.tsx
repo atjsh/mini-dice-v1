@@ -29,7 +29,7 @@ export function transformSkillLogToMessage(
             <div className="overflow-x-auto">
               <LinkGroupMessage
                 linkGroup={ard as LinkGroupType}
-                isAvailable={isLast}
+                isLast={isLast}
                 key={`${skillLogId}${index}`}
               />
             </div>

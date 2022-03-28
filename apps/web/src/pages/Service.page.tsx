@@ -52,7 +52,7 @@ export function Ingame({
         isSidebarShowing ? ' bg-gray-300' : 'bg-white'
       } md:bg-white md:transition-none`}
     >
-      <div className="sticky top-0 box-content w-auto p-3 justify-center flex flex-col md:flex-row pr-0 backdrop-blur-lg bg-white bg-opacity-75 backdrop-filter gap-3 border-b md:border-b-0">
+      <div className="sticky top-0 box-content w-auto p-3 justify-center flex flex-col md:flex-row pr-0 backdrop-blur-lg bg-white bg-opacity-75 backdrop-filter gap-3 border-b md:border-b-0 z-20">
         <div className="md:hidden text-center tracking-tighter text-2xl font-bold">
           Mini Dice
         </div>
@@ -71,7 +71,7 @@ export function Ingame({
         </div>
         <Messages messages={displayingMessages} />
 
-        <div className="md:p-7 p-3 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-30 flex flex-col gap-3">
+        <div className="md:p-7 p-3 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3">
           <div className=" md:hidden">
             <button
               onClick={() => {
@@ -116,7 +116,7 @@ export function ServicePage() {
       <div
         className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
           isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
-        } z-10 bg-gray-100 md:bg-white drop-shadow-2xl md:drop-shadow-none transition-[right] duration-300 md:right-auto md:w-auto backdrop-blur-xl bg-opacity-60 backdrop-filter`}
+        } z-30 bg-gray-100 md:bg-white drop-shadow-2xl md:drop-shadow-none transition-[right] duration-300 md:right-auto md:w-auto bg-opacity-90`}
       >
         <WordmarkComponent />
 

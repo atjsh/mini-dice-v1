@@ -79,15 +79,43 @@ export const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
   );
 };
 
+const linkMessageButtonBaseClassName =
+  'px-10 py-3 mx-0.5 rounded-xl transition duration-150 select-none transform active:scale-95';
+
 export const LinkMessage: React.FC<{
   link: LinkType;
   mutate: any;
-  isButtonActive: boolean;
-}> = ({ link, mutate, isButtonActive }) => {
-  return isButtonActive == true ? (
+  isDisabled: boolean;
+  isButtonClicked: boolean;
+  setIsButtonClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  activateIssue: () => void;
+}> = ({
+  link,
+  mutate,
+  isDisabled,
+  isButtonClicked,
+  setIsButtonClicked,
+  activateIssue,
+}) => {
+  return isDisabled == true ? (
     <button
-      className="text-white px-10 py-3 mx-0.5 rounded-xl bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transition duration-150 select-none transform active:scale-95"
+      className={`${linkMessageButtonBaseClassName} text-white bg-gray-600 cursor-not-allowed`}
+      onClick={activateIssue}
+    >
+      {link.displayText}
+    </button>
+  ) : isButtonClicked == true ? (
+    <button
+      className={`${linkMessageButtonBaseClassName} text-white bg-gray-600 cursor-progress`}
+      onClick={activateIssue}
+    >
+      {link.displayText}
+    </button>
+  ) : (
+    <button
+      className={`${linkMessageButtonBaseClassName} text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 `}
       onClick={() => {
+        setIsButtonClicked(true);
         mutate.mutate({
           callingSkillParam: link.param,
           callingSkillRoute: link.skillRouteURL,
@@ -96,25 +124,23 @@ export const LinkMessage: React.FC<{
     >
       {link.displayText}
     </button>
-  ) : (
-    <button className="text-white px-10 py-3 mx-0.5 rounded-xl bg-gray-600 cursor-not-allowed">
-      {link.displayText}
-    </button>
   );
 };
 
 export const LinkGroupMessage: React.FC<{
   linkGroup: LinkGroupType;
-  isAvailable: boolean;
-}> = ({ linkGroup, isAvailable }) => {
+  isLast: boolean;
+}> = ({ linkGroup, isLast }) => {
   const [issue, setIssue] = useState<null | string>(null);
-
-  const mutate = useSubmitUserInteraction((error) => {
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const activateIssue = () => {
     setIssue('이미 진행했어요! 주사위를 굴리세요.');
     setTimeout(() => {
       setIssue(null);
     }, 3000);
-  });
+  };
+
+  const mutate = useSubmitUserInteraction(activateIssue);
 
   return (
     <div className={`${MessageCommon} bg-gray-200 px-5 py-2 rounded-3xl`}>
@@ -127,10 +153,13 @@ export const LinkGroupMessage: React.FC<{
             key={link.displayText}
             link={link}
             mutate={mutate}
-            isButtonActive={isAvailable}
+            isDisabled={isLast == false}
+            isButtonClicked={isButtonClicked}
+            setIsButtonClicked={setIsButtonClicked}
+            activateIssue={activateIssue}
           />
         ))}
-        <div className="text-red-500 font-bold text-sm mt-2">{issue}</div>
+        <div className="text-red-400 font-bold text-sm mt-2">{issue}</div>
       </div>
     </div>
   );
