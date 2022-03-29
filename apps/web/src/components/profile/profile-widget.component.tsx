@@ -21,7 +21,7 @@ export const ProfileWidget: React.FC = () => {
             <div className="font-bold text-base text-gray-500">
               {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
             </div>
-            <details className="300 rounded-lg bg-gray-100">
+            {/* <details className="300 rounded-lg bg-gray-100">
               <summary className="cursor-pointer text-sm font-bold p-2 hover:bg-gray-200 active:bg-gray-300 transition-colors bg-white rounded-lg border-gray-300 border hover:border-gray-400">
                 설정
               </summary>
@@ -34,7 +34,7 @@ export const ProfileWidget: React.FC = () => {
                   </li>
                 </ul>
               </div>
-            </details>
+            </details> */}
           </div>
         </div>
       ) : (

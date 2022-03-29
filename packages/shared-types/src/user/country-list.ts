@@ -422,5 +422,5 @@ export const countryCode3List = countryMetadataIsoList.map(
  * 이 배열에 해당되는 국가코드가 할당된 유저는 웹 클라이언트를 통한 게임 플레이가 금지된다.
  */
 export const webGameplayBannedCountryCode3List = countryCode3List.filter(
-  (code3) => code3 == 'MMR' || code3 == 'KOR',
+  (code3) => code3 == 'MMR',
 );

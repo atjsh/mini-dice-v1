@@ -4,14 +4,8 @@ import { LoginSuccessPage } from './FinishSignup.page';
 import { LogoutPage } from './Logout.page';
 import { ServicePage } from './Service.page';
 import { TempSignupPage } from './TempSignup.page';
-
-export type Route = {
-  path: string;
-  component: React.ComponentType<any>;
-  title: string;
-  exact: boolean;
-  authRequired: boolean;
-};
+import { PrivaryPage } from './Privacy.page';
+import { TermsPage } from './terms.page';
 
 export type Protection =
   | 'public'
@@ -33,9 +27,11 @@ export const LogoutPageURL = '/logout';
 export const TempSignupPageURL = '/anon';
 export const ServicePageURL = '/service';
 export const FinishSignupPageURL = '/finish-signup';
+export const PrivacyPolicyPageURL = '/privacy';
+export const TermsPageURL = '/terms';
 
-function getTitle(subTitle: string) {
-  return `Mini Dice - ${subTitle}`;
+function getTitle(subTitle?: string) {
+  return `Mini Dice ${subTitle ? '-' : ''} ${subTitle ?? ''}`;
 }
 
 const protectedRoutesUnreversed: ProtectedRoute[] = [
@@ -49,7 +45,7 @@ const protectedRoutesUnreversed: ProtectedRoute[] = [
   {
     path: IndexPageURL,
     component: IndexPage,
-    title: getTitle('Home'),
+    title: getTitle(),
     exact: true,
     protection: 'notAuthed',
   },
@@ -70,62 +66,31 @@ const protectedRoutesUnreversed: ProtectedRoute[] = [
   {
     path: ServicePageURL,
     component: ServicePage,
-    title: getTitle('Service'),
+    title: getTitle('Sign Up'),
     exact: true,
     protection: 'signupCompleted',
   },
   {
     path: TempSignupPageURL,
     component: TempSignupPage,
-    title: getTitle('바로 플레이'),
+    title: getTitle('Sign Up (anonymous)'),
     exact: true,
     protection: 'notAuthed',
+  },
+  {
+    path: PrivacyPolicyPageURL,
+    component: PrivaryPage,
+    title: getTitle('Privacy Policy'),
+    exact: true,
+    protection: 'public',
+  },
+  {
+    path: TermsPageURL,
+    component: TermsPage,
+    title: getTitle('Terms'),
+    exact: true,
+    protection: 'public',
   },
 ];
 
 export const protectedRoutes = protectedRoutesUnreversed.reverse();
-
-export const routes: Route[] = [
-  {
-    path: '/',
-    component: FourOhFourPage,
-    title: getTitle('404'),
-    exact: false,
-    authRequired: false,
-  },
-  {
-    path: IndexPageURL,
-    component: IndexPage,
-    title: getTitle('Home'),
-    exact: true,
-    authRequired: false,
-  },
-  // {
-  //   path: LogoutPageURL,
-  //   component: LogoutPage,
-  //   title: getTitle('Logout'),
-  //   exact: true,
-  //   authRequired: false,
-  // },
-  // {
-  //   path: '/login-success',
-  //   component: LoginSuccessPage,
-  //   title: getTitle('Sign up'),
-  //   exact: true,
-  //   authRequired: true,
-  // },
-  // {
-  //   path: ServicePageURL,
-  //   component: ServicePage,
-  //   title: getTitle('Service'),
-  //   exact: true,
-  //   authRequired: true,
-  // },
-  // {
-  //   path: TempSignupPageURL,
-  //   component: TempSignupPage,
-  //   title: getTitle('바로 플레이'),
-  //   exact: true,
-  //   authRequired: false,
-  // },
-].reverse();

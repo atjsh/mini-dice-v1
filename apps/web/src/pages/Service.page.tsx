@@ -121,9 +121,9 @@ export function ServicePage() {
         <WordmarkComponent />
 
         <div className="md:bg-gray-100 rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-48 md:pb-3">
-          <ProfileWidget />
           <ConnectWithOauthWidget />
           <WalletWidget />
+          <ProfileWidget />
           <FooterWidgetComponent />
         </div>
       </div>
