@@ -74,7 +74,7 @@ function UserCompleteSignupForm() {
         />
       </div>
 
-      <div className="flex flex-col items-center gap-2 hidden">
+      <div className="flex flex-col items-center gap-2">
         <div className=" font-medium text-xl text-center">
           당신이 거주 중인 국가를 선택하세요.
         </div>
@@ -122,13 +122,15 @@ export function LoginSuccessPage() {
 
   return (
     <ServiceLayout>
-      <div className="text-center">
-        <div className="flex-col flex gap-2">
-          <h1 className="text-5xl font-bold">Mini Dice</h1>
-          <div className="font-medium text-xl">회원가입 완료하기</div>
+      <div className=" flex flex-col gap-10">
+        <div className="text-center">
+          <div className="flex-col flex gap-2">
+            <h1 className="text-5xl font-bold">Mini Dice</h1>
+            <div className="font-medium text-xl">회원가입 완료하기</div>
+          </div>
         </div>
+        <UserCompleteSignupForm />
       </div>
-      <UserCompleteSignupForm />
     </ServiceLayout>
   );
 }

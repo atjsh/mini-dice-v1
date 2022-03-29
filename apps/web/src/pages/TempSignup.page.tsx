@@ -79,7 +79,7 @@ function TempSignupForm() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col items-center gap-2 hidden">
+      <div className="flex flex-col items-center gap-2">
         <div className=" font-medium text-xl text-center">
           당신이 거주 중인 국가를 선택하세요.
         </div>
@@ -129,13 +129,15 @@ function TempSignupForm() {
 export const TempSignupPage: React.FC = () => {
   return (
     <ServiceLayout>
-      <div className="text-center">
-        <div className="flex-col flex gap-2">
-          <h1 className="text-5xl font-bold">Mini Dice</h1>
-          <div className="font-medium text-xl">바로 플레이 계정 생성</div>
+      <div className=" flex flex-col gap-10">
+        <div className="text-center">
+          <div className="flex-col flex gap-2">
+            <h1 className="text-5xl font-bold">Mini Dice</h1>
+            <div className="font-medium text-xl">바로 플레이 계정 생성</div>
+          </div>
         </div>
+        <TempSignupForm />
       </div>
-      <TempSignupForm />
     </ServiceLayout>
   );
 };

@@ -15,8 +15,7 @@ export const ServiceLayout: React.FC = ({ children }) => (
       </div>
     </div>
 
-    {children}
-
+    <div className=" px-6">{children}</div>
     <FooterWidgetComponent />
   </div>
 );
