@@ -1,5 +1,7 @@
-import { authedAxios } from '..';
 import { UserVo } from '@packages/shared-types';
+import { queryClient } from '../../..';
+import { useMutation } from 'react-query';
+import { authedAxios, UseUserHookKey } from '..';
 
 export async function getUserVo(): Promise<UserVo> {
   const response = await authedAxios.get<UserVo>(`/profile/me`);
@@ -25,3 +27,10 @@ export async function userCompleteSignup(
   );
   return response;
 }
+
+export const useCompleteSignup = () =>
+  useMutation(userCompleteSignup, {
+    onSuccess: () => {
+      queryClient.refetchQueries([UseUserHookKey]);
+    },
+  });

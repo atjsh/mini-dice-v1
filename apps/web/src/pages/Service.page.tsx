@@ -19,7 +19,7 @@ const Messages = ({ messages }: { messages: any[] }) => {
   useEffect(scrollToBottom, [messages]);
 
   return (
-    <div className="px-5 flex-grow">
+    <div className="px-5 flex-grow md:pb-0 pb-52">
       {messages.map((message, index) => (
         <div key={index}>{message}</div>
       ))}
@@ -71,7 +71,7 @@ export function Ingame({
         </div>
         <Messages messages={displayingMessages} />
 
-        <div className="md:p-7 p-3 text-center sticky bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3">
+        <div className="md:p-7 p-3 text-center md:sticky fixed w-full bottom-0 mt-4 backdrop-blur-lg bg-white bg-opacity-25 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3">
           <div className=" md:hidden">
             <button
               onClick={() => {

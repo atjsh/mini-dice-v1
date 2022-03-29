@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
+    <noscript
+      >You need to enable JavaScript to use this website. 이 웹사이트를
+      사용하려면 자바스크립트(Javascript)를 활성화해야 합니다.</noscript
+    >
     <div id="root"></div>
     <script>
       var isIE = /*@cc_on!@*/ false || !!document.documentMode;
       if (isIE) {
         document.getElementById('root').innerHTML =
-          '<h1>Mini Dice</h1><h2>Sorry, this app is not supported in Internet Explorer.</h2> <p>Use Google Chrome or Others instead.</p><h2>당신의 "인터넷 익스플로러" 웹브라우저는 지원되지 않습니다. </h2><p>구글 크롬 또는 다른 웹브라우저를 사용하여 접속해 주세요.</p>';
+          '<h1>Mini Dice 인생게임</h1><h2>Sorry, this website is not supported in Internet Explorer.</h2> <p>Use <a href="https://www.google.com/intl/ko/chrome/">Google Chrome</a> or Others instead.</p><h2>당신의 "인터넷 익스플로러" 웹브라우저는 지원되지 않습니다. </h2><p><a href="https://www.google.com/intl/ko/chrome/">구글 크롬</a> 또는 다른 웹브라우저를 사용하여 접속해 주세요.</p>';
       }
     </script>
     <script type="module" src="./index.tsx"></script>

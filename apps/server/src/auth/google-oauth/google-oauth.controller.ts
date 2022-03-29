@@ -30,8 +30,10 @@ export class GoogleOAuthController {
       return response
         .status(301)
         .redirect(
-          `${this.configService.get('FRONT_URL')}/login-success?isNewUser=${
-            googleOAuthResult.isNewUser
+          `${this.configService.get(
+            'FRONT_URL',
+          )}/finish-signup?signinFinished=${
+            googleOAuthResult.isSignupFinished
           }`,
         );
     } catch (error) {

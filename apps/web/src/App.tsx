@@ -1,54 +1,99 @@
 import { Helmet } from 'react-helmet';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import 'reflect-metadata';
 import smoothscroll from 'smoothscroll-polyfill';
-import { useAccessToken } from './libs';
-import { AuthRoute } from './libs/routes';
-import { routes } from './pages/routes';
+import { useUser } from './libs';
+import {
+  FinishSignupPageURL,
+  protectedRoutes,
+  ServicePageURL,
+} from './pages/routes';
 
-function App() {
+function App(props) {
   smoothscroll.polyfill();
 
-  const { data: accessToken, isLoading: isAccessTokenLoading } =
-    useAccessToken();
+  const { isError: isNotAuthed, data: user, isLoading } = useUser();
 
   return (
     <>
-      <BrowserRouter>
-        <Switch>
-          {routes.map((route) =>
-            route.authRequired === true ? (
-              isAccessTokenLoading ? (
-                <></>
-              ) : (
-                <AuthRoute
-                  authenticated={accessToken != null}
-                  path={route.path}
-                  render={() => (
-                    <>
-                      <route.component />
-                      <Helmet title={route.title} />
-                    </>
-                  )}
-                  exact={route.exact}
-                  title={route.title}
-                />
-              )
-            ) : (
+      {isLoading ? (
+        <></>
+      ) : (
+        <BrowserRouter>
+          <Switch>
+            {protectedRoutes.map((route) => (
               <Route
                 path={route.path}
                 exact={route.exact}
-                render={() => (
-                  <>
-                    <route.component />
-                    <Helmet title={route.title} />
-                  </>
-                )}
+                render={() =>
+                  route.protection == 'notAuthed' ? (
+                    isNotAuthed ? (
+                      <>
+                        <Helmet title={route.title} />
+                        <route.component />
+                      </>
+                    ) : (
+                      <Redirect
+                        to={{
+                          pathname: ServicePageURL,
+                          state: { from: props.location },
+                        }}
+                      />
+                    )
+                  ) : route.protection == 'authed' ? (
+                    isNotAuthed == true ? (
+                      <Redirect
+                        to={{
+                          pathname: ServicePageURL,
+                          state: { from: props.location },
+                        }}
+                      />
+                    ) : (
+                      <>
+                        <Helmet title={route.title} />
+                        <route.component />
+                      </>
+                    )
+                  ) : route.protection == 'signupCompleted' ? (
+                    user?.signupCompleted == true ? (
+                      <>
+                        <Helmet title={route.title} />
+                        <route.component />
+                      </>
+                    ) : (
+                      <Redirect
+                        to={{
+                          pathname: FinishSignupPageURL,
+                          state: { from: props.location },
+                        }}
+                      />
+                    )
+                  ) : route.protection == 'signupNotCompleted' ? (
+                    user?.signupCompleted == false ? (
+                      <>
+                        <Helmet title={route.title} />
+                        <route.component />
+                      </>
+                    ) : (
+                      <Redirect
+                        to={{
+                          pathname: ServicePageURL,
+                          state: { from: props.location },
+                        }}
+                      />
+                    )
+                  ) : (
+                    <>
+                      <Helmet title={route.title} />
+                      <route.component />
+                    </>
+                  )
+                }
               />
-            ),
-          )}
-        </Switch>
-      </BrowserRouter>
+            ))}
+          </Switch>
+        </BrowserRouter>
+      )}
     </>
   );
 }

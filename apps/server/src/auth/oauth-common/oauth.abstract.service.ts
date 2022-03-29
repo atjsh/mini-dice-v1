@@ -45,7 +45,7 @@ export abstract class OauthAbstractService {
     await this.setNewRefreshTokenOnCookie(expressResponse, user);
 
     return {
-      isNewUser: true,
+      isSignupFinished: user.signupCompleted,
     };
   }
 
@@ -56,7 +56,7 @@ export abstract class OauthAbstractService {
     await this.setNewRefreshTokenOnCookie(expressResponse, user);
 
     return {
-      isNewUser: false,
+      isSignupFinished: user.signupCompleted,
     };
   }
 
@@ -118,7 +118,7 @@ export abstract class OauthAbstractService {
         await this.setNewRefreshTokenOnCookie(expressResponse, user);
 
         return {
-          isNewUser: false,
+          isSignupFinished: user.signupCompleted,
         };
       } else {
         // 기존에 구글 계정으로 가입했다면: 구글 계정으로 그냥 로그인함. 익명 계정에는 다시 접근할 수 없음.
@@ -142,7 +142,7 @@ export abstract class OauthAbstractService {
         await this.userRepository.terminateUser(anonUser.id);
 
         return {
-          isNewUser: false,
+          isSignupFinished: existingOAuthProviderUser.signupCompleted,
         };
       }
     }

@@ -3,6 +3,7 @@ import { FastifyReply } from 'fastify';
 import { RefreshTokenService } from '../auth/local-jwt/refresh-token/refresh-token.service';
 import { HCaptchaService } from '../h-captcha/h-captcha.service';
 import { UserRepository } from '../user/user.repository';
+import { TemporarySignUpDto } from './temp-signup.controller';
 
 @Injectable()
 export class TempSignupService {
@@ -13,11 +14,10 @@ export class TempSignupService {
   ) {}
 
   async createUser(
-    hCaptchaResponse: string,
-    username: string,
+    { hCaptchaSuccessToken, username, countryCode3 }: TemporarySignUpDto,
     expressResponse: FastifyReply,
   ) {
-    const response = await this.hCaptchaService.verify(hCaptchaResponse);
+    const response = await this.hCaptchaService.verify(hCaptchaSuccessToken);
 
     if (!response) {
       throw new ForbiddenException('hcaptcha fail');
@@ -26,6 +26,7 @@ export class TempSignupService {
       username,
       authProvider: 'hcaptcha',
       signupCompleted: true,
+      countryCode3,
     });
 
     const refreshToken = await this.refreshTokenService.createNewRefreshToken({

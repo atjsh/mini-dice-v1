@@ -17,7 +17,7 @@ export class UserRepository extends Repository<UserEntity> {
       UserEntity,
       'username' | 'authProvider' | 'signupCompleted'
     > &
-      Partial<Pick<UserEntity, 'email'>>,
+      Partial<Pick<UserEntity, 'email' | 'countryCode3'>>,
   ) {
     return await this.save(
       this.create({
@@ -28,7 +28,7 @@ export class UserRepository extends Repository<UserEntity> {
         submitAllowedMapStop: null,
         isUserDiceTossForbidden: false,
         canTossDiceAfter: new Date(),
-        countryCode3: 'KOR',
+        countryCode3: createUser.countryCode3 ?? 'KOR',
         signupCompleted: createUser.signupCompleted,
       }),
     );

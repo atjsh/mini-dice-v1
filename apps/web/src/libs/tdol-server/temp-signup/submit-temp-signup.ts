@@ -1,24 +1,28 @@
-import axios from "axios";
+import { CountryCode3Type } from '@packages/shared-types';
+import axios from 'axios';
 
 class SubmitTempSignupDto {
   hCaptchaSuccessToken: string;
   username: string;
+  countryCode3: CountryCode3Type;
 }
 
 export async function submitTempSignup({
   hCaptchaSuccessToken,
-  username
+  username,
+  countryCode3,
 }: SubmitTempSignupDto): Promise<boolean> {
   const result = await axios.post(
-    "/temp-signup",
+    '/temp-signup',
     {
       hCaptchaSuccessToken,
-      username
+      username,
+      countryCode3,
     },
     {
       baseURL: process.env.REACT_APP_TDOL_SERVER_URL,
-      withCredentials: true
-    }
+      withCredentials: true,
+    },
   );
 
   return true;

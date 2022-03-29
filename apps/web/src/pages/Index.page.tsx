@@ -4,17 +4,8 @@ import { ServiceLayout } from '../layouts/wide-service/service.layout';
 import { useUser } from '../libs';
 import { ServicePageURL, TempSignupPageURL } from './routes';
 
-const linkBoxCommonStyle =
-  'rounded-xl w-96 max-w-full h-60 relative font-bold transition-colors mr-2';
-
 export function IndexPage() {
-  const { data, isLoading } = useUser();
-
-  return isLoading == true ? (
-    <></>
-  ) : data != null ? (
-    <Redirect to={ServicePageURL} />
-  ) : (
+  return (
     <ServiceLayout>
       <div className="text-center">
         <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>

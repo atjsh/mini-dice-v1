@@ -11,7 +11,7 @@ export const useUser = () =>
   });
 
 export const useMutateUser = () =>
-  useMutation(updateUserVo, {
+  useMutation(updateUserVo.name, {
     onSuccess: (data) => {
       queryClient.setQueryData(UseUserHookKey, data);
     },

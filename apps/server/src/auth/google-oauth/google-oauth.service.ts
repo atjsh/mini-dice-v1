@@ -19,7 +19,7 @@ export class GoogleOAuthService extends OauthAbstractService {
     expressResponse: FastifyReply,
     authCode: string,
     alreadyExistedRefreshToken?: string,
-  ): Promise<{ isNewUser: boolean }> {
+  ) {
     const { email } = await this.googleApiService.getGoogleUser(authCode);
 
     return await this.authUserWithOauthProvider(

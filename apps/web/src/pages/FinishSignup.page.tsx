@@ -8,6 +8,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/wide-service/service.layout';
 import {
   revokeUserAccessToken,
+  useCompleteSignup,
   useQueryString,
   userCompleteSignup,
 } from '../libs';
@@ -15,9 +16,10 @@ import {
   validateUsername,
   ValidationError,
 } from '../libs/tdol-server/profile/validations';
-import { IndexPageURL, LogoutPageURL, ServicePageURL } from './routes';
+import { FinishSignupPageURL, LogoutPageURL, ServicePageURL } from './routes';
 
 function UserCompleteSignupForm() {
+  const completeSignupMutattion = useCompleteSignup();
   const [username, setUsername] = useState('');
   const [country, setCountry] = useState(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
@@ -40,16 +42,23 @@ function UserCompleteSignupForm() {
       );
     } else {
       setDisabled(true);
-      await userCompleteSignup({ username, countryCode3: country });
-      setSuccess(true);
+      completeSignupMutattion.mutate(
+        { username, countryCode3: country },
+        {
+          onSuccess: () => {
+            setSuccess(true);
+          },
+          onError: () => {
+            setError('오류가 발생했습니다. 다시 시도해 주세요.');
+            setDisabled(false);
+          },
+        },
+      );
     }
   };
 
   return success ? (
-    <Redirect
-      to="/login-success?signinFinished=true&isNewUser=true"
-      push={false}
-    />
+    <Redirect to={ServicePageURL} push={false} />
   ) : (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2">
@@ -65,8 +74,10 @@ function UserCompleteSignupForm() {
         />
       </div>
 
-      <div className="flex flex-col items-center gap-2 hidden">
-        <div className=" font-medium text-xl">국가를 선택하세요.</div>
+      <div className="flex flex-col items-center gap-2">
+        <div className=" font-medium text-xl">
+          당신이 거주 중인 국가를 선택하세요.
+        </div>
         <select
           name="country"
           value={country}
@@ -102,30 +113,19 @@ function UserCompleteSignupForm() {
 }
 
 export function LoginSuccessPage() {
-  const isNewUser = useQueryString().get('isNewUser') === 'true';
-  const signinFinished = useQueryString().get('signinFinished') === 'true';
-
   useEffect(() => {
     revokeUserAccessToken();
   }, []);
 
-  if (isNewUser === false) {
-    return <Redirect to={IndexPageURL} />;
-  }
-
-  if (signinFinished === false) {
-    return (
-      <ServiceLayout>
-        <div className="text-center">
-          <div className="flex-col flex gap-2">
-            <h1 className="text-5xl font-bold">Mini Dice</h1>
-            <div className="font-medium text-xl">회원가입 완료하기</div>
-          </div>
+  return (
+    <ServiceLayout>
+      <div className="text-center">
+        <div className="flex-col flex gap-2">
+          <h1 className="text-5xl font-bold">Mini Dice</h1>
+          <div className="font-medium text-xl">회원가입 완료하기</div>
         </div>
-        <UserCompleteSignupForm />
-      </ServiceLayout>
-    );
-  }
-
-  return <Redirect to={ServicePageURL} />;
+      </div>
+      <UserCompleteSignupForm />
+    </ServiceLayout>
+  );
 }
