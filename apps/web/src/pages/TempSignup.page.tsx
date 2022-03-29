@@ -80,16 +80,17 @@ function TempSignupForm() {
         />
       </div>
       <div className="flex flex-col items-center gap-2">
-        <div className=" font-medium text-xl text-center">
+        <div className=" font-medium text-lg text-center">
           당신이 거주중인 국가를 선택하세요.
         </div>
-        <div className=" font-normal text-base text-center">
-          대한민국(South Korea)에 거주중일 경우, 회원가입할 수 없습니다.
+        <div className=" font-normal text-sm text-center">
+          서비스는 "<span className=" font-bold">한국어</span>"로 기본
+          제공됩니다
         </div>
         <select
           name="country"
           value={country}
-          className="border-2 border-black rounded-xl p-2 w-96"
+          className="border-2 border-black text-sm rounded-xl p-2 w-72"
           onChange={(e) => setCountry(e.target.value as CountryCode3Type)}
         >
           {countryMetadataIsoList.map((country: CountryMetadataType) => (
