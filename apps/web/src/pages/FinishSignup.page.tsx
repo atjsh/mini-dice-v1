@@ -11,7 +11,12 @@ import {
   validateUsername,
   ValidationError,
 } from '../libs/tdol-server/profile/validations';
-import { LogoutPageURL, ServicePageURL } from './routes';
+import {
+  LogoutPageURL,
+  PrivacyPolicyPageURL,
+  ServicePageURL,
+  TermsPageURL,
+} from './routes';
 
 function UserCompleteSignupForm() {
   const completeSignupMutattion = useCompleteSignup();
@@ -101,8 +106,22 @@ function UserCompleteSignupForm() {
             : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
         }
       >
-        회원가입하고 플레이
+        플레이
       </button>
+      <div className=" text-sm text-gray-400">
+        위 '플레이' 누르는 것은{' '}
+        <Link
+          to={PrivacyPolicyPageURL}
+          className="hover:underline text-gray-600"
+        >
+          개인정보 처리방침
+        </Link>
+        과{' '}
+        <Link to={TermsPageURL} className="hover:underline text-gray-600">
+          이용약관
+        </Link>
+        에 동의하는 것으로 간주합니다.
+      </div>
       <Link to={LogoutPageURL} className="font-medium">
         취소
       </Link>
