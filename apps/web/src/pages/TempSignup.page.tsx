@@ -78,18 +78,13 @@ function TempSignupForm() {
           value={username}
           onChange={handleChange}
         />
-        <div className=" italic text-red-500">{error}</div>
       </div>
-      <div className="">
-        <HCaptcha
-          sitekey={`${process.env.REACT_APP_HCAPTCHA_SITE_KEY}`}
-          onVerify={(token) => setHCaptchaToken(token)}
-        />
-      </div>
-
       <div className="flex flex-col items-center gap-2">
-        <div className=" font-medium text-xl">
+        <div className=" font-medium text-xl text-center">
           당신이 거주 중인 국가를 선택하세요.
+        </div>
+        <div className=" font-normal text-base text-center">
+          대한민국(South Korea)에 거주 중일 회원가입할 수 없습니다.
         </div>
         <select
           name="country"
@@ -104,6 +99,13 @@ function TempSignupForm() {
           ))}
         </select>
       </div>
+      <div className="">
+        <HCaptcha
+          sitekey={`${process.env.REACT_APP_HCAPTCHA_SITE_KEY}`}
+          onVerify={(token) => setHCaptchaToken(token)}
+        />
+      </div>
+      <div className=" italic text-red-500">{error}</div>
 
       <button
         onClick={handleSubmit}

@@ -28,7 +28,7 @@ export class UserRepository extends Repository<UserEntity> {
         submitAllowedMapStop: null,
         isUserDiceTossForbidden: false,
         canTossDiceAfter: new Date(),
-        countryCode3: createUser.countryCode3 ?? 'KOR',
+        countryCode3: createUser.countryCode3 ?? 'USA',
         signupCompleted: createUser.signupCompleted,
       }),
     );

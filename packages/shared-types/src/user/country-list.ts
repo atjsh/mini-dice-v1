@@ -178,7 +178,7 @@ export const countryMetadataIsoList = [
   { code2: 'KZ', code3: 'KAZ', name: 'Kazakhstan', number: '398' },
   { code2: 'KE', code3: 'KEN', name: 'Kenya', number: '404' },
   { code2: 'KI', code3: 'KIR', name: 'Kiribati', number: '296' },
-  { code2: 'KR', code3: 'KOR', name: 'Korea (the Republic of)', number: '410' },
+  // { code2: 'KR', code3: 'KOR', name: 'Korea (the Republic of)', number: '410' },
   { code2: 'KW', code3: 'KWT', name: 'Kuwait', number: '414' },
   { code2: 'KG', code3: 'KGZ', name: 'Kyrgyzstan', number: '417' },
   {
