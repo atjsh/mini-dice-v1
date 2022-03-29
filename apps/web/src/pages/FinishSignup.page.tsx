@@ -76,10 +76,10 @@ function UserCompleteSignupForm() {
 
       <div className="flex flex-col items-center gap-2">
         <div className=" font-medium text-xl text-center">
-          당신이 거주 중인 국가를 선택하세요.
+          당신이 거주중인 국가를 선택하세요.
         </div>
         <div className=" font-normal text-base text-center">
-          대한민국(South Korea)에 거주 중일 회원가입할 수 없습니다.
+          대한민국(South Korea)에 거주중일 경우, 회원가입할 수 없습니다.
         </div>
         <select
           name="country"
