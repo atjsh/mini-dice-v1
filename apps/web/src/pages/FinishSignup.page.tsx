@@ -60,7 +60,7 @@ function UserCompleteSignupForm() {
         <div className=" font-medium text-xl">닉네임을 입력하세요.</div>
         <input
           type="text"
-          className="border-2 border-black rounded-xl p-2 w-full"
+          className="border-2 border-black rounded-xl p-2 w-10/12"
           placeholder="2자 이상, 20자 미만"
           value={username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -68,7 +68,6 @@ function UserCompleteSignupForm() {
           }
         />
       </div>
-
       <div className="flex flex-col items-center gap-2">
         <div className=" font-medium text-lg text-center">
           당신이 거주중인 국가를 선택하세요.
