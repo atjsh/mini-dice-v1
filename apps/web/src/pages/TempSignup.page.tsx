@@ -84,7 +84,7 @@ function TempSignupForm() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-2 hidden">
         <div className=" font-medium text-lg text-center">
           당신이 거주중인 국가를 선택하세요.
         </div>
