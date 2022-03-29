@@ -6,17 +6,12 @@ import {
 import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/wide-service/service.layout';
-import {
-  revokeUserAccessToken,
-  useCompleteSignup,
-  useQueryString,
-  userCompleteSignup,
-} from '../libs';
+import { revokeUserAccessToken, useCompleteSignup } from '../libs';
 import {
   validateUsername,
   ValidationError,
 } from '../libs/tdol-server/profile/validations';
-import { FinishSignupPageURL, LogoutPageURL, ServicePageURL } from './routes';
+import { LogoutPageURL, ServicePageURL } from './routes';
 
 function UserCompleteSignupForm() {
   const completeSignupMutattion = useCompleteSignup();

@@ -1,7 +1,10 @@
 import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import { CompleteSignupUserDto, UserIdType } from '@packages/shared-types';
 import { EntityRepository, Repository } from 'typeorm';
+import { getRandomInteger } from '../common/random/random-number';
+import { getRandomString } from '../common/random/random-string';
 import { UserEntity } from './entity/user.entity';
+import * as _ from 'lodash';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -13,16 +16,19 @@ export class UserRepository extends Repository<UserEntity> {
    * @returns
    */
   async signUpNewUser(
-    createUser: Pick<
-      UserEntity,
-      'username' | 'authProvider' | 'signupCompleted'
-    > &
-      Partial<Pick<UserEntity, 'email' | 'countryCode3'>>,
+    createUser: Pick<UserEntity, 'authProvider' | 'signupCompleted'> &
+      Partial<Pick<UserEntity, 'username' | 'email' | 'countryCode3'>>,
   ) {
     return await this.save(
       this.create({
         cash: BigInt(1000),
-        username: createUser.username,
+        username:
+          _.isEmpty(createUser.username) == false
+            ? createUser.username
+            : `유저${getRandomInteger(
+                10000000000,
+                99999999999,
+              )}${getRandomString(4)}`,
         email: createUser.email,
         authProvider: createUser.authProvider,
         submitAllowedMapStop: null,
@@ -64,7 +70,12 @@ export class UserRepository extends Repository<UserEntity> {
   ) {
     return await this.partialUpdateUser(userId, {
       countryCode3,
-      username,
+      username:
+        _.isEmpty(username) == false
+          ? username
+          : `유저${getRandomInteger(10000000000, 99999999999)}${getRandomString(
+              4,
+            )}`,
       signupCompleted: true,
     });
   }

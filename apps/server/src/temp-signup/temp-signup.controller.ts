@@ -5,7 +5,7 @@ import { TempSignupService } from './temp-signup.service';
 
 export class TemporarySignUpDto {
   hCaptchaSuccessToken: string;
-  username: string;
+  username?: string;
   countryCode3: CountryCode3Type;
 }
 

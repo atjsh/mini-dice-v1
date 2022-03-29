@@ -80,6 +80,7 @@ export abstract class OauthAbstractService {
         const existingUsers = await this.userRepository.find({
           email: email,
           authProvider: provider,
+          isTerminated: false,
         });
 
         if (existingUsers.length == 0) {
@@ -112,6 +113,7 @@ export abstract class OauthAbstractService {
           {
             email: email,
             authProvider: provider,
+            isTerminated: false,
           },
         );
 
@@ -152,6 +154,7 @@ export abstract class OauthAbstractService {
     const existingUsers = await this.userRepository.find({
       email: email,
       authProvider: provider,
+      isTerminated: false,
     });
 
     if (existingUsers.length == 0) {

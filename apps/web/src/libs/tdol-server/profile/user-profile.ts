@@ -28,6 +28,11 @@ export async function userCompleteSignup(
   return response;
 }
 
+export async function terminateUser() {
+  const response = await authedAxios.delete('/profile');
+  return response;
+}
+
 export const useCompleteSignup = () =>
   useMutation(userCompleteSignup, {
     onSuccess: () => {

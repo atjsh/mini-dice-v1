@@ -3,6 +3,7 @@ import { useAccessToken } from '../../libs';
 import {
   LogoutPageURL,
   PrivacyPolicyPageURL,
+  TerminatePageURL,
   TermsPageURL,
 } from '../../pages/routes';
 
@@ -41,6 +42,12 @@ export const FooterWidgetComponent: React.FC = () => {
           to={LogoutPageURL}
         >
           로그아웃
+        </Link>
+        <Link
+          className={`hover:underline ${data ? '' : 'hidden'}`}
+          to={TerminatePageURL}
+        >
+          회원탈퇴
         </Link>
       </div>
       <div className="text-gray-400">

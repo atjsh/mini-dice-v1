@@ -5,7 +5,7 @@ import { IndexPageURL } from './routes';
 export function PrivaryPage() {
   return (
     <ServiceLayout>
-      <div className=" max-w-4xl self-center px-3">
+      <div className=" max-w-4xl self-center px-3 m-auto">
         <div className=" mb-10">
           <Link
             className=" text-lg text-blue-500 hover:underline"

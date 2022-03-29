@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CompleteSignupUserDto, UpdateUserDto } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
@@ -37,5 +37,11 @@ export class ProfileController {
       userJwt.userId,
       completeSignupUserDto,
     );
+  }
+
+  @JwtAuth()
+  @Delete('')
+  terminateUser(@UserJwt() userJwt: UserJwtDto) {
+    return this.userRepository.terminateUser(userJwt.userId);
   }
 }
