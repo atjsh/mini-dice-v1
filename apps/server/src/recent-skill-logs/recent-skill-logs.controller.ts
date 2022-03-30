@@ -23,10 +23,4 @@ export class RecentSkillLogsController {
       limit,
     );
   }
-
-  @JwtAuth()
-  @Get('latest')
-  async getLatestSkill(@UserJwt() userJwt: UserJwtDto) {
-    return this.recentSkillLogsService.getLatestSkill(userJwt.userId);
-  }
 }

@@ -3,10 +3,11 @@ import { diceTossButtonState } from '../../../components/dice-toss-button/dice-t
 import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { tossDice } from '.';
-import { UseUserHookKey, getLatestSkillRoute } from '..';
 import { queryClient } from '../../..';
 import { useDisplayingMessages } from '../../../components/displaying-messages/use-displaying-messages.hook';
 import { getMap } from '../map';
+import { UseUserHookKey } from '../profile';
+import { getSkillLogs } from '../skill-logs';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export function getRandomInteger(min: number, max: number): number {
@@ -26,8 +27,8 @@ export const useDiceToss = () => {
       addExposedSkillLogs([data.skillLog]);
       setDiceTossButton({ isPending: false });
       queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
-      queryClient.refetchQueries([getLatestSkillRoute.name]);
       queryClient.refetchQueries([getMap.name]);
+      queryClient.refetchQueries([getSkillLogs.name]);
     },
   });
 };

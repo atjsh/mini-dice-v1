@@ -1,8 +1,7 @@
 import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
-import { MapBlock, useMap } from '../../libs';
+import { MapBlock, useMap, useSkillLogs } from '../../libs';
 import { SkillRouteType } from '../../libs/skill-draw-ui-ts/types';
-import { useLatestSkillLog } from '../../libs/tdol-server/skill-logs/use-latest-skill-log.hook';
 
 function endlessSlice(arr: any[], from: number, to: number) {
   if (from >= to) {
@@ -42,7 +41,7 @@ const TRANSITION = 1000;
 
 export const MapStatusBar: React.FC = () => {
   const { data: mapStops } = useMap();
-  const { data: currentSkillRoute } = useLatestSkillLog();
+  const { data: skillLogs } = useSkillLogs();
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isInitalized, setIsInitalized] = useState(false);
   const [left, setLeft] = useState(0);
@@ -55,15 +54,18 @@ export const MapStatusBar: React.FC = () => {
       setLeft(node.offsetLeft);
     }
   }, []);
+  const currentSkillRoute: SkillRouteType | null | undefined = skillLogs
+    ? skillLogs[skillLogs.length - 1]?.skillRoute
+    : undefined;
 
   useEffect(() => {
-    if (mapStops != undefined && currentSkillRoute != undefined) {
+    if (mapStops !== undefined && currentSkillRoute !== undefined) {
       const sliceRange = mapStops.length;
 
-      const currentSkillRouteIndex = getSkillRouteIndexBySkillGroup(
-        mapStops,
-        currentSkillRoute.skillRoute,
-      );
+      const currentSkillRouteIndex =
+        currentSkillRoute !== null
+          ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
+          : 0;
 
       if (isInitalized == true) {
         const prevSkillRoute = zoomedMap[0].skillRoute;
@@ -117,7 +119,7 @@ export const MapStatusBar: React.FC = () => {
     }
   }, [currentSkillRoute, mapStops]);
 
-  return mapStops && currentSkillRoute ? (
+  return mapStops && skillLogs ? (
     <div className="relative overflow-x-hidden md:h-6 h-4 flex-grow leading-none">
       <div
         className="absolute flex md:gap-x-8 gap-x-3"

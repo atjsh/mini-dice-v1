@@ -1,12 +1,7 @@
-import { atom } from "recoil";
-import { ExposedSkillLogType } from "../../../libs";
-
-export const exposedSkillLogsState = atom<ExposedSkillLogType[]>({
-  key: "exposedSkillLogs",
-  default: []
-});
+import { atom } from 'recoil';
+import { ExposedSkillLogType } from '../../../libs';
 
 export const displayingMessagesState = atom<JSX.Element[]>({
-  key: "displayingMessages",
-  default: []
+  key: 'displayingMessages',
+  default: [],
 });

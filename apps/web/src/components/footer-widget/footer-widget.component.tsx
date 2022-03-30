@@ -14,10 +14,7 @@ export const FooterWidgetComponent: React.FC = () => {
     <div className="self-center mb-10 flex flex-col gap-3 max-w-7xl px-2">
       <hr />
       <div className="flex gap-3 flex-wrap">
-        <a
-          href="https://discord.gg/2dhUGXwmBq"
-          className="hover:underline hidden"
-        >
+        <a href="https://discord.gg/2dhUGXwmBq" className="hover:underline">
           <svg
             role="img"
             viewBox="0 0 24 24"

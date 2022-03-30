@@ -35,16 +35,9 @@ export function Ingame({
   isSidebarShowing: boolean;
   setisSidebarShowing: (param: boolean) => any;
 }) {
-  const { data: logs } = useSkillLogs();
   const { data: user } = useUser();
   const mutation = useDiceToss();
-  const { displayingMessages, initExposedSkillLogs } = useDisplayingMessages();
-
-  useEffect(() => {
-    if (logs) {
-      initExposedSkillLogs(logs);
-    }
-  }, [logs]);
+  const { displayingMessages } = useDisplayingMessages();
 
   return (
     <div

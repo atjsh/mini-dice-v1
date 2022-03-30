@@ -1,5 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
+import {
+  getSkillRouteFromPath,
+  getSkillRoutePath,
+  SkillRouteType,
+} from '@packages/scenario-routing';
 import { MessageResponseType } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { UserInteractionOutputDto } from '../dice-toss/interface';
@@ -70,6 +74,7 @@ export class UserInteractionWebService {
       user: serializeUserToJson(updatedUser),
       skillLog: {
         id: skillServiceLog.id,
+        skillRoute: getSkillRouteFromPath(skillServiceLog.skillRoute),
         skillDrawResult: skillDrawResult,
       },
     };

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { ExposedSkillLogType, transformSkillLogToMessage } from '../../libs';
+import { queryClient } from '../..';
 import {
-  displayingMessagesState,
-  exposedSkillLogsState,
-} from './atoms/displaying-messages.atom';
-import { useCurrentSkillLog } from './current-skill-log.hook';
+  ExposedSkillLogType,
+  getSkillLogs,
+  transformSkillLogToMessage,
+  useSkillLogs,
+} from '../../libs';
+import { displayingMessagesState } from './atoms/displaying-messages.atom';
 
 const skillLogsToRenderesMessage = (
   skillLogs: ExposedSkillLogType[],
@@ -30,16 +32,18 @@ const skillLogsToRenderesMessage = (
     .flat();
 
 export const useDisplayingMessages = () => {
-  const [exposedSkillLogs, setExposedSkillLogs] = useRecoilState(
-    exposedSkillLogsState,
-  );
+  const { data: rawExposedSkillLogs } = useSkillLogs();
+  const exposedSkillLogs = rawExposedSkillLogs ?? [];
+
   const [displayingMessages, setDisplayingMessages] = useRecoilState(
     displayingMessagesState,
   );
   const [lastExposedSkillLogIndex, setLastExposedSkillLogIndex] = useState(0);
-  const currentSkillLog = useCurrentSkillLog();
 
-  const skillLogId = currentSkillLog?.id ?? '';
+  const skillLogId =
+    exposedSkillLogs.length > 0
+      ? exposedSkillLogs[exposedSkillLogs.length - 1].id
+      : '';
 
   useEffect(() => {
     if (lastExposedSkillLogIndex == 0) {
@@ -81,10 +85,13 @@ export const useDisplayingMessages = () => {
   return {
     displayingMessages,
     addExposedSkillLogs: (addingSkillLogs: ExposedSkillLogType[]) => {
-      setExposedSkillLogs([...exposedSkillLogs, ...addingSkillLogs]);
+      queryClient.setQueryData(getSkillLogs.name, (state: any) => [
+        ...state,
+        ...addingSkillLogs,
+      ]);
     },
     initExposedSkillLogs: (initSkillLogs: ExposedSkillLogType[]) => {
-      setExposedSkillLogs(initSkillLogs);
+      queryClient.setQueryData(getSkillLogs.name, initSkillLogs);
     },
   };
 };

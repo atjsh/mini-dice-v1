@@ -109,6 +109,7 @@ export class DiceTossService {
         ),
         skillLog: {
           skillDrawResult: skillDrawResult,
+          skillRoute: getSkillRouteFromPath(lastSkillLog.log.skillRoute),
           id: lastSkillLog.log.id,
         },
         diceResult: diceResult,
@@ -156,6 +157,7 @@ export class DiceTossService {
       ),
       skillLog: {
         skillDrawResult: skillDrawResult,
+        skillRoute: nextSkillRoute,
         id: skillServiceLog.id,
       },
       diceResult: diceResult,
