@@ -1,4 +1,4 @@
-import { FooterWidgetComponent } from '../../components/footer-widget/footer-widget.component';
+import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 
 export const ServiceLayout: React.FC = ({ children }) => (
   <div className="flex flex-col gap-14">

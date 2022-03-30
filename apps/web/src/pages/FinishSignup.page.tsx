@@ -5,7 +5,7 @@ import {
 } from '@packages/shared-types';
 import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { ServiceLayout } from '../layouts/wide-service/service.layout';
+import { ServiceLayout } from '../layouts/service.layout';
 import { revokeUserAccessToken, useCompleteSignup } from '../libs';
 import {
   validateUsername,

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ServiceLayout } from '../layouts/wide-service/service.layout';
+import { ServiceLayout } from '../layouts/service.layout';
 import { IndexPageURL } from './routes';
 
 export function TermsPage() {
