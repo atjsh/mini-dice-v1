@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAccessToken } from '../../libs';
+import { getUserVo, useAccessToken, useUser } from '../../libs';
 import {
   LogoutPageURL,
   PrivacyPolicyPageURL,
@@ -8,7 +8,8 @@ import {
 } from '../../pages/routes';
 
 export const FooterWidgetComponent: React.FC = () => {
-  const { data } = useAccessToken();
+  const { data: accessToken } = useAccessToken();
+
   return (
     <div className="self-center mb-10 flex flex-col gap-3 max-w-7xl px-2">
       <hr />
@@ -37,14 +38,16 @@ export const FooterWidgetComponent: React.FC = () => {
         <a className="hover:underline" href="mailto:lifegame2021team@gmail.com">
           문의(이메일)
         </a>
+      </div>
+      <div className="flex gap-3 flex-wrap">
         <Link
-          className={`hover:underline ${data ? '' : 'hidden'}`}
+          className={`hover:underline ${accessToken ? '' : 'hidden'}`}
           to={LogoutPageURL}
         >
           로그아웃
         </Link>
         <Link
-          className={`hover:underline ${data ? '' : 'hidden'}`}
+          className={`hover:underline ${accessToken ? '' : 'hidden'}`}
           to={TerminatePageURL}
         >
           회원탈퇴
