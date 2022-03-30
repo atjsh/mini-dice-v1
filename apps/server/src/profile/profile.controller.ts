@@ -15,6 +15,8 @@ import {
   UpdateUserDto,
   UserIdType,
 } from '@packages/shared-types';
+import { Type } from 'class-transformer';
+import { Max, Min } from 'class-validator';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { USER_PROFILE_APIS } from '../common';
 import { UserRepository } from '../user/user.repository';
@@ -22,7 +24,14 @@ import { JwtAuth, UserJwt } from './decorators/user.decorator';
 import { PublicProfileService } from './profile.service';
 
 class PageDto {
-  limit = 10;
+  @Type(() => Number)
+  @Min(10)
+  @Max(50)
+  limit = 50;
+
+  @Type(() => Number)
+  @Min(1)
+  @Max(10)
   page = 1;
 }
 

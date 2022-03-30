@@ -5,7 +5,7 @@ import { useOthersProfiles } from '../libs/tdol-server/profile/use-others-profil
 import { IndexPageURL } from './routes';
 
 export function RankingPage() {
-  const limit = 40;
+  const limit = 50;
   const [page, setPage] = useState(1);
   const { data: othersProfiles, isLoading } = useOthersProfiles(limit, page);
   return (
@@ -28,7 +28,11 @@ export function RankingPage() {
           >
             이전 페이지
           </button>
-          <button onClick={() => setPage(page + 1)} className="hover:underline">
+          <button
+            onClick={() => setPage(page + 1)}
+            disabled={page === 10 || othersProfiles?.length! < limit}
+            className="hover:underline disabled:text-gray-500"
+          >
             다음 페이지
           </button>
         </div>
