@@ -7,7 +7,7 @@ import { IndexPageURL } from './routes';
 export function RankingPage() {
   const limit = 40;
   const [page, setPage] = useState(1);
-  const { data: othersProfiles } = useOthersProfiles(limit, page);
+  const { data: othersProfiles, isLoading } = useOthersProfiles(limit, page);
   return (
     <ServiceLayout>
       <div className=" max-w-4xl self-center px-3 m-auto">
@@ -33,7 +33,10 @@ export function RankingPage() {
           </button>
         </div>
         <div className="flex flex-col gap-3">
-          {othersProfiles &&
+          {isLoading ? (
+            <div className="text-center">불러오는 중...</div>
+          ) : (
+            othersProfiles &&
             othersProfiles.map((profile) => {
               const rank =
                 (page - 1) * limit + othersProfiles.indexOf(profile) + 1;
@@ -75,7 +78,8 @@ export function RankingPage() {
                   </div>
                 </div>
               );
-            })}
+            })
+          )}
         </div>
       </div>
     </ServiceLayout>
