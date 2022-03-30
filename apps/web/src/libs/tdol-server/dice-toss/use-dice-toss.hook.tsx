@@ -4,10 +4,9 @@ import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { tossDice } from '.';
 import { queryClient } from '../../..';
-import { useDisplayingMessages } from '../../../components/displaying-messages/use-displaying-messages.hook';
 import { getMap } from '../map';
 import { UseUserHookKey } from '../profile';
-import { getSkillLogs } from '../skill-logs';
+import { ExposedSkillLogType, getSkillLogs } from '../skill-logs';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export function getRandomInteger(min: number, max: number): number {
@@ -15,7 +14,6 @@ export function getRandomInteger(min: number, max: number): number {
 }
 
 export const useDiceToss = () => {
-  const { addExposedSkillLogs } = useDisplayingMessages();
   const [diceTossButton, setDiceTossButton] =
     useRecoilState(diceTossButtonState);
 
@@ -24,7 +22,10 @@ export const useDiceToss = () => {
       await sleep(getRandomInteger(300, 600));
     },
     onSuccess: (data) => {
-      addExposedSkillLogs([data.skillLog]);
+      queryClient.setQueryData(
+        getSkillLogs.name,
+        (state?: ExposedSkillLogType[]) => [...(state ?? []), data.skillLog],
+      );
       setDiceTossButton({ isPending: false });
       queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
       queryClient.refetchQueries([getMap.name]);

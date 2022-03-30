@@ -84,14 +84,5 @@ export const useDisplayingMessages = () => {
 
   return {
     displayingMessages,
-    addExposedSkillLogs: (addingSkillLogs: ExposedSkillLogType[]) => {
-      queryClient.setQueryData(getSkillLogs.name, (state: any) => [
-        ...state,
-        ...addingSkillLogs,
-      ]);
-    },
-    initExposedSkillLogs: (initSkillLogs: ExposedSkillLogType[]) => {
-      queryClient.setQueryData(getSkillLogs.name, initSkillLogs);
-    },
   };
 };

@@ -51,8 +51,6 @@ export function transformSkillLogToMessage(
     time: (
       <div className="text-gray-400 font-bold text-xs pl-2">
         {new Date(skillLog.date).toLocaleString()}
-        <br />
-        {skillLogId}
       </div>
     ),
   };
