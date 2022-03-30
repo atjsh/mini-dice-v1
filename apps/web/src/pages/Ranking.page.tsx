@@ -48,7 +48,7 @@ export function RankingPage() {
               };
 
               return (
-                <div className="flex gap-1 flex-col bg-white px-3 py-3 rounded-3xl border-2">
+                <div className="flex gap-3 flex-row flex-wrap items-baseline bg-white px-3 py-3 rounded-3xl border-2">
                   <div
                     className={
                       rank > 3
