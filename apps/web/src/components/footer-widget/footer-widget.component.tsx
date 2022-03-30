@@ -3,6 +3,7 @@ import { getUserVo, useAccessToken, useUser } from '../../libs';
 import {
   LogoutPageURL,
   PrivacyPolicyPageURL,
+  RankingPgaeURL,
   TerminatePageURL,
   TermsPageURL,
 } from '../../pages/routes';
@@ -26,15 +27,9 @@ export const FooterWidgetComponent: React.FC = () => {
           </svg>{' '}
           디스코드 채널
         </a>
-        <Link className="hover:underline" to={PrivacyPolicyPageURL}>
-          개인정보 처리방침
+        <Link className="hover:underline" to={RankingPgaeURL}>
+          랭킹
         </Link>
-        <Link className="hover:underline" to={TermsPageURL}>
-          이용약관
-        </Link>
-        <a className="hover:underline" href="mailto:lifegame2021team@gmail.com">
-          문의(이메일)
-        </a>
       </div>
       <div className="flex gap-3 flex-wrap">
         <Link
@@ -49,6 +44,17 @@ export const FooterWidgetComponent: React.FC = () => {
         >
           회원탈퇴
         </Link>
+      </div>
+      <div className="flex gap-3 flex-wrap">
+        <Link className="hover:underline" to={PrivacyPolicyPageURL}>
+          개인정보 처리방침
+        </Link>
+        <Link className="hover:underline" to={TermsPageURL}>
+          이용약관
+        </Link>
+        <a className="hover:underline" href="mailto:lifegame2021team@gmail.com">
+          문의(이메일)
+        </a>
       </div>
       <div className="text-gray-400">
         Copyright © 2022 Mini Dice Team. All rights reserved. <br />

@@ -98,3 +98,8 @@ export class UserVo {
 
   updatedAt: Date;
 }
+
+export type PublicProfileVo = Pick<
+  UserVo,
+  'id' | 'username' | 'cash' | 'createdAt'
+>;

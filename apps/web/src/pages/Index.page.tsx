@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import { googleOAuthCredential } from '../constants';
 import { ServiceLayout } from '../layouts/service.layout';
+import { useQueryString } from '../libs';
 import { TempSignupPageURL } from './routes';
 
 export function IndexPage() {
+  const loginRequired = useQueryString().get('loginRequired') === 'true';
+
   return (
     <ServiceLayout>
       <div className=" flex flex-col gap-10">
@@ -13,7 +16,14 @@ export function IndexPage() {
             <h1 className="text-5xl font-bold">Mini Dice</h1>
             <div className="font-medium text-base">인생게임</div>
             <div className=" self-center mt-5 text-xl">
-              주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 랭킹에 오르세요.
+              {loginRequired ? (
+                '계속하려면 로그인하세요.'
+              ) : (
+                <>
+                  주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 랭킹에
+                  오르세요.
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -23,7 +33,7 @@ export function IndexPage() {
               className="inline-block text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold bg-blue-500 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95"
               to={TempSignupPageURL}
             >
-              바로 플레이
+              {loginRequired ? '바로 플레이 계정 생성' : '바로 플레이'}
             </Link>
           </div>
           <div>

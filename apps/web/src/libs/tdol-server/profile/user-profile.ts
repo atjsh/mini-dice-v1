@@ -1,10 +1,24 @@
-import { UserVo } from '@packages/shared-types';
+import { PublicProfileVo, UserVo } from '@packages/shared-types';
 import { queryClient } from '../../..';
 import { useMutation } from 'react-query';
 import { authedAxios, UseUserHookKey } from '..';
 
 export async function getUserVo(): Promise<UserVo> {
   const response = await authedAxios.get<UserVo>(`/profile/me`);
+  return response.data;
+}
+
+export async function getOthersProfiles(
+  limit: number,
+  page: number,
+): Promise<PublicProfileVo[]> {
+  const response = await authedAxios.get<PublicProfileVo[]>('profile/others', {
+    params: {
+      limit,
+      page,
+    },
+  });
+
   return response.data;
 }
 

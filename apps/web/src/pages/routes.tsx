@@ -7,6 +7,7 @@ import { TempSignupPage } from './TempSignup.page';
 import { PrivaryPage } from './Privacy.page';
 import { TermsPage } from './terms.page';
 import { TerminatePage } from './Terminate.page';
+import { RankingPage } from './Ranking.page';
 
 export type Protection =
   | 'public'
@@ -31,6 +32,7 @@ export const FinishSignupPageURL = '/finish-signup';
 export const PrivacyPolicyPageURL = '/privacy';
 export const TermsPageURL = '/terms';
 export const TerminatePageURL = '/terminate';
+export const RankingPgaeURL = '/ranking';
 
 function getTitle(subTitle?: string) {
   return `Mini Dice ${subTitle ? '-' : ''} ${subTitle ?? ''}`;
@@ -97,6 +99,13 @@ const protectedRoutesUnreversed: ProtectedRoute[] = [
     path: TerminatePageURL,
     component: TerminatePage,
     title: getTitle('Terminate'),
+    exact: true,
+    protection: 'signupCompleted',
+  },
+  {
+    path: RankingPgaeURL,
+    component: RankingPage,
+    title: getTitle('Ranking'),
     exact: true,
     protection: 'signupCompleted',
   },

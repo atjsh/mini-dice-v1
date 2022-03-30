@@ -5,6 +5,7 @@ import smoothscroll from 'smoothscroll-polyfill';
 import { useUser } from './libs';
 import {
   FinishSignupPageURL,
+  IndexPageURL,
   protectedRoutes,
   ServicePageURL,
 } from './pages/routes';
@@ -60,10 +61,18 @@ function App(props) {
                         <Helmet title={route.title} />
                         <route.component />
                       </>
-                    ) : (
+                    ) : user ? (
                       <Redirect
                         to={{
                           pathname: FinishSignupPageURL,
+                          state: { from: props.location },
+                        }}
+                      />
+                    ) : (
+                      <Redirect
+                        to={{
+                          pathname: IndexPageURL,
+                          search: '?loginRequired=true',
                           state: { from: props.location },
                         }}
                       />

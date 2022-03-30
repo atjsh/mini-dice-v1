@@ -55,7 +55,7 @@ export const MapStatusBar: React.FC = () => {
     }
   }, []);
   const currentSkillRoute: SkillRouteType | null | undefined = skillLogs
-    ? skillLogs[skillLogs.length - 1]?.skillRoute
+    ? skillLogs[skillLogs.length - 1]?.skillRoute ?? null
     : undefined;
 
   useEffect(() => {

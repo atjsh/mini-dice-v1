@@ -126,7 +126,7 @@ function TempSignupForm() {
         플레이
       </button>
       <div className=" text-sm text-gray-400">
-        위 '플레이' 누르는 것은{' '}
+        위 '플레이' 버튼을 누르는 것은{' '}
         <Link
           to={PrivacyPolicyPageURL}
           className="hover:underline text-gray-600"
@@ -137,7 +137,7 @@ function TempSignupForm() {
         <Link to={TermsPageURL} className="hover:underline text-gray-600">
           이용약관
         </Link>
-        에 동의하는 것으로 간주합니다.
+        에 동의하는 것으로 간주됩니다.
       </div>
       <Link to={IndexPageURL} className="font-medium hover:underline p-1">
         취소
