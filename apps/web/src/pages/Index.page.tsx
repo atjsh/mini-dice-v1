@@ -41,7 +41,9 @@ export function IndexPage() {
               className="inline-block text-xl text-blue-600 hover:underline p-5"
               href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleOAuthCredential.clientId}&redirect_uri=${process.env.REACT_APP_TDOL_SERVER_URL}${googleOAuthCredential.redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`}
             >
-              구글 계정으로 플레이 →
+              {loginRequired
+                ? '구글 계정으로 로그인 →'
+                : '구글 계정으로 플레이 →'}
             </a>
           </div>
         </div>
