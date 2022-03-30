@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { queryClient } from '../..';
 import {
   ExposedSkillLogType,
-  getSkillLogs,
   transformSkillLogToMessage,
   useSkillLogs,
 } from '../../libs';

@@ -7,9 +7,7 @@ import { MapStatusBar } from '../components/map/map-status-bar.component';
 import { ProfileWidget } from '../components/profile/profile-widget.component';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
-import { useDiceToss, useSkillLogs, useUser } from '../libs';
-
-const height100 = { height: '100vh, calc(var(--vh, 1vh) * 100)' };
+import { useDiceToss, useUser } from '../libs';
 
 const Messages = ({ messages }: { messages: any[] }) => {
   const messagesEndRef: any = useRef(null);
