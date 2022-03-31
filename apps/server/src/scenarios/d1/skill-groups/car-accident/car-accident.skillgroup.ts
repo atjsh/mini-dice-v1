@@ -35,22 +35,16 @@ export class CarAccidentSkillGroup implements SkillGroupController {
       MethodReturnType<CarAccidentService, 'index'>
     >,
   ) {
-    return props.skillServiceResult.accident == 'safe'
-      ? MessageResponseFactory({
-          date: props.date,
-          userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
-          actionResultDrawings: [
-            PlainMessage({
+    return MessageResponseFactory({
+      date: props.date,
+      userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
+      actionResultDrawings: [
+        props.skillServiceResult.accident == 'safe'
+          ? PlainMessage({
               title: '교통 사고',
               description: '교통 사고가 발생했지만 다치지 않았네요.',
-            }),
-          ],
-        })
-      : MessageResponseFactory({
-          date: props.date,
-          userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
-          actionResultDrawings: [
-            PlainMessage({
+            })
+          : PlainMessage({
               title: '교통 사고',
               description:
                 `교통 사고가 발생하여 '${props.skillServiceResult.accident}' 부상을 입었습니다. \n` +
@@ -58,7 +52,7 @@ export class CarAccidentSkillGroup implements SkillGroupController {
                   props.skillServiceResult.cashDeclineAmount,
                 )} 잃었습니다.`,
             }),
-          ],
-        });
+      ],
+    });
   }
 }

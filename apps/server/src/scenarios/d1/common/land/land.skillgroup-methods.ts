@@ -5,6 +5,7 @@ import {
   InputField,
   MessageResponseFactory,
   PlainMessage,
+  strEllipsis,
   UserActivityMessage,
 } from '@packages/shared-types';
 import {
@@ -26,9 +27,11 @@ export function getCommonLandSkillGroupAlias(
   landStatus: LandStatus,
   adjective?: string,
 ) {
-  return `${landStatus.landOwnedBy?.username || '운영자'}의 ${
-    adjective ? `${adjective} ` : ''
-  }${landStatus.landName} 토지`;
+  return `${
+    landStatus.landOwnedBy?.username
+      ? strEllipsis(landStatus.landOwnedBy?.username, 6)
+      : '운영자'
+  }의 ${adjective ? `${adjective} ` : ''}${landStatus.landName} 토지`;
 }
 
 function landBuyableByUserMessage(

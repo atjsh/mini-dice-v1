@@ -10,6 +10,7 @@ import { Land4Module } from './land4/land4.module';
 import { Land5Module } from './land5/land5.module';
 import { Land6Module } from './land6/land6.module';
 import { DragonMoneyModule } from './dragon-money/dragon-money.module';
+import { PartTimeWorkModule } from './part-time-work/part-time-work.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DragonMoneyModule } from './dragon-money/dragon-money.module';
     Land1Module,
     Land2Module,
     Land3Module,
+    PartTimeWorkModule,
     Land4Module,
     Land5Module,
     DragonMoneyModule,

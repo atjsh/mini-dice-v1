@@ -48,6 +48,7 @@ export const OrderedD1ScenarioRoutes: SkillRouteType[] = [
   D1ScenarioRoutes.skillGroups.land1,
   D1ScenarioRoutes.skillGroups.land2,
   D1ScenarioRoutes.skillGroups.land3,
+  D1ScenarioRoutes.skillGroups.partTimeWork,
   D1ScenarioRoutes.skillGroups.land4,
   D1ScenarioRoutes.skillGroups.land5,
   D1ScenarioRoutes.skillGroups.dragonMoney,
