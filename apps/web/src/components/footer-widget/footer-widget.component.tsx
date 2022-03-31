@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getUserVo, useAccessToken, useUser } from '../../libs';
+import { useAccessToken } from '../../libs';
 import {
   LogoutPageURL,
   PrivacyPolicyPageURL,

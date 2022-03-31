@@ -38,6 +38,8 @@ function transformMessage(
       </div>
     );
   }
+
+  return {} as never;
 }
 
 export function transformSkillLogToMessage(
