@@ -1,0 +1,67 @@
+import {
+  cashLocale,
+  MessageResponseFactory,
+  PlainMessage,
+} from '@packages/shared-types';
+import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
+import {
+  drawDiceUserActivityMessage,
+  IndexSkillPropsType,
+  MethodReturnType,
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from 'apps/server/src/skill-group-lib/skill-service-lib';
+import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+import { D1ScenarioRoutes } from '../../routes';
+import { PickedItemService, PickedItemEventEnum } from './picked-item.service';
+
+@SkillGroup(D1ScenarioRoutes.skillGroups.pickedItem)
+export class PickedItemSkillGroup implements SkillGroupController {
+  constructor(private skillService: PickedItemService) {}
+
+  getSkillGroupAlias() {
+    return '분실물 발견';
+  }
+
+  @Skill(D1ScenarioRoutes.skillGroups.pickedItem.skills.index)
+  async index(indexSkillProps: IndexSkillPropsType) {
+    return await this.skillService.index(indexSkillProps);
+  }
+
+  @SkillDraw(D1ScenarioRoutes.skillGroups.pickedItem.skills.index)
+  async indexDraw(
+    props: DiceUserActivitySkillDrawPropsType<
+      MethodReturnType<PickedItemService, 'index'>
+    >,
+  ) {
+    return MessageResponseFactory({
+      date: props.date,
+      userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
+      actionResultDrawings: [
+        PlainMessage({
+          title: `${this.getSkillGroupAlias()} 칸`,
+          description: '분실물을 발견했습니다.',
+        }),
+        (() => {
+          switch (
+            props.skillServiceResult.cashChangeEvent.eventCase.causeName
+          ) {
+            case PickedItemEventEnum.MADE_PROFIT:
+              return PlainMessage({
+                description: `'${
+                  props.skillServiceResult.item
+                }' 분실물을 중고로 팔았습니다! ${cashLocale(
+                  props.skillServiceResult.cashChangeEvent.value,
+                )} 벌었습니다.`,
+              });
+            case PickedItemEventEnum.NO_PROFIT:
+              return PlainMessage({
+                description: `'${props.skillServiceResult.item}' 분실물을 발견했습니다. 집에서 쓰기 위해 가져갔습니다.`,
+              });
+          }
+        })(),
+      ],
+    });
+  }
+}

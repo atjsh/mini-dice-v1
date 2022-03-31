@@ -14,6 +14,9 @@ import { PartTimeWorkModule } from './part-time-work/part-time-work.module';
 import { BookModule } from './book/book.module';
 import { LotteryModule } from './lottery/lottery.module';
 import { FastCarModule } from './fast-car/fast-car.module';
+import { GameDevModule } from './game-dev/game-dev.module';
+import { PickedItemModule } from './picked-item/picked-item.module';
+import { FireModule } from './fire/fire.module';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { FastCarModule } from './fast-car/fast-car.module';
     RpsModule,
     NightFoodModule,
     Land1Module,
+    GameDevModule,
+    PickedItemModule,
+    FireModule,
     LotteryModule,
     Land2Module,
     Land3Module,
