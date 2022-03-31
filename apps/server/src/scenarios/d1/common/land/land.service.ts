@@ -1,12 +1,16 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SkillRouteType } from '@packages/scenario-routing';
 import { UserIdType } from '@packages/shared-types';
+import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import {
   UserEntity,
   UserCashStrType,
 } from 'apps/server/src/user/entity/user.entity';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 import { Repository } from 'typeorm';
+import { getUserCanTossDice } from '../../../scenarios.commons';
+import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import { LandEntity } from './entity/land.entity';
 
 export enum LandIdEnum {
@@ -279,4 +283,56 @@ export class CommonLandService {
       landName,
     };
   }
+
+  public async indexSkill(
+    props: SkillServiceProps<{
+      landId: LandIdEnum;
+      landSubmitSkillRoute: SkillRouteType;
+    }>,
+  ) {
+    const landStatus = await this.getLandStatusById(props.landId);
+    const landBuyableByUserStatus = await this.isLandBuyableByUser(
+      landStatus,
+      props.userId,
+    );
+    if (landBuyableByUserStatus.status == LandBuyableByUserEnum.BUYABLE) {
+      await this.userRepository.setUserAllowedSkillRoute(
+        props.userId,
+        props.landSubmitSkillRoute,
+        false,
+      );
+    }
+
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1),
+      false,
+    );
+
+    return {
+      landStatus,
+      landBuyableByUserStatus,
+    };
+  }
+
+  public async submitSkill(
+    props: SkillServiceProps<{ landName: string; landId: LandIdEnum }>,
+  ) {
+    try {
+      await this.buyLand(props.landId, props.userId, props.landName);
+      return {
+        landName: props.landName,
+        buyingResult: LandBuyingResult.SUCCESS,
+      };
+    } catch (error) {
+      return {
+        landName: props.landName,
+        buyingResult: LandBuyingResult.FAIL,
+      };
+    }
+  }
+}
+
+export class CommonLandServiceSubmitParamType {
+  landName: string;
 }
