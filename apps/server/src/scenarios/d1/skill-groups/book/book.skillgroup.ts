@@ -14,28 +14,25 @@ import {
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import {
-  DragonMoneyEventEnum,
-  DragonMoneyService,
-} from './dragon-money.service';
+import { BookEventEnum, BookService } from './book.service';
 
-@SkillGroup(D1ScenarioRoutes.skillGroups.dragonMoney)
-export class DragonMoneySkillGroup implements SkillGroupController {
-  constructor(private skillService: DragonMoneyService) {}
+@SkillGroup(D1ScenarioRoutes.skillGroups.book)
+export class BookSkillGroup implements SkillGroupController {
+  constructor(private skillService: BookService) {}
 
   getSkillGroupAlias(): string | Promise<string> {
-    return '용돈';
+    return '책을 내다';
   }
 
-  @Skill(D1ScenarioRoutes.skillGroups.dragonMoney.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.book.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(D1ScenarioRoutes.skillGroups.dragonMoney.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.book.skills.index)
   async indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
-      MethodReturnType<DragonMoneyService, 'index'>
+      MethodReturnType<BookService, 'index'>
     >,
   ) {
     return MessageResponseFactory({
@@ -44,19 +41,21 @@ export class DragonMoneySkillGroup implements SkillGroupController {
       actionResultDrawings: [
         PlainMessage({
           title: `${this.getSkillGroupAlias()} 칸`,
-          description: '용돈 칸에 도착! 부모님으로부터 용돈을 받아봅시다.',
+          description: '책을 써서 출판합니다.',
         }),
-        props.skillServiceResult.eventCase.causeName ==
-        DragonMoneyEventEnum.MADE_PROFIT
+        props.skillServiceResult.cashChangeEvent.eventCase.causeName ==
+        BookEventEnum.MADE_PROFIT
           ? PlainMessage({
-              title: '용돈을 받았습니다!',
-              description: `부모님 집의 집안일을 처리하여 용돈으로 ${cashLocale(
-                props.skillServiceResult.value,
-              )} 받았습니다.`,
+              title: '수익을 남겼습니다!',
+              description: `'${
+                props.skillServiceResult.book
+              }' 책은 매우 잘 팔려서 ${cashLocale(
+                props.skillServiceResult.cashChangeEvent.value,
+              )} 벌었습니다.`,
             })
           : PlainMessage({
-              title: '하지만 용돈을 받지 못했습니다',
-              description: `오늘은 용돈을 주지 않으시네요.`,
+              title: '본전 쳤네요',
+              description: `'${props.skillServiceResult.book}' 책은 몇몇 사람들이 좋아하는 작품이 되었습니다.`,
             }),
       ],
     });

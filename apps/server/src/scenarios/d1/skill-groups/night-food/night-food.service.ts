@@ -17,7 +17,8 @@ export enum PROFIT_STATUS {
 }
 
 const nightFoods = [
-  '치킨피자',
+  '치킨',
+  '피자',
   '햄버거',
   '수육',
   '아몬드',
@@ -30,6 +31,11 @@ const nightFoods = [
   '탕수육',
   '닭발',
   '곱창',
+  '떡볶이',
+  '컵라면',
+  '물',
+  '군만두',
+  '타코야끼',
 ];
 
 const cashChangeEventValues: DynamicValueEventCase[] = [
