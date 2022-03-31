@@ -333,12 +333,13 @@ export const FormMessageGroup: React.FC<{
 
   return (
     <>
-      {formMessages.map((formMessage) => (
+      {formMessages.map((formMessage, index) => (
         <FormMessage
           form={formMessage}
           isLast={isLast}
           isNeighborButtonClicked={isButtonClicked}
           setIsisNeighborButtonClicked={setIsButtonClicked}
+          key={`${formMessage.description}-${index}`}
         />
       ))}
     </>

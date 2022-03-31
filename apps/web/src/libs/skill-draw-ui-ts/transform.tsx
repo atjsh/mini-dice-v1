@@ -57,6 +57,7 @@ export function transformSkillLogToMessage(
               <FormMessageGroup
                 formMessages={messageData as FormMessageType[]}
                 isLast={isLast}
+                key={`${skillLogId}${row}`}
               />
             ) : (
               messageData.map((message: PlainMessageType, col: number) =>
