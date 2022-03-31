@@ -44,9 +44,7 @@ export class FireSkillGroup implements SkillGroupController {
           description: '화재가 발생합니다.',
         }),
         (() => {
-          switch (
-            props.skillServiceResult.cashChangeEvent.eventCase.causeName
-          ) {
+          switch (props.skillServiceResult.eventCase) {
             case FireEventEnum.LOSE_MONEY:
               return PlainMessage({
                 title: '화재 피해 발생',

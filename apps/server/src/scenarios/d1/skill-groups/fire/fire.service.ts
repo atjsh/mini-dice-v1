@@ -52,11 +52,11 @@ export class FireService {
 
         return {
           losing: String(losing),
-          cashChangeEvent,
+          eventCase: cashChangeEvent.eventCase.causeName,
         };
       case FireEventEnum.NO_PROFIT:
         return {
-          cashChangeEvent,
+          eventCase: cashChangeEvent.eventCase.causeName,
         };
     }
   }
