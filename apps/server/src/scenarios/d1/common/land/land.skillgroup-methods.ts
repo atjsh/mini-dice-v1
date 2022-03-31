@@ -1,11 +1,11 @@
-import { getSkillRoutePath } from '@packages/scenario-routing';
+import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import {
-  MessageResponseFactory,
-  UserActivityMessage,
-  PlainMessage,
   DataField,
   FormMessage,
   InputField,
+  MessageResponseFactory,
+  PlainMessage,
+  UserActivityMessage,
 } from '@packages/shared-types';
 import {
   drawDiceUserActivityMessage,
@@ -15,7 +15,6 @@ import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { D1ScenarioRoutes } from '../../routes';
 import {
   CommonLandService,
   LandBuyableByUserEnum,
@@ -28,11 +27,14 @@ export function getCommonLandSkillGroupAlias(
   adjective?: string,
 ) {
   return `${landStatus.landOwnedBy?.username || '운영자'}의 ${
-    adjective ? `adjective ` : ''
+    adjective ? `${adjective} ` : ''
   }${landStatus.landName} 토지`;
 }
 
-function landBuyableByUserMessage(landStatus: LandStatus) {
+function landBuyableByUserMessage(
+  landStatus: LandStatus,
+  submitSkillRoute: SkillRouteType,
+) {
   return [
     PlainMessage({
       description: `지금 이 토지를 구매할 수 있습니다! 다른 유저가 구매하기 전에 서두르세요.`,
@@ -70,9 +72,7 @@ function landBuyableByUserMessage(landStatus: LandStatus) {
         }),
       ],
       submitButtonLabel: '구매하기',
-      submitSkillRouteURL: getSkillRoutePath(
-        D1ScenarioRoutes.skillGroups.land1.skills.submit,
-      ),
+      submitSkillRouteURL: getSkillRoutePath(submitSkillRoute),
     }),
   ];
 }
@@ -112,6 +112,7 @@ export function commonLandSkillGroupWebIndexDraw(
   props: DiceUserActivitySkillDrawPropsType<
     MethodReturnType<CommonLandService, 'indexSkill'>
   >,
+  submitSkillRoute: SkillRouteType,
 ) {
   return MessageResponseFactory({
     date: props.date,
@@ -119,11 +120,28 @@ export function commonLandSkillGroupWebIndexDraw(
     actionResultDrawings: [
       PlainMessage({
         title: '토지 칸',
-        description: `${props.skillServiceResult.landStatus.landName} 토지 칸에 도착했습니다.`,
+        description: `${
+          props.skillServiceResult.landStatus.landName
+        } 토지 칸에 도착했습니다. ${
+          props.skillServiceResult.landBuyableByUserStatus.status ==
+          LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU
+            ? ''
+            : `\n${
+                props.skillServiceResult.landStatus.landOwnedBy?.username
+              } 유저에게 ${BigInt(
+                props.skillServiceResult.landStatus.tollFee,
+              ).toLocaleString('ko-kr', {
+                style: 'currency',
+                currency: 'KRW',
+              })} 통행료를 지불했습니다.`
+        }`,
       }),
       ...(props.skillServiceResult.landBuyableByUserStatus.status ==
       LandBuyableByUserEnum.BUYABLE
-        ? landBuyableByUserMessage(props.skillServiceResult.landStatus)
+        ? landBuyableByUserMessage(
+            props.skillServiceResult.landStatus,
+            submitSkillRoute,
+          )
         : props.skillServiceResult.landBuyableByUserStatus.status ==
           LandBuyableByUserEnum.ALREADY_OWNED_BY_OTHER
         ? landNotBuyableBCOtherUserAlreadyOwns(

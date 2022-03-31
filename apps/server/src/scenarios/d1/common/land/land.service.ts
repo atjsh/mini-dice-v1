@@ -208,7 +208,7 @@ export class CommonLandService {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
       };
     } else if (landStatus.isLandExpired == true) {
-      if (landStatus.landPrice > user.cash) {
+      if (landStatus.landPrice * 2 > user.cash) {
         return {
           status: LandBuyableByUserEnum.NOT_ENOUGH_MONEY,
         };
@@ -295,6 +295,20 @@ export class CommonLandService {
       landStatus,
       props.userId,
     );
+    // 통행세 걷기
+    if (
+      [LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU].includes(
+        landBuyableByUserStatus.status,
+      ) == false
+    ) {
+      await Promise.all([
+        this.userRepository.changeUserCash(props.userId, -landStatus.tollFee),
+        this.userRepository.changeUserCash(
+          landStatus.landOwnedBy!.id,
+          landStatus.tollFee,
+        ),
+      ]);
+    }
     if (landBuyableByUserStatus.status == LandBuyableByUserEnum.BUYABLE) {
       await this.userRepository.setUserAllowedSkillRoute(
         props.userId,

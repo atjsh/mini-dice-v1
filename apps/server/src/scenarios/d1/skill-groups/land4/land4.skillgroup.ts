@@ -19,11 +19,11 @@ import {
   commonLandSkillGroupWebSubmitDraw,
 } from '../../common';
 import { D1ScenarioRoutes } from '../../routes';
-import { Land1Service } from './land1.service';
+import { Land4Service } from './land4.service';
 
-@SkillGroup(D1ScenarioRoutes.skillGroups.land1)
-export class Land1SkillGroup implements SkillGroupController {
-  constructor(private skillService: Land1Service) {}
+@SkillGroup(D1ScenarioRoutes.skillGroups.land4)
+export class Land4SkillGroup implements SkillGroupController {
+  constructor(private skillService: Land4Service) {}
 
   async getSkillGroupAlias() {
     return getCommonLandSkillGroupAlias(
@@ -31,24 +31,24 @@ export class Land1SkillGroup implements SkillGroupController {
     );
   }
 
-  @Skill(D1ScenarioRoutes.skillGroups.land1.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.land4.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(D1ScenarioRoutes.skillGroups.land1.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.land4.skills.index)
   async indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
-      MethodReturnType<Land1Service, 'index'>
+      MethodReturnType<Land4Service, 'index'>
     >,
   ) {
     return commonLandSkillGroupWebIndexDraw(
       props,
-      D1ScenarioRoutes.skillGroups.land1.skills.submit,
+      D1ScenarioRoutes.skillGroups.land4.skills.submit,
     );
   }
 
-  @Skill(D1ScenarioRoutes.skillGroups.land1.skills.submit)
+  @Skill(D1ScenarioRoutes.skillGroups.land4.skills.submit)
   async submit({
     userId,
     userActivity,
@@ -61,10 +61,10 @@ export class Land1SkillGroup implements SkillGroupController {
     });
   }
 
-  @SkillDraw(D1ScenarioRoutes.skillGroups.land1.skills.submit)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.land4.skills.submit)
   async webSubmitDraw(
     props: InteractionUserActivitySkillDrawPropsType<
-      MethodReturnType<Land1Service, 'submit'>
+      MethodReturnType<Land4Service, 'submit'>
     >,
   ) {
     return commonLandSkillGroupWebSubmitDraw(props);
