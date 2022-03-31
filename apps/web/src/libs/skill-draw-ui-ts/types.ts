@@ -36,7 +36,7 @@ export class InputFieldType {
 
   label: string;
 
-  type: "string" | "number";
+  type: 'string' | 'number';
 
   placeholder?: string;
 
@@ -59,6 +59,9 @@ export class DataFieldType {
 
   // '이 값을 다른 값 옆에 표시할 것인가?' 여부
   inline: boolean;
+
+  // '이 값이 돈과 관련된 값인가?' 여부
+  isCash: boolean;
 }
 
 export class LinkType<T = Record<string, string>> {
@@ -98,7 +101,7 @@ export class PlainMessageType implements BaseMessage {
 }
 
 export class FormMessageType implements BaseMessage {
-  type: "formMessage";
+  type: 'formMessage';
 
   title?: string;
 

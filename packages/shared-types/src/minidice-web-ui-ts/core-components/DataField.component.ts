@@ -13,6 +13,9 @@ export class DataFieldPropsType {
 
   // '이 값을 다른 값 옆에 표시할 것인가?' 여부
   inline: boolean;
+
+  // '이 값이 돈과 관련된 값인가?' 여부
+  isCash: boolean;
 }
 
 export type DataFieldType = ChatElement<

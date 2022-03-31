@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { UseMutationResult } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
 import {
   DataFieldType,
@@ -12,7 +13,7 @@ import {
 import { useSubmitUserInteraction } from '../tdol-server/user-interaction';
 
 const MessageWidth = 'w-max min-w ';
-const MessageCommon = `${MessageWidth} my-1 mx-2`;
+const MessageCommon = `${MessageWidth} my-1 ml-1`;
 
 const UserActivityMessageRadius = 'rounded-xl';
 const UserActivityMessagePadding = 'p-5';
@@ -116,10 +117,17 @@ export const LinkMessage: React.FC<{
       className={`${linkMessageButtonBaseClassName} text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 `}
       onClick={() => {
         setIsButtonClicked(true);
-        mutate.mutate({
-          callingSkillParam: link.param,
-          callingSkillRoute: link.skillRouteURL,
-        });
+        mutate.mutate(
+          {
+            callingSkillParam: link.param,
+            callingSkillRoute: link.skillRouteURL,
+          },
+          {
+            onError: () => {
+              setIsButtonClicked(false);
+            },
+          },
+        );
       }}
     >
       {link.displayText}
@@ -175,7 +183,14 @@ export const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
       } mr-5 mb-5 rounded-xl `}
     >
       <div className="font-bold text-sm text-gray-600">{dataField.label}</div>
-      <div className="text-xl">{dataField.value}</div>
+      <div className="text-xl">
+        {dataField.isCash
+          ? `${BigInt(dataField.value).toLocaleString('ko-kr', {
+              style: 'currency',
+              currency: 'KRW',
+            })}`
+          : dataField.value}
+      </div>
     </div>
   );
 };
@@ -198,26 +213,37 @@ export const InputFieldMessage: React.FC<{
         placeholder={inputField.placeholder}
         maxLength={inputField.maxLength}
         minLength={inputField.minLength}
+        required
         className="border-2 border-gray-400 rounded-md p-2"
       />
     </div>
   );
 };
 
+const submitButtonBaseClassName = 'px-10 py-3 mx-0.5 rounded-xl';
+
 export const SubmitButton: React.FC<{
   label: string;
-  mutate: any;
-  isButtonActive: boolean;
-}> = ({ label, mutate, isButtonActive }) => {
-  return isButtonActive == true ? (
+  isDisabled: boolean;
+  isButtonClicked: boolean;
+}> = ({ label, isDisabled, isButtonClicked }) => {
+  return isDisabled ? (
     <button
-      className="text-white px-10 py-3 mx-0.5 rounded-xl bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transition duration-150 select-none transform active:scale-95"
-      onClick={mutate}
+      className={`text-white ${submitButtonBaseClassName} rounded-xl bg-gray-600 cursor-not-allowed`}
+    >
+      {label}
+    </button>
+  ) : isButtonClicked ? (
+    <button
+      className={`text-white ${submitButtonBaseClassName} rounded-xl bg-gray-600 cursor-progress`}
     >
       {label}
     </button>
   ) : (
-    <button className="text-white px-10 py-3 mx-0.5 rounded-xl bg-gray-600 cursor-not-allowed">
+    <button
+      className={`text-white ${submitButtonBaseClassName} rounded-xl bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transition duration-150 select-none transform active:scale-95`}
+      type="submit"
+    >
       {label}
     </button>
   );
@@ -225,15 +251,47 @@ export const SubmitButton: React.FC<{
 
 export const FormMessage: React.FC<{
   form: FormMessageType;
-  isAvailable: boolean;
-}> = ({ form, isAvailable }) => {
+  isLast: boolean;
+  isNeighborButtonClicked?: boolean;
+  setIsisNeighborButtonClicked?: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  form,
+  isLast,
+  isNeighborButtonClicked,
+  setIsisNeighborButtonClicked,
+}) => {
   const [formParam, setFormParam] = useState({});
+  const [isOwnButtonClicked, setIsOwnButtonClicked] = useState(false);
+
+  const isButtonClicked =
+    isNeighborButtonClicked != undefined
+      ? isNeighborButtonClicked
+      : isOwnButtonClicked;
+  const setIsButtonClicked =
+    setIsisNeighborButtonClicked != undefined
+      ? setIsisNeighborButtonClicked
+      : setIsOwnButtonClicked;
 
   const mutate = useSubmitUserInteraction();
 
-  return isAvailable ? (
-    <div
+  return isLast ? (
+    <form
       className={`${MessageCommon} bg-white px-5 rounded-3xl border-2 border-gray-300 py-6`}
+      onSubmit={(e) => {
+        e.preventDefault();
+        setIsButtonClicked(true);
+        mutate.mutate(
+          {
+            callingSkillParam: formParam,
+            callingSkillRoute: form.submitSkillRouteURL,
+          },
+          {
+            onError: () => {
+              setIsButtonClicked(false);
+            },
+          },
+        );
+      }}
     >
       <div className="font-bold text-2xl mb-3">{form.description}</div>
       <div className="">
@@ -251,17 +309,12 @@ export const FormMessage: React.FC<{
       </div>
       <div className="text-center mt-5 text-xl">
         <SubmitButton
-          mutate={() => {
-            mutate.mutate({
-              callingSkillParam: formParam,
-              callingSkillRoute: form.submitSkillRouteURL,
-            });
-          }}
-          isButtonActive={true}
+          isDisabled={false}
           label={form.submitButtonLabel}
+          isButtonClicked={isButtonClicked}
         />
       </div>
-    </div>
+    </form>
   ) : (
     <div
       className={`${MessageCommon} bg-white px-5 rounded-3xl border-2 border-gray-300 py-6`}
@@ -269,5 +322,25 @@ export const FormMessage: React.FC<{
       <div className="font-bold text-2xl mb-3">{form.description}</div>
       완료되었습니다.
     </div>
+  );
+};
+
+export const FormMessageGroup: React.FC<{
+  formMessages: FormMessageType[];
+  isLast: boolean;
+}> = ({ formMessages, isLast }) => {
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+  return (
+    <>
+      {formMessages.map((formMessage) => (
+        <FormMessage
+          form={formMessage}
+          isLast={isLast}
+          isNeighborButtonClicked={isButtonClicked}
+          setIsisNeighborButtonClicked={setIsButtonClicked}
+        />
+      ))}
+    </>
   );
 };

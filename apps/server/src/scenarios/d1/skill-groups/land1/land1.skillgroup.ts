@@ -60,18 +60,21 @@ export class Land1SkillGroup implements SkillGroupController {
         dataFields: [
           DataField({
             label: '토지 가격',
-            value: `${landStatus.landPrice}원`,
+            value: String(landStatus.landPrice),
             inline: false,
+            isCash: true,
           }),
           DataField({
             label: '통행비',
-            value: `${landStatus.tollFee}원`,
+            value: String(landStatus.tollFee),
             inline: true,
+            isCash: true,
           }),
           DataField({
             label: '토지 소유 가능 시간',
             value: `${landStatus.landTTLsecs}초`,
             inline: true,
+            isCash: false,
           }),
         ],
         inputFields: [

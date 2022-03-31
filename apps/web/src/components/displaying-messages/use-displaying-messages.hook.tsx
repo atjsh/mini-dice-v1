@@ -20,9 +20,9 @@ const skillLogsToRenderesMessage = (
       );
       return [
         message.userActivityMessage,
-        ...message.serverMessage.slice(0, message.serverMessage.length - 1),
+        ...message.serverMessages.slice(0, message.serverMessages.length - 1),
         <>
-          {message.serverMessage.slice(message.serverMessage.length - 1)}
+          {message.serverMessages.slice(message.serverMessages.length - 1)}
           {message.time}
         </>,
       ];
