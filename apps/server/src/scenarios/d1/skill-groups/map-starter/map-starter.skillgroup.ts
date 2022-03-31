@@ -1,4 +1,5 @@
 import {
+  cashLocale,
   MessageResponseFactory,
   PlainMessage,
   UserActivityMessage,
@@ -63,7 +64,9 @@ export class MapStarterSkillGroup implements SkillGroupController {
         actionResultDrawings: [
           PlainMessage({
             title: `${this.getSkillGroupAlias()} 칸`,
-            description: `${props.skillServiceResult?.rewarded_cash}원을 받았습니다. \n총 보유 금액: ${props.skillServiceResult?.currentCash}원`,
+            description: `기념으로 ${cashLocale(
+              props.skillServiceResult?.rewarded_cash,
+            )} 받았습니다.`,
           }),
         ],
         date: props.date,

@@ -1,4 +1,8 @@
-import { MessageResponseFactory, PlainMessage } from '@packages/shared-types';
+import {
+  cashLocale,
+  MessageResponseFactory,
+  PlainMessage,
+} from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
   drawDiceUserActivityMessage,
@@ -46,12 +50,20 @@ export class NightFoodSkillGroup implements SkillGroupController {
             case PROFIT_STATUS.MADE_PROFIT:
               return PlainMessage({
                 title: nightFoodPlainMessageTitle,
-                description: `'${props.skillServiceResult.foodDetail.foodName}' 야식을 판매하여 ${props.skillServiceResult.foodDetail.changingAmount}원 벌었습니다.`,
+                description: `'${
+                  props.skillServiceResult.foodDetail.foodName
+                }' 야식을 판매하여 ${cashLocale(
+                  props.skillServiceResult.foodDetail.changingAmount,
+                )} 벌었습니다.`,
               });
             case PROFIT_STATUS.LOST_PROFIT:
               return PlainMessage({
                 title: nightFoodPlainMessageTitle,
-                description: `'${props.skillServiceResult.foodDetail.foodName}' 야식을 팔아 보았지만 손해를 봤습니다. ${props.skillServiceResult.foodDetail.changingAmount}원 잃었습니다.`,
+                description: `'${
+                  props.skillServiceResult.foodDetail.foodName
+                }' 야식을 팔아 보았지만 손해를 봤습니다. ${cashLocale(
+                  props.skillServiceResult.foodDetail.changingAmount,
+                )} 잃었습니다.`,
               });
             case PROFIT_STATUS.NO_PROFIT:
               return PlainMessage({

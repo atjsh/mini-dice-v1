@@ -10,9 +10,6 @@ export const MAP_STARTER_REWARD_CASH = 10000;
 export class MapStarterService {
   constructor(private userRepository: UserRepository) {}
 
-  /**
-   * 유저에게 10000원을 지급한다.
-   */
   public async index(props: SkillServiceProps) {
     const user = await this.userRepository.changeUserCash(
       props.userId,

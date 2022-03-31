@@ -11,6 +11,7 @@ import {
   SkillMetadataKey,
 } from '@packages/scenario-routing/constants';
 import {
+  cashLocale,
   UserActivityMessage,
   UserActivityMessageType,
   UserIdType,
@@ -79,9 +80,9 @@ export function drawDiceUserActivityMessage(
       diceUserActivity.stockChangeAmount != undefined
         ? `\n 더블 발생으로 주가가 ${
             diceUserActivity.stockChangeAmount > 0
-              ? `+${diceUserActivity.stockChangeAmount}`
-              : `${diceUserActivity.stockChangeAmount}`
-          }원 ${diceUserActivity.stockChangeAmount > 0 ? `상승` : `하락`}했음`
+              ? `+${cashLocale(diceUserActivity.stockChangeAmount)}`
+              : `-${cashLocale(diceUserActivity.stockChangeAmount)}`
+          } ${diceUserActivity.stockChangeAmount > 0 ? `상승` : `하락`}했음`
         : ''
     }`,
     description: `${_.sum(diceUserActivity.diceResult)}칸을 이동했다`,

@@ -9,6 +9,7 @@ import { Land3Module } from './land3/land3.module';
 import { Land4Module } from './land4/land4.module';
 import { Land5Module } from './land5/land5.module';
 import { Land6Module } from './land6/land6.module';
+import { DragonMoneyModule } from './dragon-money/dragon-money.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Land6Module } from './land6/land6.module';
     Land3Module,
     Land4Module,
     Land5Module,
+    DragonMoneyModule,
     Land6Module,
   ],
 })

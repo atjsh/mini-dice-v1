@@ -4,3 +4,5 @@ export * from './user/update.user.dto';
 export * from './user/country-list';
 
 export * from './minidice-web-ui-ts';
+
+export * from './locale/bigint-locale';

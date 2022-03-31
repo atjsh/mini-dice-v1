@@ -9,8 +9,8 @@ import { weightedRandom } from './weighted-random';
 /**
  * 이벤트 이름과 확률 가중치로 구성된 이벤트 케이스 객체 인터페이스
  */
-export type EventCase = {
-  causeName: string;
+export type EventCase<T = string> = {
+  causeName: T;
   weight: number;
 };
 
@@ -26,7 +26,7 @@ export type NumberRange = {
  * EventCase에 value가 추가된 타입.
  * value는 수 또는 NumberRange가 할당될 수 있다.
  */
-export type DynamicValueEventCase = EventCase & {
+export type DynamicValueEventCase<T = string> = EventCase<T> & {
   value: number | NumberRange;
 };
 
@@ -56,8 +56,8 @@ export function selectEventCaseRandomly<T extends EventCase>(
  * @param cashChangeEventCases
  * @returns
  */
-export function calcRandomCashChangeEvent(
-  cashChangeEventCases: DynamicValueEventCase[],
+export function calcRandomCashChangeEvent<T extends string>(
+  cashChangeEventCases: DynamicValueEventCase<T>[],
 ) {
   const eventCase = selectEventCaseRandomly(cashChangeEventCases);
   if (typeof eventCase.value === 'number') {

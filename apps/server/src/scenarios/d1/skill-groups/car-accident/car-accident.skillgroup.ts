@@ -1,4 +1,8 @@
-import { MessageResponseFactory, PlainMessage } from '@packages/shared-types';
+import {
+  cashLocale,
+  MessageResponseFactory,
+  PlainMessage,
+} from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
 import {
   drawDiceUserActivityMessage,
@@ -50,7 +54,9 @@ export class CarAccidentSkillGroup implements SkillGroupController {
               title: '교통 사고',
               description:
                 `교통 사고가 발생하여 '${props.skillServiceResult.accident}' 부상을 입었습니다. \n` +
-                `${props.skillServiceResult.cashDeclineAmount}원 잃었습니다.`,
+                `${cashLocale(
+                  props.skillServiceResult.cashDeclineAmount,
+                )} 잃었습니다.`,
             }),
           ],
         });

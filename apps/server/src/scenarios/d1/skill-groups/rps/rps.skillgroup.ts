@@ -1,5 +1,6 @@
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
+  cashLocale,
   Link,
   LinkGroup,
   MessageResponseFactory,
@@ -62,8 +63,9 @@ export class RpsSkillGroup implements SkillGroupController {
       actionResultDrawings: [
         PlainMessage({
           title: `${this.getSkillGroupAlias()} 칸`,
-          description:
-            '모르는 사람과 가위바위보 게임을 합니다. 이기면 5000원을 받게 되지만, 지면 5000원을 내야 합니다.',
+          description: `모르는 사람과 가위바위보 게임을 합니다. 이기면 ${cashLocale(
+            5000,
+          )}을 받게 되지만, 지면 ${cashLocale(5000)}을 내야 합니다.`,
         }),
         LinkGroup({
           type: 'linkGroup',
@@ -111,8 +113,12 @@ export class RpsSkillGroup implements SkillGroupController {
     const rpsGameCashChangeDescription =
       props.skillServiceResult.cashChangingAmount != 0
         ? props.skillServiceResult.cashChangingAmount > 0
-          ? `${props.skillServiceResult.cashChangingAmount}원 벌었습니다.`
-          : `${props.skillServiceResult.cashChangingAmount}원 잃었습니다...`
+          ? `${cashLocale(
+              props.skillServiceResult.cashChangingAmount,
+            )} 벌었습니다.`
+          : `${cashLocale(
+              props.skillServiceResult.cashChangingAmount,
+            )} 잃었습니다...`
         : '';
 
     return MessageResponseFactory({
