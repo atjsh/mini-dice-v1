@@ -6,7 +6,11 @@ import {
 import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
-import { revokeUserAccessToken, useCompleteSignup } from '../libs';
+import {
+  revokeUserAccessToken,
+  useCompleteSignup,
+  useQueryString,
+} from '../libs';
 import {
   validateUsername,
   ValidationError,
@@ -103,7 +107,7 @@ function UserCompleteSignupForm() {
           'inline-block px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
           (disabled
             ? 'text-white bg-gray-600 cursor-progress'
-            : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
+            : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
         }
       >
         플레이
@@ -130,10 +134,6 @@ function UserCompleteSignupForm() {
 }
 
 export function LoginSuccessPage() {
-  useEffect(() => {
-    revokeUserAccessToken();
-  }, []);
-
   return (
     <ServiceLayout>
       <div className=" flex flex-col gap-10">

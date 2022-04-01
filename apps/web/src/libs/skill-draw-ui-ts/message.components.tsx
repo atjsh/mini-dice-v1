@@ -116,7 +116,7 @@ export const LinkMessage: React.FC<{
     </button>
   ) : (
     <button
-      className={`${linkMessageButtonBaseClassName} text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700`}
+      className={`${linkMessageButtonBaseClassName} text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700`}
       onClick={() => {
         setIsButtonClicked(true);
         mutate.mutate(
@@ -186,7 +186,9 @@ export const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
         dataField.inline ? 'inline-block' : 'block'
       } mr-5 mb-5 rounded-xl `}
     >
-      <div className="font-bold text-sm text-gray-600">{dataField.label}</div>
+      <div className="font-bold text-sm text-gray-600 dark:text-zinc-400">
+        {dataField.label}
+      </div>
       <div className="text-xl">
         {dataField.isCash
           ? `${BigInt(dataField.value).toLocaleString('ko-kr', {
@@ -245,7 +247,7 @@ export const SubmitButton: React.FC<{
     </button>
   ) : (
     <button
-      className={`text-white ${submitButtonBaseClassName} rounded-xl bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transition duration-150 select-none transform active:scale-95`}
+      className={`text-white ${submitButtonBaseClassName} rounded-xl bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 transition duration-150 select-none transform active:scale-95`}
       type="submit"
     >
       {label}

@@ -8,6 +8,7 @@ import { PrivaryPage } from './Privacy.page';
 import { TermsPage } from './terms.page';
 import { TerminatePage } from './Terminate.page';
 import { RankingPage } from './Ranking.page';
+import { FinishLoginPage } from './FinishLogin.page';
 
 export type Protection =
   | 'public'
@@ -108,6 +109,13 @@ const protectedRoutesUnreversed: ProtectedRoute[] = [
     title: getTitle('Ranking'),
     exact: true,
     protection: 'signupCompleted',
+  },
+  {
+    path: '/finish-login',
+    component: FinishLoginPage,
+    title: getTitle('Finishing Login'),
+    exact: true,
+    protection: 'public',
   },
 ];
 

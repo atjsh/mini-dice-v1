@@ -25,11 +25,6 @@ window.addEventListener('resize', () => {
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 });
 
-setInterval(() => {
-  let vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-}, 1000);
-
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>

@@ -117,6 +117,11 @@ export abstract class OauthAbstractService {
           },
         );
 
+        await this.refreshTokenService.deleteRefreshToken(
+          expressResponse,
+          alreadyExistedRefreshToken,
+        );
+
         await this.setNewRefreshTokenOnCookie(expressResponse, user);
 
         return {

@@ -37,7 +37,7 @@ function getRelativeMovingCount(
     : toIndex - fromIndex;
 }
 
-const TRANSITION = 3600;
+const TRANSITION = 200;
 
 export const MapStatusBar: React.FC = () => {
   const { data: mapStops } = useMap();

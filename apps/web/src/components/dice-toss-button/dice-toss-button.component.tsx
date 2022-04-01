@@ -42,9 +42,6 @@ export const DiceTossButton: React.FC<{
           onClick={setisSidebarShowing}
         >
           🎲 먼저 칸을 마치세요
-          <div className="mt-2 font-normal text-base">
-            칸을 마치세요! 그래야 주사위를 굴릴 수 있어요.
-          </div>
         </button>
       </div>
     );
@@ -59,13 +56,7 @@ export const DiceTossButton: React.FC<{
           className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
           onClick={setisSidebarShowing}
         >
-          🎲 주사위 기다리기
-          <div className="mt-2 font-normal text-base">
-            <span className="font-bold text-gray-200">{needTime}초</span>{' '}
-            <span className="text-gray-300">
-              후에 주사위를 굴릴 수 있습니다.
-            </span>
-          </div>
+          🎲 주사위 기다리기: <span className="font-bold">{needTime}초</span>
         </button>
       </div>
     );
@@ -78,8 +69,6 @@ export const DiceTossButton: React.FC<{
         >
           🎲 주사위를 굴리는 중 ...
         </button>
-        <br />
-        <br />
       </div>
     );
   }
@@ -87,7 +76,7 @@ export const DiceTossButton: React.FC<{
   return (
     <div className="">
       <button
-        className={`${baseButtonClassNames} bg-blue-500 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95`}
+        className={`${baseButtonClassNames} bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95`}
         onClick={() => {
           setDiceButtonState({ isPending: true });
           onClick();
@@ -96,8 +85,6 @@ export const DiceTossButton: React.FC<{
       >
         🎲 주사위 굴리기
       </button>
-      <br />
-      <br />
     </div>
   );
 };

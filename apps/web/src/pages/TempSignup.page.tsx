@@ -120,7 +120,7 @@ function TempSignupForm() {
           'inline-block px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
           (disabled
             ? 'text-white bg-gray-600 cursor-progress'
-            : 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
+            : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
         }
       >
         플레이

@@ -7,13 +7,13 @@ export const ProfileWidget: React.FC = () => {
     <div>
       {user ? (
         <div className="flex gap-4 flex-col bg-white dark:md:bg-zinc-800 dark:bg-black px-4 py-5 rounded-3xl">
-          <div className=" w-24">
+          {/* <div className=" w-24">
             <img
               src={new URL('~/src/assets/logo512.png', import.meta.url).href}
               className="border-png"
               alt=""
             />
-          </div>
+          </div> */}
           <div className="flex flex-col gap-2 justify-center">
             <div className="font-bold text-xl break-all">@{user.username}</div>
             <div className="font-bold text-base text-gray-500">
