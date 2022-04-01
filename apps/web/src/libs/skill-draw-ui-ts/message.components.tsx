@@ -68,7 +68,9 @@ export const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
 }) => {
   return (
     <div className="flex flex-row">
-      <div className={`${MessageCommon} bg-gray-200 px-5 py-2 rounded-3xl`}>
+      <div
+        className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl`}
+      >
         <div className="font-bold text-xl">
           <Text t={plainMessage.title} />
         </div>
@@ -114,7 +116,7 @@ export const LinkMessage: React.FC<{
     </button>
   ) : (
     <button
-      className={`${linkMessageButtonBaseClassName} text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700 `}
+      className={`${linkMessageButtonBaseClassName} text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-700`}
       onClick={() => {
         setIsButtonClicked(true);
         mutate.mutate(
@@ -151,7 +153,9 @@ export const LinkGroupMessage: React.FC<{
   const mutate = useSubmitUserInteraction(activateIssue);
 
   return (
-    <div className={`${MessageCommon} bg-gray-200 px-5 py-2 rounded-3xl`}>
+    <div
+      className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl`}
+    >
       <div className="mt-1">
         <Text t={linkGroup.description} />
       </div>
@@ -214,7 +218,7 @@ export const InputFieldMessage: React.FC<{
         maxLength={inputField.maxLength}
         minLength={inputField.minLength}
         required
-        className="border-2 border-gray-400 rounded-md p-2"
+        className="border-2 border-gray-400 rounded-md p-2 dark:text-black"
       />
     </div>
   );
@@ -276,7 +280,7 @@ export const FormMessage: React.FC<{
 
   return isLast ? (
     <form
-      className={`${MessageCommon} bg-white px-5 rounded-3xl border-2 border-gray-300 py-6`}
+      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6`}
       onSubmit={(e) => {
         e.preventDefault();
         setIsButtonClicked(true);
@@ -317,7 +321,7 @@ export const FormMessage: React.FC<{
     </form>
   ) : (
     <div
-      className={`${MessageCommon} bg-white px-5 rounded-3xl border-2 border-gray-300 py-6`}
+      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6`}
     >
       <div className="font-bold text-2xl mb-3">{form.description}</div>
       완료되었습니다.

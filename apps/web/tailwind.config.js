@@ -1,6 +1,5 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './src/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './src/index.html'],
   theme: {
     fontFamily: {
       sans: [
@@ -19,7 +18,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        black: '#3B3737',
         gray: {
           100: '#E8EAEC',
         },

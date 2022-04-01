@@ -6,7 +6,7 @@ export const ProfileWidget: React.FC = () => {
   return (
     <div>
       {user ? (
-        <div className="flex gap-4 flex-col bg-white px-4 py-5 rounded-3xl">
+        <div className="flex gap-4 flex-col bg-white dark:md:bg-zinc-800 dark:bg-black px-4 py-5 rounded-3xl">
           <div className=" w-24">
             <img
               src={new URL('~/src/assets/logo512.png', import.meta.url).href}

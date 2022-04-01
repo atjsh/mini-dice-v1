@@ -134,8 +134,8 @@ export const MapStatusBar: React.FC = () => {
           <div
             className={`${
               index == 0
-                ? 'font-extrabold text-black'
-                : 'font-medium text-gray-700'
+                ? 'font-extrabold text-black dark:text-zinc-200'
+                : 'font-medium text-gray-700 dark:text-zinc-400'
             } whitespace-nowrap tracking-tighter`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}

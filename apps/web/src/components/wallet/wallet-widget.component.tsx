@@ -19,7 +19,7 @@ export const WalletWidget: React.FC = () => {
   const { data: user } = useUser();
 
   return user ? (
-    <div className="bg-white py-5 px-7 rounded-3xl">
+    <div className="bg-white dark:md:bg-zinc-800 dark:bg-black py-5 px-7 rounded-3xl">
       <div className="flex gap-4 flex-col">
         <ValueDisplayContainer>
           <ValueDisplay
