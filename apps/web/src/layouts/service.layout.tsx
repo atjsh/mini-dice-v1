@@ -26,8 +26,6 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
     </div>
 
     <div className=" px-6">{children}</div>
-    {(hideFooter === undefined || hideFooter == true) ?? (
-      <FooterWidgetComponent />
-    )}
+    {hideFooter == false ? <FooterWidgetComponent /> : <></>}
   </div>
 );

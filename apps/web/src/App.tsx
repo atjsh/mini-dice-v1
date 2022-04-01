@@ -20,15 +20,7 @@ function App(props) {
   return (
     <>
       {isLoading ? (
-        <>
-          <BrowserRouter>
-            <Switch>
-              <Route>
-                <IndexSkeletonPage />
-              </Route>
-            </Switch>
-          </BrowserRouter>
-        </>
+        <IndexSkeletonPage />
       ) : (
         <BrowserRouter>
           <Switch>

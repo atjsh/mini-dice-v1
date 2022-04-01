@@ -8,7 +8,7 @@ export function IndexPage() {
   const loginRequired = useQueryString().get('loginRequired') === 'true';
 
   return (
-    <ServiceLayout>
+    <ServiceLayout hideFooter={false}>
       <div className=" flex flex-col gap-10">
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
