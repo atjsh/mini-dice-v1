@@ -127,7 +127,8 @@ export function commonLandSkillGroupWebIndexDraw(
           props.skillServiceResult.landStatus.landName
         } 토지 칸에 도착했습니다. ${
           props.skillServiceResult.landBuyableByUserStatus.status ==
-          LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU
+            LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU ||
+          props.skillServiceResult.landStatus.landOwnedBy == null
             ? ''
             : `\n${
                 props.skillServiceResult.landStatus.landOwnedBy?.username

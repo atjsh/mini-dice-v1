@@ -73,7 +73,7 @@ export const useDisplayingMessages = () => {
       steps.map((step, index) =>
         setTimeout(() => {
           setDisplayingMessages(step);
-        }, [0, 300, 1000, 1700][index] ?? (index + 1) * 600),
+        }, [0, 700, 2400, 3600][index] ?? (index + 1) * 600),
       );
 
       setLastExposedSkillLogIndex(exposedSkillLogs.length);

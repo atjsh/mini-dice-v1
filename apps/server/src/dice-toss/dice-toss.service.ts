@@ -31,10 +31,10 @@ export class DiceTossService {
   ) {}
 
   private throwDices(dices: number): number[] {
-    // return Array(dices)
-    //   .fill(0)
-    //   .map(() => getRandomInteger(1, 2));
-    return [1];
+    return Array(dices)
+      .fill(0)
+      .map(() => getRandomInteger(1, 6));
+    // return [1];
   }
 
   private moveUserForward(
@@ -78,7 +78,7 @@ export class DiceTossService {
       throw new ForbiddenException('finish signup fist');
     }
 
-    const diceResult = this.throwDices(1);
+    const diceResult = this.throwDices(2);
 
     const lastSkillLog = await this.skillLogService.getLastLogOrCreateOne({
       userId: userJwt.userId,

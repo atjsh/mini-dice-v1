@@ -299,7 +299,8 @@ export class CommonLandService {
     if (
       [LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU].includes(
         landBuyableByUserStatus.status,
-      ) == false
+      ) == false &&
+      landStatus.landOwnedBy != null
     ) {
       await Promise.all([
         this.userRepository.changeUserCash(props.userId, -landStatus.tollFee),

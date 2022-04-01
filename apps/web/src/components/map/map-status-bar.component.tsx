@@ -37,7 +37,7 @@ function getRelativeMovingCount(
     : toIndex - fromIndex;
 }
 
-const TRANSITION = 1000;
+const TRANSITION = 3600;
 
 export const MapStatusBar: React.FC = () => {
   const { data: mapStops } = useMap();
@@ -136,7 +136,7 @@ export const MapStatusBar: React.FC = () => {
               index == 0
                 ? 'font-extrabold text-black'
                 : 'font-medium text-gray-700'
-            } whitespace-nowrap tracking-tighter `}
+            } whitespace-nowrap tracking-tighter`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}
           >
