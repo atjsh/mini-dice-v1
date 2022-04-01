@@ -3,6 +3,8 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import 'reflect-metadata';
 import smoothscroll from 'smoothscroll-polyfill';
 import { useUser } from './libs';
+import { IndexPage } from './pages/Index.page';
+import { IndexSkeletonPage } from './pages/IndexSkeleton';
 import {
   FinishSignupPageURL,
   IndexPageURL,
@@ -18,7 +20,15 @@ function App(props) {
   return (
     <>
       {isLoading ? (
-        <></>
+        <>
+          <BrowserRouter>
+            <Switch>
+              <Route>
+                <IndexSkeletonPage />
+              </Route>
+            </Switch>
+          </BrowserRouter>
+        </>
       ) : (
         <BrowserRouter>
           <Switch>

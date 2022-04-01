@@ -1,6 +1,9 @@
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 
-export const ServiceLayout: React.FC = ({ children }) => (
+export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
+  children,
+  hideFooter,
+}) => (
   <div className="flex flex-col gap-14">
     <div className="flex flex-col select-none">
       <img
@@ -23,6 +26,8 @@ export const ServiceLayout: React.FC = ({ children }) => (
     </div>
 
     <div className=" px-6">{children}</div>
-    <FooterWidgetComponent />
+    {(hideFooter === undefined || hideFooter == true) ?? (
+      <FooterWidgetComponent />
+    )}
   </div>
 );
