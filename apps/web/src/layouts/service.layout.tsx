@@ -4,8 +4,15 @@ export const ServiceLayout: React.FC = ({ children }) => (
   <div className="flex flex-col gap-14">
     <div className="flex flex-col select-none">
       <img
-        className="object-cover h-32"
+        className="object-cover h-32 dark:hidden"
         src={new URL('~/src/assets/openstreetmap.png', import.meta.url).href}
+        alt=""
+      />
+      <img
+        className="object-cover h-32 hidden dark:block"
+        src={
+          new URL('~/src/assets/openstreetmap-dark.png', import.meta.url).href
+        }
         alt=""
       />
       <div className=" text-gray-500 text-right text-xs mr-1">
