@@ -30,6 +30,7 @@
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-fastify": "^8.3.1",
     "@nestjs/swagger": "^5.2.0",
+    "@nestjs/terminus": "^8.0.6",
     "@nestjs/typeorm": "^8.0.3",
     "@packages/scenario-routing": "1.0.0",
     "@packages/shared-types": "1.0.0",

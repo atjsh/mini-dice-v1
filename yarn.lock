@@ -2222,6 +2222,13 @@
     lodash "4.17.21"
     path-to-regexp "3.2.0"
 
+"@nestjs/terminus@^8.0.6":
+  version "8.0.6"
+  resolved "https://registry.yarnpkg.com/@nestjs/terminus/-/terminus-8.0.6.tgz#012c00fb9bc133f53f6e029358e4bcbe1638ec90"
+  integrity sha512-HevQNlJzIkiZ5S1Yb+ll4pwiqg8qB5M6G+2LD0hIkUHzWFvVdCAZDIhLhtwjjRGJ76dwC8BFE/YyUC/4reGAzQ==
+  dependencies:
+    check-disk-space "3.3.0"
+
 "@nestjs/testing@^8.0.0":
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-8.3.1.tgz#8af5b6127d1250405fe65a857be98658e04a386a"
@@ -4499,6 +4506,11 @@ chat-element-json-ts@^3.0.0:
   integrity sha512-szftENV/ehR/qikBqpOdaOgJa/CUPSZYfhdgFwc1rIhT4PZyweXbW16OOsDFie/IHoesTEFGT4dzqNHl8vLXlw==
   dependencies:
     lodash "^4.17.21"
+
+check-disk-space@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/check-disk-space/-/check-disk-space-3.3.0.tgz#2a8f4c9542ed71a70878fc28fda7e265d40942ec"
+  integrity sha512-Hvr+Nr01xSSvuCpXvJ8oZ2iXjIu4XT3uHbw3g7F/Uiw6O5xk8c/Ot7ZGFDaTRDf2Bz8AdWA4DvpAgCJVKt8arw==
 
 chokidar@3.5.3, "chokidar@>=3.0.0 <4.0.0", chokidar@^3.4.2, chokidar@^3.5.3:
   version "3.5.3"

@@ -8,6 +8,7 @@ import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
 import { DiceTossModule } from './dice-toss/dice-toss.module';
+import { HealthModule } from './health/health.module';
 import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-logger.interceptor';
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
@@ -83,6 +84,8 @@ import { UserModule } from './user/user.module';
     DiscoveryModule,
 
     LoggingModule,
+
+    HealthModule,
   ],
   providers: [
     {
