@@ -32,7 +32,7 @@ export const ConnectWithOauthWidget: React.FC = () => {
               googleOAuthCredential.clientId
             }&redirect_uri=${process.env.REACT_APP_TDOL_SERVER_URL}${
               googleOAuthCredential.redirectUri
-            }/${atob(
+            }/${btoa(
               process.env.REACT_APP_MINIDICE_WEB_URL!,
             )}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`}
           >
