@@ -7,7 +7,6 @@ import {
   TerminatePageURL,
   TermsPageURL,
 } from '../../pages/routes';
-import { HealthCheckComponent } from '../health-check/health-check.component';
 
 export const FooterWidgetComponent: React.FC = () => {
   const { data: accessToken } = useAccessToken();
@@ -15,7 +14,6 @@ export const FooterWidgetComponent: React.FC = () => {
   return (
     <div className="self-center mb-10 flex flex-col gap-3 max-w-7xl px-2">
       <hr className=" border-gray-300" />
-      <HealthCheckComponent />
       <div className="flex gap-x-5 gap-y-3 flex-wrap">
         <a
           href="https://discord.gg/2dhUGXwmBq"
