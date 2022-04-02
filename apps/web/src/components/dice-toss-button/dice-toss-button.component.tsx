@@ -32,18 +32,16 @@ export const DiceTossButton: React.FC<{
     useRecoilState(diceTossButtonState);
 
   const baseButtonClassNames =
-    'text-white md:px-5 md:py-7 px-7 py-5 rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold';
+    'text-white md:px-5 md:py-7 px-4 py-4 rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
 
   if (isDiceTossForbidden == true) {
     return (
-      <div className="">
-        <button
-          className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
-          onClick={setisSidebarShowing}
-        >
-          🎲 먼저 칸을 마치세요
-        </button>
-      </div>
+      <button
+        className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+        onClick={setisSidebarShowing}
+      >
+        🎲 먼저 칸을 마치세요
+      </button>
     );
   } else if (canTossDiceAfter && canTossDiceAfter > useDateTime) {
     const needTime = Math.ceil(
@@ -51,40 +49,34 @@ export const DiceTossButton: React.FC<{
     );
 
     return (
-      <div className="">
-        <button
-          className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
-          onClick={setisSidebarShowing}
-        >
-          🎲 주사위 기다리기: <span className="font-bold">{needTime}초</span>
-        </button>
-      </div>
+      <button
+        className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+        onClick={setisSidebarShowing}
+      >
+        🎲 주사위 기다리기: <span className="font-bold">{needTime}초</span>
+      </button>
     );
   } else if (diceButtonState.isPending) {
     return (
-      <div className="">
-        <button
-          className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
-          onClick={setisSidebarShowing}
-        >
-          🎲 주사위를 굴리는 중 ...
-        </button>
-      </div>
+      <button
+        className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
+        onClick={setisSidebarShowing}
+      >
+        🎲 주사위를 굴리는 중 ...
+      </button>
     );
   }
 
   return (
-    <div className="">
-      <button
-        className={`${baseButtonClassNames} bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95`}
-        onClick={() => {
-          setDiceButtonState({ isPending: true });
-          onClick();
-          setisSidebarShowing();
-        }}
-      >
-        🎲 주사위 굴리기
-      </button>
-    </div>
+    <button
+      className={`${baseButtonClassNames} bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95`}
+      onClick={() => {
+        setDiceButtonState({ isPending: true });
+        onClick();
+        setisSidebarShowing();
+      }}
+    >
+      🎲 주사위 굴리기
+    </button>
   );
 };

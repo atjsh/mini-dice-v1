@@ -40,12 +40,12 @@ const cashChangeEventValues: DynamicValueEventCase<PickedItemEventEnum>[] = [
       from: 10000,
       to: 20000,
     },
-    weight: 0.4,
+    weight: 0.7,
   },
   {
     causeName: PickedItemEventEnum.NO_PROFIT,
     value: 0,
-    weight: 0.6,
+    weight: 0.3,
   },
 ];
 

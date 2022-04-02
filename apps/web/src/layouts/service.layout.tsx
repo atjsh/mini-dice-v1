@@ -12,7 +12,7 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
         alt=""
       />
       <img
-        className="object-cover h-32 hidden dark:block"
+        className="object-cover h-32 hidden dark:block w-[calc(100vw+10rem)]"
         src={
           new URL('~/src/assets/openstreetmap-dark.png', import.meta.url).href
         }

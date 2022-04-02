@@ -17,7 +17,7 @@ const Messages = ({ messages }: { messages: any[] }) => {
   useEffect(scrollToBottom, [messages]);
 
   return (
-    <div className="px-5 flex-grow md:pb-0 pb-52">
+    <div className="px-5 flex-grow md:pb-0 pb-60">
       {messages.map((message, index) => (
         <div key={index}>{message}</div>
       ))}
@@ -45,15 +45,9 @@ export function Ingame({
           : 'bg-white dark:bg-black'
       } md:bg-white md:dark:bg-black md:transition-none`}
     >
-      <div className="sticky top-0 box-content w-auto p-3 justify-center flex flex-col md:flex-row pr-0 backdrop-blur-lg bg-white dark:bg-black bg-opacity-75 backdrop-filter gap-3 border-b md:border-b-0 z-20">
-        <div className="md:hidden text-center tracking-tighter text-2xl font-bold">
-          Mini Dice
-        </div>
-        <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-5xl w-full">
-          <div className="md:text-3xl text-base">🗺</div>
-          <MapStatusBar />
-        </div>
-      </div>
+      {/* <div className="sticky top-0 box-content w-auto p-3 justify-center flex flex-col md:flex-row pr-0 backdrop-blur-lg bg-white dark:bg-black bg-opacity-75 backdrop-filter gap-3 border-b md:border-b-0 z-20">
+
+      </div> */}
       <div className="mx-auto my-0 max-w-5xl">
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
@@ -64,8 +58,15 @@ export function Ingame({
         </div>
         <Messages messages={displayingMessages} />
 
-        <div className="md:p-7 p-3 text-center md:sticky fixed w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3">
-          <div className=" md:hidden">
+        <div className="md:p-7 p-3 text-center md:sticky fixed w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-1 pb-15 z-40 flex flex-col gap-2 border-t dark:border-gray-700 border-gray-300">
+          <div className="md:hidden text-center tracking-tighter text-2xl font-bold">
+            Mini Dice
+          </div>
+          <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-5xl w-full">
+            <div className="md:text-3xl text-base">🗺</div>
+            <MapStatusBar />
+          </div>
+          <div className=" ">
             <button
               onClick={() => {
                 setisSidebarShowing(!isSidebarShowing);
@@ -74,28 +75,29 @@ export function Ingame({
                 isSidebarShowing == false
                   ? 'border-gray-300 bg-white hover:bg-gray-100 active:bg-gray-300 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
-              } border-2 px-4 py-2 rounded-xl transition duration-150 text-base font-semibold select-none transform active:scale-95`}
+              } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95  md:hidden`}
             >
               💵{' '}
               {`${BigInt(user?.cash ?? 0).toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'KRW',
               })}`}{' '}
-              | 잔고 더보기
+              | <span className=" whitespace-nowrap">잔고 더보기</span>
             </button>
+            <div className=" mb-3"></div>
+            <DiceTossButton
+              canTossDiceAfter={
+                user?.canTossDiceAfter
+                  ? new Date(user.canTossDiceAfter)
+                  : undefined
+              }
+              isDiceTossForbidden={user?.isUserDiceTossForbidden}
+              onClick={() => {
+                mutation.mutate();
+              }}
+              setisSidebarShowing={() => setisSidebarShowing(false)}
+            />
           </div>
-          <DiceTossButton
-            canTossDiceAfter={
-              user?.canTossDiceAfter
-                ? new Date(user.canTossDiceAfter)
-                : undefined
-            }
-            isDiceTossForbidden={user?.isUserDiceTossForbidden}
-            onClick={() => {
-              mutation.mutate();
-            }}
-            setisSidebarShowing={() => setisSidebarShowing(false)}
-          />
         </div>
       </div>
     </div>
@@ -114,7 +116,7 @@ export function ServicePage() {
       >
         <WordmarkComponent />
 
-        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-48 md:pb-3">
+        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3">
           <ConnectWithOauthWidget />
           <WalletWidget />
           <ProfileWidget />
