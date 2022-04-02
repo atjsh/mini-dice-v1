@@ -1,9 +1,7 @@
 import { Helmet } from 'react-helmet';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import 'reflect-metadata';
-import smoothscroll from 'smoothscroll-polyfill';
 import { useUser } from './libs';
-import { IndexPage } from './pages/Index.page';
 import { IndexSkeletonPage } from './pages/IndexSkeleton';
 import {
   FinishSignupPageURL,
@@ -13,8 +11,6 @@ import {
 } from './pages/routes';
 
 function App(props) {
-  smoothscroll.polyfill();
-
   const { isError: isNotAuthed, data: user, isLoading } = useUser();
 
   return (

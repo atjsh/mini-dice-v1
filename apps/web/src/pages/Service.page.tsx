@@ -10,14 +10,15 @@ import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { useDiceToss, useUser } from '../libs';
 
 const Messages = ({ messages }: { messages: any[] }) => {
-  const messagesEndRef: any = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })!;
+    messagesEndRef!.current!.scrollIntoView({ behavior: 'smooth' })!;
+    setTimeout(() => {}, 100);
   };
-  useEffect(scrollToBottom, [messages]);
+  useEffect(scrollToBottom, [messages?.length]);
 
   return (
-    <div className="px-5 flex-grow md:pb-0 pb-60">
+    <div className="px-5 flex-grow md:pb-0">
       {messages.map((message, index) => (
         <div key={index}>{message}</div>
       ))}
@@ -39,15 +40,12 @@ export function Ingame({
 
   return (
     <div
-      className={`custom-h-screen flex-1 overflow-y-auto transition-colors duration-300 ${
+      className={` flex-1 overflow-y-auto transition-colors duration-300 ${
         isSidebarShowing
           ? ' bg-gray-300 dark:bg-zinc-800'
           : 'bg-white dark:bg-black'
       } md:bg-white md:dark:bg-black md:transition-none`}
     >
-      {/* <div className="sticky top-0 box-content w-auto p-3 justify-center flex flex-col md:flex-row pr-0 backdrop-blur-lg bg-white dark:bg-black bg-opacity-75 backdrop-filter gap-3 border-b md:border-b-0 z-20">
-
-      </div> */}
       <div className="mx-auto my-0 max-w-5xl">
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
@@ -58,10 +56,7 @@ export function Ingame({
         </div>
         <Messages messages={displayingMessages} />
 
-        <div className="md:p-7 p-3 text-center md:sticky fixed w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-1 pb-15 z-40 flex flex-col gap-2 border-t dark:border-gray-700 border-gray-300">
-          <div className="md:hidden text-center tracking-tighter text-2xl font-bold">
-            Mini Dice
-          </div>
+        <div className="md:p-7 p-3 text-center  sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3 border-t dark:border-gray-700 border-gray-300">
           <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-5xl w-full">
             <div className="md:text-3xl text-base">🗺</div>
             <MapStatusBar />
@@ -84,6 +79,13 @@ export function Ingame({
               })}`}{' '}
               | <span className=" whitespace-nowrap">잔고 더보기</span>
             </button>
+            <div className="px-4 py-2 rounded-2xl text-base font-semibold select-none md:inline-block bg-white text-black dark:bg-zinc-800 dark:text-white hidden">
+              💵{' '}
+              {`${BigInt(user?.cash ?? 0).toLocaleString('en-us', {
+                style: 'currency',
+                currency: 'KRW',
+              })}`}
+            </div>
             <div className=" mb-3"></div>
             <DiceTossButton
               canTossDiceAfter={
@@ -112,11 +114,11 @@ export function ServicePage() {
       <div
         className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
           isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
-        } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 drop-shadow-2xl md:drop-shadow-none transition-[right] duration-300 md:right-auto md:w-auto bg-opacity-90`}
+        } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
         <WordmarkComponent />
 
-        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3">
+        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 d:pb-3">
           <ConnectWithOauthWidget />
           <WalletWidget />
           <ProfileWidget />
