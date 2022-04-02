@@ -2,7 +2,7 @@ import { useServerHealth } from '../../libs/tdol-server/server-health/use-server
 
 export const HealthCheckComponent: React.FC = () => {
   const { data: isServerOn, isLoading } = useServerHealth();
-  return isLoading == false && isServerOn != false ? (
+  return isLoading == true || (isLoading == false && isServerOn != false) ? (
     <></>
   ) : (
     <div className=" bg-yellow-500 text-center text-black font-bold px-6 py-2 text-base w-fit block mx-auto my-3 rounded-2xl cursor-default select-none">
