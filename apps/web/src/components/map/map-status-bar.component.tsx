@@ -37,7 +37,7 @@ function getRelativeMovingCount(
     : toIndex - fromIndex;
 }
 
-const TRANSITION = 200;
+const TRANSITION = 3000;
 
 export const MapStatusBar: React.FC = () => {
   const { data: mapStops } = useMap();
@@ -127,7 +127,7 @@ export const MapStatusBar: React.FC = () => {
           left: `-${left}px`,
           transitionDuration: isTransitioning ? `${TRANSITION}ms` : '0s',
           transitionProperty: 'left',
-          transitionTimingFunction: 'ease-in-out',
+          transitionTimingFunction: 'linear',
         }}
       >
         {zoomedMap.map((stop, index) => (
