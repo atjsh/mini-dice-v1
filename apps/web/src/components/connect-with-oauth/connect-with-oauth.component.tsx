@@ -18,7 +18,9 @@ export const ConnectWithOauthWidget: React.FC = () => {
     ) : (
       <div className="bg-white dark:md:bg-zinc-800 dark:bg-black rounded-3xl flex flex-col gap-3 py-7">
         <div className="flex flex-col gap-2 px-8">
-          <div className="font-bold">다시 로그인할 수 있도록 계정 유지하기</div>
+          <div className="font-bold">
+            나중에도 플레이할 수 있도록 구글 계정과 연결하기
+          </div>
           <div className="text-sm">
             "바로 플레이"로 게임하고 있습니다.{' '}
             <span className=" font-bold">
