@@ -80,7 +80,8 @@ export function Ingame({
               {`${BigInt(user?.cash ?? 0).toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'KRW',
-              })}`}
+              })}`}{' '}
+              | 잔고 더보기
             </button>
           </div>
           <DiceTossButton
