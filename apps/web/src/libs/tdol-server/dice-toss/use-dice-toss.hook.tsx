@@ -7,6 +7,7 @@ import { queryClient } from '../../..';
 import { getMap } from '../map';
 import { UseUserHookKey } from '../profile';
 import { ExposedSkillLogType, getSkillLogs } from '../skill-logs';
+import { MAP_TRANSITION_MS } from '../../../components/map/map-status-bar.component';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export function getRandomInteger(min: number, max: number): number {
@@ -26,10 +27,12 @@ export const useDiceToss = () => {
         getSkillLogs.name,
         (state?: ExposedSkillLogType[]) => [...(state ?? []), data.skillLog],
       );
-      setDiceTossButton({ isPending: false });
-      queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
       queryClient.refetchQueries([getMap.name]);
       queryClient.refetchQueries([getSkillLogs.name]);
+      setTimeout(() => {
+        setDiceTossButton({ isPending: false });
+        queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
+      }, MAP_TRANSITION_MS);
     },
   });
 };

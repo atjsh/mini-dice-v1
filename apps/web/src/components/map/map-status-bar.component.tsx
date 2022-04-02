@@ -37,7 +37,7 @@ function getRelativeMovingCount(
     : toIndex - fromIndex;
 }
 
-const TRANSITION = 3000;
+export const MAP_TRANSITION_MS = 3000;
 
 export const MapStatusBar: React.FC = () => {
   const { data: mapStops } = useMap();
@@ -104,7 +104,7 @@ export const MapStatusBar: React.FC = () => {
           setTimeout(() => {
             setIsTransitioning(true);
           }, 100);
-        }, TRANSITION);
+        }, MAP_TRANSITION_MS);
       } else {
         setZoomedMap(
           endlessSlice(
@@ -125,7 +125,7 @@ export const MapStatusBar: React.FC = () => {
         className="absolute flex md:gap-x-8 gap-x-3"
         style={{
           left: `-${left}px`,
-          transitionDuration: isTransitioning ? `${TRANSITION}ms` : '0s',
+          transitionDuration: isTransitioning ? `${MAP_TRANSITION_MS}ms` : '0s',
           transitionProperty: 'left',
           transitionTimingFunction: 'linear',
         }}

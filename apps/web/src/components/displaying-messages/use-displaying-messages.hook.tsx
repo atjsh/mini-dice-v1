@@ -5,6 +5,7 @@ import {
   transformSkillLogToMessage,
   useSkillLogs,
 } from '../../libs';
+import { MAP_TRANSITION_MS } from '../map/map-status-bar.component';
 import { displayingMessagesState } from './atoms/displaying-messages.atom';
 
 const skillLogsToRenderesMessage = (
@@ -73,7 +74,7 @@ export const useDisplayingMessages = () => {
       steps.map((step, index) =>
         setTimeout(() => {
           setDisplayingMessages(step);
-        }, [0, 700, 2400, 3600][index] ?? (index + 1) * 600),
+        }, [0, 700 + MAP_TRANSITION_MS, 2400 + MAP_TRANSITION_MS, 3600 + MAP_TRANSITION_MS][index] ?? (index + 1) * 600),
       );
 
       setLastExposedSkillLogIndex(exposedSkillLogs.length);
