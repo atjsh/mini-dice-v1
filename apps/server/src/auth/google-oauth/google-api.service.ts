@@ -23,7 +23,10 @@ export class GoogleApiService {
     return plainToClass(GoogleUser, userInfo);
   }
 
-  async getAccessTokenFromGoogle(authCode: string): Promise<string> {
+  async getAccessTokenFromGoogle(
+    authCode: string,
+    websiteUrl: string,
+  ): Promise<string> {
     const { data } = await lastValueFrom(
       this.httpService.post(
         'https://oauth2.googleapis.com/token',
@@ -31,7 +34,9 @@ export class GoogleApiService {
           code: authCode,
           client_id: this.configService.get('GOOGLE_OAUTH_CLIENT_ID'),
           client_secret: this.configService.get('GOOGLE_OAUTH_CLILENT_SECRET'),
-          redirect_uri: this.configService.get('GOOGLE_OAUTH_REDIRECT_URI'),
+          redirect_uri: `${this.configService.get(
+            'GOOGLE_OAUTH_REDIRECT_URI',
+          )}/${websiteUrl}`,
           grant_type: 'authorization_code',
         }),
         {
@@ -42,12 +47,19 @@ export class GoogleApiService {
         },
       ),
     );
+    console.log(data);
 
     return data.access_token;
   }
 
-  async getGoogleUser(authCode: string): Promise<GoogleUser> {
-    const accessToken = await this.getAccessTokenFromGoogle(authCode);
+  async getGoogleUser(
+    authCode: string,
+    websiteUrl: string,
+  ): Promise<GoogleUser> {
+    const accessToken = await this.getAccessTokenFromGoogle(
+      authCode,
+      websiteUrl,
+    );
 
     return await this.getGoogleUserFromGoogleAPI(accessToken);
   }

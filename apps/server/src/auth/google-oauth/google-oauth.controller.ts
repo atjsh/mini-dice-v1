@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyRequest, FastifyReply } from 'fastify';
@@ -13,24 +13,29 @@ export class GoogleOAuthController {
     private configService: ConfigService,
   ) {}
 
-  @Get('')
+  @Get(':web')
   async authUserWithGoogleOauthCode(
     @Res({ passthrough: true }) response: FastifyReply,
     @Query('code') authCode: string,
+    @Param('web') websiteUrlBase64: string,
     @Req() request: FastifyRequest,
   ) {
+    const websiteUrl = Buffer.from(websiteUrlBase64, 'base64').toString();
+    console.log(websiteUrl, authCode);
+
     try {
       const googleOAuthResult =
         await this.googleOAuthService.authUserWithGoogleOauthCode(
           response,
           authCode,
+          websiteUrlBase64,
           request.cookies['refreshToken'],
         );
 
       return response
         .status(301)
         .redirect(
-          `${this.configService.get('FRONT_URL')}/${
+          `${websiteUrl}/${
             googleOAuthResult.isSignupFinished == true
               ? 'finish-login'
               : 'finish-signup'
@@ -39,9 +44,7 @@ export class GoogleOAuthController {
     } catch (error) {
       console.error(error);
 
-      return response
-        .status(301)
-        .redirect(`${this.configService.get('FRONT_URL')}`);
+      return response.status(301).redirect(`${websiteUrl}`);
     }
   }
 }

@@ -28,7 +28,13 @@ export const ConnectWithOauthWidget: React.FC = () => {
         <div className="flex flex-col px-3 gap-2 text-center">
           <a
             className="font-bold rounded-md py-2 transition-colors text-blue-500 dark:text-blue-600 border-2 border-blue-500 hover:bg-blue-500 dark:hover:bg-blue-600 dark:border-blue-600 hover:text-white active:bg-blue-700 "
-            href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleOAuthCredential.clientId}&redirect_uri=${process.env.REACT_APP_TDOL_SERVER_URL}${googleOAuthCredential.redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`}
+            href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+              googleOAuthCredential.clientId
+            }&redirect_uri=${process.env.REACT_APP_TDOL_SERVER_URL}${
+              googleOAuthCredential.redirectUri
+            }/${atob(
+              process.env.REACT_APP_MINIDICE_WEB_URL!,
+            )}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`}
           >
             구글 계정과 연결하기
           </a>

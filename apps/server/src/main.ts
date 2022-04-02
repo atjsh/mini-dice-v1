@@ -36,6 +36,7 @@ async function bootstrap() {
     origin: [
       `${configService.get('APP_URL')}`,
       `${configService.get('FRONT_URL')}`,
+      /\.mini-dice\.com$/,
     ],
   });
 
