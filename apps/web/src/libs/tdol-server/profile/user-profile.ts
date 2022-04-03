@@ -2,9 +2,14 @@ import { PublicProfileVo, UserVo } from '@packages/shared-types';
 import { queryClient } from '../../..';
 import { useMutation } from 'react-query';
 import { authedAxios, UseUserHookKey } from '..';
+import { revokeUserAccessToken } from '../auth';
 
 export async function getUserVo(): Promise<UserVo> {
   const response = await authedAxios.get<UserVo>(`/profile/me`);
+  if (response.status == 403) {
+    revokeUserAccessToken();
+    location.href = '/logout';
+  }
   return response.data;
 }
 
