@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { mapMovingDelayTimeMS } from '../../common/timing';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
 import { SkillRouteType } from '../../libs/skill-draw-ui-ts/types';
 import { currentSkillRouteAtom } from './current-skill-route.atom';
@@ -40,7 +41,6 @@ function getRelativeMovingCount(
 }
 
 export const MAP_TRANSITION_DURATION_MS = 2000;
-export const MAP_TRANSITION_DELAY_MS = 500;
 
 export const MapStatusBar: React.FC = () => {
   const { data: mapStops } = useMap();
@@ -64,51 +64,37 @@ export const MapStatusBar: React.FC = () => {
     if (mapStops !== undefined) {
       const sliceRange = mapStops.length;
 
-      setTimeout(() => {
-        const currentSkillRouteIndex =
-          currentSkillRoute !== null
-            ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
-            : 0;
+      const currentSkillRouteIndex =
+        currentSkillRoute !== null
+          ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
+          : 0;
 
-        if (isInitalized == true) {
-          const prevSkillRoute = zoomedMap[0].skillRoute;
-          const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
+      if (isInitalized == true) {
+        const prevSkillRoute = zoomedMap[0].skillRoute;
+        const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
+          mapStops,
+          prevSkillRoute,
+        );
+
+        const relativeMovingCount = getRelativeMovingCount(
+          mapStops.length,
+          prevSkillRouteIndex,
+          currentSkillRouteIndex,
+        );
+
+        setRelativeMovingCount(relativeMovingCount);
+
+        setZoomedMap(
+          endlessSlice(
             mapStops,
-            prevSkillRoute,
-          );
-
-          const relativeMovingCount = getRelativeMovingCount(
-            mapStops.length,
             prevSkillRouteIndex,
-            currentSkillRouteIndex,
-          );
+            prevSkillRouteIndex + relativeMovingCount + sliceRange,
+          ),
+        );
 
-          setRelativeMovingCount(relativeMovingCount);
-
-          setZoomedMap(
-            endlessSlice(
-              mapStops,
-              prevSkillRouteIndex,
-              prevSkillRouteIndex + relativeMovingCount + sliceRange,
-            ),
-          );
-
-          setTimeout(() => {
-            setRelativeMovingCount(-1);
-            setIsTransitioning(false);
-            setZoomedMap(
-              endlessSlice(
-                mapStops,
-                currentSkillRouteIndex,
-                currentSkillRouteIndex + sliceRange,
-              ),
-            );
-            setLeft(0);
-            setTimeout(() => {
-              setIsTransitioning(true);
-            }, 100);
-          }, MAP_TRANSITION_DURATION_MS);
-        } else {
+        setTimeout(() => {
+          setRelativeMovingCount(-1);
+          setIsTransitioning(false);
           setZoomedMap(
             endlessSlice(
               mapStops,
@@ -116,10 +102,22 @@ export const MapStatusBar: React.FC = () => {
               currentSkillRouteIndex + sliceRange,
             ),
           );
-        }
+          setLeft(0);
+          setTimeout(() => {
+            setIsTransitioning(true);
+          }, 100);
+        }, mapMovingDelayTimeMS);
+      } else {
+        setZoomedMap(
+          endlessSlice(
+            mapStops,
+            currentSkillRouteIndex,
+            currentSkillRouteIndex + sliceRange,
+          ),
+        );
+      }
 
-        setIsInitalized(true);
-      }, MAP_TRANSITION_DELAY_MS);
+      setIsInitalized(true);
     }
   }, [currentSkillRoute, mapStops]);
 
@@ -131,7 +129,7 @@ export const MapStatusBar: React.FC = () => {
           left: `-${left}px`,
           transitionProperty: 'left',
           transitionDuration: isTransitioning
-            ? `${MAP_TRANSITION_DURATION_MS}ms`
+            ? `${mapMovingDelayTimeMS}ms`
             : '0s',
           transitionTimingFunction: 'linear',
         }}

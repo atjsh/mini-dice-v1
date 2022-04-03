@@ -43,7 +43,7 @@ export const useDiceToss = () => {
         {
           skillLogMessage: {
             message: data.skillLog.skillDrawResult.userRequestDrawings,
-            date: data.skillLog.skillDrawResult.date,
+            date: new Date(data.skillLog.skillDrawResult.date),
             skillLogId: data.skillLog.id,
           },
         },
@@ -51,9 +51,11 @@ export const useDiceToss = () => {
       await sleep(diceTossingDelayTimeMS);
 
       setDiceTossActivityStatus(DiceTossActivityEnum.ResultShowing);
+      await sleep(200);
+
       queryClient.refetchQueries([getMap.name]);
       setCurrentSkillRoute(data.skillLog.skillRoute);
-      await sleep(mapMovingDelayTimeMS);
+      await sleep(mapMovingDelayTimeMS + 200);
 
       addSkillLogMessages(
         data.skillLog.skillDrawResult.actionResultDrawings.map(
@@ -61,7 +63,7 @@ export const useDiceToss = () => {
             delay: getSkillLogMessageAddingDelayTiming(index),
             skillLogMessage: {
               message: actionResultDrawing,
-              date: data.skillLog.skillDrawResult.date,
+              date: new Date(data.skillLog.skillDrawResult.date),
               skillLogId: data.skillLog.id,
             },
           }),

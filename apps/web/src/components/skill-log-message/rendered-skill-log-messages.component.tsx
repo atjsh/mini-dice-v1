@@ -75,47 +75,28 @@ const UserActivityMessage: React.FC<{
 
   if (
     userActivityMessage.type == 'diceTossUserActivityMessage' &&
-    isLast == true
+    isLast == true &&
+    diceTossActivityStatus == DiceTossActivityEnum.Processing
   ) {
-    if (diceTossActivityStatus == DiceTossActivityEnum.Processing) {
-      return (
-        <div className="flex flex-row-reverse items-end">
-          <div
-            className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
-          >
-            <div className="text-xs mb-1">
-              <Text
-                t={`🎲 ${diceTossingNumbers[0]}, ${diceTossingNumbers[1]}`}
-              />
-            </div>
-            <div>
-              <Text t={'주사위 굴리는 중'} />
-            </div>
+    return (
+      <div className="flex flex-row-reverse items-end">
+        <div
+          className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
+        >
+          <div className="text-xs mb-1">
+            <Text t={'주사위 굴리는 중'} />
           </div>
-          <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
-            {date.toLocaleString()}
+          <div>
+            <Text
+              t={`🎲 ${diceTossingNumbers[0]}, ${diceTossingNumbers[1]} ...`}
+            />
           </div>
         </div>
-      );
-    } else {
-      return (
-        <div className="flex flex-row-reverse items-end">
-          <div
-            className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
-          >
-            <div className="text-xs mb-1">
-              <Text t={userActivityMessage.title} />
-            </div>
-            <div>
-              <Text t={userActivityMessage.description} />
-            </div>
-          </div>
-          <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
-            {date.toLocaleString()}
-          </div>
+        <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
+          {date.toLocaleString()}
         </div>
-      );
-    }
+      </div>
+    );
   }
 
   if (userActivityMessage.description) {

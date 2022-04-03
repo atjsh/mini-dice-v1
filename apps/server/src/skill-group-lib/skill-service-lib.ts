@@ -76,7 +76,8 @@ export function drawDiceUserActivityMessage(
 ): UserActivityMessageType {
   return UserActivityMessage({
     type: 'diceTossUserActivityMessage',
-    title: `🎲 ${diceUserActivity.diceResult.join(', ')} 나옴${
+    title: `${_.sum(diceUserActivity.diceResult)}칸을 이동했다`,
+    description: `🎲 ${diceUserActivity.diceResult.join(', ')} 나옴${
       diceUserActivity.stockChangeAmount != undefined
         ? `\n 더블 발생으로 주가가 ${
             diceUserActivity.stockChangeAmount > 0
@@ -85,6 +86,5 @@ export function drawDiceUserActivityMessage(
           } ${diceUserActivity.stockChangeAmount > 0 ? `상승` : `하락`}했음`
         : ''
     }`,
-    description: `${_.sum(diceUserActivity.diceResult)}칸을 이동했다`,
   });
 }

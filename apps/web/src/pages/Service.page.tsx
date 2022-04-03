@@ -46,12 +46,12 @@ export function Ingame({
         skillLogs
           .map((skillLog) => [
             {
-              date: skillLog.skillDrawResult.date,
+              date: new Date(skillLog.skillDrawResult.date),
               skillLogId: skillLog.id,
               message: skillLog.skillDrawResult.userRequestDrawings,
             },
             ...skillLog.skillDrawResult.actionResultDrawings.map((message) => ({
-              date: skillLog.skillDrawResult.date,
+              date: new Date(skillLog.skillDrawResult.date),
               skillLogId: skillLog.id,
               message: message,
             })),
@@ -137,11 +137,11 @@ export function ServicePage() {
       <div
         className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
           isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
-        } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
+        } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
         <WordmarkComponent />
 
-        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 d:pb-3">
+        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3  pb-60 md:pb-3">
           <ConnectWithOauthWidget />
           <WalletWidget />
           <ProfileWidget />

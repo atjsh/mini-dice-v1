@@ -24,8 +24,8 @@ export const useSubmitUserInteraction = (
           {
             skillLogMessage: {
               skillLogId: data.skillLog.id,
+              date: new Date(data.skillLog.skillDrawResult.date),
               message: data.skillLog.skillDrawResult.userRequestDrawings,
-              date: data.skillLog.skillDrawResult.date,
             },
             delay: getSkillLogMessageAddingDelayTiming(0),
           },
@@ -34,7 +34,7 @@ export const useSubmitUserInteraction = (
               delay: getSkillLogMessageAddingDelayTiming(index + 1),
               skillLogMessage: {
                 message: actionResultDrawing,
-                date: data.skillLog.skillDrawResult.date,
+                date: new Date(data.skillLog.skillDrawResult.date),
                 skillLogId: data.skillLog.id,
               },
             }),
