@@ -78,7 +78,7 @@ function TempSignupForm() {
         <div className=" font-medium text-xl">닉네임을 입력하세요.</div>
         <input
           type="text"
-          className="border-2 border-black rounded-xl p-2 w-10/12"
+          className="border-2 border-black rounded-xl p-2 w-10/12 dark:text-black"
           placeholder="2자 이상, 20자 미만"
           value={username}
           onChange={handleChange}
