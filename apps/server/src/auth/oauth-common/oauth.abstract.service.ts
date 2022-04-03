@@ -85,6 +85,8 @@ export abstract class OauthAbstractService {
           throw new ForbiddenException('FYX');
         }
       } catch (e) {
+        // 익명 유저가 아닌 일반 유저이거나, refreshToken에 대응되는 유저가 존재하지 않거나, 유저가 삭제되었을 경우
+        // 기존 계정에 로그인을 시도하거나 새로 가입함
         const existingUsers = await this.userRepository.find({
           email: email,
           authProvider: provider,
@@ -97,6 +99,7 @@ export abstract class OauthAbstractService {
 
         return this.signInExistingUser(expressResponse, existingUsers[0]);
       }
+      // 정상적인 익명 유저로 확인된 경우
 
       // 기존에 구글 계정으로 가입했는지 체크
       const existingOAuthProviderUsers = await this.userRepository.find({
@@ -106,7 +109,7 @@ export abstract class OauthAbstractService {
 
       const isNewUser = existingOAuthProviderUsers.length == 0;
 
-      // 기존에 구글 계정으로 가입하지 않았다면: 기존 익명 계정에 구글 계정을 연결함
+      // 기존에 구글 계정으로 가입하지 않았다면: 익명 계정에 구글 계정을 연결함
       if (isNewUser) {
         const user = await this.userRepository.partialUpdateUser(
           refreshTokenEntity.userId,
