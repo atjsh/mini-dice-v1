@@ -3,14 +3,10 @@ import {
   countryMetadataIsoList,
   CountryMetadataType,
 } from '@packages/shared-types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
-import {
-  revokeUserAccessToken,
-  useCompleteSignup,
-  useQueryString,
-} from '../libs';
+import { useCompleteSignup } from '../libs';
 import {
   validateUsername,
   ValidationError,
