@@ -8,7 +8,7 @@ export async function getUserVo(): Promise<UserVo> {
   const response = await authedAxios.get<UserVo>(`/profile/me`);
   if (response.status == 403) {
     revokeUserAccessToken();
-    location.href = '/logout';
+    throw Error('User is not authenticated');
   }
   return response.data;
 }
