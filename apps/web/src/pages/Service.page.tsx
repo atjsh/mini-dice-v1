@@ -45,26 +45,30 @@ export function Ingame({
   );
 
   useEffect(() => {
-    if (skillLogs != undefined && skillLogs.length > 0) {
-      setCurrentSkillRoute(skillLogs[0].skillRoute);
-      initSkillLogMessages(
-        skillLogs
-          .map((skillLog) => [
-            {
-              date: new Date(skillLog.skillDrawResult.date),
-              skillLogId: skillLog.id,
-              message: skillLog.skillDrawResult.userRequestDrawings,
-            },
-            ...skillLog.skillDrawResult.actionResultDrawings.map((message) => ({
-              date: new Date(skillLog.skillDrawResult.date),
-              skillLogId: skillLog.id,
-              message: message,
-            })),
-          ])
-          .flat(),
-      );
-    } else {
-      setCurrentSkillRoute(null);
+    if (skillLogs != undefined) {
+      if (skillLogs.length > 0) {
+        setCurrentSkillRoute(skillLogs[skillLogs.length - 1].skillRoute);
+        initSkillLogMessages(
+          skillLogs
+            .map((skillLog) => [
+              {
+                date: new Date(skillLog.skillDrawResult.date),
+                skillLogId: skillLog.id,
+                message: skillLog.skillDrawResult.userRequestDrawings,
+              },
+              ...skillLog.skillDrawResult.actionResultDrawings.map(
+                (message) => ({
+                  date: new Date(skillLog.skillDrawResult.date),
+                  skillLogId: skillLog.id,
+                  message: message,
+                }),
+              ),
+            ])
+            .flat(),
+        );
+      } else {
+        setCurrentSkillRoute(null);
+      }
     }
   }, [skillLogs]);
 
