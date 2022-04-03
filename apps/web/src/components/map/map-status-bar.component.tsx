@@ -61,7 +61,7 @@ export const MapStatusBar: React.FC = () => {
   const currentSkillRoute = useRecoilValue(currentSkillRouteAtom);
 
   useEffect(() => {
-    if (mapStops !== undefined) {
+    if (mapStops !== undefined && currentSkillRoute !== undefined) {
       const sliceRange = mapStops.length;
 
       const currentSkillRouteIndex =

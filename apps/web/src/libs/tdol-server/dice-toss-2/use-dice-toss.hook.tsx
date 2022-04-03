@@ -48,14 +48,18 @@ export const useDiceToss = () => {
           },
         },
       ]);
-      await sleep(diceTossingDelayTimeMS);
+      if (currentSkillRoute) {
+        await sleep(diceTossingDelayTimeMS);
+      }
 
       setDiceTossActivityStatus(DiceTossActivityEnum.ResultShowing);
       await sleep(200);
 
       queryClient.refetchQueries([getMap.name]);
       setCurrentSkillRoute(data.skillLog.skillRoute);
-      await sleep(mapMovingDelayTimeMS + 200);
+      if (currentSkillRoute) {
+        await sleep(mapMovingDelayTimeMS + 200);
+      }
 
       addSkillLogMessages(
         data.skillLog.skillDrawResult.actionResultDrawings.map(
