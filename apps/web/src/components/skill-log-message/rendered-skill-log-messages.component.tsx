@@ -102,6 +102,7 @@ const UserActivityMessage: React.FC<{
   if (userActivityMessage.description) {
     return (
       <div className="flex flex-row-reverse items-end">
+        <br style={{ fontSize: '0px' }} />
         <div
           className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
         >
@@ -121,6 +122,7 @@ const UserActivityMessage: React.FC<{
 
   return (
     <div className="flex flex-row-reverse">
+      <br style={{ fontSize: '0px' }} />
       <div className={`${MessageCommon} ${UserActivityMessageCommon}`}>
         <Text t={userActivityMessage.title} />
       </div>
