@@ -42,16 +42,22 @@ function transformMessage(
   return {} as never;
 }
 
-export function transformSkillLogToMessage(
-  skillLog: MessageResponseType,
-  isLast: boolean,
-  skillLogId: string,
-) {
-  return {
-    userActivityMessage: (
-      <UserActivityMessage userActivityMessage={skillLog.userRequestDrawings} />
-    ),
-    serverMessages: skillLog.actionResultDrawings.map((messageData, row) => {
+export function transformDicetossAnimationMessage(diceResult: number[]) {
+  return <div></div>;
+}
+
+export const TransformSkillLogToMessage: React.FC<{
+  skillLog: MessageResponseType;
+  isLast: boolean;
+  skillLogId: string;
+}> = ({ skillLog, isLast, skillLogId }) => (
+  <>
+    <UserActivityMessage
+      userActivityMessage={skillLog.userRequestDrawings}
+      date={new Date(skillLog.date)}
+      isLast={isLast}
+    />
+    {skillLog.actionResultDrawings.map((messageData, row) => {
       if (Array.isArray(messageData)) {
         return (
           <div className=" flex flex-row overflow-x-scroll rounded-3xl">
@@ -71,11 +77,6 @@ export function transformSkillLogToMessage(
       } else {
         return transformMessage(messageData, isLast, `${skillLogId}${row}`);
       }
-    }),
-    time: (
-      <div className="text-gray-400 font-bold text-xs pl-2">
-        {new Date(skillLog.date).toLocaleString()}
-      </div>
-    ),
-  };
-}
+    })}
+  </>
+);

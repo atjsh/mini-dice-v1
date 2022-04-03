@@ -73,7 +73,7 @@ export class LinkType<T = Record<string, string>> {
 }
 
 export class LinkGroupType implements BaseMessage {
-  type: string;
+  type: 'linkGroup';
 
   description: string;
 
@@ -85,7 +85,7 @@ export class LinkGroupType implements BaseMessage {
  */
 export class PlainMessageType implements BaseMessage {
   // 타입
-  type: string;
+  type: 'plainMessage';
 
   // 타이틀
   title?: string;
@@ -117,7 +117,7 @@ export class FormMessageType implements BaseMessage {
 }
 
 export class UserActivityMessageType implements BaseMessage {
-  type: string;
+  type: 'diceTossUserActivityMessage' | 'interactionUserActivityMessage';
 
   title: string;
 

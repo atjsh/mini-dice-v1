@@ -1,27 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
-import { useDisplayingMessages } from '../components/displaying-messages/use-displaying-messages.hook';
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 import { MapStatusBar } from '../components/map/map-status-bar.component';
 import { ProfileWidget } from '../components/profile/profile-widget.component';
+import { skillLogMessagesState } from '../components/skill-log-message/atoms/skill-log-messages.atom';
+import { RenderedSkillLogMessages } from '../components/skill-log-message/rendered-skill-log-messages.component';
+import { useSkillLogMessages } from '../components/skill-log-message/use-skill-log-messages.hook';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
-import { useDiceToss, useUser } from '../libs';
+import { useDiceToss, useSkillLogs, useUser } from '../libs';
 
-const Messages = ({ messages }: { messages: any[] }) => {
+const Messages = () => {
+  const skillLogMessages = useRecoilValue(skillLogMessagesState);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
     messagesEndRef!.current!.scrollIntoView({ behavior: 'smooth' })!;
-    setTimeout(() => {}, 100);
   };
-  useEffect(scrollToBottom, [messages?.length]);
+  useEffect(scrollToBottom, [skillLogMessages.length]);
 
   return (
     <div className="px-5 flex-grow md:pb-0">
-      {messages.map((message, index) => (
-        <div key={index}>{message}</div>
-      ))}
+      <RenderedSkillLogMessages />
       <div ref={messagesEndRef} />
     </div>
   );
@@ -36,7 +37,29 @@ export function Ingame({
 }) {
   const { data: user } = useUser();
   const mutation = useDiceToss();
-  const { displayingMessages } = useDisplayingMessages();
+  const { data: skillLogs } = useSkillLogs();
+  const { initSkillLogMessages } = useSkillLogMessages();
+
+  useEffect(() => {
+    if (skillLogs != undefined) {
+      initSkillLogMessages(
+        skillLogs
+          .map((skillLog) => [
+            {
+              date: skillLog.skillDrawResult.date,
+              skillLogId: skillLog.id,
+              message: skillLog.skillDrawResult.userRequestDrawings,
+            },
+            ...skillLog.skillDrawResult.actionResultDrawings.map((message) => ({
+              date: skillLog.skillDrawResult.date,
+              skillLogId: skillLog.id,
+              message: message,
+            })),
+          ])
+          .flat(),
+      );
+    }
+  }, [skillLogs]);
 
   return (
     <div
@@ -54,7 +77,7 @@ export function Ingame({
             </p>
           </div>
         </div>
-        <Messages messages={displayingMessages} />
+        <Messages />
 
         <div className="md:p-7 p-3 text-center  sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3 border-t dark:border-gray-700 border-gray-300">
           <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-5xl w-full">

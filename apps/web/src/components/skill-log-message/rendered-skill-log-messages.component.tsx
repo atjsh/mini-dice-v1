@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import {
   DataFieldType,
@@ -8,8 +9,14 @@ import {
   LinkType,
   PlainMessageType,
   UserActivityMessageType,
-} from '..';
-import { useSubmitUserInteraction } from '../tdol-server/user-interaction';
+} from '../../libs';
+import {
+  DiceTossActivityEnum,
+  diceTossActivityStatusAtom,
+} from '../../libs/tdol-server/dice-toss-2/atoms/dice-toss-activity.atom';
+import { useSubmitUserInteraction } from '../../libs/tdol-server/user-interaction';
+import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
+import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
 
 const MessageWidth = 'w-max min-w ';
 const MessageCommon = `${MessageWidth} my-1 ml-1`;
@@ -37,12 +44,12 @@ function getRandomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const UserActivityMessage: React.FC<{
+const UserActivityMessage: React.FC<{
   userActivityMessage: UserActivityMessageType;
   date: Date;
   isLast: boolean;
 }> = ({ userActivityMessage, date, isLast }) => {
-  const [isShowingDiceTossResult, setIsShowingDiceTossResult] = useState(false);
+  const diceTossActivityStatus = useRecoilValue(diceTossActivityStatusAtom);
 
   const [diceTossingNumbers, setDiceTossingNumbers] = useState([
     getRandomInteger(1, 6),
@@ -50,7 +57,7 @@ export const UserActivityMessage: React.FC<{
   ]);
 
   useEffect(() => {
-    if (isShowingDiceTossResult) {
+    if (diceTossActivityStatus == DiceTossActivityEnum.Processing) {
       const numberChangingInterval = setInterval(
         () =>
           setDiceTossingNumbers([
@@ -64,17 +71,13 @@ export const UserActivityMessage: React.FC<{
         clearInterval(numberChangingInterval);
       };
     }
-  }, [isShowingDiceTossResult]);
-
-  setTimeout(() => {
-    setIsShowingDiceTossResult(true);
-  }, 2000);
+  }, [diceTossActivityStatus]);
 
   if (
     userActivityMessage.type == 'diceTossUserActivityMessage' &&
-    isLast == false
+    isLast == true
   ) {
-    if (isShowingDiceTossResult == false) {
+    if (diceTossActivityStatus == DiceTossActivityEnum.Processing) {
       return (
         <div className="flex flex-row-reverse items-end">
           <div
@@ -115,6 +118,26 @@ export const UserActivityMessage: React.FC<{
     }
   }
 
+  if (userActivityMessage.description) {
+    return (
+      <div className="flex flex-row-reverse items-end">
+        <div
+          className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
+        >
+          <div className="text-xs mb-1">
+            <Text t={userActivityMessage.title} />
+          </div>
+          <div>
+            <Text t={userActivityMessage.description} />
+          </div>
+        </div>
+        <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
+          {date.toLocaleString()}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-row-reverse">
       <div className={`${MessageCommon} ${UserActivityMessageCommon}`}>
@@ -124,7 +147,7 @@ export const UserActivityMessage: React.FC<{
   );
 };
 
-export const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
+const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
   plainMessage,
 }) => {
   return (
@@ -146,7 +169,7 @@ export const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
 const linkMessageButtonBaseClassName =
   'px-10 py-3 mx-0.5 rounded-xl transition duration-150 select-none transform active:scale-95';
 
-export const LinkMessage: React.FC<{
+const LinkMessage: React.FC<{
   link: LinkType;
   mutate: any;
   isDisabled: boolean;
@@ -198,7 +221,7 @@ export const LinkMessage: React.FC<{
   );
 };
 
-export const LinkGroupMessage: React.FC<{
+const LinkGroupMessage: React.FC<{
   linkGroup: LinkGroupType;
   isLast: boolean;
 }> = ({ linkGroup, isLast }) => {
@@ -238,7 +261,7 @@ export const LinkGroupMessage: React.FC<{
   );
 };
 
-export const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
+const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
   dataField,
 }) => {
   return (
@@ -262,7 +285,7 @@ export const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
   );
 };
 
-export const InputFieldMessage: React.FC<{
+const InputFieldMessage: React.FC<{
   inputField: InputFieldType;
   setFormParam: Function;
 }> = ({ inputField, setFormParam }) => {
@@ -289,7 +312,7 @@ export const InputFieldMessage: React.FC<{
 
 const submitButtonBaseClassName = 'px-10 py-3 mx-0.5 rounded-xl';
 
-export const SubmitButton: React.FC<{
+const SubmitButton: React.FC<{
   label: string;
   isDisabled: boolean;
   isButtonClicked: boolean;
@@ -316,7 +339,7 @@ export const SubmitButton: React.FC<{
   );
 };
 
-export const FormMessage: React.FC<{
+const FormMessage: React.FC<{
   form: FormMessageType;
   isLast: boolean;
   isNeighborButtonClicked?: boolean;
@@ -392,7 +415,7 @@ export const FormMessage: React.FC<{
   );
 };
 
-export const FormMessageGroup: React.FC<{
+const FormMessageGroup: React.FC<{
   formMessages: FormMessageType[];
   isLast: boolean;
 }> = ({ formMessages, isLast }) => {
@@ -407,6 +430,115 @@ export const FormMessageGroup: React.FC<{
           isNeighborButtonClicked={isButtonClicked}
           setIsisNeighborButtonClicked={setIsButtonClicked}
           key={`${formMessage.description}-${index}`}
+        />
+      ))}
+    </>
+  );
+};
+
+const RenderedMessageByType: React.FC<{
+  message:
+    | FormMessageType
+    | LinkGroupType
+    | PlainMessageType
+    | UserActivityMessageType;
+  isLastSkillLog: boolean;
+  key: string;
+  date: Date;
+}> = ({ message, isLastSkillLog: isLast, key, date }) => {
+  if (
+    message.type == 'diceTossUserActivityMessage' ||
+    message.type == 'interactionUserActivityMessage'
+  ) {
+    return (
+      <UserActivityMessage
+        userActivityMessage={message}
+        date={date}
+        isLast={isLast}
+      />
+    );
+  } else if (message.type == 'plainMessage') {
+    return <PlainMessage plainMessage={message} key={`${key}-plainMessage`} />;
+  } else if (message.type == 'linkGroup') {
+    return (
+      <div className="overflow-x-auto">
+        <LinkGroupMessage
+          linkGroup={message as LinkGroupType}
+          isLast={isLast}
+          key={`${key}-linkGroup`}
+        />
+      </div>
+    );
+  } else if (message.type == 'formMessage') {
+    return (
+      <div className="overflow-x-auto">
+        <FormMessage
+          form={message as FormMessageType}
+          isLast={isLast}
+          key={`${key}-form`}
+        />
+      </div>
+    );
+  }
+
+  return {} as never;
+};
+
+const RenderedSkillLogMessage: React.FC<{
+  skillLogMessage: SkillLogMessageInerface;
+  isLastSkillLog: boolean;
+  index: number;
+}> = ({ skillLogMessage, index, isLastSkillLog }) => {
+  const { skillLogId } = skillLogMessage;
+
+  if (Array.isArray(skillLogMessage.message)) {
+    return (
+      <div className=" flex flex-row overflow-x-scroll rounded-3xl">
+        {skillLogMessage.message[0].type == 'formMessage' ? (
+          <FormMessageGroup
+            formMessages={skillLogMessage.message as FormMessageType[]}
+            isLast={isLastSkillLog}
+            key={`${skillLogId}${index}`}
+          />
+        ) : (
+          skillLogMessage.message.map((message, col: number) => (
+            <RenderedMessageByType
+              message={message as PlainMessageType}
+              isLastSkillLog={isLastSkillLog}
+              key={`${skillLogId}${index}-${col}`}
+              date={skillLogMessage.date}
+            />
+          ))
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <RenderedMessageByType
+      message={skillLogMessage.message}
+      isLastSkillLog={isLastSkillLog}
+      key={`${skillLogId}${index}`}
+      date={skillLogMessage.date}
+    />
+  );
+};
+
+export const RenderedSkillLogMessages: React.FC<{}> = () => {
+  const skillLogMessages = useRecoilValue(skillLogMessagesState);
+
+  const lastSkillLogId =
+    skillLogMessages.length > 0
+      ? skillLogMessages[skillLogMessages.length - 1].skillLogId
+      : '';
+
+  return (
+    <>
+      {skillLogMessages.map((message, index) => (
+        <RenderedSkillLogMessage
+          skillLogMessage={message}
+          index={index}
+          isLastSkillLog={message.skillLogId == lastSkillLogId}
         />
       ))}
     </>

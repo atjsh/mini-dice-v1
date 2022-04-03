@@ -1,7 +1,9 @@
 import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
 import { SkillRouteType } from '../../libs/skill-draw-ui-ts/types';
+import { currentSkillRouteAtom } from './current-skill-route.atom';
 
 function endlessSlice(arr: any[], from: number, to: number) {
   if (from >= to) {
@@ -37,7 +39,7 @@ function getRelativeMovingCount(
     : toIndex - fromIndex;
 }
 
-export const MAP_TRANSITION_DURATION_MS = 3000;
+export const MAP_TRANSITION_DURATION_MS = 2000;
 export const MAP_TRANSITION_DELAY_MS = 500;
 
 export const MapStatusBar: React.FC = () => {
@@ -55,45 +57,58 @@ export const MapStatusBar: React.FC = () => {
       setLeft(node.offsetLeft);
     }
   }, []);
-  const currentSkillRoute: SkillRouteType | null | undefined = skillLogs
-    ? skillLogs[skillLogs.length - 1]?.skillRoute ?? null
-    : undefined;
+
+  const currentSkillRoute = useRecoilValue(currentSkillRouteAtom);
 
   useEffect(() => {
-    if (mapStops !== undefined && currentSkillRoute !== undefined) {
+    if (mapStops !== undefined) {
       const sliceRange = mapStops.length;
 
-      const currentSkillRouteIndex =
-        currentSkillRoute !== null
-          ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
-          : 0;
+      setTimeout(() => {
+        const currentSkillRouteIndex =
+          currentSkillRoute !== null
+            ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
+            : 0;
 
-      if (isInitalized == true) {
-        const prevSkillRoute = zoomedMap[0].skillRoute;
-        const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
-          mapStops,
-          prevSkillRoute,
-        );
-
-        const relativeMovingCount = getRelativeMovingCount(
-          mapStops.length,
-          prevSkillRouteIndex,
-          currentSkillRouteIndex,
-        );
-
-        setRelativeMovingCount(relativeMovingCount);
-
-        setZoomedMap(
-          endlessSlice(
+        if (isInitalized == true) {
+          const prevSkillRoute = zoomedMap[0].skillRoute;
+          const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
             mapStops,
-            prevSkillRouteIndex,
-            prevSkillRouteIndex + relativeMovingCount + sliceRange,
-          ),
-        );
+            prevSkillRoute,
+          );
 
-        setTimeout(() => {
-          setRelativeMovingCount(-1);
-          setIsTransitioning(false);
+          const relativeMovingCount = getRelativeMovingCount(
+            mapStops.length,
+            prevSkillRouteIndex,
+            currentSkillRouteIndex,
+          );
+
+          setRelativeMovingCount(relativeMovingCount);
+
+          setZoomedMap(
+            endlessSlice(
+              mapStops,
+              prevSkillRouteIndex,
+              prevSkillRouteIndex + relativeMovingCount + sliceRange,
+            ),
+          );
+
+          setTimeout(() => {
+            setRelativeMovingCount(-1);
+            setIsTransitioning(false);
+            setZoomedMap(
+              endlessSlice(
+                mapStops,
+                currentSkillRouteIndex,
+                currentSkillRouteIndex + sliceRange,
+              ),
+            );
+            setLeft(0);
+            setTimeout(() => {
+              setIsTransitioning(true);
+            }, 100);
+          }, MAP_TRANSITION_DURATION_MS);
+        } else {
           setZoomedMap(
             endlessSlice(
               mapStops,
@@ -101,23 +116,10 @@ export const MapStatusBar: React.FC = () => {
               currentSkillRouteIndex + sliceRange,
             ),
           );
-          setLeft(0);
-          setTimeout(() => {
-            setIsTransitioning(true);
-          }, 100);
-          // }, MAP_TRANSITION_DURATION_MS + MAP_TRANSITION_DELAY_MS);
-        }, 0);
-      } else {
-        setZoomedMap(
-          endlessSlice(
-            mapStops,
-            currentSkillRouteIndex,
-            currentSkillRouteIndex + sliceRange,
-          ),
-        );
-      }
+        }
 
-      setIsInitalized(true);
+        setIsInitalized(true);
+      }, MAP_TRANSITION_DELAY_MS);
     }
   }, [currentSkillRoute, mapStops]);
 
@@ -128,13 +130,9 @@ export const MapStatusBar: React.FC = () => {
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',
-          // transitionDuration: isTransitioning
-          //   ? `${MAP_TRANSITION_DURATION_MS}ms`
-          //   : '0s',
-          // transitionDelay: isTransitioning
-          //   ? `${MAP_TRANSITION_DELAY_MS}ms`
-          //   : '0s',
-          transitionDuration: '0ms',
+          transitionDuration: isTransitioning
+            ? `${MAP_TRANSITION_DURATION_MS}ms`
+            : '0s',
           transitionTimingFunction: 'linear',
         }}
       >

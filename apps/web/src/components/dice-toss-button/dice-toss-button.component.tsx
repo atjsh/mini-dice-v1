@@ -1,7 +1,7 @@
 import { UserVo } from '@packages/shared-types';
-import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { diceTossButtonState } from './dice-toss-button-state.atom';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { DiceTossActivityEnum, diceTossActivityStatusAtom } from '../../libs';
 
 export const DateTime = () => {
   const [dateTime, setDateTime] = useState(new Date());
@@ -28,13 +28,25 @@ export const DiceTossButton: React.FC<{
   setisSidebarShowing,
 }) => {
   const useDateTime = DateTime();
-  const [diceButtonState, setDiceButtonState] =
-    useRecoilState(diceTossButtonState);
+  const diceButtonState = useRecoilValue(diceTossActivityStatusAtom);
 
   const baseButtonClassNames =
     'text-white md:px-5 md:py-7 px-4 py-4 rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
 
-  if (isDiceTossForbidden == true) {
+  if (
+    diceButtonState == DiceTossActivityEnum.Processing ||
+    diceButtonState == DiceTossActivityEnum.Submitted ||
+    diceButtonState == DiceTossActivityEnum.ResultShowing
+  ) {
+    return (
+      <button
+        className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
+        onClick={setisSidebarShowing}
+      >
+        🎲 주사위를 굴리는 중 ...
+      </button>
+    );
+  } else if (isDiceTossForbidden == true) {
     return (
       <button
         className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
@@ -56,22 +68,12 @@ export const DiceTossButton: React.FC<{
         🎲 주사위 기다리기: <span className="font-bold">{needTime}초</span>
       </button>
     );
-  } else if (diceButtonState.isPending) {
-    return (
-      <button
-        className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
-        onClick={setisSidebarShowing}
-      >
-        🎲 주사위를 굴리는 중 ...
-      </button>
-    );
   }
 
   return (
     <button
       className={`${baseButtonClassNames} bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95`}
       onClick={() => {
-        setDiceButtonState({ isPending: true });
         onClick();
         setisSidebarShowing();
       }}
