@@ -70,12 +70,20 @@ export abstract class OauthAbstractService {
     if (alreadyExistedRefreshToken != undefined) {
       // 익명 유저가 맞는지 체크
       let refreshTokenEntity: RefreshTokenEntity;
+      let anonUser: UserEntity;
       try {
         refreshTokenEntity =
           await this.refreshTokenService.findRefreshTokenOrRevokeAndThrow(
             expressResponse,
             alreadyExistedRefreshToken,
           );
+        anonUser = await this.userRepository.findOneOrFail(
+          refreshTokenEntity.userId,
+        );
+
+        if (anonUser.email != null || anonUser.isTerminated == true) {
+          throw new ForbiddenException('FYX');
+        }
       } catch (e) {
         const existingUsers = await this.userRepository.find({
           email: email,
@@ -88,14 +96,6 @@ export abstract class OauthAbstractService {
         }
 
         return this.signInExistingUser(expressResponse, existingUsers[0]);
-      }
-
-      const anonUser = await this.userRepository.findOneOrFail(
-        refreshTokenEntity.userId,
-      );
-
-      if (anonUser.email != null) {
-        throw new ForbiddenException('FYX');
       }
 
       // 기존에 구글 계정으로 가입했는지 체크
