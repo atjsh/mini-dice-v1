@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
+import { currentSkillRouteAtom } from '../components/map/current-skill-route.atom';
 import { MapStatusBar } from '../components/map/map-status-bar.component';
 import { ProfileWidget } from '../components/profile/profile-widget.component';
 import { skillLogMessagesState } from '../components/skill-log-message/atoms/skill-log-messages.atom';
@@ -39,9 +40,13 @@ export function Ingame({
   const mutation = useDiceToss();
   const { data: skillLogs } = useSkillLogs();
   const { initSkillLogMessages } = useSkillLogMessages();
+  const [currentSkillRoute, setCurrentSkillRoute] = useRecoilState(
+    currentSkillRouteAtom,
+  );
 
   useEffect(() => {
-    if (skillLogs != undefined) {
+    if (skillLogs != undefined && skillLogs.length > 0) {
+      setCurrentSkillRoute(skillLogs[0].skillRoute);
       initSkillLogMessages(
         skillLogs
           .map((skillLog) => [
