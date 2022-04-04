@@ -123,10 +123,10 @@ function TempSignupForm() {
             : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
         }
       >
-        플레이
+        시작
       </button>
       <div className=" text-sm text-gray-400">
-        위 '플레이' 버튼을 누르는 것은{' '}
+        위 '시작' 버튼을 누르는 것은{' '}
         <Link
           to={PrivacyPolicyPageURL}
           className="hover:underline text-gray-600"
@@ -153,7 +153,7 @@ export const TempSignupPage: React.FC = () => {
         <div className="text-center">
           <div className="flex-col flex gap-2">
             <h1 className="text-5xl font-bold">Mini Dice</h1>
-            <div className="font-medium text-xl">바로 플레이 계정 생성</div>
+            <div className="font-medium text-xl">바로 시작 계정 생성</div>
           </div>
         </div>
         <TempSignupForm />

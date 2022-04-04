@@ -84,7 +84,7 @@ export function Ingame({
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
             <p className="text-xl">
-              "🎲 주사위 굴리기" 버튼을 계속 눌러 게임을 진행하세요!
+              "🎲 주사위 굴리기" 버튼을 계속 눌러 진행하세요!
             </p>
           </div>
         </div>

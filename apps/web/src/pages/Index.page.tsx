@@ -15,7 +15,6 @@ export function IndexPage() {
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
             <h1 className="text-5xl font-bold">Mini Dice</h1>
-            <div className="font-medium text-base">인생게임</div>
             <HealthCheckComponent />
 
             <div className=" self-center mt-5 text-xl">
@@ -36,7 +35,7 @@ export function IndexPage() {
               className="inline-block text-white px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 select-none transform active:scale-95"
               to={TempSignupPageURL}
             >
-              {loginRequired ? '바로 플레이 계정 생성' : '바로 플레이'}
+              {loginRequired ? '바로 시작 계정 생성' : '바로 시작'}
             </Link>
           </div>
           <div>
@@ -46,7 +45,7 @@ export function IndexPage() {
             >
               {loginRequired
                 ? '구글 계정으로 로그인 →'
-                : '구글 계정으로 플레이 →'}
+                : '구글 계정으로 시작 →'}
             </a>
           </div>
         </div>
