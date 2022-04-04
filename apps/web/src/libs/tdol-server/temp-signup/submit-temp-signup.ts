@@ -20,7 +20,7 @@ export async function submitTempSignup({
       countryCode3,
     },
     {
-      baseURL: process.env.REACT_APP_TDOL_SERVER_URL,
+      baseURL: process.env.SERVER_URL,
       withCredentials: true,
     },
   );

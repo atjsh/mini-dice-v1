@@ -30,11 +30,10 @@ import { UserModule } from './user/user.module';
           ? 'tdol-process.env' // NODE_ENV가 local이거나 미지정된 경우
           : `tdol-process.env.${process.env.APP_ENV}`, // NODE_ENV가 local이 아닌 값으로 지정된 경우
       validationSchema: Joi.object({
-        APP_URL: Joi.string().required(),
-        APP_SERVICE_NAME: Joi.string().required(),
-        APP_PORT: Joi.number().required(),
+        SERVER_URL: Joi.string().required(),
+        SERVER_PORT: Joi.number().required(),
 
-        FRONT_URL: Joi.string().required(),
+        WEB_URL: Joi.string().required(),
 
         DB_URL: Joi.string().required(),
         DB_PORT: Joi.number().required(),
@@ -48,7 +47,6 @@ import { UserModule } from './user/user.module';
 
         GOOGLE_OAUTH_CLIENT_ID: Joi.string().required(),
         GOOGLE_OAUTH_CLILENT_SECRET: Joi.string().required(),
-        GOOGLE_OAUTH_REDIRECT_URI: Joi.string().required(),
       }),
     }),
 

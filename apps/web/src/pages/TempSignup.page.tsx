@@ -107,7 +107,7 @@ function TempSignupForm() {
       </div>
       <div className="">
         <HCaptcha
-          sitekey={`${process.env.REACT_APP_HCAPTCHA_SITE_KEY}`}
+          sitekey={`${process.env.HCAPTCHA_SITE_KEY}`}
           onVerify={(token) => setHCaptchaToken(token)}
         />
       </div>

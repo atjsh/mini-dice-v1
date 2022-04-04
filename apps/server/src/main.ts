@@ -34,12 +34,12 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: [
-      `${configService.get('APP_URL')}`,
-      `${configService.get('FRONT_URL')}`,
+      `${configService.get('SERVER_URL')}`,
+      `${configService.get('WEB_URL')}`,
       /\.mini-dice\.com$/,
     ],
   });
 
-  await app.listen(+configService.get('APP_PORT'), '0.0.0.0');
+  await app.listen(+configService.get('SERVER_PORT'), '0.0.0.0');
 }
 bootstrap();

@@ -35,8 +35,8 @@ export class GoogleApiService {
           client_id: this.configService.get('GOOGLE_OAUTH_CLIENT_ID'),
           client_secret: this.configService.get('GOOGLE_OAUTH_CLILENT_SECRET'),
           redirect_uri: `${this.configService.get(
-            'GOOGLE_OAUTH_REDIRECT_URI',
-          )}/${websiteUrl}`,
+            'SERVER_URL',
+          )}/auth/google-oauth/${websiteUrl}`,
           grant_type: 'authorization_code',
         }),
         {
