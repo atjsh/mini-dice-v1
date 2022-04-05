@@ -13,7 +13,7 @@ export class HCaptchaService {
 
   async verify(clientResponse: string) {
     const response = await lastValueFrom(
-      this.httpService.post(
+      this.httpService.post<{ success: true }>(
         'https://hcaptcha.com/siteverify',
         stringify({
           response: clientResponse,
@@ -22,6 +22,6 @@ export class HCaptchaService {
       ),
     );
 
-    return true;
+    return response.data.success;
   }
 }
