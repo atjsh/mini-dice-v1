@@ -4,11 +4,12 @@ import { SkillRouteType } from '@packages/scenario-routing';
 import { UserIdType } from '@packages/shared-types';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import {
-  UserEntity,
   UserCashStrType,
+  UserEntity,
 } from 'apps/server/src/user/entity/user.entity';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 import { Repository } from 'typeorm';
+import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import { LandEntity } from './entity/land.entity';
@@ -154,6 +155,8 @@ export class CommonLandService {
 
     @InjectRepository(LandEntity)
     private landRepository: Repository<LandEntity>,
+
+    private skillGroupAliasesService: SkillGroupAliasesService,
   ) {}
 
   private async initLand(id: LandEntity['id']): Promise<LandEntity> {
@@ -277,6 +280,10 @@ export class CommonLandService {
       userId,
       -initalLandData.landPrice,
       user.cash,
+    );
+
+    await this.skillGroupAliasesService.invalidateSkillGroupAliasesCache(
+      SCENARIO_NAMES.D1,
     );
 
     return {

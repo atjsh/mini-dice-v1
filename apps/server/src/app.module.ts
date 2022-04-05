@@ -14,6 +14,7 @@ import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
 import { D1Module } from './scenarios/d1/d1.module';
+import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
 import { TempSignupModule } from './temp-signup/temp-signup.module';
 import { UpbitApiModule } from './upbit-api/upbit-api.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
@@ -73,6 +74,7 @@ import { UserModule } from './user/user.module';
     TempSignupModule,
 
     UpbitApiModule,
+    SkillGroupAliasesModule,
 
     UserModule,
     ProfileModule,
