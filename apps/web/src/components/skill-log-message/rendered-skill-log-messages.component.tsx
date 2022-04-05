@@ -83,13 +83,13 @@ const UserActivityMessage: React.FC<{
         <div
           className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
         >
-          <div className="text-xs mb-1">
-            <Text t={'주사위 굴리는 중'} />
-          </div>
+          <div className="text-xs mb-1">주사위 굴리는 중</div>
           <div>
-            <Text
-              t={`🎲 ${diceTossingNumbers[0]}, ${diceTossingNumbers[1]} ...`}
-            />
+            🎲{' '}
+            <span className=" text-white">
+              {diceTossingNumbers[0]}, {diceTossingNumbers[1]}
+            </span>{' '}
+            ...
           </div>
         </div>
         <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">

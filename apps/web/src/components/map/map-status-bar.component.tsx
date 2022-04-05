@@ -131,7 +131,7 @@ export const MapStatusBar: React.FC = () => {
           transitionDuration: isTransitioning
             ? `${mapMovingDelayTimeMS}ms`
             : '0s',
-          transitionTimingFunction: 'linear',
+          transitionTimingFunction: 'ease-in-out',
         }}
       >
         {zoomedMap.map((stop, index) => (

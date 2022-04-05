@@ -163,6 +163,18 @@ export class UserEntity {
   @OneToMany(() => LandEntity, (land) => land.user)
   lands: LandEntity;
 
+  @Transform(({ type, value }) =>
+    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
+  )
+  @Column('bigint')
+  stockPrice: bigint;
+
+  @Transform(({ type, value }) =>
+    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
+  )
+  @Column('bigint')
+  stockAmound: bigint;
+
   /** 객체가 생성된 날짜 */
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
