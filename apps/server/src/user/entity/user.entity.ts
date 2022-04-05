@@ -3,6 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   countryCode3List,
   CountryCode3Type,
+  getStockStatus,
+  serializeStockStatusToJson,
   StockIdType,
   UserVo,
 } from '@packages/shared-types';
@@ -19,7 +21,6 @@ import {
 } from 'typeorm';
 import { getSequentialPk } from '../../common';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
-import { getStockStatus, serializeStockStatusToJson } from '../stock.service';
 
 const UserEntityTableName = 'tb_user';
 

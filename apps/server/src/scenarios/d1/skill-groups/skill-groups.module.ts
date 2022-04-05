@@ -17,6 +17,7 @@ import { FastCarModule } from './fast-car/fast-car.module';
 import { GameDevModule } from './game-dev/game-dev.module';
 import { PickedItemModule } from './picked-item/picked-item.module';
 import { FireModule } from './fire/fire.module';
+import { StockModule } from './stock/stock.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FireModule } from './fire/fire.module';
     GameDevModule,
     PickedItemModule,
     FireModule,
+    StockModule,
     LotteryModule,
     Land2Module,
     Land3Module,
