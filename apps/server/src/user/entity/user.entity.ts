@@ -1,6 +1,11 @@
 import { ForbiddenException } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { countryCode3List, CountryCode3Type } from '@packages/shared-types';
+import {
+  countryCode3List,
+  CountryCode3Type,
+  StockIdType,
+  UserVo,
+} from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
@@ -12,8 +17,9 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EntityWithTimestamps, getSequentialPk } from '../../common';
+import { getSequentialPk } from '../../common';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
+import { getStockStatus, serializeStockStatusToJson } from '../stock.service';
 
 const UserEntityTableName = 'tb_user';
 
@@ -163,6 +169,12 @@ export class UserEntity {
   @OneToMany(() => LandEntity, (land) => land.user)
   lands: LandEntity;
 
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  stockId: StockIdType | null;
+
   @Transform(({ type, value }) =>
     type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
   )
@@ -173,7 +185,7 @@ export class UserEntity {
     type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
   )
   @Column('bigint')
-  stockAmound: bigint;
+  stockAmount: bigint;
 
   /** 객체가 생성된 날짜 */
   @ApiProperty({ readOnly: true })
@@ -190,7 +202,7 @@ export class UserEntity {
  * 유저 데이터를 JSON으로 변환시킨 데이터 타입.
  * 유저의 잔고량을 문자열로 변환시킨 상태로 데이터가 변환된다.
  */
-export type UserEntityJson = Omit<UserEntity, 'cash' | 'setPk'> & {
+export type UserEntityJson = Omit<UserVo, 'cash'> & {
   cash: string;
 };
 
@@ -202,6 +214,16 @@ export type UserEntityJson = Omit<UserEntity, 'cash' | 'setPk'> & {
 export function serializeUserToJson(user: UserEntity): UserEntityJson {
   return {
     ...user,
+    stockStatus:
+      user.stockId == null
+        ? null
+        : serializeStockStatusToJson(
+            getStockStatus(
+              user.stockId,
+              BigInt(user.stockAmount),
+              BigInt(user.stockPrice),
+            ),
+          ),
     cash: user.cash.toString(),
   };
 }

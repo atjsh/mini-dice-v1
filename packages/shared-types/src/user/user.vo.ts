@@ -1,4 +1,5 @@
 import { CountryCode3Type } from './country-list';
+import { StockStatus, StockStatusJson } from './stock';
 
 export type UserIdType = string;
 
@@ -93,6 +94,8 @@ export class UserVo {
    * @memberof UserVo
    */
   isTerminated: boolean;
+
+  stockStatus: StockStatusJson | null;
 
   createdAt: Date;
 

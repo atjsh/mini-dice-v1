@@ -23,11 +23,17 @@ export const WalletWidget: React.FC = () => {
       <div className="flex gap-4 flex-col">
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(user.cash).toLocaleString('ko-kr', {
+            value={`${BigInt(
+              BigInt(user.cash) +
+                (user.stockStatus
+                  ? BigInt(user.stockStatus.stockAmount) *
+                    BigInt(user.stockStatus.stockCurrentPrice)
+                  : BigInt(1)),
+            ).toLocaleString('ko-kr', {
               style: 'currency',
               currency: 'KRW',
             })}`}
-            label="잔고"
+            label="보유중인 자산의 총합"
             fontSize="text-4xl"
           />
         </ValueDisplayContainer>
@@ -37,13 +43,18 @@ export const WalletWidget: React.FC = () => {
               style: 'currency',
               currency: 'KRW',
             })}`}
-            label="보유중인 현금"
+            label="현금"
             fontSize="text-3xl"
           />
         </ValueDisplayContainer>
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(0).toLocaleString('ko-kr', {
+            value={`${BigInt(
+              user.stockStatus
+                ? BigInt(user.stockStatus.stockAmount) *
+                    BigInt(user.stockStatus.stockCurrentPrice)
+                : 0,
+            ).toLocaleString('ko-kr', {
               style: 'currency',
               currency: 'KRW',
             })}`}
@@ -53,25 +64,40 @@ export const WalletWidget: React.FC = () => {
         </ValueDisplayContainer>
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(0).toLocaleString('ko-kr', {
-              style: 'currency',
-              currency: 'KRW',
-            })}`}
+            value={`${
+              user.stockStatus
+                ? `${user.stockStatus.stockName} ${user.stockStatus.stockAmount}주 (TICKER: ${user.stockStatus.stockTicker})`
+                : '-'
+            }`}
             label="소유중인 주식 종목"
             fontSize="text-md"
           />
           <ValueDisplay
-            value={`${BigInt(0).toLocaleString('ko-kr', {
-              style: 'currency',
-              currency: 'KRW',
-            })}`}
+            value={`${
+              user.stockStatus
+                ? `+${BigInt(user.stockStatus.stockRisingPrice).toLocaleString(
+                    'ko-kr',
+                    {
+                      style: 'currency',
+                      currency: 'KRW',
+                    },
+                  )}, -${BigInt(
+                    user.stockStatus.stockFallingPrice,
+                  ).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })}`
+                : '없음'
+            }`}
             label="더블 시 주가 증감"
             fontSize="text-md"
           />
         </ValueDisplayContainer>
         <ValueDisplayContainer>
           <ValueDisplay
-            value={`${BigInt(0).toLocaleString('ko-kr', {
+            value={`${BigInt(
+              user?.stockStatus?.stockCurrentPrice ?? 0,
+            ).toLocaleString('ko-kr', {
               style: 'currency',
               currency: 'KRW',
             })}`}
@@ -79,7 +105,13 @@ export const WalletWidget: React.FC = () => {
             fontSize="text-md"
           />
           <ValueDisplay
-            value={`${BigInt(0).toLocaleString('ko-kr', {
+            value={`${BigInt(
+              user.stockStatus
+                ? BigInt(user.stockStatus.stockAmount) *
+                    (BigInt(user.stockStatus.stockCurrentPrice) -
+                      BigInt(user.stockStatus.stockStartingPrice))
+                : 0,
+            ).toLocaleString('ko-kr', {
               style: 'currency',
               currency: 'KRW',
             })}`}
