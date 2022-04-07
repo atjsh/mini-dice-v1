@@ -1,1 +1,1 @@
-export const IndexSkill = 'index';
+export const IndexSkill = 'index' as const;

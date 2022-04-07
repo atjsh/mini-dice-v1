@@ -64,6 +64,14 @@ import { UserModule } from './user/user.module';
         autoLoadEntities: true,
         synchronize: true,
         logging: true,
+        cache: {
+          type: 'redis',
+          options: {
+            host: configService.get('REDIS_HOST'),
+            port: +configService.get<number>('REDIS_PORT')!,
+            prefix: `minidice:dbcache::`,
+          },
+        },
       }),
       inject: [ConfigService],
     }),

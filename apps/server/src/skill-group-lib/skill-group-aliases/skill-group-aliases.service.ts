@@ -63,14 +63,14 @@ export class SkillGroupAliasesService {
     scenarioRoutes: SkillRouteType[],
     scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
-    const cachedSkillGroupAliases =
-      await this.cacheManager.get<SkillGroupAliasesType>(
-        `${cacheKey}${scenarioName}`,
-      );
+    // const cachedSkillGroupAliases =
+    //   await this.cacheManager.get<SkillGroupAliasesType>(
+    //     `${cacheKey}${scenarioName}`,
+    //   );
 
-    if (cachedSkillGroupAliases) {
-      return cachedSkillGroupAliases;
-    }
+    // if (cachedSkillGroupAliases) {
+    //   return cachedSkillGroupAliases;
+    // }
 
     return this.setSkillGroupAliasesToCache(scenarioRoutes, scenarioName);
   }

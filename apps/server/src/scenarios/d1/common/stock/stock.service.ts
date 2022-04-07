@@ -1,5 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import {
+  getStockInitialData,
+  getStockStatus,
   StockIdType,
   StockInitalDataType,
   StockInitialData,
@@ -9,19 +11,14 @@ import { EntityManager } from 'typeorm';
 import { UserEntity } from '../../../../user/entity/user.entity';
 import { UserRepository } from '../../../../user/user.repository';
 
-export enum StockBuyableByUserEnum {
+export enum StockOwningStatusEnum {
   BUYABLE,
-  ALREADY_OWNED,
+  SELLABLE,
   NOT_ENOUGH_MONEY,
 }
 
-export enum StockSellableByUserEnum {
-  SELLABLE,
-  NOT_ENOUGH_STOCK,
-}
-
 export type StockBuyableByUserStatus = {
-  status: StockBuyableByUserEnum;
+  status: StockOwningStatusEnum;
 };
 
 @Injectable()
@@ -35,9 +32,9 @@ export class CommonStockService {
   async getStockBuyableStatus(userId: UserIdType) {
     const user = await this.userRepository.findOneOrFail(userId);
     if (user.stockId == null) {
-      return StockBuyableByUserEnum.BUYABLE;
+      return StockOwningStatusEnum.BUYABLE;
     }
-    return StockBuyableByUserEnum.ALREADY_OWNED;
+    return StockOwningStatusEnum.SELLABLE;
   }
 
   async buyStock(
@@ -45,72 +42,75 @@ export class CommonStockService {
     stockId: StockIdType,
     stockAmount: bigint,
   ) {
-    await this.userRepository.manager.transaction(
+    if (stockAmount > 0 == false) {
+      throw new ForbiddenException('not enough stock amount');
+    }
+
+    const stockInitialData = StockInitialData.find(
+      (stock) => stock.id === stockId,
+    );
+    if (stockInitialData == undefined) {
+      throw new ForbiddenException('Stock Not Found');
+    }
+
+    return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
         const user = await transactionManager.findOneOrFail<UserEntity>(userId);
         if (user.stockId != null) {
-          return StockBuyableByUserEnum.ALREADY_OWNED;
-        }
-
-        const stockInitialData = StockInitialData.find(
-          (stock) => stock.id === stockId,
-        );
-        if (stockInitialData == undefined) {
-          throw new ForbiddenException('Stock Not Found');
+          return StockOwningStatusEnum.SELLABLE;
         }
 
         if (
           BigInt(user.cash) <
           stockInitialData.stockStartingPrice * BigInt(stockAmount)
         ) {
-          return StockBuyableByUserEnum.NOT_ENOUGH_MONEY;
+          return StockOwningStatusEnum.NOT_ENOUGH_MONEY;
         }
 
-        await transactionManager.update(
-          UserEntity,
-          {
-            id: userId,
-          },
-          {
+        await transactionManager
+          .getCustomRepository(UserRepository)
+          .partialUpdateUser(userId, {
             cash:
               BigInt(user.cash) -
               stockInitialData.stockStartingPrice * BigInt(stockAmount),
             stockId,
             stockAmount,
             stockPrice: stockInitialData.stockStartingPrice,
-          },
-        );
+          });
+
+        return true;
       },
     );
-
-    return true;
   }
 
   async sellStock(userId: UserIdType) {
-    await this.userRepository.manager.transaction(
+    return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
         const user = await transactionManager.findOneOrFail<UserEntity>(userId);
         if (user.stockId == null) {
-          return StockSellableByUserEnum.NOT_ENOUGH_STOCK;
+          return StockOwningStatusEnum.BUYABLE;
         }
 
-        await transactionManager.update(
-          UserEntity,
-          {
-            id: userId,
-          },
-          {
-            cash:
-              BigInt(user.cash) +
-              BigInt(user.stockAmount) * BigInt(user.stockPrice),
+        const { stockName } = getStockInitialData(user.stockId);
+
+        const userCash =
+          BigInt(user.cash) +
+          BigInt(user.stockAmount) * BigInt(user.stockPrice);
+
+        await transactionManager
+          .getCustomRepository(UserRepository)
+          .partialUpdateUser(userId, {
+            cash: userCash,
             stockId: null,
             stockAmount: BigInt(0),
             stockPrice: BigInt(0),
-          },
-        );
+          });
+
+        return {
+          userCash,
+          stockName,
+        };
       },
     );
-
-    return true;
   }
 }

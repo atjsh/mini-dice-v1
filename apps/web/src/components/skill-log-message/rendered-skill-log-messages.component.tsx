@@ -274,22 +274,54 @@ const InputFieldMessage: React.FC<{
 }> = ({ inputField, setFormParam }) => {
   const id = uuidv4();
   return (
-    <div className="flex flex-col">
-      <label htmlFor={id} className="text-sm font-bold">
-        {inputField.label}
-      </label>
-      <input
-        onChange={(e) => setFormParam({ [inputField.name]: e.target.value })}
-        id={id}
-        name={inputField.name}
-        type="text"
-        placeholder={inputField.placeholder}
-        maxLength={inputField.maxLength}
-        minLength={inputField.minLength}
-        required
-        className="border-2 border-gray-400 rounded-md p-2 dark:text-black"
-      />
-    </div>
+    <>
+      {inputField.isHidden ? (
+        <>
+          <input
+            onChange={(e) =>
+              setFormParam({ [inputField.name]: e.target.value })
+            }
+            defaultValue={inputField.defaultValue}
+            id={id}
+            name={inputField.name}
+            type={inputField.type}
+            hidden={
+              inputField.isHidden != undefined ? inputField.isHidden : false
+            }
+            required
+          />
+        </>
+      ) : (
+        <div className="flex flex-col">
+          <label htmlFor={id} className="text-sm font-bold">
+            {inputField.label}
+          </label>
+          <input
+            onChange={(e) =>
+              setFormParam({ [inputField.name]: e.target.value })
+            }
+            id={id}
+            name={inputField.name}
+            type={inputField.type}
+            placeholder={inputField.placeholder}
+            maxLength={inputField.maxLength}
+            minLength={inputField.minLength}
+            max={inputField.maxNumber}
+            min={inputField.minNumber}
+            hidden={
+              inputField.isHidden != undefined ? inputField.isHidden : false
+            }
+            disabled={
+              inputField.isDisabled != undefined ? inputField.isDisabled : false
+            }
+            required
+            className={`border-2 border-gray-400 rounded-md p-2 dark:text-black ${
+              inputField.isDisabled == true ? 'cursor-not-allowed' : ''
+            }`}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
@@ -349,7 +381,7 @@ const FormMessage: React.FC<{
 
   return isLast ? (
     <form
-      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6`}
+      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6 flex-shrink-0 max-w-xs `}
       onSubmit={(e) => {
         e.preventDefault();
         setIsButtonClicked(true);
@@ -366,6 +398,9 @@ const FormMessage: React.FC<{
         );
       }}
     >
+      <div className="font-bold text-sm text-gray-600 dark:text-zinc-400">
+        {form.title}
+      </div>
       <div className="font-bold text-2xl mb-3">{form.description}</div>
       <div className="">
         {form.dataFields.map((dataField) => (
@@ -382,7 +417,11 @@ const FormMessage: React.FC<{
       </div>
       <div className="text-center mt-5 text-xl">
         <SubmitButton
-          isDisabled={false}
+          isDisabled={
+            form.isSubmitButtonDisabled != undefined
+              ? form.isSubmitButtonDisabled
+              : false
+          }
           label={form.submitButtonLabel}
           isButtonClicked={isButtonClicked}
         />
@@ -406,15 +445,28 @@ const FormMessageGroup: React.FC<{
 
   return (
     <>
-      {formMessages.map((formMessage, index) => (
-        <FormMessage
-          form={formMessage}
-          isLast={isLast}
-          isNeighborButtonClicked={isButtonClicked}
-          setIsisNeighborButtonClicked={setIsButtonClicked}
-          key={`${formMessage.description}-${index}`}
-        />
-      ))}
+      <div className=" flex flex-col  mt-3">
+        <div
+          className={`dark:text-gray-600 text-gray-400 font-bold pl-2 ${
+            isLast ? '' : 'hidden'
+          }`}
+        >
+          {formMessages.length > 1
+            ? `${formMessages.length}가지 중에서 선택 - 좌우로 스크롤하여 더 보기`
+            : ''}
+        </div>
+        <div className=" flex flex-row overflow-x-scroll rounded-3xl gap-x-2 items-start py-3 pr-3">
+          {formMessages.map((formMessage, index) => (
+            <FormMessage
+              form={formMessage}
+              isLast={isLast}
+              isNeighborButtonClicked={isButtonClicked}
+              setIsisNeighborButtonClicked={setIsButtonClicked}
+              key={`${formMessage.description}-${index}`}
+            />
+          ))}
+        </div>
+      </div>
     </>
   );
 };
@@ -476,7 +528,7 @@ const RenderedSkillLogMessage: React.FC<{
 
   if (Array.isArray(skillLogMessage.message)) {
     return (
-      <div className=" flex flex-row overflow-x-scroll rounded-3xl">
+      <>
         {skillLogMessage.message[0].type == 'formMessage' ? (
           <FormMessageGroup
             formMessages={skillLogMessage.message as FormMessageType[]}
@@ -485,15 +537,17 @@ const RenderedSkillLogMessage: React.FC<{
           />
         ) : (
           skillLogMessage.message.map((message, col: number) => (
-            <RenderedMessageByType
-              message={message as PlainMessageType}
-              isLastSkillLog={isLastSkillLog}
-              key={`${skillLogId}${index}-${col}`}
-              date={skillLogMessage.date}
-            />
+            <div className=" flex flex-row overflow-x-scroll rounded-3xl gap-x-2 items-start">
+              <RenderedMessageByType
+                message={message as PlainMessageType}
+                isLastSkillLog={isLastSkillLog}
+                key={`${skillLogId}${index}-${col}`}
+                date={skillLogMessage.date}
+              />
+            </div>
           ))
         )}
-      </div>
+      </>
     );
   }
 

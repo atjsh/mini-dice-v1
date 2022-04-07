@@ -17,6 +17,8 @@ export class FormMessagePropsType implements BaseMessage {
 
   submitButtonLabel: string;
 
+  isSubmitButtonDisabled?: boolean;
+
   submitSkillRouteURL: string;
 }
 

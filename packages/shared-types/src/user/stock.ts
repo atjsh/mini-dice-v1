@@ -80,6 +80,10 @@ export const StockInitialData: StockInitalDataType[] = [
   },
 ];
 
+export function getStockInitialData(id: StockIdType): StockInitalDataType {
+  return StockInitialData.find((stock) => stock.id === id)!;
+}
+
 export function getStockStatus(
   stockId: StockIdType,
   stockAmount: StockStatus['stockAmount'],
@@ -116,4 +120,18 @@ export function serializeStockStatusToJson(
     stockAmount: stockStatus.stockAmount.toString(),
     stockCurrentPrice: stockStatus.stockCurrentPrice.toString(),
   };
+}
+
+export function getMaxStockBuyableAmount(
+  stockId: StockIdType,
+  userCash: bigint,
+): bigint {
+  const stockInitialData = StockInitialData.find(
+    (stock) => stock.id === stockId,
+  );
+  if (!stockInitialData) {
+    throw new Error('Stock Not Found');
+  }
+
+  return userCash / stockInitialData.stockStartingPrice;
 }

@@ -1,13 +1,31 @@
 import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import { CompleteSignupUserDto, UserIdType } from '@packages/shared-types';
+import * as _ from 'lodash';
 import { EntityRepository, Repository } from 'typeorm';
 import { getRandomInteger } from '../common/random/random-number';
 import { getRandomString } from '../common/random/random-string';
 import { UserEntity } from './entity/user.entity';
-import * as _ from 'lodash';
+
+function getCacheKey(userId: UserIdType) {
+  return 'user:' + userId;
+}
+
+const CACHE_DURATION_MS = 1000 * 60 * 60 * 24;
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
+  /**
+   * 유저를 찾고 캐시한다.
+   */
+  findUserWithCache(userId: UserIdType) {
+    return this.findOneOrFail(userId, {
+      cache: {
+        id: getCacheKey(userId),
+        milliseconds: CACHE_DURATION_MS,
+      },
+    });
+  }
+
   /**
    * 유저를 새로 회원가입 처리한다.
    * 이 떄, 유저는 회원가입이 완료되지 않은 상태로써 저장시킨다.
@@ -50,6 +68,9 @@ export class UserRepository extends Repository<UserEntity> {
     userId: UserIdType,
     partialUserDto: Partial<UserEntity>,
   ): Promise<UserEntity> {
+    await this.manager.connection.queryResultCache?.remove([
+      getCacheKey(userId),
+    ]);
     return await this.save({
       ...partialUserDto,
       cash: partialUserDto.cash

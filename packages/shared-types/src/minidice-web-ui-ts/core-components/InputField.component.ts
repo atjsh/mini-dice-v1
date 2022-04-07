@@ -14,7 +14,15 @@ export class InputFieldPropsType {
 
   maxLength?: number;
 
+  minNumber?: string;
+
+  maxNumber?: string;
+
+  isDisabled?: boolean;
+
   defaultValue?: any;
+
+  isHidden?: boolean;
 }
 
 export type InputFieldType = ChatElement<

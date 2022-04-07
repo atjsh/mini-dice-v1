@@ -50,7 +50,7 @@ export class FireSkillGroup implements SkillGroupController {
                 title: '화재 피해 발생',
                 description: `집에 화재가 발생하여 집이 홀랑 타 버렸습니다. ${cashLocale(
                   BigInt(
-                    props.skillServiceResult.losing == ''
+                    props.skillServiceResult.losing != ''
                       ? props.skillServiceResult.losing
                       : 0,
                   ),

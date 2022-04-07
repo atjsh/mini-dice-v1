@@ -1,4 +1,6 @@
-export const skillLogMessageAddingDelayTiming = [0, 1200, 2100, 2900];
+export const skillLogMessageAddingDelayTiming = [
+  0, 1200, 2100, 2900, 3900, 4700,
+];
 
 export const diceTossingDelayTimeMS = 2500;
 export const mapMovingDelayTimeMS = 4000;

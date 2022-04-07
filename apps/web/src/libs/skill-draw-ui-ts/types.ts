@@ -44,7 +44,15 @@ export class InputFieldType {
 
   maxLength?: number;
 
+  minNumber?: string;
+
+  maxNumber?: string;
+
+  isDisabled?: boolean;
+
   defaultValue?: any;
+
+  isHidden?: boolean;
 }
 
 /**
@@ -112,6 +120,8 @@ export class FormMessageType implements BaseMessage {
   inputFields: InputFieldType[];
 
   submitButtonLabel: string;
+
+  isSubmitButtonDisabled?: boolean;
 
   submitSkillRouteURL: string;
 }

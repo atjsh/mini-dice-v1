@@ -179,13 +179,17 @@ export class UserEntity {
   @Transform(({ type, value }) =>
     type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
   )
-  @Column('bigint')
+  @Column('bigint', {
+    default: 0,
+  })
   stockPrice: bigint;
 
   @Transform(({ type, value }) =>
     type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
   )
-  @Column('bigint')
+  @Column('bigint', {
+    default: 0,
+  })
   stockAmount: bigint;
 
   /** 객체가 생성된 날짜 */
