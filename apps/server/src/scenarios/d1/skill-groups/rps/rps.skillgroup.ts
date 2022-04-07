@@ -123,13 +123,15 @@ export class RpsSkillGroup implements SkillGroupController {
 
     return MessageResponseFactory({
       date: props.date,
-      userRequestDrawings: UserActivityMessage({
-        type: 'interactionUserActivityMessage',
-        title: '가위바위보 게임',
-        description: `나는 '${getRpsMoveAsKoreanText(
-          props.skillServiceResult.playerRpsMove,
-        )}'를 냈다`,
-      }),
+      userRequestDrawings: [
+        UserActivityMessage({
+          type: 'interactionUserActivityMessage',
+          title: '가위바위보 게임',
+          description: `나는 '${getRpsMoveAsKoreanText(
+            props.skillServiceResult.playerRpsMove,
+          )}'를 냈다`,
+        }),
+      ],
       actionResultDrawings: [
         props.skillServiceResult.rpsResult == RpsResult.Win
           ? PlainMessage({

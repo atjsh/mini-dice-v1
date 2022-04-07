@@ -138,7 +138,7 @@ export class UserActivityMessageType implements BaseMessage {
  * 클라이언트로 보낼 메세지 객체
  */
 export class MessageResponseType {
-  userRequestDrawings: UserActivityMessageType;
+  userRequestDrawings: UserActivityMessageType[];
 
   // 메세지들
   actionResultDrawings: (

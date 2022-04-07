@@ -39,15 +39,18 @@ export const useDiceToss = () => {
     onSuccess: async (data) => {
       setDiceTossActivityStatus(DiceTossActivityEnum.Processing);
 
-      addSkillLogMessages([
-        {
-          skillLogMessage: {
-            message: data.skillLog.skillDrawResult.userRequestDrawings,
-            date: new Date(data.skillLog.skillDrawResult.date),
-            skillLogId: data.skillLog.id,
-          },
-        },
-      ]);
+      addSkillLogMessages(
+        data.skillLog.skillDrawResult.userRequestDrawings.map(
+          (actionResultDrawing, index) => ({
+            delay: index == 0 ? 0 : diceTossingDelayTimeMS + 300,
+            skillLogMessage: {
+              message: actionResultDrawing,
+              date: new Date(data.skillLog.skillDrawResult.date),
+              skillLogId: data.skillLog.id,
+            },
+          }),
+        ),
+      );
       if (currentSkillRoute) {
         await sleep(diceTossingDelayTimeMS);
       }

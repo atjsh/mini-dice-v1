@@ -51,11 +51,13 @@ export function Ingame({
         initSkillLogMessages(
           skillLogs
             .map((skillLog) => [
-              {
-                date: new Date(skillLog.skillDrawResult.date),
-                skillLogId: skillLog.id,
-                message: skillLog.skillDrawResult.userRequestDrawings,
-              },
+              ...skillLog.skillDrawResult.userRequestDrawings.map(
+                (message) => ({
+                  date: new Date(skillLog.skillDrawResult.date),
+                  skillLogId: skillLog.id,
+                  message: message,
+                }),
+              ),
               ...skillLog.skillDrawResult.actionResultDrawings.map(
                 (message) => ({
                   date: new Date(skillLog.skillDrawResult.date),
@@ -107,18 +109,40 @@ export function Ingame({
               } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95  md:hidden`}
             >
               💵{' '}
-              {`${BigInt(user?.cash ?? 0).toLocaleString('en-us', {
-                style: 'currency',
-                currency: 'KRW',
-              })}`}{' '}
+              {user
+                ? `${BigInt(
+                    BigInt(user.cash) +
+                      (user.stockStatus
+                        ? BigInt(user.stockStatus.stockAmount) *
+                          BigInt(user.stockStatus.stockCurrentPrice)
+                        : BigInt(0)),
+                  ).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })}`
+                : `${BigInt(0).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })}`}{' '}
               | <span className=" whitespace-nowrap">잔고 더보기</span>
             </button>
             <div className="px-4 py-2 rounded-2xl text-base font-semibold select-none md:inline-block bg-white text-black dark:bg-zinc-800 dark:text-white hidden">
               💵{' '}
-              {`${BigInt(user?.cash ?? 0).toLocaleString('en-us', {
-                style: 'currency',
-                currency: 'KRW',
-              })}`}
+              {user
+                ? `${BigInt(
+                    BigInt(user.cash) +
+                      (user.stockStatus
+                        ? BigInt(user.stockStatus.stockAmount) *
+                          BigInt(user.stockStatus.stockCurrentPrice)
+                        : BigInt(0)),
+                  ).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })}`
+                : `${BigInt(0).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })}`}
             </div>
             <div className=" mb-3"></div>
             <DiceTossButton

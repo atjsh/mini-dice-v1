@@ -169,10 +169,12 @@ export function commonLandSkillGroupWebSubmitDraw(
 ) {
   return MessageResponseFactory({
     date: props.date,
-    userRequestDrawings: UserActivityMessage({
-      type: 'interactionUserActivityMessage',
-      title: '토지 구입',
-    }),
+    userRequestDrawings: [
+      UserActivityMessage({
+        type: 'interactionUserActivityMessage',
+        title: '토지 구입',
+      }),
+    ],
     actionResultDrawings: [
       props.skillServiceResult.buyingResult == LandBuyingResult.SUCCESS
         ? PlainMessage({

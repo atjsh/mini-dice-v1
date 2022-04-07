@@ -24,11 +24,15 @@ export class UserRepository extends Repository<UserEntity> {
         milliseconds: CACHE_DURATION_MS,
       },
     });
+
     return {
       ...user,
       canTossDiceAfter: user.canTossDiceAfter
         ? new Date(user.canTossDiceAfter)
         : null,
+      cash: BigInt(user.cash),
+      stockPrice: BigInt(user.stockPrice),
+      stockAmount: BigInt(user.stockAmount),
       createdAt: new Date(user.createdAt),
       updatedAt: new Date(user.updatedAt),
     } as UserEntity;

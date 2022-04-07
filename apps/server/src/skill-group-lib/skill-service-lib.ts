@@ -73,18 +73,41 @@ export const SkillGroup = (skillGroup: SkillGroupRouteType) =>
 
 export function drawDiceUserActivityMessage(
   diceUserActivity: DiceUserActivity,
-): UserActivityMessageType {
-  return UserActivityMessage({
-    type: 'diceTossUserActivityMessage',
-    title: `${_.sum(diceUserActivity.diceResult)}칸을 이동했다`,
-    description: `🎲 ${diceUserActivity.diceResult.join(', ')} 나옴${
-      diceUserActivity.stockChangeAmount != undefined
-        ? `\n 더블 발생으로 주가가 ${
-            diceUserActivity.stockChangeAmount > 0
-              ? `+${cashLocale(diceUserActivity.stockChangeAmount)}`
-              : `-${cashLocale(diceUserActivity.stockChangeAmount)}`
-          } ${diceUserActivity.stockChangeAmount > 0 ? `상승` : `하락`}했음`
-        : ''
-    }`,
-  });
+): UserActivityMessageType[] {
+  return [
+    UserActivityMessage({
+      type: 'diceTossUserActivityMessage',
+      title: `${_.sum(diceUserActivity.diceResult)}칸을 이동했다`,
+      description: `${diceUserActivity.diceResult
+        .map((dice) => `🎲 ${dice}`)
+        .join(' + ')}`,
+    }),
+    ...(diceUserActivity.stockPriceChange != undefined
+      ? [
+          UserActivityMessage({
+            type: 'interactionUserActivityMessage',
+            title: '주가 변동',
+            description: `${
+              BigInt(diceUserActivity.stockPriceChange.stockPriceDifference) > 0
+                ? `짝수 더블 발생, 주가 ${cashLocale(
+                    diceUserActivity.stockPriceChange.stockPriceDifference,
+                  )} 상승`
+                : `홀수 더블 발생, 주가 ${cashLocale(
+                    diceUserActivity.stockPriceChange.stockPriceDifference,
+                  )} 하락`
+            }${
+              diceUserActivity.stockPriceChange.forcedSoldCash != false
+                ? `\n\n주가가 ${cashLocale(
+                    1000,
+                  )} 이하로 하락(현 가치 ${cashLocale(
+                    diceUserActivity.stockPriceChange.changedStockPrice,
+                  )})했기 때문에 주식이 강제로 판매되었음, 현금 ${cashLocale(
+                    diceUserActivity.stockPriceChange.forcedSoldCash,
+                  )} 받았다`
+                : ''
+            }`,
+          }),
+        ]
+      : []),
+  ];
 }

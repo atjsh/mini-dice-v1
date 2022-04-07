@@ -21,17 +21,22 @@ export const useSubmitUserInteraction = (
 
       addSkillLogMessages(
         [
-          {
-            skillLogMessage: {
-              skillLogId: data.skillLog.id,
-              date: new Date(data.skillLog.skillDrawResult.date),
-              message: data.skillLog.skillDrawResult.userRequestDrawings,
-            },
-            delay: getSkillLogMessageAddingDelayTiming(0),
-          },
+          data.skillLog.skillDrawResult.userRequestDrawings.map(
+            (actionResultDrawing, index) => ({
+              delay: getSkillLogMessageAddingDelayTiming(index),
+              skillLogMessage: {
+                message: actionResultDrawing,
+                date: new Date(data.skillLog.skillDrawResult.date),
+                skillLogId: data.skillLog.id,
+              },
+            }),
+          ),
           data.skillLog.skillDrawResult.actionResultDrawings.map(
             (actionResultDrawing, index) => ({
-              delay: getSkillLogMessageAddingDelayTiming(index + 1),
+              delay: getSkillLogMessageAddingDelayTiming(
+                index +
+                  data.skillLog.skillDrawResult.userRequestDrawings.length,
+              ),
               skillLogMessage: {
                 message: actionResultDrawing,
                 date: new Date(data.skillLog.skillDrawResult.date),

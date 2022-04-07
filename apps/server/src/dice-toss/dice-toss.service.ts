@@ -4,11 +4,19 @@ import {
   getSkillRoutePath,
   SkillRouteType,
 } from '@packages/scenario-routing';
-import { MessageResponseType, UserIdType } from '@packages/shared-types';
+import {
+  getStockInitialData,
+  MessageResponseType,
+  UserIdType,
+} from '@packages/shared-types';
 import * as _ from 'lodash';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { getRandomInteger } from '../common/random/random-number';
 import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import {
+  CommonStockService,
+  StockPriceChangeResult,
+} from '../scenarios/d1/common/stock/stock.service';
 import {
   D1ScenarioRoutes,
   OrderedD1ScenarioRoutes,
@@ -22,11 +30,16 @@ import {
 import { UserRepository } from '../user/user.repository';
 import { DiceTossOutputDto } from './interface';
 
+function isOdd(num: number | bigint) {
+  return BigInt(num) % BigInt(2);
+}
+
 @Injectable()
 export class DiceTossService {
   constructor(
     private userRepository: UserRepository,
     private skillLogService: SkillLogService,
+    private commonStockService: CommonStockService,
     private scenarioRouteCallService: ScenarioRouteCallService,
   ) {}
 
@@ -34,7 +47,7 @@ export class DiceTossService {
     return Array(dices)
       .fill(0)
       .map(() => getRandomInteger(1, 6));
-    // return [19];
+    return [19];
   }
 
   private moveUserForward(
@@ -55,18 +68,38 @@ export class DiceTossService {
     return orderedSkillRoutes[nextSkillRouteIndex];
   }
 
-  private createChangeOnStock(
+  private async createChangeOnStock(
     diceResult: number[],
     userId: UserIdType,
-  ): number | undefined {
+  ): Promise<StockPriceChangeResult | undefined> {
     const uniqueDiceResult = _.uniq(diceResult);
     const isDiceResultEqual = uniqueDiceResult.length == 1;
 
-    if (isDiceResultEqual == false) {
-      return undefined;
+    if (isDiceResultEqual == true) {
+      const user = await this.userRepository.findUserWithCache(userId);
+      if (user.stockId) {
+        const { stockRisingPrice, stockFallingPrice } = getStockInitialData(
+          user.stockId,
+        );
+
+        let stockChanging: bigint;
+
+        if (isOdd(diceResult[0])) {
+          stockChanging = -stockFallingPrice;
+        } else {
+          stockChanging = stockRisingPrice;
+        }
+        console.log(stockChanging);
+        console.log(typeof stockChanging);
+
+        return await this.commonStockService.changeStockPrice(
+          userId,
+          stockChanging,
+        );
+      }
     }
 
-    return;
+    return undefined;
   }
 
   async tossDiceAndGetWebMessageResponse(
@@ -126,7 +159,10 @@ export class DiceTossService {
     const diceUserActivity: DiceUserActivity = {
       type: 'dice',
       diceResult,
-      stockChangeAmount: this.createChangeOnStock(diceResult, userJwt.userId),
+      stockPriceChange: await this.createChangeOnStock(
+        diceResult,
+        userJwt.userId,
+      ),
     };
 
     const skillServiceResult =

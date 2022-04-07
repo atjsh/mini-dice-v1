@@ -43,10 +43,12 @@ export class MapStarterSkillGroup implements SkillGroupController {
   ) {
     if (props.userActivity.type == 'gameStart') {
       return MessageResponseFactory({
-        userRequestDrawings: UserActivityMessage({
-          type: 'interactionUserActivityMessage',
-          title: '시작',
-        }),
+        userRequestDrawings: [
+          UserActivityMessage({
+            type: 'interactionUserActivityMessage',
+            title: '시작',
+          }),
+        ],
         date: props.date,
         actionResultDrawings: [
           PlainMessage({

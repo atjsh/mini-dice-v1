@@ -186,11 +186,13 @@ export class StockSkillGroup implements SkillGroupController {
   ) {
     return MessageResponseFactory({
       date: props.date,
-      userRequestDrawings: UserActivityMessage({
-        title: `${props.skillServiceResult.stockName} 주식 구매`,
-        description: `${props.skillServiceResult.stockAmount}주 구매`,
-        type: 'interactionUserActivityMessage',
-      }),
+      userRequestDrawings: [
+        UserActivityMessage({
+          title: `${props.skillServiceResult.stockName} 주식 구매`,
+          description: `${props.skillServiceResult.stockAmount}주 구매`,
+          type: 'interactionUserActivityMessage',
+        }),
+      ],
       actionResultDrawings: [
         PlainMessage({
           description: `${props.skillServiceResult.stockName} 주식을 ${props.skillServiceResult.stockAmount}주 구매했습니다.`,
@@ -212,10 +214,12 @@ export class StockSkillGroup implements SkillGroupController {
   ) {
     return MessageResponseFactory({
       date: props.date,
-      userRequestDrawings: UserActivityMessage({
-        title: `${props.skillServiceResult.stockName} 주식 처분`,
-        type: 'interactionUserActivityMessage',
-      }),
+      userRequestDrawings: [
+        UserActivityMessage({
+          title: `${props.skillServiceResult.stockName} 주식 처분`,
+          type: 'interactionUserActivityMessage',
+        }),
+      ],
       actionResultDrawings: [
         PlainMessage({
           description: `${

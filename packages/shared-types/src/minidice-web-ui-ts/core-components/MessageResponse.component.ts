@@ -9,7 +9,7 @@ import { UserActivityMessageType } from './UserActivityMessage.component';
  * 클라이언트로 보낼 메세지 객체
  */
 export class MessageResponsePropsType {
-  userRequestDrawings: UserActivityMessageType;
+  userRequestDrawings: UserActivityMessageType[];
 
   // 메세지들
   actionResultDrawings: (

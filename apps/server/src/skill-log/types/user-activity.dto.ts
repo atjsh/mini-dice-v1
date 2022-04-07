@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { StockPriceChangeResult } from '../../scenarios/d1/common/stock/stock.service';
 
 export interface UserActivityInterface {
   type: string;
@@ -13,7 +14,7 @@ export class DiceUserActivity implements UserActivityInterface {
 
   diceResult: number[];
 
-  stockChangeAmount?: number;
+  stockPriceChange?: StockPriceChangeResult;
 }
 
 export class InteractionUserActivity<T = Record<string, any>>

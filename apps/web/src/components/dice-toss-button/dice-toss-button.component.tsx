@@ -40,7 +40,7 @@ export const DiceTossButton: React.FC<{
   ) {
     return (
       <button
-        className={`${baseButtonClassNames} cursor-wait bg-gray-500 select-none`}
+        className={`${baseButtonClassNames} cursor-default bg-gray-500 select-none`}
         onClick={setisSidebarShowing}
       >
         🎲 주사위를 굴리는 중 ...
@@ -49,7 +49,7 @@ export const DiceTossButton: React.FC<{
   } else if (isDiceTossForbidden == true) {
     return (
       <button
-        className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+        className={`${baseButtonClassNames} cursor-default bg-gray-500 select-none`}
         onClick={setisSidebarShowing}
       >
         🎲 먼저 칸을 마치세요
@@ -62,7 +62,7 @@ export const DiceTossButton: React.FC<{
 
     return (
       <button
-        className={`${baseButtonClassNames} cursor-not-allowed bg-gray-500 select-none`}
+        className={`${baseButtonClassNames} cursor-default bg-gray-500 select-none`}
         onClick={setisSidebarShowing}
       >
         🎲 주사위 기다리기: <span className="font-bold">{needTime}초</span>

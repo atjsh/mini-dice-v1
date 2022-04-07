@@ -1,14 +1,12 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import {
   getStockInitialData,
-  getStockStatus,
   StockIdType,
   StockInitalDataType,
   StockInitialData,
   UserIdType,
 } from '@packages/shared-types';
 import { EntityManager } from 'typeorm';
-import { UserEntity } from '../../../../user/entity/user.entity';
 import { UserRepository } from '../../../../user/user.repository';
 
 export enum StockOwningStatusEnum {
@@ -20,6 +18,12 @@ export enum StockOwningStatusEnum {
 export type StockBuyableByUserStatus = {
   status: StockOwningStatusEnum;
 };
+
+export interface StockPriceChangeResult {
+  changedStockPrice: bigint;
+  stockPriceDifference: bigint;
+  forcedSoldCash: false | bigint;
+}
 
 @Injectable()
 export class CommonStockService {
@@ -121,5 +125,38 @@ export class CommonStockService {
         };
       },
     );
+  }
+
+  async changeStockPrice(
+    userId: UserIdType,
+    stockPriceDifference: bigint | number,
+  ): Promise<StockPriceChangeResult> {
+    const user = await this.userRepository.findUserWithCache(userId);
+    const changedStockPrice =
+      BigInt(user.stockPrice) + BigInt(stockPriceDifference);
+
+    if (changedStockPrice < 1000) {
+      const stockAmount = user.stockAmount;
+      await this.userRepository.partialUpdateUser(userId, {
+        stockPrice: changedStockPrice,
+      });
+      await this.sellStock(userId);
+
+      return {
+        changedStockPrice: changedStockPrice,
+        stockPriceDifference: BigInt(stockPriceDifference),
+        forcedSoldCash: changedStockPrice * stockAmount,
+      };
+    }
+
+    await this.userRepository.partialUpdateUser(userId, {
+      stockPrice: changedStockPrice,
+    });
+
+    return {
+      changedStockPrice: changedStockPrice,
+      stockPriceDifference: BigInt(stockPriceDifference),
+      forcedSoldCash: false,
+    };
   }
 }

@@ -85,11 +85,9 @@ const UserActivityMessage: React.FC<{
         >
           <div className="text-xs mb-1">주사위 굴리는 중</div>
           <div>
-            🎲{' '}
             <span className=" text-white">
-              {diceTossingNumbers[0]}, {diceTossingNumbers[1]}
-            </span>{' '}
-            ...
+              {diceTossingNumbers.map((dice) => `🎲 ${dice}`).join(' · ')}
+            </span>
           </div>
         </div>
         <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
