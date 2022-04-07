@@ -205,7 +205,7 @@ export class CommonLandService {
     landStatus: LandStatus,
     userId: UserIdType,
   ): Promise<LandBuyableByUserStatus> {
-    const user = await this.userRepository.findOneOrFail(userId);
+    const user = await this.userRepository.findUserWithCache(userId);
     if (landStatus.landOwnedBy?.id == userId) {
       return {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
@@ -252,7 +252,7 @@ export class CommonLandService {
       (land) => land.id == landId,
     )!;
 
-    const user = await this.userRepository.findOneOrFail(userId);
+    const user = await this.userRepository.findUserWithCache(userId);
 
     if (user.cash < initalLandData.landPrice) {
       throw new LandTooExpensive({

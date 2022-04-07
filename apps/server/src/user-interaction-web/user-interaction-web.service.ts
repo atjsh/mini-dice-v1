@@ -28,7 +28,7 @@ export class UserInteractionWebService {
     callingSkillParam: Record<string, string>,
     userJwt: UserJwtDto,
   ): Promise<UserInteractionOutputDto> {
-    const user = await this.userRepository.findOneOrFail(userJwt.userId);
+    const user = await this.userRepository.findUserWithCache(userJwt.userId);
     if (user.signupCompleted == false) {
       throw new ForbiddenException('finish signup fist');
     }
@@ -68,7 +68,9 @@ export class UserInteractionWebService {
         },
       );
 
-    const updatedUser = await this.userRepository.findOneOrFail(userJwt.userId);
+    const updatedUser = await this.userRepository.findUserWithCache(
+      userJwt.userId,
+    );
 
     return {
       user: serializeUserToJson(updatedUser),

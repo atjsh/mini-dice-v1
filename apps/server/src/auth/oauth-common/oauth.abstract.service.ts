@@ -77,7 +77,7 @@ export abstract class OauthAbstractService {
             expressResponse,
             alreadyExistedRefreshToken,
           );
-        anonUser = await this.userRepository.findOneOrFail(
+        anonUser = await this.userRepository.findUserWithCache(
           refreshTokenEntity.userId,
         );
 

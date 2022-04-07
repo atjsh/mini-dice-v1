@@ -17,13 +17,21 @@ export class UserRepository extends Repository<UserEntity> {
   /**
    * 유저를 찾고 캐시한다.
    */
-  findUserWithCache(userId: UserIdType) {
-    return this.findOneOrFail(userId, {
+  async findUserWithCache(userId: UserIdType): Promise<UserEntity> {
+    const user = await this.findOneOrFail(userId, {
       cache: {
         id: getCacheKey(userId),
         milliseconds: CACHE_DURATION_MS,
       },
     });
+    return {
+      ...user,
+      canTossDiceAfter: user.canTossDiceAfter
+        ? new Date(user.canTossDiceAfter)
+        : null,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    } as UserEntity;
   }
 
   /**
@@ -115,7 +123,7 @@ export class UserRepository extends Repository<UserEntity> {
       });
     }
 
-    const user = await this.findOneOrFail(userId);
+    const user = await this.findUserWithCache(userId);
     return await this.partialUpdateUser(userId, {
       cash: BigInt(user.cash) + BigInt(cashDifference),
     });

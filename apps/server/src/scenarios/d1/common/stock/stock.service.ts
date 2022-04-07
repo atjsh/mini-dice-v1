@@ -30,7 +30,7 @@ export class CommonStockService {
   }
 
   async getStockBuyableStatus(userId: UserIdType) {
-    const user = await this.userRepository.findOneOrFail(userId);
+    const user = await this.userRepository.findUserWithCache(userId);
     if (user.stockId == null) {
       return StockOwningStatusEnum.BUYABLE;
     }
@@ -55,10 +55,9 @@ export class CommonStockService {
       async (transactionManager: EntityManager) => {
         console.log(userId);
 
-        const user = await transactionManager.findOneOrFail<UserEntity>(
-          UserEntity,
-          userId,
-        );
+        const user = await transactionManager
+          .getCustomRepository(UserRepository)
+          .findUserWithCache(userId);
         console.log(user);
 
         if (user.stockId != null) {
@@ -94,10 +93,9 @@ export class CommonStockService {
   async sellStock(userId: UserIdType) {
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
-        const user = await transactionManager.findOneOrFail<UserEntity>(
-          UserEntity,
-          userId,
-        );
+        const user = await transactionManager
+          .getCustomRepository(UserRepository)
+          .findUserWithCache(userId);
         if (user.stockId == null) {
           return StockOwningStatusEnum.BUYABLE;
         }

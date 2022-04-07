@@ -22,7 +22,7 @@ export class UserService {
     userId: UserIdType,
     callingSkillRoute: SkillRouteType,
   ): Promise<boolean> {
-    const user = await this.userRepository.findOneOrFail(userId);
+    const user = await this.userRepository.findUserWithCache(userId);
 
     if (
       (await this.isUserCallingSkillAllowed(user, callingSkillRoute)) == false

@@ -44,7 +44,7 @@ export class FireService {
     );
     switch (cashChangeEvent.eventCase.causeName) {
       case FireEventEnum.LOSE_MONEY:
-        const cash = (await this.userRepository.findOneOrFail(props.userId))
+        const cash = (await this.userRepository.findUserWithCache(props.userId))
           .cash;
         const losing =
           (BigInt(cashChangeEvent.value) * BigInt(cash)) / BigInt(100);

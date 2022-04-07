@@ -31,7 +31,7 @@ export class StockService implements SkillService {
     );
 
     const { cash, stockId, stockAmount, stockPrice } =
-      await this.userRepository.findOneOrFail(props.userId);
+      await this.userRepository.findUserWithCache(props.userId);
 
     await this.userRepository.setUserCanTossDice(
       props.userId,

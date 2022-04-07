@@ -31,10 +31,10 @@ export class DiceTossService {
   ) {}
 
   private throwDices(dices: number): number[] {
-    // return Array(dices)
-    //   .fill(0)
-    //   .map(() => getRandomInteger(1, 6));
-    return [19];
+    return Array(dices)
+      .fill(0)
+      .map(() => getRandomInteger(1, 6));
+    // return [19];
   }
 
   private moveUserForward(
@@ -72,7 +72,7 @@ export class DiceTossService {
   async tossDiceAndGetWebMessageResponse(
     userJwt: UserJwtDto,
   ): Promise<DiceTossOutputDto> {
-    const user = await this.userRepository.findOneOrFail(userJwt.userId);
+    const user = await this.userRepository.findUserWithCache(userJwt.userId);
     isUserThrowingDiceTossAllowedOrThrow(user);
     if (user.signupCompleted == false) {
       throw new ForbiddenException('finish signup fist');
@@ -106,7 +106,7 @@ export class DiceTossService {
 
       return {
         user: serializeUserToJson(
-          await this.userRepository.findOneOrFail(userJwt.userId),
+          await this.userRepository.findUserWithCache(userJwt.userId),
         ),
         skillLog: {
           skillDrawResult: skillDrawResult,
@@ -154,7 +154,7 @@ export class DiceTossService {
 
     return {
       user: serializeUserToJson(
-        await this.userRepository.findOneOrFail(userJwt.userId),
+        await this.userRepository.findUserWithCache(userJwt.userId),
       ),
       skillLog: {
         skillDrawResult: skillDrawResult,

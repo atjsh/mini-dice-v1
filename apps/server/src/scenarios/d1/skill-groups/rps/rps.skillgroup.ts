@@ -91,7 +91,7 @@ export class RpsSkillGroup implements SkillGroupController {
     userActivity,
     userId,
   }: SkillPropsType<InteractionUserActivity<RpsSubmitParamType>>) {
-    const user = await this.userRepository.findOneOrFail(userId);
+    const user = await this.userRepository.findUserWithCache(userId);
     return this.skillService.submit({
       userId: userId,
       rpsMove: userActivity.params.move,
