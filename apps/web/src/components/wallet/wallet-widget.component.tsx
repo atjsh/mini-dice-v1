@@ -7,7 +7,16 @@ const ValueDisplay: React.FC<{
 }> = ({ value, label, fontSize }) => (
   <div className="flex-1">
     <div className="font-extrabold">{label}</div>
-    <div className={`${fontSize} break-all`}>{value}</div>
+    <div className={`${fontSize} break-all`}>
+      {value.includes('\n')
+        ? value.split('\n').map((line, index) => (
+            <div key={index}>
+              {line}
+              <br />
+            </div>
+          ))
+        : value}
+    </div>
   </div>
 );
 
@@ -28,7 +37,7 @@ export const WalletWidget: React.FC = () => {
                 (user.stockStatus
                   ? BigInt(user.stockStatus.stockAmount) *
                     BigInt(user.stockStatus.stockCurrentPrice)
-                  : BigInt(1)),
+                  : BigInt(0)),
             ).toLocaleString('ko-kr', {
               style: 'currency',
               currency: 'KRW',
@@ -75,13 +84,13 @@ export const WalletWidget: React.FC = () => {
           <ValueDisplay
             value={`${
               user.stockStatus
-                ? `+${BigInt(user.stockStatus.stockRisingPrice).toLocaleString(
+                ? `↑${BigInt(user.stockStatus.stockRisingPrice).toLocaleString(
                     'ko-kr',
                     {
                       style: 'currency',
                       currency: 'KRW',
                     },
-                  )}, -${BigInt(
+                  )}\n ↓${BigInt(
                     user.stockStatus.stockFallingPrice,
                   ).toLocaleString('ko-kr', {
                     style: 'currency',

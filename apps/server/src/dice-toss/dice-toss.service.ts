@@ -31,10 +31,10 @@ export class DiceTossService {
   ) {}
 
   private throwDices(dices: number): number[] {
-    return Array(dices)
-      .fill(0)
-      .map(() => getRandomInteger(1, 6));
-    // return [19];
+    // return Array(dices)
+    //   .fill(0)
+    //   .map(() => getRandomInteger(1, 6));
+    return [19];
   }
 
   private moveUserForward(

@@ -28,6 +28,7 @@ export class Land3SkillGroup implements SkillGroupController {
   async getSkillGroupAlias() {
     return getCommonLandSkillGroupAlias(
       await this.skillService.getCurrentLandStatus(),
+      '황금',
     );
   }
 

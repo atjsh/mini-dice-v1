@@ -19,7 +19,7 @@ import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
 
 const MessageWidth = 'w-max min-w ';
-const MessageCommon = `${MessageWidth} my-1 ml-1`;
+const MessageCommon = `${MessageWidth} my-1 ml-1 leading-7 `;
 
 const UserActivityMessageRadius = 'rounded-xl';
 const UserActivityMessagePadding = 'p-5';
@@ -270,17 +270,13 @@ const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
 
 const InputFieldMessage: React.FC<{
   inputField: InputFieldType;
-  setFormParam: Function;
-}> = ({ inputField, setFormParam }) => {
+}> = ({ inputField }) => {
   const id = uuidv4();
   return (
     <>
       {inputField.isHidden ? (
         <>
           <input
-            onChange={(e) =>
-              setFormParam({ [inputField.name]: e.target.value })
-            }
             defaultValue={inputField.defaultValue}
             id={id}
             name={inputField.name}
@@ -297,9 +293,6 @@ const InputFieldMessage: React.FC<{
             {inputField.label}
           </label>
           <input
-            onChange={(e) =>
-              setFormParam({ [inputField.name]: e.target.value })
-            }
             id={id}
             name={inputField.name}
             type={inputField.type}
@@ -365,7 +358,6 @@ const FormMessage: React.FC<{
   isNeighborButtonClicked,
   setIsisNeighborButtonClicked,
 }) => {
-  const [formParam, setFormParam] = useState({});
   const [isOwnButtonClicked, setIsOwnButtonClicked] = useState(false);
 
   const isButtonClicked =
@@ -381,13 +373,19 @@ const FormMessage: React.FC<{
 
   return isLast ? (
     <form
-      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6 flex-shrink-0 max-w-xs `}
+      className={`w-max min-w ml-1 bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6 flex-shrink-0 max-w-xs `}
       onSubmit={(e) => {
         e.preventDefault();
         setIsButtonClicked(true);
+
+        const data = {};
+        for (let index = 0; index < (e.target as any).length - 1; index++) {
+          data[e.target[index].name] = e.target[index].value;
+        }
+
         mutate.mutate(
           {
-            callingSkillParam: formParam,
+            callingSkillParam: data,
             callingSkillRoute: form.submitSkillRouteURL,
           },
           {
@@ -409,10 +407,7 @@ const FormMessage: React.FC<{
       </div>
       <div>
         {form.inputFields.map((inputField) => (
-          <InputFieldMessage
-            inputField={inputField}
-            setFormParam={setFormParam}
-          />
+          <InputFieldMessage inputField={inputField} />
         ))}
       </div>
       <div className="text-center mt-5 text-xl">
@@ -445,7 +440,7 @@ const FormMessageGroup: React.FC<{
 
   return (
     <>
-      <div className=" flex flex-col  mt-3">
+      <div className=" flex flex-col mt-3 my-1">
         <div
           className={`dark:text-gray-600 text-gray-400 font-bold pl-2 ${
             isLast ? '' : 'hidden'
@@ -455,7 +450,7 @@ const FormMessageGroup: React.FC<{
             ? `${formMessages.length}가지 중에서 선택 - 좌우로 스크롤하여 더 보기`
             : ''}
         </div>
-        <div className=" flex flex-row overflow-x-scroll rounded-3xl gap-x-2 items-start py-3 pr-3">
+        <div className=" flex flex-row overflow-x-scroll rounded-3xl gap-x-2 items-start">
           {formMessages.map((formMessage, index) => (
             <FormMessage
               form={formMessage}

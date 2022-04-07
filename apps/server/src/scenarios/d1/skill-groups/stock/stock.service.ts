@@ -3,6 +3,7 @@ import {
   getMaxStockBuyableAmount,
   getStockStatus,
   serializeStockStatusToJson,
+  StockIdType,
   StockInitialData,
 } from '@packages/shared-types';
 import {
@@ -73,11 +74,32 @@ export class StockService implements SkillService {
     }
   }
 
-  async sell(props: SkillServiceProps): Promise<string> {
+  async buy(
+    props: SkillServiceProps<{ amount: bigint; stockId: StockIdType }>,
+  ) {
+    const result = await this.commonStockService.buyStock(
+      props.userId,
+      props.stockId,
+      props.amount,
+    );
+    if (result == StockOwningStatusEnum.SELLABLE) {
+      throw new ForbiddenException('cannot buy stock; already owned');
+    }
+    if (result == StockOwningStatusEnum.NOT_ENOUGH_MONEY) {
+      throw new ForbiddenException('cannot buy stock; not enough money');
+    }
+
+    return {
+      stockName: result.stockInitialData.stockName,
+      stockAmount: String(result.stockAmount),
+    };
+  }
+
+  async sell(props: SkillServiceProps) {
     const result = await this.commonStockService.sellStock(props.userId);
     if (result == StockOwningStatusEnum.BUYABLE) {
       throw new ForbiddenException('cannot sell stock; not owning stocks');
     }
-    return String(result);
+    return result;
   }
 }

@@ -4,8 +4,11 @@ import {
   DataField,
   FormMessage,
   InputField,
+  Link,
+  LinkGroup,
   MessageResponseFactory,
   PlainMessage,
+  StockIdType,
   UserActivityMessage,
 } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
@@ -75,7 +78,12 @@ export class StockSkillGroup implements SkillGroupController {
                     InputField({
                       label: '구매량',
                       name: 'amount',
-                      placeholder: `1 이상, ${stock.maxBuyableAmount} 이하`,
+                      placeholder:
+                        BigInt(stock.maxBuyableAmount) > 0
+                          ? `1 이상, ${BigInt(
+                              stock.maxBuyableAmount,
+                            ).toLocaleString()} 이하`
+                          : '구매 불가',
                       maxNumber: stock.maxBuyableAmount,
                       minNumber: `${1}`,
                       type: 'number',
@@ -125,7 +133,7 @@ export class StockSkillGroup implements SkillGroupController {
                   isSubmitButtonDisabled:
                     BigInt(stock.maxBuyableAmount) > 0 ? false : true,
                   submitSkillRouteURL: getSkillRoutePath(
-                    D1ScenarioRoutes.skillGroups.stock.skills.index,
+                    D1ScenarioRoutes.skillGroups.stock.skills.buy,
                   ),
                 }),
               ),
@@ -133,22 +141,60 @@ export class StockSkillGroup implements SkillGroupController {
                 title: '주식: 규칙',
                 description: `- "주식 총평가금액"이 ${cashLocale(
                   1000,
-                )} 이하로 폭락하면 강제로 판매됩니다. \n - 주식은 1종류만 구매 가능합니다. \n - 주사위를 굴렸을 때, 동일한 주사위 눈이 나오면 주가가 "더블 시 주가 증감" 값에 맞춰 바뀝니다. 눈이 짝수면 오르고, 눈이 홀수면 떨어집니다.`,
+                )} 이하로 폭락하면 강제로 판매됩니다. \n - 주식은 1종류만 구매 가능합니다. \n - "더블 시 주가 증감"이란? 주사위를 굴렸을 때, 동일한 주사위 눈이 나오면 주가가 "더블 시 주가 증감" 값에 맞춰 바뀝니다. 눈이 짝수면 오르고, 눈이 홀수면 떨어집니다.`,
               }),
             ]
           : [
               PlainMessage({
-                description:
-                  '앗! 이미 주식을 보유중이시네요. 처분하시겠습니까?',
+                description: '앗! 이미 주식을 보유중이시네요.',
               }),
-              PlainMessage({
-                title: `${props.skillServiceResult.status?.stockName} 주식 처분하기`,
-                description: `처분하면 현금으로 ${cashLocale(
+              LinkGroup({
+                description: `주식을 처분하시겠습니까? 처분하면 현금으로 ${cashLocale(
                   BigInt(props.skillServiceResult.status!.stockAmount) *
                     BigInt(props.skillServiceResult.status!.stockCurrentPrice),
-                )} 지급됩니다.`,
+                )} 지급됩니다. \n물론 나중에 처분해도 됩니다.`,
+                type: 'linkGroup',
+                links: [
+                  Link({
+                    displayText: '주식 모두 처분하기',
+                    skillRouteURL: getSkillRoutePath(
+                      D1ScenarioRoutes.skillGroups.stock.skills.sell,
+                    ),
+                    param: {},
+                  }),
+                ],
               }),
             ]),
+      ],
+    });
+  }
+
+  @Skill(D1ScenarioRoutes.skillGroups.stock.skills.buy)
+  buy(props: SkillPropsType<InteractionUserActivity<StockBuySubmitDto>>) {
+    return this.skillService.buy({
+      ...props,
+      stockId: Number(props.userActivity.params.stockId) as StockIdType,
+      amount: BigInt(props.userActivity.params.amount),
+    });
+  }
+
+  @SkillDraw(D1ScenarioRoutes.skillGroups.stock.skills.buy)
+  buyDraw(
+    props: InteractionUserActivitySkillDrawPropsType<
+      MethodReturnType<StockService, 'buy'>
+    >,
+  ) {
+    return MessageResponseFactory({
+      date: props.date,
+      userRequestDrawings: UserActivityMessage({
+        title: `${props.skillServiceResult.stockName} 주식 구매`,
+        description: `${props.skillServiceResult.stockAmount}주 구매`,
+        type: 'interactionUserActivityMessage',
+      }),
+      actionResultDrawings: [
+        PlainMessage({
+          description: `${props.skillServiceResult.stockName} 주식을 ${props.skillServiceResult.stockAmount}주 구매했습니다.`,
+        }),
       ],
     });
   }
@@ -167,11 +213,18 @@ export class StockSkillGroup implements SkillGroupController {
     return MessageResponseFactory({
       date: props.date,
       userRequestDrawings: UserActivityMessage({
-        title: '주식 처분',
+        title: `${props.skillServiceResult.stockName} 주식 처분`,
         type: 'interactionUserActivityMessage',
-        description: `주식을 처분하였습니다.`,
       }),
-      actionResultDrawings: [],
+      actionResultDrawings: [
+        PlainMessage({
+          description: `${
+            props.skillServiceResult.stockName
+          } 주식을 처분하였습니다. ${cashLocale(
+            BigInt(props.skillServiceResult.userCash),
+          )} 받았습니다.`,
+        }),
+      ],
     });
   }
 }

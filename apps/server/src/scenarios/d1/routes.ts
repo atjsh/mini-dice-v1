@@ -49,7 +49,7 @@ export const OrderedD1ScenarioRoutes: SkillRouteType[] = [
   D1ScenarioRoutes.skillGroups.gameDev,
   D1ScenarioRoutes.skillGroups.pickedItem,
   D1ScenarioRoutes.skillGroups.fire,
-  // D1ScenarioRoutes.skillGroups.stock,
+  D1ScenarioRoutes.skillGroups.stock,
   D1ScenarioRoutes.skillGroups.lottery,
   D1ScenarioRoutes.skillGroups.land2,
   D1ScenarioRoutes.skillGroups.land3,

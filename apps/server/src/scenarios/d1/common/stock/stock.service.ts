@@ -46,16 +46,21 @@ export class CommonStockService {
       throw new ForbiddenException('not enough stock amount');
     }
 
-    const stockInitialData = StockInitialData.find(
-      (stock) => stock.id === stockId,
-    );
+    const stockInitialData = getStockInitialData(stockId);
     if (stockInitialData == undefined) {
       throw new ForbiddenException('Stock Not Found');
     }
 
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
-        const user = await transactionManager.findOneOrFail<UserEntity>(userId);
+        console.log(userId);
+
+        const user = await transactionManager.findOneOrFail<UserEntity>(
+          UserEntity,
+          userId,
+        );
+        console.log(user);
+
         if (user.stockId != null) {
           return StockOwningStatusEnum.SELLABLE;
         }
@@ -78,7 +83,10 @@ export class CommonStockService {
             stockPrice: stockInitialData.stockStartingPrice,
           });
 
-        return true;
+        return {
+          stockInitialData,
+          stockAmount,
+        };
       },
     );
   }
@@ -86,7 +94,10 @@ export class CommonStockService {
   async sellStock(userId: UserIdType) {
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
-        const user = await transactionManager.findOneOrFail<UserEntity>(userId);
+        const user = await transactionManager.findOneOrFail<UserEntity>(
+          UserEntity,
+          userId,
+        );
         if (user.stockId == null) {
           return StockOwningStatusEnum.BUYABLE;
         }
