@@ -1,13 +1,16 @@
 # Mini Dice V1 Source Code
 
+## What is Mini Dice?
+
+- '주사위'를 굴려 맵을 이동하며 가상의 재화를 얻을 수 있고, 랭킹을 통해 다른 유저의 가상 재화 보유 상태를 확인할 수 있도록 하는 웹 서비스
+
 ## Highlights
 
 - HTTP 기반 웹 서비스
-- Oauth 또는 '임시 인증'을 통한 회원 가입
-  - 서비스에 접속한 유저는 Google 등의 Oauth Provider를 통해 인증을 거친 후 서비스에 가입/로그인할 수 있음.
-  - 또는, 인증하지 않고 Hcaptcha 서비스를 통해 유저가 스팸 유저인지만 확인한 후 서비스에 가입/로그인할 수 있음.
-- NestJS, Fastify로 구축된 API 서버, MySQL와 Redis에 서버 데이터 저장
+- 소셜 계정 기반 OAuth 또는 임시 가입을 통한 회원 가입 & 로그인
+- NestJS, Fastify로 구축된 API 서버
 - React, Tailwind CSS, Recoil로 구축된 웹 애플리케이션
+- MySQL와 Redis에 서버 데이터 저장
 
 ## Code Spec
 
@@ -37,3 +40,7 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
   - NestJS CLI로 빌드 / 실행
 - @apps/web
   - Parcel로 빌드 / 웹 서버 실행
+
+## Maintainer
+
+- Mini Dice's Source code and Infrastructures are maintained by MDT (Mini Dice Team)
