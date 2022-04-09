@@ -21,6 +21,7 @@ FROM installed
 WORKDIR /app
 
 ENV NODE_ENV=prod
+ENV APP_ENV=dev
 
 RUN  ls -la
 RUN pwd

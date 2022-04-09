@@ -21,5 +21,8 @@ jobs:
       - name: stop and remove my old container with name mini-dice-server if they exist
         run: docker stop mini-dice-server || true && docker rm mini-dice-server || true
 
+      - name: Show the image id
+        run: docker images
+
       - name: run container with the image
         run: docker run -d --name mini-dice-server -p 7001:7000 mini-dice-server
