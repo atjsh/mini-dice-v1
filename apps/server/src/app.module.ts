@@ -69,6 +69,7 @@ import { UserModule } from './user/user.module';
           options: {
             host: configService.get('REDIS_HOST'),
             port: +configService.get<number>('REDIS_PORT')!,
+            auth_pass: configService.get('REDIS_PASSWORD'),
             prefix: `minidice:dbcache::`,
           },
         },

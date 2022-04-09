@@ -23,6 +23,7 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
         store: redisStore,
         host: configService.get('REDIS_HOST'),
         port: +configService.get<number>('REDIS_PORT')!,
+        auth_pass: configService.get('REDIS_PASSWORD'),
       }),
     }),
   ],
