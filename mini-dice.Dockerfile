@@ -20,6 +20,7 @@ WORKDIR /app
 ENV NODE_ENV=prod
 
 COPY --from=built /apps/server/dist ./dist
+COPY --from=builder /apps/server/tdol-process.env.dev ./
 
 CMD ["node", "dist/apps/server/dist/apps/server/src/main.js"]
 EXPOSE 7000

@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   build:
@@ -12,7 +12,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      # - name: Build the Docker image
-      #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      - name: run pwd
-        run: pwd
+      - name: Create ENV File from base64 envireoemnt value
+        run: base64 ${{ secrets.MINIDICE_SERVER_DEV_ENV }} > apps/server/tdol-process.env.dev
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag mini-dice-server:$(date +%s)
+
+      - name: stop and remove my old container with name mini-dice-server if they exist
+        run: docker stop mini-dice-server || true && docker rm mini-dice-server || true
+
+      - name: run container with the image
+        run: docker run -d --name mini-dice-server -p 7001:7000 mini-dice-server
