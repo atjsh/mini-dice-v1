@@ -26,7 +26,7 @@ jobs:
         run: docker images
 
       - name: run container with the image
-        run: docker run -d --name mini-dice-server -p 7001:7000 mini-dice-server:${GITHUB_SHA::8}
+        run: docker run -d --name mini-dice-server -p 7001:80 mini-dice-server:${GITHUB_SHA::8}
 
       - name: Remove Old Docker Images with name mini-dice-server
         run: docker image prune -a -f
