@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Create ENV File from base64 envireoemnt value
         run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
 
@@ -26,3 +27,6 @@ jobs:
 
       - name: run container with the image
         run: docker run -d --name mini-dice-server -p 7001:7000 mini-dice-server:${GITHUB_SHA::8}
+
+      - name: Remove Old Docker Images with name mini-dice-server
+        run: docker image prune -a -f
