@@ -8,13 +8,13 @@ COPY . .
 RUN yarn
 
 # 2. 번들링함.
-FROM installer as built
+FROM installed as built
 WORKDIR /app
 
 RUN yarn workspace @apps/server build
 
 # 번들링된 프로젝트를 실행함.
-FROM installer
+FROM installed
 WORKDIR /app
 
 ENV NODE_ENV=prod
