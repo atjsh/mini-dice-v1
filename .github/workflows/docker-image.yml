@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create ENV File from base64 envireoemnt value
-        run: base64 ${{ secrets.MINIDICE_SERVER_DEV_ENV }} > apps/server/tdol-process.env.dev
+        run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag mini-dice-server:$(date +%s)
