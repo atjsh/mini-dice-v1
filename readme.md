@@ -29,8 +29,8 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
   - server(@apps/server): API 서버 코드 저장
   - web(@apps/web): 웹 프론트엔드 코드 저장
 - packages
-  - scenario-routing(@packages/scenario-routing): Typescript를 통해 객체의 구조를 쉽게 정의해주는 개발 편의용 코드들을 저장함
-  - shared-types(@packages/shared-types): 시스템 내에서 공통적으로 사용되는 VO / DTO / 함수들을 저장함
+  - scenario-routing(@packages/scenario-routing): 서비스 내 '맵'을 정의하고 구조화하는 코드를 저장함
+  - shared-types(@packages/shared-types): 시스템 내에서 공통적으로 사용되는 코드들을 저장함
 
 ### Tooling
 
