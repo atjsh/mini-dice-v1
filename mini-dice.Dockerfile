@@ -29,5 +29,5 @@ RUN pwd
 COPY --from=built /app/apps/server/dist ./dist
 COPY --from=built /app/apps/server/tdol-process.env.dev ./
 
-CMD ["node", "dist/apps/server/dist/apps/server/src/main.js"]
+CMD ["node", "dist/apps/server/src/main.js"]
 EXPOSE 7000
