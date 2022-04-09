@@ -1,12 +1,14 @@
 # 1. npm 패키지를 모두 설치한 이미지 1개를 생성함
 FROM node:16-alpine as installed
 RUN apk update
-RUN apk add g++ make python
+RUN apk add --no-cache --virtual apk add g++ make python3
 WORKDIR /app
 
 COPY . .
 
 RUN yarn
+
+RUN apk del .gyp
 
 # 2. 번들링함.
 FROM installed as built
