@@ -25,8 +25,8 @@ ENV NODE_ENV=prod
 RUN  ls -la
 RUN pwd
 
-COPY --from=built /apps/server/dist ./dist
-COPY --from=built /apps/server/tdol-process.env.dev ./
+COPY --from=built ./apps/server/dist ./dist
+COPY --from=built ./apps/server/tdol-process.env.dev ./
 
 CMD ["node", "dist/apps/server/dist/apps/server/src/main.js"]
 EXPOSE 7000
