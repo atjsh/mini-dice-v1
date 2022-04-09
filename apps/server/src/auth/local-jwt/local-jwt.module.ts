@@ -1,24 +1,29 @@
 import { CacheModule, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import * as redisStore from 'cache-manager-redis-store';
 import { AccessTokenController } from './access-token/access-token.controller';
 import { AccessTokenService } from './access-token/access-token.service';
 import { jwtConstants } from './constants';
 import { JwtAuthGuard } from './jwt.guard';
+import { JwtStrategy } from './jwt.strategy';
+import { LocalJwtController } from './local-jwt.controller';
 import { LocalJwtService } from './local-jwt.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
-import { JwtStrategy } from './jwt.strategy';
-import * as redisStore from 'cache-manager-redis-store';
-import { LocalJwtController } from './local-jwt.controller';
 
 @Module({
   imports: [
     JwtModule.register({
       secret: jwtConstants.secret,
     }),
-    CacheModule.register({
-      store: redisStore,
-      host: 'localhost',
-      port: 6379,
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get('REDIS_HOST'),
+        port: +configService.get<number>('REDIS_PORT')!,
+      }),
     }),
   ],
   controllers: [AccessTokenController, LocalJwtController],
