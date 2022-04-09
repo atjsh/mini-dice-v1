@@ -6,7 +6,6 @@ COPY . .
 
 RUN yarn
 
-RUN apk del .gyp
 
 # 2. 번들링함.
 FROM installed as built
