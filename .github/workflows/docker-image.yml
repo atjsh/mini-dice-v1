@@ -16,7 +16,7 @@ jobs:
         run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
 
       - name: Build the Docker image
-        run: docker build . --file mini-dice.Dockerfile --tag mini-dice-server:$(date +%s)
+        run: docker build . --file mini-dice.Dockerfile --tag mini-dice-server:${GITHUB_SHA::8}
 
       - name: stop and remove my old container with name mini-dice-server if they exist
         run: docker stop mini-dice-server || true && docker rm mini-dice-server || true
@@ -25,4 +25,4 @@ jobs:
         run: docker images
 
       - name: run container with the image
-        run: docker run -d --name mini-dice-server -p 7001:7000 mini-dice-server
+        run: docker run -d --name mini-dice-server -p 7001:7000 mini-dice-server:${GITHUB_SHA::8}
