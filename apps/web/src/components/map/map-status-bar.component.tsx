@@ -124,7 +124,7 @@ export const MapStatusBar: React.FC = () => {
   return mapStops && skillLogs ? (
     <div className="relative overflow-x-hidden md:h-6 h-4 flex-grow leading-none">
       <div
-        className="absolute flex md:gap-x-8 gap-x-3"
+        className="absolute flex md:gap-x-8 gap-x-1.5"
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',

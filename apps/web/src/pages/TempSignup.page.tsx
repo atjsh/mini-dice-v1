@@ -6,6 +6,7 @@ import {
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import {
   validateUsername,
@@ -105,19 +106,30 @@ function TempSignupForm() {
           ))}
         </select>
       </div>
-      <div className="">
+      <div className="flex flex-col gap-1 text-center">
         <HCaptcha
           sitekey={`${process.env.HCAPTCHA_SITE_KEY}`}
           onVerify={(token) => setHCaptchaToken(token)}
         />
       </div>
+      <a
+        className="inline-block text-base text-blue-600 hover:underline p-5 text-center"
+        href={getGoogleOAuthPageUrl()}
+      >
+        <span className=" text-black dark:text-white">
+          캡차 검사가 싫으신가요?
+        </span>{' '}
+        <br />
+        캡차 검사 없이 <span className="font-bold">구글 계정</span>으로 시작할
+        수도 있습니다. →
+      </a>
       <div className=" italic text-red-500">{error}</div>
 
       <button
         onClick={handleSubmit}
         disabled={disabled}
         className={
-          'inline-block px-5 py-7 rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
+          'inline-block px-5 py-5 max-w-xs w-full rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
           (disabled
             ? 'text-white bg-gray-600 cursor-progress'
             : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
