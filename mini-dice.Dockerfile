@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN yarn
+RUN yarn install --prod
 
 
 # 2. 번들링함.
@@ -13,18 +13,14 @@ WORKDIR /app
 
 RUN yarn workspace @apps/server build
 
-RUN  ls -la
-RUN pwd
 
 # 번들링된 프로젝트를 실행함.
 FROM installed
 WORKDIR /app
 
-ENV NODE_ENV=prod
+ENV NODE_ENV=production
 ENV APP_ENV=dev
 
-RUN  ls -la
-RUN pwd
 
 COPY --from=built /app/apps/server/dist ./dist
 COPY --from=built /app/apps/server/tdol-process.env.dev ./
