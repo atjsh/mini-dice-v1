@@ -1,5 +1,5 @@
 # 1. npm 패키지를 모두 설치한 이미지 1개를 생성함
-FROM node:16 as installed
+FROM node:16
 WORKDIR /app
 
 ENV NODE_ENV=production
