@@ -52,7 +52,10 @@ export class PublicProfileController {
   @JwtAuth()
   @Patch('me')
   updateUserById(@UserJwt() userJwt: UserJwtDto, @Body() user: UpdateUserDto) {
-    return this.userRepository.partialUpdateUser(userJwt.userId, user);
+    return this.userRepository.partialUpdateUser(userJwt.userId, {
+      username: user.username,
+      countryCode3: user.countryCode3,
+    });
   }
 
   @Get('others')
