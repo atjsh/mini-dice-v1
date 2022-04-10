@@ -22,7 +22,7 @@ const Messages = () => {
   useEffect(scrollToBottom, [skillLogMessages.length]);
 
   return (
-    <div className="px-5 flex-grow md:pb-0">
+    <div className="px-5 flex-grow md:pb-0 custom-min-h-screen">
       <RenderedSkillLogMessages />
       <div ref={messagesEndRef} />
     </div>
