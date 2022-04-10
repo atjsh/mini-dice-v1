@@ -1,0 +1,3 @@
+.dockerignore
+Dockerfile
+mini-dice.Dockerfile

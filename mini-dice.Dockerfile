@@ -12,7 +12,7 @@ RUN yarn install --prod
 
 RUN yarn workspace @apps/server build
 
-RUN cd /app/apps/server
+WORKDIR /app/apps/server
 
 CMD ["node", "./dist/apps/server/src/main.js"]
 EXPOSE 80
