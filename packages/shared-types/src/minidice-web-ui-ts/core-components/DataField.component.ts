@@ -1,10 +1,7 @@
-import { ChatElement } from 'chat-element-json-ts';
-import { DataFieldElementName } from './constants';
-
 /**
  * PlainMessage에 속할 수 있는 값들을 담고 있는 클래스
  */
-export class DataFieldPropsType {
+export class DataFieldType {
   // 표시할 값에 대한 설명
   label: string;
 
@@ -18,11 +15,6 @@ export class DataFieldPropsType {
   isCash: boolean;
 }
 
-export type DataFieldType = ChatElement<
-  typeof DataFieldElementName,
-  DataFieldPropsType
->;
-
-export function DataField(props: DataFieldPropsType): DataFieldType {
-  return new ChatElement(DataFieldElementName, props);
+export function DataField(props: DataFieldType) {
+  return props;
 }

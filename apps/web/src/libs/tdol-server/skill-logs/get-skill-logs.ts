@@ -1,8 +1,6 @@
+import { SkillRouteType } from '@packages/scenario-routing';
+import { MessageResponseType } from '@packages/shared-types';
 import { authedAxios } from '..';
-import {
-  MessageResponseType,
-  SkillRouteType,
-} from '../../skill-draw-ui-ts/types';
 
 export type ExposedSkillLogType = {
   skillDrawResult: MessageResponseType;

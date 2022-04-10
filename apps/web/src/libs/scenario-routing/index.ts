@@ -1,24 +1,23 @@
-import { SkillRouteType, SkillRouteURLType } from "../skill-draw-ui-ts/types";
+import { SkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 
 export enum SkillCallingClients {
-  Discord = "discord",
-  Web = "web"
+  Discord = 'discord',
+  Web = 'web',
 }
 /**
  * SkillRouteURL 문자열을 SKillRouteType의 객체로 변환함.
  */
 export function getSkillRouteFromSkillRouteURL(
-  skillRouteURL: SkillRouteURLType
+  skillRouteURL: SkillRoutePath,
 ): SkillRouteType {
-  const [scenarioName, skillGroupName, name] = skillRouteURL.split("/");
+  const [scenarioName, skillGroupName, name] = skillRouteURL.split('/');
 
   return {
     scenarioName,
     skillGroupName,
-    name
+    name,
   };
 }
-
 
 /**
  * 인자로 받은 SkillGroupType 인자들의 SkillGroup 값이 서로 동일한지 확인한다.

@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { v4 as uuidv4 } from 'uuid';
 import {
   DataFieldType,
   FormMessageType,
@@ -9,7 +6,10 @@ import {
   LinkType,
   PlainMessageType,
   UserActivityMessageType,
-} from '../../libs';
+} from '@packages/shared-types';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { v4 as uuidv4 } from 'uuid';
 import {
   DiceTossActivityEnum,
   diceTossActivityStatusAtom,

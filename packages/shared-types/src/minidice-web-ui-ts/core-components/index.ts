@@ -1,4 +1,3 @@
-export * from './constants';
 export * from './DataField.component';
 export * from './FormMessage.component';
 export * from './HostedImage.component';

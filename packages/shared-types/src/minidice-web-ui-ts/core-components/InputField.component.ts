@@ -1,7 +1,4 @@
-import { ChatElement } from 'chat-element-json-ts';
-import { InputFieldElementName } from './constants';
-
-export class InputFieldPropsType {
+export class InputFieldType {
   name: string;
 
   label: string;
@@ -25,11 +22,6 @@ export class InputFieldPropsType {
   isHidden?: boolean;
 }
 
-export type InputFieldType = ChatElement<
-  typeof InputFieldElementName,
-  InputFieldPropsType
->;
-
-export function InputField(props: InputFieldPropsType): InputFieldType {
-  return new ChatElement(InputFieldElementName, props);
+export function InputField(props: InputFieldType) {
+  return props;
 }

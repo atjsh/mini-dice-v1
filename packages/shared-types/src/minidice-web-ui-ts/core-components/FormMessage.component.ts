@@ -1,10 +1,8 @@
-import { ChatElement } from 'chat-element-json-ts';
-import { FormMessageElementName } from './constants';
 import { DataFieldType } from './DataField.component';
 import { InputFieldType } from './InputField.component';
 import { BaseMessage } from './Message.base.component';
 
-export class FormMessagePropsType implements BaseMessage {
+export class FormMessageType implements BaseMessage {
   type: 'formMessage';
 
   title?: string;
@@ -22,16 +20,11 @@ export class FormMessagePropsType implements BaseMessage {
   submitSkillRouteURL: string;
 }
 
-export type FormMessageType = ChatElement<
-  typeof FormMessageElementName,
-  FormMessagePropsType
->;
-
 export function FormMessage(
-  props: Omit<FormMessagePropsType, 'type'>,
+  props: Omit<FormMessageType, 'type'>,
 ): FormMessageType {
-  return new ChatElement(FormMessageElementName, {
+  return {
     ...props,
     type: 'formMessage',
-  });
+  };
 }

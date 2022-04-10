@@ -1,8 +1,6 @@
-import { ChatElement } from 'chat-element-json-ts';
-import { UserActivityMessageElementName } from '.';
 import { BaseMessage } from './Message.base.component';
 
-export class UserActivityMessagePropsType implements BaseMessage {
+export class UserActivityMessageType implements BaseMessage {
   type: 'diceTossUserActivityMessage' | 'interactionUserActivityMessage';
 
   title: string;
@@ -10,13 +8,8 @@ export class UserActivityMessagePropsType implements BaseMessage {
   description?: string;
 }
 
-export type UserActivityMessageType = ChatElement<
-  typeof UserActivityMessageElementName,
-  UserActivityMessagePropsType
->;
-
 export function UserActivityMessage(
-  props: UserActivityMessagePropsType,
+  props: UserActivityMessageType,
 ): UserActivityMessageType {
-  return new ChatElement(UserActivityMessageElementName, props);
+  return props;
 }

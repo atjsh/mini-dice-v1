@@ -1,6 +1,6 @@
-import { authedAxios } from "..";
-import { SkillRouteType } from "../../skill-draw-ui-ts/types";
-export * from "./map.hook";
+import { SkillRouteType } from '@packages/scenario-routing';
+import { authedAxios } from '..';
+export * from './map.hook';
 
 export class MapBlock {
   skillRoute: SkillRouteType;
@@ -9,5 +9,5 @@ export class MapBlock {
 }
 
 export async function getMap() {
-  return (await authedAxios.get<MapBlock[]>("/scenarios/d1/map")).data;
+  return (await authedAxios.get<MapBlock[]>('/scenarios/d1/map')).data;
 }

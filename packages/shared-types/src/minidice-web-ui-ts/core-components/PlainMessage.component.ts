@@ -1,5 +1,3 @@
-import { ChatElement } from 'chat-element-json-ts';
-import { PlainMessageElementName } from './constants';
 import { DataFieldType } from './DataField.component';
 import { HostedImageType } from './HostedImage.component';
 import { BaseMessage } from './Message.base.component';
@@ -7,7 +5,7 @@ import { BaseMessage } from './Message.base.component';
 /**
  * 서비스에서 보낸 메세지
  */
-export class PlainMessagePropsType implements BaseMessage {
+export class PlainMessageType implements BaseMessage {
   // 타입
   type: 'plainMessage';
 
@@ -24,16 +22,11 @@ export class PlainMessagePropsType implements BaseMessage {
   thumbnail?: HostedImageType;
 }
 
-export type PlainMessageType = ChatElement<
-  typeof PlainMessageElementName,
-  PlainMessagePropsType
->;
-
 export function PlainMessage(
-  props: Omit<PlainMessagePropsType, 'type'>,
+  props: Omit<PlainMessageType, 'type'>,
 ): PlainMessageType {
-  return new ChatElement(PlainMessageElementName, {
+  return {
     ...props,
     type: 'plainMessage',
-  });
+  };
 }

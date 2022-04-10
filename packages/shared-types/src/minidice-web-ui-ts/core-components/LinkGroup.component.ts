@@ -1,7 +1,6 @@
-import { ChatElement } from 'chat-element-json-ts';
-import { LinkGroupElementName, LinkType } from '.';
+import { LinkType } from './Link.component';
 
-export class LinkGroupPropsType {
+export class LinkGroupType {
   type: 'linkGroup';
 
   description: string;
@@ -9,11 +8,6 @@ export class LinkGroupPropsType {
   links: LinkType[];
 }
 
-export type LinkGroupType = ChatElement<
-  typeof LinkGroupElementName,
-  LinkGroupPropsType
->;
-
-export function LinkGroup(props: LinkGroupPropsType): LinkGroupType {
-  return new ChatElement(LinkGroupElementName, props);
+export function LinkGroup(props: LinkGroupType): LinkGroupType {
+  return props;
 }

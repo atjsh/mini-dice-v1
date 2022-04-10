@@ -1,9 +1,0 @@
-export const HostedImageElementName = 'hostedImage';
-export const DataFieldElementName = 'dataField';
-export const InputFieldElementName = 'inputField';
-export const FormMessageElementName = 'formMessage';
-export const PlainMessageElementName = 'plainMessage';
-export const MessageResponseElementName = 'messageResponse';
-export const UserActivityMessageElementName = 'userActivityMessage';
-export const LinkElementName = 'link';
-export const LinkGroupElementName = 'linkGroup';

@@ -1,5 +1,5 @@
-import { MessageResponsePropsType, MessageResponse } from '../core-components';
+import { MessageResponseType } from '../core-components';
 
-export function MessageResponseFactory(props: MessageResponsePropsType) {
-  return JSON.parse(JSON.stringify(MessageResponse(props)));
+export function MessageResponseFactory(props: MessageResponseType) {
+  return props;
 }

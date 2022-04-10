@@ -1,10 +1,10 @@
 import {
-  ExposedSkillLogType,
+  UserActivityMessageType,
+  PlainMessageType,
   FormMessageType,
   LinkGroupType,
-  PlainMessageType,
-  UserActivityMessageType,
-} from '../../../libs';
+} from '@packages/shared-types';
+import { ExposedSkillLogType } from '../../../libs';
 
 export interface SkillLogMessageInerface {
   message:

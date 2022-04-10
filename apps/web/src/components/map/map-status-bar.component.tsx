@@ -1,9 +1,9 @@
+import { SkillRouteType } from '@packages/scenario-routing';
 import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { mapMovingDelayTimeMS } from '../../common/timing';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
-import { SkillRouteType } from '../../libs/skill-draw-ui-ts/types';
 import { currentSkillRouteAtom } from './current-skill-route.atom';
 
 function endlessSlice(arr: any[], from: number, to: number) {
