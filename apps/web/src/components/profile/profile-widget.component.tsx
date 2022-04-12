@@ -17,9 +17,9 @@ export const ProfileWidget: React.FC = () => {
 
           <div className="flex flex-col gap-2 justify-center">
             <div className="font-bold text-xl break-all">@{user.username}</div>
-            <div className="font-bold text-base text-gray-500">
+            {/* <div className="font-bold text-base text-gray-500">
               {user.rank.toLocaleString()}위
-            </div>
+            </div> */}
             <div className="font-bold text-base text-gray-500">
               {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
             </div>
