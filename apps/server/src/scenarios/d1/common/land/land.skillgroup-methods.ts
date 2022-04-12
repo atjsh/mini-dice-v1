@@ -131,7 +131,7 @@ function landNotBuyableBCNotEnoughMoneey(landStatus: LandStatus) {
     PlainMessage({
       description: `앗! 이 토지를 구매하려면 ${cashLocale(
         landStatus.landPrice,
-      )}원이 필요합니다만, 돈이 부족하기에 토지를 구매할 수 없습니다. \n돈을 벌고 다시 들러 주세요!`,
+      )} 필요하지만, 돈이 부족하기에 토지를 구매할 수 없습니다. \n돈을 벌고 다시 들러 주세요!`,
     }),
   ];
 }
