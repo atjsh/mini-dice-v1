@@ -20,7 +20,7 @@ export const ProfileWidget: React.FC = () => {
             {/* <div className="font-bold text-base text-gray-500">
               {user.rank.toLocaleString()}위
             </div> */}
-            <div className="font-bold text-base text-gray-500">
+            <div className="font-bold text-base text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
               {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
             </div>
           </div>

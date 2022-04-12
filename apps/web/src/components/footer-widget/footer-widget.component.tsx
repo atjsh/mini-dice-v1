@@ -16,7 +16,9 @@ export const FooterWidgetComponent: React.FC = () => {
     <div className="self-center mb-10 flex flex-col gap-5 max-w-7xl px-2">
       <hr className=" border-gray-300" />
       <div className=" flex gap-y-1 flex-col ">
-        <div className="font-bold select-none">서비스</div>
+        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+          서비스
+        </div>
         <div className="flex gap-x-5 gap-y-3 flex-wrap">
           <a className="hover:underline" href={IndexPageURL}>
             Mini Dice
@@ -27,7 +29,9 @@ export const FooterWidgetComponent: React.FC = () => {
         </div>
       </div>
       <div className=" flex gap-y-1 flex-col ">
-        <div className="font-bold select-none">외부 링크</div>
+        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500 ">
+          외부 링크
+        </div>
         <div className="flex gap-x-5 gap-y-3 flex-wrap">
           <a
             href="https://discord.gg/2dhUGXwmBq"
@@ -52,7 +56,9 @@ export const FooterWidgetComponent: React.FC = () => {
         </div>
       </div>
       <div className={`flex gap-y-1 flex-col ${accessToken ? '' : 'hidden'}`}>
-        <div className="font-bold select-none">관리</div>
+        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+          관리
+        </div>
         <div className="flex gap-x-5 gap-y-3 flex-wrap">
           <Link className={`hover:underline`} to={LogoutPageURL}>
             로그아웃
@@ -63,7 +69,9 @@ export const FooterWidgetComponent: React.FC = () => {
         </div>
       </div>
       <div className=" flex gap-y-1 flex-col ">
-        <div className="font-bold select-none">정보</div>
+        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+          정보
+        </div>
         <div className="flex gap-x-5 gap-y-3 flex-wrap">
           <Link className="hover:underline" to={PrivacyPolicyPageURL}>
             개인정보 처리방침
