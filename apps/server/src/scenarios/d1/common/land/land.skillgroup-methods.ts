@@ -32,7 +32,7 @@ export function getCommonLandSkillGroupAlias(
     landStatus.landOwnedBy?.username
       ? strEllipsis(landStatus.landOwnedBy?.username, 6)
       : '운영자'
-  }의 ${adjective ? `${adjective} ` : ''}${landStatus.landName} 토지`;
+  }의 ${landStatus.landName} ${adjective ? adjective : ''}토지`;
 }
 
 function secondsToBiggerTime(seconds: number) {
