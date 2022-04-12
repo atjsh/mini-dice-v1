@@ -113,7 +113,9 @@ function landNotBuyableBCOtherUserAlreadyOwns(landStatus: LandStatus) {
         landStatus.landOwnedBy?.username
       }' 유저가 이 토지를 소유하고 있습니다. \n 이 토지는 ${
         landStatus.landExpiresAt
-          ? new Date(landStatus.landExpiresAt).toLocaleString('ko-KR')
+          ? new Date(landStatus.landExpiresAt).toLocaleString('ko-KR', {
+              timeZone: 'Asia/Seoul',
+            })
           : '나중'
       }에 구매할 수 있게 됩니다. 다시 이 칸에 들러 주세요!`,
     }),
