@@ -106,7 +106,10 @@ function landNotBuyableBCUserAlreadyOwns() {
   ];
 }
 
-function landNotBuyableBCOtherUserAlreadyOwns(landStatus: LandStatus) {
+function landNotBuyableBCOtherUserAlreadyOwns(
+  landStatus: LandStatus,
+  timezone: string,
+) {
   return [
     PlainMessage({
       description: `아직 '${
@@ -114,7 +117,7 @@ function landNotBuyableBCOtherUserAlreadyOwns(landStatus: LandStatus) {
       }' 유저가 이 토지를 소유하고 있습니다. \n 이 토지는 ${
         landStatus.landExpiresAt
           ? new Date(landStatus.landExpiresAt).toLocaleString('ko-KR', {
-              timeZone: 'Asia/Seoul',
+              timeZone: timezone,
             })
           : '나중'
       }에 구매할 수 있게 됩니다. 다시 이 칸에 들러 주세요!`,
@@ -169,6 +172,7 @@ export function commonLandSkillGroupWebIndexDraw(
           LandBuyableByUserEnum.ALREADY_OWNED_BY_OTHER
         ? landNotBuyableBCOtherUserAlreadyOwns(
             props.skillServiceResult.landStatus,
+            props.timezone,
           )
         : props.skillServiceResult.landBuyableByUserStatus.status ==
           LandBuyableByUserEnum.NOT_ENOUGH_MONEY

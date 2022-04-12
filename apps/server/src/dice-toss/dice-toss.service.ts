@@ -104,6 +104,7 @@ export class DiceTossService {
 
   async tossDiceAndGetWebMessageResponse(
     userJwt: UserJwtDto,
+    timezone: string,
   ): Promise<DiceTossOutputDto> {
     const user = await this.userRepository.findUserWithCache(userJwt.userId);
     isUserThrowingDiceTossAllowedOrThrow(user);
@@ -134,6 +135,7 @@ export class DiceTossService {
             userActivity: {
               type: 'gameStart',
             },
+            timezone: timezone,
           },
         );
 
@@ -185,6 +187,7 @@ export class DiceTossService {
           date: skillServiceLog.date,
           skillServiceResult: skillServiceResult,
           userActivity: diceUserActivity,
+          timezone: timezone,
         },
       );
 

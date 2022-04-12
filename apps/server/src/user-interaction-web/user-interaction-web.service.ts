@@ -27,6 +27,7 @@ export class UserInteractionWebService {
     callingSkillRoute: SkillRouteType,
     callingSkillParam: Record<string, string>,
     userJwt: UserJwtDto,
+    timezone: string,
   ): Promise<UserInteractionOutputDto> {
     const user = await this.userRepository.findUserWithCache(userJwt.userId);
     if (user.signupCompleted == false) {
@@ -65,6 +66,7 @@ export class UserInteractionWebService {
           date: skillServiceLog.date,
           skillServiceResult: skillServiceResult,
           userActivity: interactionUserActivity,
+          timezone: timezone,
         },
       );
 

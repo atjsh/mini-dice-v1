@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Headers, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { USER_PROFILE_APIS } from '../common';
@@ -16,11 +16,15 @@ export class RecentSkillLogsController {
   @Get('')
   async getRecentSkillLogsWeb(
     @UserJwt() userJwt: UserJwtDto,
+    @Headers('TimeZone') timezoneHeader: string | undefined,
     @Query('limit') limit: number,
   ) {
+    const timezone = timezoneHeader || 'Asia/Seoul';
+
     return this.recentSkillLogsService.getRecentSkillLogsWeb(
       userJwt.userId,
       limit,
+      timezone,
     );
   }
 }
