@@ -225,7 +225,7 @@ export class StockSkillGroup implements SkillGroupController {
           description: `${
             props.skillServiceResult.stockName
           } 주식을 처분하였습니다. ${cashLocale(
-            BigInt(props.skillServiceResult.stockSold),
+            props.skillServiceResult.stockSold,
           )} 받았습니다. \n이제 잔고가 ${cashLocale(
             props.skillServiceResult.userCash,
           )} 입니다.`,
