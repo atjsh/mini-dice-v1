@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PublicProfileVo } from '@packages/shared-types';
+import { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { serializeUserToJson } from '../user/entity/user.entity';
 import { UserRepository } from '../user/user.repository';
@@ -28,19 +28,21 @@ function pickKeysFromObjectKeys<Return>(obj: any, keys: string[]): Return {
 export class PublicProfileService {
   constructor(private userRepository: UserRepository) {}
 
-  async getUser(userJwt: UserJwtDto, isMe: boolean): Promise<PublicProfileVo> {
+  async getUser(
+    userJwt: UserJwtDto,
+    isMe: boolean,
+  ): Promise<UserEntityJson | PublicProfileVo> {
     try {
       const getUser = await this.userRepository
         .createQueryBuilder('user')
         .where('user.userId = :userId', { userId: userJwt.userId })
         .select()
-        .addSelect(
-          'row_number () over (order by user.cash + user.stockAmount * user.stockPrice desc)',
-          'rank',
-        )
+        .addSelect('1', 'rank')
         .getRawOne();
 
       if (isMe) {
+        console.log(getUser.rank);
+
         return {
           ...serializeUserToJson(removePrefixFromObjectKeys(getUser, 'user_')),
           rank: Number(getUser.rank),
@@ -68,6 +70,7 @@ export class PublicProfileService {
         'row_number () over (order by user.cash + user.stockAmount * user.stockPrice desc)',
         'rank',
       )
+      .where('user.isTerminated = :isTerminated', { isTerminated: false })
       .orderBy('totalCash', 'DESC')
       .take(limit)
       .skip(limit * (page - 1))
