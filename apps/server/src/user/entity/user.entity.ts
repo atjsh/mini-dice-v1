@@ -6,6 +6,7 @@ import {
   getStockStatus,
   serializeStockStatusToJson,
   StockIdType,
+  UserEntityJson,
   UserVo,
 } from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
@@ -202,14 +203,6 @@ export class UserEntity {
   @UpdateDateColumn({ type: 'timestamp', comment: '객체가 업데이트된 날짜' })
   updatedAt: Date;
 }
-
-/**
- * 유저 데이터를 JSON으로 변환시킨 데이터 타입.
- * 유저의 잔고량을 문자열로 변환시킨 상태로 데이터가 변환된다.
- */
-export type UserEntityJson = Omit<UserVo, 'cash'> & {
-  cash: string;
-};
 
 /**
  * 유저 데이터를 JSON 형태로 변환시킨다. 이 때, 유저의 잔고량을 string으로 변환한다.

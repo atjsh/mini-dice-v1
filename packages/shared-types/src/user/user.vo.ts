@@ -100,9 +100,21 @@ export class UserVo {
   createdAt: Date;
 
   updatedAt: Date;
+
+  rank: number;
 }
 
-export type PublicProfileVo = Pick<
-  UserVo,
-  'id' | 'username' | 'cash' | 'createdAt'
->;
+/**
+ * 유저 데이터를 JSON으로 변환시킨 데이터 타입.
+ * 유저의 잔고량을 문자열로 변환시킨 상태로 데이터가 변환된다.
+ */
+export type UserEntityJson = Omit<UserVo, 'cash' | 'rank'> & {
+  cash: string;
+};
+
+export type PublicProfileVo = Omit<
+  Pick<UserVo, 'id' | 'username' | 'cash' | 'createdAt' | 'rank'>,
+  'cash'
+> & {
+  cash: string;
+};

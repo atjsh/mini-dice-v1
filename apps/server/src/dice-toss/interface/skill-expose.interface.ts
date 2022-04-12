@@ -1,5 +1,5 @@
 import { SkillRouteType } from '@packages/scenario-routing';
-import { MessageResponseType, UserVo } from '@packages/shared-types';
+import { MessageResponseType, UserEntityJson } from '@packages/shared-types';
 
 export type ExposedSkillLogType = {
   skillDrawResult: MessageResponseType;
@@ -8,12 +8,12 @@ export type ExposedSkillLogType = {
 };
 
 export class DiceTossOutputDto {
-  user: UserVo;
+  user: UserEntityJson;
   diceResult: number[];
   skillLog: ExposedSkillLogType;
 }
 
 export class UserInteractionOutputDto {
-  user: UserVo;
+  user: UserEntityJson;
   skillLog: ExposedSkillLogType;
 }
