@@ -97,33 +97,29 @@ const UserActivityMessage: React.FC<{
     );
   }
 
-  if (userActivityMessage.description) {
-    return (
-      <div className="flex flex-row-reverse items-end">
-        <br style={{ fontSize: '0px' }} />
-        <div
-          className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
-        >
-          <div className="text-xs mb-1">
-            <Text t={userActivityMessage.title} />
-          </div>
-          <div>
-            <Text t={userActivityMessage.description} />
-          </div>
-        </div>
-        <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
-          {date.toLocaleString()}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-row-reverse">
+    <div className="flex flex-row-reverse items-end">
       <br style={{ fontSize: '0px' }} />
-      <div className={`${MessageCommon} ${UserActivityMessageCommon}`}>
-        <Text t={userActivityMessage.title} />
+      <div
+        className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
+      >
+        {userActivityMessage.description ? (
+          <>
+            <div className="text-xs mb-1">
+              <Text t={userActivityMessage.title} />
+            </div>
+            <div>
+              <Text t={userActivityMessage.description} />
+            </div>
+          </>
+        ) : (
+          <Text t={userActivityMessage.title} />
+        )}
       </div>
+      <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
+        {date.toLocaleString()}
+      </div>
+      <br style={{ fontSize: '0px' }} />
     </div>
   );
 };
