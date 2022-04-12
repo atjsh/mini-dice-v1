@@ -26,15 +26,22 @@ export class PublicProfileService {
   }
 
   async getUsers(limit: number, page: number): Promise<PublicProfileVo[]> {
-    const rawUsers = await this.userRepository.find({
-      take: limit,
-      skip: limit * (page - 1),
-      select: ['id', 'username', 'cash', 'createdAt'],
-      order: {
-        cash: 'DESC',
-      },
-    });
+    const rawUsers = await this.userRepository
+      .createQueryBuilder('user')
+      .select(['user.userId', 'user.username', 'user.createdAt'])
+      .addSelect('user.cash + user.stockAmount * user.stockPrice', 'totalCash')
+      .orderBy('totalCash', 'DESC')
+      .take(limit)
+      .skip(limit * (page - 1))
+      .getRawMany();
 
-    return rawUsers.map(serializeUserToJson);
+    return rawUsers
+      .map((rawResultUser) => ({
+        id: rawResultUser.userId,
+        username: rawResultUser.user_username,
+        cash: rawResultUser.totalCash,
+        createdAt: rawResultUser.user_createdAt,
+      }))
+      .map(serializeUserToJson);
   }
 }
