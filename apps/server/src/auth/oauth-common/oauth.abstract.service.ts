@@ -136,11 +136,12 @@ export abstract class OauthAbstractService {
         const [existingOAuthProviderUser] = existingOAuthProviderUsers;
 
         // 익명 계정의 캐시가 20,000 이상인 경우: 기존의 구글 계정에 편입시킴
-        if (anonUser.cash > 20000) {
+        if (anonUser.cash > 20000 || anonUser.stockId) {
           await this.userRepository.changeUserCash(
             existingOAuthProviderUser.id,
             anonUser.cash,
-            existingOAuthProviderUser.cash,
+            existingOAuthProviderUser.cash +
+              BigInt(anonUser.stockAmount) * BigInt(anonUser.stockPrice),
           );
         }
 
