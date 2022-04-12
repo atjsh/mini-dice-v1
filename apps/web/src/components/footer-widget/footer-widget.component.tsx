@@ -45,19 +45,13 @@ export const FooterWidgetComponent: React.FC = () => {
           </Link>
         </div>
       </div>
-      <div className=" flex gap-y-1 flex-col ">
+      <div className={`flex gap-y-1 flex-col ${accessToken ? '' : 'hidden'}`}>
         <div className="font-bold select-none">관리</div>
         <div className="flex gap-x-5 gap-y-3 flex-wrap">
-          <Link
-            className={`hover:underline ${accessToken ? '' : 'hidden'}`}
-            to={LogoutPageURL}
-          >
+          <Link className={`hover:underline`} to={LogoutPageURL}>
             로그아웃
           </Link>
-          <Link
-            className={`hover:underline ${accessToken ? '' : 'hidden'}`}
-            to={TerminatePageURL}
-          >
+          <Link className={`hover:underline`} to={TerminatePageURL}>
             회원탈퇴
           </Link>
         </div>
