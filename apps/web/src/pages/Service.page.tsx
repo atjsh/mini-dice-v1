@@ -104,7 +104,7 @@ export function Ingame({
               }}
               className={`${
                 isSidebarShowing == false
-                  ? 'border-gray-300 bg-white hover:bg-gray-100 active:bg-gray-300 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
+                  ? 'border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
               } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95  md:hidden`}
             >
@@ -124,9 +124,9 @@ export function Ingame({
                     style: 'currency',
                     currency: 'KRW',
                   })}`}{' '}
-              | <span className=" whitespace-nowrap">잔고 더보기</span>
+              | <span className=" whitespace-nowrap">자산 더보기</span>
             </button>
-            <div className="px-4 py-2 rounded-2xl text-base font-semibold select-none md:inline-block bg-white text-black dark:bg-zinc-800 dark:text-white hidden">
+            <div className="px-4 py-2 rounded-2xl text-base font-semibold select-none md:inline-block bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white hidden">
               💵{' '}
               {user
                 ? `${BigInt(

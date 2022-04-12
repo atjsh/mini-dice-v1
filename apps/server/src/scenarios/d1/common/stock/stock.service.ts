@@ -120,6 +120,7 @@ export class CommonStockService {
           });
 
         return {
+          stockSold: BigInt(user.stockAmount) * BigInt(user.stockPrice),
           userCash,
           stockName,
         };
