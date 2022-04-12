@@ -63,7 +63,9 @@ export class UserRepository extends Repository<UserEntity> {
         authProvider: createUser.authProvider,
         submitAllowedMapStop: null,
         isUserDiceTossForbidden: false,
-        canTossDiceAfter: new Date(),
+        canTossDiceAfter: new Date(
+          new Date().setHours(new Date().getHours() - 1),
+        ),
         countryCode3: createUser.countryCode3 ?? 'USA',
         signupCompleted: createUser.signupCompleted,
       }),
