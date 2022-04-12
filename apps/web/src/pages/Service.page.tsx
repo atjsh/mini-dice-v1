@@ -92,7 +92,7 @@ export function Ingame({
         </div>
         <Messages />
 
-        <div className="md:p-7 p-3 text-center  sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3 border-t dark:border-gray-700 border-gray-300">
+        <div className="md:p-7 p-3 text-center  sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300">
           <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-7xl w-full">
             <div className="md:text-3xl text-base">🗺</div>
             <MapStatusBar />
@@ -177,7 +177,7 @@ export function ServicePage() {
         <div className=" text-5xl md:text-6xl font-bold tracking-tight select-none">
           <WordmarkComponent />
         </div>
-        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-gray-700 box-border ">
+        <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />
           <WalletWidget />
           <ProfileWidget />
