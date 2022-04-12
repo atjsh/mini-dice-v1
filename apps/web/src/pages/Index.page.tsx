@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { HealthCheckComponent } from '../components/health-check/health-check.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useQueryString } from '../libs';
@@ -14,7 +15,9 @@ export function IndexPage() {
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
-            <h1 className="text-5xl font-bold">Mini Dice</h1>
+            <h1 className="text-5xl font-bold">
+              <WordmarkComponent />
+            </h1>
             <HealthCheckComponent />
 
             <div className=" self-center mt-5 text-xl">

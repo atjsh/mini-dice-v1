@@ -5,6 +5,7 @@ import {
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useCompleteSignup } from '../libs';
 import {
@@ -135,7 +136,9 @@ export function LoginSuccessPage() {
       <div className=" flex flex-col gap-10">
         <div className="text-center">
           <div className="flex-col flex gap-2">
-            <h1 className="text-5xl font-bold">Mini Dice</h1>
+            <h1 className="text-5xl font-bold">
+              <WordmarkComponent />
+            </h1>
             <div className="font-medium text-xl">회원가입 완료하기</div>
           </div>
         </div>

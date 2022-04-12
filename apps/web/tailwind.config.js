@@ -22,6 +22,7 @@ module.exports = {
         gray: {
           100: '#E8EAEC',
         },
+        minidice_red: '#ea4f43',
       },
     },
   },

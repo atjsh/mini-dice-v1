@@ -174,8 +174,9 @@ export function ServicePage() {
           isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
-        <WordmarkComponent />
-
+        <div className=" text-5xl md:text-6xl font-bold tracking-tight select-none">
+          <WordmarkComponent />
+        </div>
         <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-gray-700 box-border ">
           <ConnectWithOauthWidget />
           <WalletWidget />
