@@ -34,6 +34,23 @@ export function getCommonLandSkillGroupAlias(
   }의 ${adjective ? `${adjective} ` : ''}${landStatus.landName} 토지`;
 }
 
+function secondsToBiggerTime(seconds: number) {
+  if (seconds < 60) {
+    return `${seconds}초`;
+  }
+  if (seconds < 60 * 60) {
+    return `${Math.floor(seconds / 60)}분 ${seconds % 60}초`;
+  }
+  if (seconds < 60 * 60 * 60) {
+    return `${Math.floor(seconds / 3600)}시간 ${Math.floor(
+      (seconds % 3600) / 60,
+    )}분`;
+  }
+  return `${Math.floor(seconds / 3600 / 24)}일 ${Math.floor(
+    (seconds % 3600) / 60,
+  )}분`;
+}
+
 function landBuyableByUserMessage(
   landStatus: LandStatus,
   submitSkillRoute: SkillRouteType,
@@ -59,7 +76,7 @@ function landBuyableByUserMessage(
         }),
         DataField({
           label: '토지 소유 가능 시간',
-          value: `${landStatus.landTTLsecs}초`,
+          value: `${secondsToBiggerTime(landStatus.landTTLsecs)}`,
           inline: true,
           isCash: false,
         }),

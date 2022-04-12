@@ -211,7 +211,10 @@ export class CommonLandService {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
       };
     } else if (landStatus.isLandExpired == true) {
-      if (landStatus.landPrice * 2 > user.cash) {
+      if (
+        BigInt(user.cash) - BigInt(landStatus.landPrice + landStatus.tollFee) <
+        0
+      ) {
         return {
           status: LandBuyableByUserEnum.NOT_ENOUGH_MONEY,
         };
@@ -347,6 +350,7 @@ export class CommonLandService {
         buyingResult: LandBuyingResult.SUCCESS,
       };
     } catch (error) {
+      console.error(error);
       return {
         landName: props.landName,
         buyingResult: LandBuyingResult.FAIL,
