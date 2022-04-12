@@ -14,6 +14,7 @@ export const ProfileWidget: React.FC = () => {
               alt=""
             />
           </div> */}
+
           <div className="flex flex-col gap-2 justify-center">
             <div className="font-bold text-xl break-all">@{user.username}</div>
             <div className="font-bold text-base text-gray-500">
