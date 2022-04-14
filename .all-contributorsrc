@@ -13,6 +13,19 @@
       "contributions": [
         "tool"
       ]
+    },
+    {
+      "login": "ATJSH",
+      "name": "전성훈 / SUNG HOON CHON",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35552274?v=4",
+      "profile": "https://velog.io/@atjsh",
+      "contributions": [
+        "code",
+        "design",
+        "blog",
+        "doc",
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
