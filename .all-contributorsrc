@@ -26,6 +26,17 @@
         "doc",
         "infra"
       ]
+    },
+    {
+      "login": "jipark0716",
+      "name": "Park JungIn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37520386?v=4",
+      "profile": "https://github.com/jipark0716",
+      "contributions": [
+        "ideas",
+        "code",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
