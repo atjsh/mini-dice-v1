@@ -89,8 +89,6 @@ export class DiceTossService {
         } else {
           stockChanging = stockRisingPrice;
         }
-        console.log(stockChanging);
-        console.log(typeof stockChanging);
 
         return await this.commonStockService.changeStockPrice(
           userId,

@@ -8,8 +8,6 @@ export interface PushSkillLogMessageInterface {
 }
 
 function getArrayFromArrayLatest<T>(array: T[], max: number): T[] {
-  console.log(array.length);
-
   return array.length == max
     ? array.slice(Math.max(array.length - max / 2, 0))
     : array;

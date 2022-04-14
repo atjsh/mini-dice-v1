@@ -41,8 +41,6 @@ export class PublicProfileService {
         .getRawOne();
 
       if (isMe) {
-        console.log(getUser.rank);
-
         return {
           ...serializeUserToJson(removePrefixFromObjectKeys(getUser, 'user_')),
           rank: Number(getUser.rank),
@@ -75,7 +73,6 @@ export class PublicProfileService {
       .take(limit)
       .skip(limit * (page - 1))
       .getRawMany();
-    console.log(rawUsers);
 
     return rawUsers.map((rawResultUser) => ({
       id: rawResultUser.userId,
