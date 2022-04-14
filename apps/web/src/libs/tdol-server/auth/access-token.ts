@@ -87,13 +87,35 @@ authedAxios.interceptors.request.use(async (config: any) => {
 
 authedAxios.interceptors.response.use(async (response) => {
   if (response.status != 200 && response.status != 201) {
-    await axios.post(`${process.env.SERVER_URL}/frontend-error`, {
-      error: JSON.stringify({
-        status: response.status,
-        statusText: response.statusText,
-        data: response.data,
-      }),
-    });
+    try {
+      const accessToken = await getUserAccessToken();
+      await axios.post(
+        `${process.env.SERVER_URL}/frontend-error`,
+        {
+          error: JSON.stringify({
+            status: response.status,
+            statusText: response.statusText,
+            data: response.data,
+          }),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      alert(
+        `죄송합니다. 에러가 발생했습니다. 다음 텍스트를 복사해서 디스코드 채널에 제보해주시면 에러 해결에 도움이 됩니다. || ${JSON.stringify(
+          {
+            status: response.status,
+            statusText: response.statusText,
+            data: response.data,
+          },
+        )}`,
+      );
+    }
   }
 
   return response;

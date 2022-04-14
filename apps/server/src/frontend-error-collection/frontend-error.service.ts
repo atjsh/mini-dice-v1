@@ -10,8 +10,8 @@ export class FrontendErrorService {
     private repository: Repository<FrontendErrorEntity>,
   ) {}
 
-  async insert(error: string) {
-    await this.repository.save(this.repository.create({ error }), {
+  async insert(error: string, userId: string) {
+    await this.repository.save(this.repository.create({ error, userId }), {
       transaction: false,
       reload: false,
     });
