@@ -3,4 +3,4 @@ export const jwtConstants = {
 };
 
 export const REFRESH_TOKEN_EXPIRES_IN = 60 * 60 * 24; // 24h
-export const ACCESS_TOKEN_EXPIRES_IN = '10m';
+export const ACCESS_TOKEN_EXPIRES_IN = '60m';

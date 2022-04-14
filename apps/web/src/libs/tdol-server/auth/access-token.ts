@@ -10,15 +10,17 @@ export const authedAxios = axios.create({
   validateStatus: () => true,
 });
 
-const THIRTHY_SECONDS = 30 * 1000;
+const TWO_MINUTES = 1000 * 60 * 2;
 
 function isJwtTokenExpired(token: string) {
   const payloadBase64 = token.split('.')[1];
   const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
   const decoded = JSON.parse(decodedJson);
   const exp = decoded.exp;
-  const expired = Date.now() - THIRTHY_SECONDS >= exp * 1000;
-  return expired;
+
+  // exp * 1000 is date value
+  // if exp is less then 2 minutes from now, it is expired
+  return exp * 1000 < Date.now() + TWO_MINUTES;
 }
 
 async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
@@ -51,8 +53,12 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
     accessTokenFromLocalStorage &&
     isJwtTokenExpired(accessTokenFromLocalStorage) === false
   ) {
+    console.log('used', accessTokenFromLocalStorage);
+
     return accessTokenFromLocalStorage;
   } else {
+    console.log('revoked', accessTokenFromLocalStorage);
+
     revokeUserAccessToken();
   }
 
@@ -79,6 +85,7 @@ export async function logoutUser() {
 
 authedAxios.interceptors.request.use(async (config: any) => {
   const accessToken = await getUserAccessToken();
+  console.log(accessToken);
 
   config.headers.Authorization = `Bearer ${accessToken}`;
 
