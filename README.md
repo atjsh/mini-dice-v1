@@ -1,11 +1,5 @@
 # Mini Dice V1 Source Code
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
-
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 ## What is Mini Dice?
 
 - '주사위'를 굴려 맵을 이동하며 가상의 재화를 얻을 수 있고, 랭킹을 통해 다른 유저의 가상 재화 보유 상태를 확인할 수 있도록 하는 웹 서비스
