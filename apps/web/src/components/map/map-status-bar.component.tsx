@@ -69,7 +69,7 @@ export const MapStatusBar: React.FC = () => {
           ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
           : 0;
 
-      if (isInitalized == true) {
+      if (isInitalized) {
         const prevSkillRoute = zoomedMap[0].skillRoute;
         const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
           mapStops,

@@ -46,7 +46,7 @@ export class CommonStockService {
     stockId: StockIdType,
     stockAmount: bigint,
   ) {
-    if (stockAmount > 0 == false) {
+    if (!(stockAmount > 0)) {
       throw new ForbiddenException('not enough stock amount');
     }
 

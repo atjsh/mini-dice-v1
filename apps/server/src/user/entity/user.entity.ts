@@ -236,7 +236,7 @@ export function serializeUserToJson(user: UserEntity): UserEntityJson {
 export function isUserThrowingDiceTossAllowedOrThrow(user: UserEntity) {
   if (
     user.canTossDiceAfter != null &&
-    user.isUserDiceTossForbidden == false &&
+    !user.isUserDiceTossForbidden &&
     user.canTossDiceAfter < new Date()
   ) {
     return true;

@@ -210,7 +210,7 @@ export class CommonLandService {
       return {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
       };
-    } else if (landStatus.isLandExpired == true) {
+    } else if (landStatus.isLandExpired) {
       if (landStatus.landPrice * 2 > user.cash) {
         return {
           status: LandBuyableByUserEnum.NOT_ENOUGH_MONEY,
@@ -244,7 +244,7 @@ export class CommonLandService {
       throw new LandAlreadyBought({ landId, userId });
     }
 
-    if (land.isLandExpired == false) {
+    if (!land.isLandExpired) {
       throw new LandNotForSaleYet({ landId, buyableAt: land.expiresAt });
     }
 
@@ -304,9 +304,9 @@ export class CommonLandService {
     );
     // 통행세 걷기
     if (
-      [LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU].includes(
+      ![LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU].includes(
         landBuyableByUserStatus.status,
-      ) == false &&
+      ) &&
       landStatus.landOwnedBy != null
     ) {
       await Promise.all([

@@ -12,10 +12,7 @@ export class UserService {
     user: UserEntity,
     callingSkillRoute: SkillRouteType,
   ) {
-    if (user.submitAllowedMapStop == getSkillRoutePath(callingSkillRoute)) {
-      return true;
-    }
-    return false;
+    return user.submitAllowedMapStop == getSkillRoutePath(callingSkillRoute);
   }
 
   async isUserCallingSkillAllowedOrThrow(
@@ -24,9 +21,7 @@ export class UserService {
   ): Promise<boolean> {
     const user = await this.userRepository.findUserWithCache(userId);
 
-    if (
-      (await this.isUserCallingSkillAllowed(user, callingSkillRoute)) == false
-    ) {
+    if (!(await this.isUserCallingSkillAllowed(user, callingSkillRoute))) {
       throw new ForbiddenException(
         `${JSON.stringify(user.submitAllowedMapStop)} != ${JSON.stringify(
           callingSkillRoute,

@@ -12,7 +12,7 @@ export class PublicProfileService {
     try {
       const rawUser = await this.userRepository.findOneOrFail(
         userJwt.userId,
-        isMe == true
+        isMe
           ? undefined
           : {
               select: ['id', 'username', 'cash', 'createdAt'],

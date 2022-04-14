@@ -47,7 +47,7 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
 
   if (
     accessTokenFromLocalStorage &&
-    isJwtTokenExpired(accessTokenFromLocalStorage) === false
+    !isJwtTokenExpired(accessTokenFromLocalStorage)
   ) {
     return accessTokenFromLocalStorage;
   } else {

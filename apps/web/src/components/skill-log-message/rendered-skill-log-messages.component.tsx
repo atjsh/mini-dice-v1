@@ -74,8 +74,7 @@ const UserActivityMessage: React.FC<{
   }, [diceTossActivityStatus]);
 
   if (
-    userActivityMessage.type == 'diceTossUserActivityMessage' &&
-    isLast == true &&
+    userActivityMessage.type == 'diceTossUserActivityMessage' && isLast &&
     diceTossActivityStatus == DiceTossActivityEnum.Processing
   ) {
     return (
@@ -165,14 +164,14 @@ const LinkMessage: React.FC<{
   setIsButtonClicked,
   activateIssue,
 }) => {
-  return isDisabled == true ? (
+  return isDisabled ? (
     <button
       className={`${linkMessageButtonBaseClassName} text-white bg-gray-600 cursor-not-allowed`}
       onClick={activateIssue}
     >
       {link.displayText}
     </button>
-  ) : isButtonClicked == true ? (
+  ) : isButtonClicked ? (
     <button
       className={`${linkMessageButtonBaseClassName} text-white bg-gray-600 cursor-progress`}
       onClick={activateIssue}
@@ -230,7 +229,7 @@ const LinkGroupMessage: React.FC<{
             key={link.displayText}
             link={link}
             mutate={mutate}
-            isDisabled={isLast == false}
+            isDisabled={!isLast}
             isButtonClicked={isButtonClicked}
             setIsButtonClicked={setIsButtonClicked}
             activateIssue={activateIssue}
