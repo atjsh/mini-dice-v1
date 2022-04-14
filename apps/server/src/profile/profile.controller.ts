@@ -14,6 +14,7 @@ import {
   CompleteSignupUserDto,
   UpdateUserDto,
   UserIdType,
+  UserVo,
 } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
@@ -52,6 +53,12 @@ export class PublicProfileController {
   @JwtAuth()
   @Patch('me')
   updateUserById(@UserJwt() userJwt: UserJwtDto, @Body() user: UpdateUserDto) {
+    if ((user as UserVo).cash) {
+      return {
+        error: '치트는 금지됩니다. 당신의 시도는 로그에 남습니다.',
+      };
+    }
+
     return this.userRepository.partialUpdateUser(userJwt.userId, {
       username: user.username,
       countryCode3: user.countryCode3,
