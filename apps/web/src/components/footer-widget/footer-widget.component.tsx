@@ -42,6 +42,7 @@ export const FooterWidgetComponent: React.FC = () => {
           </a>
           <a
             href="https://twitter.com/TeamMiniDice1"
+            target="_blank"
             className="hover:underline"
           >
             트위터↗

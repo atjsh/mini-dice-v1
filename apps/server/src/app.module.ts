@@ -1,7 +1,7 @@
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
@@ -10,6 +10,7 @@ import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
 import { DiceTossModule } from './dice-toss/dice-toss.module';
 import { FrontendErrorModule } from './frontend-error-collection/frontend-error.module';
 import { HealthModule } from './health/health.module';
+import { HttpExceptionLoggingFilter } from './logging/http-exception.filter';
 import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-logger.interceptor';
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
@@ -106,6 +107,10 @@ import { UserModule } from './user/user.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpRequestResponseLoggingInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionLoggingFilter,
     },
   ],
 })
