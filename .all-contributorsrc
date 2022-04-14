@@ -26,6 +26,17 @@
         "doc",
         "infra"
       ]
+    },
+    {
+      "login": "hywlss9",
+      "name": "HyeongJin Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37681882?v=4",
+      "profile": "https://github.com/hywlss9",
+      "contributions": [
+        "ideas",
+        "code",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
