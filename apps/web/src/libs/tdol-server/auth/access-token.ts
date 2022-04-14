@@ -99,6 +99,7 @@ authedAxios.interceptors.response.use(async (response) => {
           }),
         },
         {
+          validateStatus: () => true,
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
