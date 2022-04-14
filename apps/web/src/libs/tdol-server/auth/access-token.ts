@@ -53,12 +53,8 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
     accessTokenFromLocalStorage &&
     isJwtTokenExpired(accessTokenFromLocalStorage) === false
   ) {
-    console.log('used', accessTokenFromLocalStorage);
-
     return accessTokenFromLocalStorage;
   } else {
-    console.log('revoked', accessTokenFromLocalStorage);
-
     revokeUserAccessToken();
   }
 
@@ -85,7 +81,6 @@ export async function logoutUser() {
 
 authedAxios.interceptors.request.use(async (config: any) => {
   const accessToken = await getUserAccessToken();
-  console.log(accessToken);
 
   config.headers.Authorization = `Bearer ${accessToken}`;
 

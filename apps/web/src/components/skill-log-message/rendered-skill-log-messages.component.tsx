@@ -396,12 +396,18 @@ const FormMessage: React.FC<{
       <div className="font-bold text-2xl mb-3">{form.description}</div>
       <div className="">
         {form.dataFields.map((dataField) => (
-          <DataFieldMessage dataField={dataField} />
+          <DataFieldMessage
+            dataField={dataField}
+            key={`${form.description}${dataField.label}${dataField.value}`}
+          />
         ))}
       </div>
       <div>
         {form.inputFields.map((inputField) => (
-          <InputFieldMessage inputField={inputField} />
+          <InputFieldMessage
+            inputField={inputField}
+            key={`${form.description}${inputField.label}${inputField.name}`}
+          />
         ))}
       </div>
       <div className="text-center mt-5 text-xl">
@@ -467,9 +473,10 @@ const RenderedMessageByType: React.FC<{
     | PlainMessageType
     | UserActivityMessageType;
   isLastSkillLog: boolean;
-  key: string;
+  messageKey: string;
+
   date: Date;
-}> = ({ message, isLastSkillLog: isLast, key, date }) => {
+}> = ({ message, isLastSkillLog: isLast, messageKey, date }) => {
   if (
     message.type == 'diceTossUserActivityMessage' ||
     message.type == 'interactionUserActivityMessage'
@@ -482,14 +489,16 @@ const RenderedMessageByType: React.FC<{
       />
     );
   } else if (message.type == 'plainMessage') {
-    return <PlainMessage plainMessage={message} key={`${key}-plainMessage`} />;
+    return (
+      <PlainMessage plainMessage={message} key={`${messageKey}-plainMessage`} />
+    );
   } else if (message.type == 'linkGroup') {
     return (
       <div className="overflow-x-auto">
         <LinkGroupMessage
           linkGroup={message as LinkGroupType}
           isLast={isLast}
-          key={`${key}-linkGroup`}
+          key={`${messageKey}-linkGroup`}
         />
       </div>
     );
@@ -499,7 +508,7 @@ const RenderedMessageByType: React.FC<{
         <FormMessage
           form={message as FormMessageType}
           isLast={isLast}
-          key={`${key}-form`}
+          key={`${messageKey}-form`}
         />
       </div>
     );
@@ -531,6 +540,7 @@ const RenderedSkillLogMessage: React.FC<{
                 message={message as PlainMessageType}
                 isLastSkillLog={isLastSkillLog}
                 key={`${skillLogId}${index}-${col}`}
+                messageKey={`${skillLogId}${index}-${col}`}
                 date={skillLogMessage.date}
               />
             </div>
@@ -545,6 +555,7 @@ const RenderedSkillLogMessage: React.FC<{
       message={skillLogMessage.message}
       isLastSkillLog={isLastSkillLog}
       key={`${skillLogId}${index}`}
+      messageKey={`${skillLogId}${index}`}
       date={skillLogMessage.date}
     />
   );
@@ -565,6 +576,7 @@ export const RenderedSkillLogMessages: React.FC<{}> = () => {
           skillLogMessage={message}
           index={index}
           isLastSkillLog={message.skillLogId == lastSkillLogId}
+          key={`slm${message.skillLogId}${index}${message.date}`}
         />
       ))}
     </>
