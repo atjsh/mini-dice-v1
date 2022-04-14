@@ -1,6 +1,6 @@
 # Mini Dice V1 Source Code
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## What is Mini Dice?
@@ -59,6 +59,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/MuxLee"><img src="https://avatars.githubusercontent.com/u/37520438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mux</b></sub></a><br /><a href="#tool-MuxLee" title="Tools">🔧</a></td>
     <td align="center"><a href="https://velog.io/@atjsh"><img src="https://avatars.githubusercontent.com/u/35552274?v=4?s=100" width="100px;" alt=""/><br /><sub><b>전성훈 / SUNG HOON CHON</b></sub></a><br /><a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Code">💻</a> <a href="#design-ATJSH" title="Design">🎨</a> <a href="#blog-ATJSH" title="Blogposts">📝</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Documentation">📖</a> <a href="#infra-ATJSH" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://github.com/hywlss9"><img src="https://avatars.githubusercontent.com/u/37681882?v=4?s=100" width="100px;" alt=""/><br /><sub><b>HyeongJin Park</b></sub></a><br /><a href="#ideas-hywlss9" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=hywlss9" title="Code">💻</a> <a href="https://github.com/ATJSH/mini-dice-v1/pulls?q=is%3Apr+reviewed-by%3Ahywlss9" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
