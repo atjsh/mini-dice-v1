@@ -46,7 +46,7 @@ export class SkillGroupAliasesService {
 
         return {
           skillRoute: skillRoute,
-          alias: `${await instance.getSkillGroupAlias()}칸`,
+          alias: `${await instance.getSkillGroupAlias()}`,
         };
       }),
     );
