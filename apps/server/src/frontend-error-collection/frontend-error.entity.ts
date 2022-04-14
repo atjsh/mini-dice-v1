@@ -2,6 +2,7 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -29,4 +30,7 @@ export class FrontendErrorEntity {
   @ManyToOne(() => UserEntity, (user) => user.frontendErrors)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
