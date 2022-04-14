@@ -58,7 +58,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/MuxLee"><img src="https://avatars.githubusercontent.com/u/37520438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mux</b></sub></a><br /><a href="#tool-MuxLee" title="Tools">🔧</a></td>
-    <td align="center"><a href="https://velog.io/@atjsh"><img src="https://avatars.githubusercontent.com/u/35552274?v=4?s=100" width="100px;" alt=""/><br /><sub><b>전성훈 / SUNG HOON CHON</b></sub></a><br /><a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Code">💻</a> <a href="#design-ATJSH" title="Design">🎨</a> <a href="#blog-ATJSH" title="Blogposts">📝</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Documentation">📖</a> <a href="#infra-ATJSH" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://velog.io/@atjsh"><img src="https://avatars.githubusercontent.com/u/35552274?v=4?s=100" width="100px;" alt=""/><br /><sub><b>전성훈 / SUNG HOON CHON</b></sub></a><br /><a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Code">💻</a> <a href="#design-ATJSH" title="Design">🎨</a> <a href="#blog-ATJSH" title="Blogposts">📝</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Documentation">📖</a> <a href="#infra-ATJSH" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#ideas-ATJSH" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
