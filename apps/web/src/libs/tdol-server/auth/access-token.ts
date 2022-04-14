@@ -84,3 +84,17 @@ authedAxios.interceptors.request.use(async (config: any) => {
 
   return config;
 });
+
+authedAxios.interceptors.response.use(async (response) => {
+  if (response.status != 200 && response.status != 201) {
+    await axios.post(`${process.env.SERVER_URL}/frontend-error`, {
+      error: JSON.stringify({
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data,
+      }),
+    });
+  }
+
+  return response;
+});
