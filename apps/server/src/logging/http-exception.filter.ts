@@ -25,12 +25,12 @@ export class HttpExceptionLoggingFilter implements ExceptionFilter {
     const errorResponseBody = exception.getResponse();
 
     this.logger.error(
-      {
+      JSON.stringify({
         statusCode: statusCode,
         errorResponseBody: errorResponseBody,
         stackTrace: exception.stack,
-      },
-      undefined,
+      }),
+      exception.stack,
       HttpExceptionLoggingFilter.name,
     );
 
