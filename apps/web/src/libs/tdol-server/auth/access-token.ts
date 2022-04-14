@@ -10,12 +10,14 @@ export const authedAxios = axios.create({
   validateStatus: () => true,
 });
 
+const THIRTHY_SECONDS = 30 * 1000;
+
 function isJwtTokenExpired(token: string) {
   const payloadBase64 = token.split('.')[1];
   const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
   const decoded = JSON.parse(decodedJson);
   const exp = decoded.exp;
-  const expired = Date.now() >= exp * 1000;
+  const expired = Date.now() - THIRTHY_SECONDS >= exp * 1000;
   return expired;
 }
 
