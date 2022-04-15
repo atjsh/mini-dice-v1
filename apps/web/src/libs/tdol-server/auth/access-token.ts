@@ -84,7 +84,7 @@ authedAxios.interceptors.request.use(async (config: any) => {
 
   config.headers.Authorization = `Bearer ${accessToken}`;
 
-  config.headers.TimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  config.headers.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return config;
 });

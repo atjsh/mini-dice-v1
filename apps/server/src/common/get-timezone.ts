@@ -14,18 +14,14 @@ function isValidTimeZone(tz: string) {
   }
 }
 
-const REQUEST_HEADER_TIMEZONE_KEY = 'TimeZone';
+const REQUEST_HEADER_TIMEZONE_KEY = 'timezone';
 
 export const TimeZone = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): string => {
     const request = ctx.switchToHttp().getRequest<FastifyRequest>();
     const timeZoneHeader = request.headers[REQUEST_HEADER_TIMEZONE_KEY];
 
-    console.log(timeZoneHeader);
-
     if (typeof timeZoneHeader == 'string' && isValidTimeZone(timeZoneHeader)) {
-      console.log(timeZoneHeader);
-
       return timeZoneHeader;
     }
 
