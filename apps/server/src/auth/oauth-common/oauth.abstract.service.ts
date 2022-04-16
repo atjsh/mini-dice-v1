@@ -81,7 +81,7 @@ export abstract class OauthAbstractService {
           refreshTokenEntity.userId,
         );
 
-        if (anonUser.email != null || anonUser.isTerminated == true) {
+        if (anonUser.email != null || anonUser.isTerminated) {
           throw new ForbiddenException('FYX');
         }
       } catch (e) {
