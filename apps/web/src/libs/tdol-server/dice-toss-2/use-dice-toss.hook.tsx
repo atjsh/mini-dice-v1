@@ -32,6 +32,9 @@ export const useDiceToss = () => {
   );
 
   return useMutation(tossDice, {
+    onMutate: async () => {
+      setDiceTossActivityStatus(DiceTossActivityEnum.Submitted);
+    },
     onSuccess: async (data) => {
       setDiceTossActivityStatus(DiceTossActivityEnum.Processing);
 
