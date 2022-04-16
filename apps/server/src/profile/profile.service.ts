@@ -1,28 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { serializeUserToJson } from '../user/entity/user.entity';
 import { UserRepository } from '../user/user.repository';
-
-function removePrefix(str: string, prefix: string) {
-  return str.startsWith(prefix) ? str.substring(prefix.length) : str;
-}
-
-function removePrefixFromObjectKeys<Return>(obj: any, prefix: string): Return {
-  const newObj = {};
-  Object.keys(obj).forEach((key) => {
-    newObj[removePrefix(key, prefix)] = obj[key];
-  });
-  return newObj as Return;
-}
-
-function pickKeysFromObjectKeys<Return>(obj: any, keys: string[]): Return {
-  const newObj = {};
-  keys.forEach((key) => {
-    newObj[key] = obj[key];
-  });
-  return newObj as Return;
-}
 
 @Injectable()
 export class PublicProfileService {
