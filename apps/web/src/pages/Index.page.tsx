@@ -20,7 +20,7 @@ export function IndexPage() {
             </h1>
             <HealthCheckComponent />
 
-            <div className=" self-center mt-5 text-xl">
+            <h2 className=" self-center mt-5 text-xl">
               {loginRequired ? (
                 '계속하려면 로그인하세요.'
               ) : (
@@ -29,7 +29,7 @@ export function IndexPage() {
                   오르세요.
                 </>
               )}
-            </div>
+            </h2>
           </div>
         </div>
         <div className=" flex flex-col text-center gap-5">

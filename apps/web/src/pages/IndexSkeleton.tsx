@@ -11,11 +11,11 @@ export function IndexSkeletonPage() {
             <h1 className="text-5xl font-bold">
               <WordmarkComponent />
             </h1>
-            <div className=" self-center mt-5 text-xl">
+            <h2 className=" self-center mt-5 text-xl">
               주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 랭킹에 오르세요.
               <br />
               <br />
-            </div>
+            </h2>
           </div>
         </div>
         <div className=" flex flex-col text-center gap-5"></div>
