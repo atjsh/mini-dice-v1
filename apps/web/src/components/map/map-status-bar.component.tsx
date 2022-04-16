@@ -124,7 +124,7 @@ export const MapStatusBar: React.FC = () => {
   return mapStops && skillLogs ? (
     <div className="relative overflow-x-hidden md:h-6 h-4 flex-grow leading-none">
       <div
-        className="absolute flex md:gap-x-8 gap-x-1.5"
+        className="absolute flex"
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',
@@ -140,7 +140,7 @@ export const MapStatusBar: React.FC = () => {
               index == 0
                 ? 'font-extrabold text-black dark:text-zinc-200'
                 : 'font-medium text-gray-700 dark:text-zinc-400'
-            } whitespace-nowrap tracking-tighter`}
+            } whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 border-slate-500 md:mr-4 md:pr-4`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}
           >

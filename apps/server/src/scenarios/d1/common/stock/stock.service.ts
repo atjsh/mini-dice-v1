@@ -57,12 +57,9 @@ export class CommonStockService {
 
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
-        console.log(userId);
-
         const user = await transactionManager
           .getCustomRepository(UserRepository)
           .findUserWithCache(userId);
-        console.log(user);
 
         if (user.stockId != null) {
           return StockOwningStatusEnum.SELLABLE;
@@ -120,6 +117,7 @@ export class CommonStockService {
           });
 
         return {
+          stockSold: BigInt(user.stockAmount) * BigInt(user.stockPrice),
           userCash,
           stockName,
         };

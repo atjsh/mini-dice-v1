@@ -1,0 +1,59 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "MuxLee",
+      "name": "Mux",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37520438?v=4",
+      "profile": "https://github.com/MuxLee",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "ATJSH",
+      "name": "전성훈 / SUNG HOON CHON",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35552274?v=4",
+      "profile": "https://velog.io/@atjsh",
+      "contributions": [
+        "code",
+        "design",
+        "blog",
+        "doc",
+        "infra"
+      ]
+    },
+    {
+      "login": "jipark0716",
+      "name": "Park JungIn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37520386?v=4",
+      "profile": "https://github.com/jipark0716",
+      "contributions": [
+        "ideas",
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "hywlss9",
+      "name": "HyeongJin Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37681882?v=4",
+      "profile": "https://github.com/hywlss9",
+      "contributions": [
+        "ideas",
+        "code",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "mini-dice-v1",
+  "projectOwner": "ATJSH",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

@@ -19,10 +19,10 @@ export class UserRepository extends Repository<UserEntity> {
    */
   async findUserWithCache(userId: UserIdType): Promise<UserEntity> {
     const user = await this.findOneOrFail(userId, {
-      cache: {
-        id: getCacheKey(userId),
-        milliseconds: CACHE_DURATION_MS,
-      },
+      // cache: {
+      //   id: getCacheKey(userId),
+      //   milliseconds: CACHE_DURATION_MS,
+      // },
     });
 
     return {
@@ -61,7 +61,9 @@ export class UserRepository extends Repository<UserEntity> {
         authProvider: createUser.authProvider,
         submitAllowedMapStop: null,
         isUserDiceTossForbidden: false,
-        canTossDiceAfter: new Date(),
+        canTossDiceAfter: new Date(
+          new Date().setHours(new Date().getHours() - 1),
+        ),
         countryCode3: createUser.countryCode3 ?? 'USA',
         signupCompleted: createUser.signupCompleted,
       }),

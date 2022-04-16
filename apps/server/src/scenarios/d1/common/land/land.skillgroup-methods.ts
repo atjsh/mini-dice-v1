@@ -1,5 +1,6 @@
 import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import {
+  cashLocale,
   DataField,
   FormMessage,
   InputField,
@@ -31,7 +32,24 @@ export function getCommonLandSkillGroupAlias(
     landStatus.landOwnedBy?.username
       ? strEllipsis(landStatus.landOwnedBy?.username, 6)
       : '운영자'
-  }의 ${adjective ? `${adjective} ` : ''}${landStatus.landName} 토지`;
+  }의 ${landStatus.landName} ${adjective ? adjective : ''}토지`;
+}
+
+function secondsToBiggerTime(seconds: number) {
+  if (seconds < 60) {
+    return `${seconds}초`;
+  }
+  if (seconds < 60 * 60) {
+    return `${Math.floor(seconds / 60)}분 ${seconds % 60}초`;
+  }
+  if (seconds < 60 * 60 * 60) {
+    return `${Math.floor(seconds / 3600)}시간 ${Math.floor(
+      (seconds % 3600) / 60,
+    )}분`;
+  }
+  return `${Math.floor(seconds / 3600 / 24)}일 ${Math.floor(
+    (seconds % 3600) / 60,
+  )}분`;
 }
 
 function landBuyableByUserMessage(
@@ -59,7 +77,7 @@ function landBuyableByUserMessage(
         }),
         DataField({
           label: '토지 소유 가능 시간',
-          value: `${landStatus.landTTLsecs}초`,
+          value: `${secondsToBiggerTime(landStatus.landTTLsecs)}`,
           inline: true,
           isCash: false,
         }),
@@ -89,14 +107,19 @@ function landNotBuyableBCUserAlreadyOwns() {
   ];
 }
 
-function landNotBuyableBCOtherUserAlreadyOwns(landStatus: LandStatus) {
+function landNotBuyableBCOtherUserAlreadyOwns(
+  landStatus: LandStatus,
+  timezone: string,
+) {
   return [
     PlainMessage({
       description: `아직 '${
         landStatus.landOwnedBy?.username
       }' 유저가 이 토지를 소유하고 있습니다. \n 이 토지는 ${
         landStatus.landExpiresAt
-          ? new Date(landStatus.landExpiresAt).toLocaleString('ko-KR')
+          ? new Date(landStatus.landExpiresAt).toLocaleString('ko-KR', {
+              timeZone: timezone,
+            })
           : '나중'
       }에 구매할 수 있게 됩니다. 다시 이 칸에 들러 주세요!`,
     }),
@@ -106,7 +129,9 @@ function landNotBuyableBCOtherUserAlreadyOwns(landStatus: LandStatus) {
 function landNotBuyableBCNotEnoughMoneey(landStatus: LandStatus) {
   return [
     PlainMessage({
-      description: `앗! 이 토지를 구매하려면 ${landStatus.landPrice}원이 필요합니다만, 돈이 부족하기에 토지를 구매할 수 없습니다. \n돈을 벌고 다시 들러 주세요!`,
+      description: `앗! 이 토지를 구매하려면 ${cashLocale(
+        landStatus.landPrice,
+      )} 필요하지만, 돈이 부족하기에 토지를 구매할 수 없습니다. \n돈을 벌고 다시 들러 주세요!`,
     }),
   ];
 }
@@ -150,6 +175,7 @@ export function commonLandSkillGroupWebIndexDraw(
           LandBuyableByUserEnum.ALREADY_OWNED_BY_OTHER
         ? landNotBuyableBCOtherUserAlreadyOwns(
             props.skillServiceResult.landStatus,
+            props.timezone,
           )
         : props.skillServiceResult.landBuyableByUserStatus.status ==
           LandBuyableByUserEnum.NOT_ENOUGH_MONEY

@@ -15,6 +15,7 @@ export class RecentSkillLogsService {
   async getRecentSkillLogsWeb(
     userId: UserIdType,
     limit: number,
+    timezone: string,
   ): Promise<ExposedSkillLogType[]> {
     const recentSkillLogs = await this.skillLogsService.getLatestLog({
       userId,
@@ -29,6 +30,7 @@ export class RecentSkillLogsService {
               date: skillLog.date,
               skillServiceResult: skillLog.skillServiceResult,
               userActivity: skillLog.userActivity,
+              timezone: timezone,
             },
           );
 

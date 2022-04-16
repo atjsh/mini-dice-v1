@@ -22,6 +22,7 @@ function App(props) {
           <Switch>
             {protectedRoutes.map((route) => (
               <Route
+                key={route.path}
                 path={route.path}
                 exact={route.exact}
                 render={() =>

@@ -1,5 +1,12 @@
 export const WordmarkComponent: React.FC = () => (
-  <div className=" text-5xl md:text-6xl font-bold tracking-tight select-none">
-    Mini Dice
-  </div>
+  <>
+    Mini <span className="text-minidice_red">Dice</span>{' '}
+    <span
+      className={`text-xl tracking-normal font-normal ${
+        process.env.WEB_VERSION_KIND === 'beta' ? '' : 'hidden'
+      }`}
+    >
+      (베타)
+    </span>
+  </>
 );

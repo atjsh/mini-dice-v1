@@ -6,7 +6,9 @@ const ValueDisplay: React.FC<{
   fontSize: 'text-md' | 'text-3xl' | 'text-4xl';
 }> = ({ value, label, fontSize }) => (
   <div className="flex-1">
-    <div className="font-extrabold">{label}</div>
+    <div className="font-extrabold text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
+      {label}
+    </div>
     <div className={`${fontSize} break-all`}>
       {value.includes('\n')
         ? value.split('\n').map((line, index) => (

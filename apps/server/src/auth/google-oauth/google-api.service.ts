@@ -47,7 +47,6 @@ export class GoogleApiService {
         },
       ),
     );
-    console.log(data);
 
     return data.access_token;
   }

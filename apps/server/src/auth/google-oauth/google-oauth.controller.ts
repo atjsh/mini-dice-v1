@@ -21,7 +21,6 @@ export class GoogleOAuthController {
     @Req() request: FastifyRequest,
   ) {
     const websiteUrl = Buffer.from(websiteUrlBase64, 'base64').toString();
-    console.log(websiteUrl, authCode);
 
     try {
       const googleOAuthResult =

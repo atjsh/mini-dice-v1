@@ -10,6 +10,7 @@ export type SkillDrawPropsType<
   SkillServiceResult,
 > = {
   date: Date;
+  timezone: string;
   userActivity: UserActivity;
   skillServiceResult: SkillServiceResult;
 };

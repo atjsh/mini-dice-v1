@@ -47,7 +47,7 @@ export class DiceTossService {
     return Array(dices)
       .fill(0)
       .map(() => getRandomInteger(1, 6));
-    return [19];
+    // return [19];
   }
 
   private moveUserForward(
@@ -89,8 +89,6 @@ export class DiceTossService {
         } else {
           stockChanging = stockRisingPrice;
         }
-        console.log(stockChanging);
-        console.log(typeof stockChanging);
 
         return await this.commonStockService.changeStockPrice(
           userId,
@@ -104,6 +102,7 @@ export class DiceTossService {
 
   async tossDiceAndGetWebMessageResponse(
     userJwt: UserJwtDto,
+    timezone: string,
   ): Promise<DiceTossOutputDto> {
     const user = await this.userRepository.findUserWithCache(userJwt.userId);
     isUserThrowingDiceTossAllowedOrThrow(user);
@@ -134,6 +133,7 @@ export class DiceTossService {
             userActivity: {
               type: 'gameStart',
             },
+            timezone: timezone,
           },
         );
 
@@ -185,6 +185,7 @@ export class DiceTossService {
           date: skillServiceLog.date,
           skillServiceResult: skillServiceResult,
           userActivity: diceUserActivity,
+          timezone: timezone,
         },
       );
 
