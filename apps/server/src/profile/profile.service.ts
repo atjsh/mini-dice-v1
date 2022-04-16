@@ -33,6 +33,7 @@ export class PublicProfileService {
     isMe: boolean,
   ): Promise<UserEntityJson | PublicProfileVo> {
     try {
+
       const getUser = await this.userRepository
         .createQueryBuilder('user')
         .where('user.userId = :userId', { userId: userJwt.userId })

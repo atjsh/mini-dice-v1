@@ -35,7 +35,7 @@ export class GoogleOAuthController {
         .status(301)
         .redirect(
           `${websiteUrl}/${
-            googleOAuthResult.isSignupFinished == true
+            googleOAuthResult.isSignupFinished
               ? 'finish-login'
               : 'finish-signup'
           }`,

@@ -52,13 +52,11 @@ export class UserRepository extends Repository<UserEntity> {
     return await this.save(
       this.create({
         cash: BigInt(1000),
-        username:
-          _.isEmpty(createUser.username) == false
-            ? createUser.username
-            : `유저${getRandomInteger(
-                10000000000,
-                99999999999,
-              )}${getRandomString(4)}`,
+        username: !_.isEmpty(createUser.username)
+          ? createUser.username
+          : `유저${getRandomInteger(10000000000, 99999999999)}${getRandomString(
+              4,
+            )}`,
         email: createUser.email,
         authProvider: createUser.authProvider,
         submitAllowedMapStop: null,
@@ -105,12 +103,11 @@ export class UserRepository extends Repository<UserEntity> {
   ) {
     return await this.partialUpdateUser(userId, {
       countryCode3,
-      username:
-        _.isEmpty(username) == false
-          ? username
-          : `유저${getRandomInteger(10000000000, 99999999999)}${getRandomString(
-              4,
-            )}`,
+      username: !_.isEmpty(username)
+        ? username
+        : `유저${getRandomInteger(10000000000, 99999999999)}${getRandomString(
+            4,
+          )}`,
       signupCompleted: true,
     });
   }
@@ -139,6 +136,7 @@ export class UserRepository extends Repository<UserEntity> {
    * 유저가 주사위를 굴릴 수 있도록 조정한다.
    * @param userId
    * @param canTossDiceAt
+   * @param resetSubmitAllowedMapStop
    * @returns
    */
   async setUserCanTossDice(

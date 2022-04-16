@@ -41,7 +41,7 @@ function App(props) {
                       />
                     )
                   ) : route.protection == 'authed' ? (
-                    isNotAuthed == true ? (
+                    isNotAuthed ? (
                       <Redirect
                         to={{
                           pathname: ServicePageURL,

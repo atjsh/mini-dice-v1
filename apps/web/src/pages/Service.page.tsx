@@ -103,7 +103,7 @@ export function Ingame({
                 setisSidebarShowing(!isSidebarShowing);
               }}
               className={`${
-                isSidebarShowing == false
+                !isSidebarShowing
                   ? 'border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
               } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95  md:hidden`}
@@ -171,7 +171,7 @@ export function ServicePage() {
     <div className="custom-h-screen w-screen flex relative overflow-x-hidden">
       <div
         className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
-          isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
+          !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
         <div className=" text-5xl md:text-6xl font-bold tracking-tight select-none">
