@@ -47,7 +47,7 @@ export class PublicProfileController {
   @JwtAuth()
   @Get('me')
   async getProfile(@UserJwt() userJwt: UserJwtDto) {
-    return await this.profileService.getUser(userJwt, true);
+    return await this.profileService.getUser(userJwt);
   }
 
   @JwtAuth()
@@ -69,12 +69,6 @@ export class PublicProfileController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async getOthersProfiles(@Query() { limit, page }: PageDto) {
     return await this.profileService.getUsers(limit, page);
-  }
-
-  @JwtAuth()
-  @Get('others/:otherUserId')
-  async getOthersProfile(@Param('otherUserId') otherUserId: UserIdType) {
-    return await this.profileService.getUser({ userId: otherUserId }, false);
   }
 
   @JwtAuth()

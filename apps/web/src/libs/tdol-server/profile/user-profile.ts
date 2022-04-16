@@ -1,11 +1,15 @@
-import { PublicProfileVo, UserVo } from '@packages/shared-types';
+import {
+  PublicProfileVo,
+  UserEntityJson,
+  UserVo,
+} from '@packages/shared-types';
 import { queryClient } from '../../..';
 import { useMutation } from 'react-query';
 import { authedAxios, UseUserHookKey } from '..';
 import { revokeUserAccessToken } from '../auth';
 
-export async function getUserVo(): Promise<UserVo> {
-  const response = await authedAxios.get<UserVo>(`/profile/me`);
+export async function getUserVo(): Promise<UserEntityJson> {
+  const response = await authedAxios.get<UserEntityJson>(`/profile/me`);
   if (response.status == 403) {
     revokeUserAccessToken();
     throw Error('User is not authenticated');

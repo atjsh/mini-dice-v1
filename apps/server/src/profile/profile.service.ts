@@ -28,35 +28,10 @@ function pickKeysFromObjectKeys<Return>(obj: any, keys: string[]): Return {
 export class PublicProfileService {
   constructor(private userRepository: UserRepository) {}
 
-  async getUser(
-    userJwt: UserJwtDto,
-    isMe: boolean,
-  ): Promise<UserEntityJson | PublicProfileVo> {
-    try {
-      const getUser = await this.userRepository
-        .createQueryBuilder('user')
-        .where('user.userId = :userId', { userId: userJwt.userId })
-        .select()
-        .addSelect('1', 'rank')
-        .getRawOne();
-
-      if (isMe) {
-        return {
-          ...serializeUserToJson(removePrefixFromObjectKeys(getUser, 'user_')),
-          rank: Number(getUser.rank),
-        };
-      } else {
-        return {
-          ...pickKeysFromObjectKeys(
-            serializeUserToJson(removePrefixFromObjectKeys(getUser, 'user_')),
-            ['id', 'username', 'cash', 'createdAt'],
-          ),
-          rank: Number(getUser.rank),
-        };
-      }
-    } catch (error) {
-      throw new ForbiddenException('User not found');
-    }
+  async getUser(userJwt: UserJwtDto): Promise<UserEntityJson> {
+    return serializeUserToJson(
+      await this.userRepository.findUserWithCache(userJwt.userId),
+    );
   }
 
   async getUsers(limit: number, page: number): Promise<PublicProfileVo[]> {
