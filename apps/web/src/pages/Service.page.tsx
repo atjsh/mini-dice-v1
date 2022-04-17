@@ -176,7 +176,7 @@ export function ServicePage() {
           !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
-        <div className="font-bold tracking-tight select-none pt-3 text-center md:text-left md:pl-3 md:pt-3">
+        <div className="font-bold tracking-tight pt-3 text-center md:text-left md:pl-3 md:pt-3">
           <div className="text-4xl md:text-4xl">
             <KoreanWordmarkComponent />
           </div>
