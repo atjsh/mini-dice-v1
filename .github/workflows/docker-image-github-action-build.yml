@@ -24,4 +24,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
 
       - name: Build the Docker image
-        run: docker build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev --push .
+        run: docker build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev .
+
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev
