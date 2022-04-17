@@ -93,8 +93,7 @@ export function Ingame({
         <Messages />
 
         <div className="md:p-7 p-3 text-center  sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300">
-          <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-7xl w-full">
-            <div className="md:text-3xl text-base">🗺</div>
+          <div className="flex gap-x-3 items-start text-sm md:text-xl max-w-7xl w-full">
             <MapStatusBar />
           </div>
           <div className=" ">

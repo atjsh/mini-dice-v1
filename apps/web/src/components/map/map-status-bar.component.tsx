@@ -1,6 +1,6 @@
 import { SkillRouteType } from '@packages/scenario-routing';
 import * as _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { mapMovingDelayTimeMS } from '../../common/timing';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
@@ -59,6 +59,14 @@ export const MapStatusBar: React.FC = () => {
   }, []);
 
   const currentSkillRoute = useRecoilValue(currentSkillRouteAtom);
+
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (mapContainerRef.current) {
+      mapContainerRef.current.scrollLeft = 0;
+    }
+  }, [currentSkillRoute]);
 
   useEffect(() => {
     if (mapStops !== undefined && currentSkillRoute !== undefined) {
@@ -122,9 +130,12 @@ export const MapStatusBar: React.FC = () => {
   }, [currentSkillRoute, mapStops]);
 
   return mapStops && skillLogs ? (
-    <div className="relative overflow-x-hidden md:h-6 h-4 flex-grow leading-none">
+    <div
+      className="relative overflow-x-scroll flex-grow leading-none px-2 py-3 rounded-md md:rounded-2xl md:px-4 md:py-5 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white"
+      ref={mapContainerRef}
+    >
       <div
-        className="absolute flex"
+        className=" relative flex"
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',
