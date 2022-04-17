@@ -59,5 +59,7 @@ export const OrderedD1ScenarioRoutes: SkillRouteType[] = [
   D1ScenarioRoutes.skillGroups.land5,
   D1ScenarioRoutes.skillGroups.dragonMoney,
   D1ScenarioRoutes.skillGroups.fastCar,
+  D1ScenarioRoutes.skillGroups.stockUp,
+  D1ScenarioRoutes.skillGroups.stockDown,
   D1ScenarioRoutes.skillGroups.land6,
 ].map((skillGroup) => skillGroup.skills[IndexSkill]);

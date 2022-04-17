@@ -19,10 +19,10 @@ export class UserRepository extends Repository<UserEntity> {
    */
   async findUserWithCache(userId: UserIdType): Promise<UserEntity> {
     const user = await this.findOneOrFail(userId, {
-      // cache: {
-      //   id: getCacheKey(userId),
-      //   milliseconds: CACHE_DURATION_MS,
-      // },
+      cache: {
+        id: getCacheKey(userId),
+        milliseconds: CACHE_DURATION_MS,
+      },
     });
 
     return {

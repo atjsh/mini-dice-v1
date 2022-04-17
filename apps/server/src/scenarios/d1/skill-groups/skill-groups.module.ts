@@ -18,6 +18,8 @@ import { GameDevModule } from './game-dev/game-dev.module';
 import { PickedItemModule } from './picked-item/picked-item.module';
 import { FireModule } from './fire/fire.module';
 import { StockModule } from './stock/stock.module';
+import { StockUpModule } from './stock-up/stock-up.module';
+import { StockDownModule } from './stock-down/stock-down.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { StockModule } from './stock/stock.module';
     Land5Module,
     DragonMoneyModule,
     FastCarModule,
+    StockUpModule,
+    StockDownModule,
     Land6Module,
   ],
 })
