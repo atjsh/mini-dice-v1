@@ -4,3 +4,5 @@ mini-dice.Dockerfile
 yarn.lock
 apps/web/**/*
 apps/web
+docs
+docs/**/*
