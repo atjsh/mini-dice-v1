@@ -36,7 +36,9 @@ export const TerminatePageURL = '/terminate';
 export const RankingPgaeURL = '/ranking';
 
 function getTitle(subTitle?: string) {
-  return `Mini Dice ${subTitle ? '-' : ''} ${subTitle ?? ''}`;
+  return `Mini Dice | 미니다이스 인생게임 ${subTitle ? '-' : ''} ${
+    subTitle ?? ''
+  }`;
 }
 
 const protectedRoutesUnreversed: ProtectedRoute[] = [
