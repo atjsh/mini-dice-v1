@@ -164,6 +164,11 @@ export const MapStatusBar: React.FC = () => {
             {stop.alias}
           </div>
         ))}
+        {zoomedMap.length === 0 && (
+          <div className="text-zinc-600 dark:text-zinc-400 pr-2 mr-2 border-r-2 md:mr-4 md:pr-4 whitespace-nowrap tracking-tighter">
+            불러오는 중
+          </div>
+        )}
       </div>
     </div>
   ) : (
