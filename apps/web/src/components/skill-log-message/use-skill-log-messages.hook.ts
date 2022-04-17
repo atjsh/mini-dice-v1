@@ -7,12 +7,6 @@ export interface PushSkillLogMessageInterface {
   delay?: number;
 }
 
-function getArrayFromArrayLatest<T>(array: T[], max: number): T[] {
-  return array.length == max
-    ? array.slice(Math.max(array.length - max / 2, 0))
-    : array;
-}
-
 export const useSkillLogMessages = () => {
   const [skillLogMessages, setSkillLogMessages] = useRecoilState(
     skillLogMessagesState,
@@ -24,14 +18,10 @@ export const useSkillLogMessages = () => {
     pushSkillLogMessages.map(({ skillLogMessage, delay }) => {
       if (delay) {
         setTimeout(() => {
-          setSkillLogMessages((old) =>
-            getArrayFromArrayLatest([...old, skillLogMessage], 50),
-          );
+          setSkillLogMessages((old) => [...old, skillLogMessage]);
         }, delay);
       } else {
-        setSkillLogMessages((old) =>
-          getArrayFromArrayLatest([...old, skillLogMessage], 50),
-        );
+        setSkillLogMessages((old) => [...old, skillLogMessage]);
       }
     });
   }
