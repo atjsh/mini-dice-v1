@@ -17,7 +17,7 @@ jobs:
         run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
 
       - name: login docker registry
-        run: docker login -u '$DOCKER_USERNAME' -p '$DOCKER_PASSWORD' $DOCKER_REGISTRY
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
 
       - name: Build the Docker image
         run: docker build -f "mini-dice.Dockerfile" -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:latest.dev --push .
