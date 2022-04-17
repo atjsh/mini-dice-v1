@@ -3,6 +3,7 @@ import {
   calcRandomCashChangeEvent,
   DynamicValueEventCase,
 } from 'apps/server/src/common/random/event-case-processing';
+import { getRandomInteger } from 'apps/server/src/common/random/random-number';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
 import { getUserCanTossDice } from '../../../scenarios.commons';
@@ -48,7 +49,14 @@ export class FireService {
           .cash;
         const losing =
           (BigInt(cashChangeEvent.value) * BigInt(cash)) / BigInt(100);
-        await this.userRepository.changeUserCash(props.userId, -losing);
+        if (losing > 200000) {
+          await this.userRepository.changeUserCash(
+            props.userId,
+            -getRandomInteger(50000, 100000),
+          );
+        } else {
+          await this.userRepository.changeUserCash(props.userId, -losing);
+        }
 
         return {
           losing: String(losing),
