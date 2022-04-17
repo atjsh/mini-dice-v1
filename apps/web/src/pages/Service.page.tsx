@@ -10,7 +10,10 @@ import { skillLogMessagesState } from '../components/skill-log-message/atoms/ski
 import { RenderedSkillLogMessages } from '../components/skill-log-message/rendered-skill-log-messages.component';
 import { useSkillLogMessages } from '../components/skill-log-message/use-skill-log-messages.hook';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
-import { WordmarkComponent } from '../components/wordmark/wordmark.component';
+import {
+  KoreanWordmarkComponent,
+  WordmarkComponent,
+} from '../components/wordmark/wordmark.component';
 import { useDiceToss, useSkillLogs, useUser } from '../libs';
 
 const Messages = () => {
@@ -173,8 +176,13 @@ export function ServicePage() {
           !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
-        <div className=" text-5xl md:text-6xl font-bold tracking-tight select-none">
-          <WordmarkComponent />
+        <div className="font-bold tracking-tight select-none pt-3 text-center md:text-left md:pl-3 md:pt-3">
+          <div className="text-4xl md:text-4xl">
+            <KoreanWordmarkComponent />
+          </div>
+          <div className="text-2xl md:text-2xl">
+            <WordmarkComponent />
+          </div>
         </div>
         <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />

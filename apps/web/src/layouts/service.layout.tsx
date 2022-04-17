@@ -4,8 +4,9 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
   children,
   hideFooter,
 }) => (
-  <div className="flex flex-col gap-14">
-    <div className="flex flex-col select-none">
+  <div className="flex min-h-screen w-full justify-center items-center">
+    <div className="flex flex-col gap-14 pt-10">
+      {/* <div className="flex flex-col select-none">
       <img
         className="object-cover h-32 dark:hidden"
         src={new URL('~/src/assets/openstreetmap.png', import.meta.url).href}
@@ -23,13 +24,14 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
           Map Image © OpenStreetMap contributors
         </a>
       </div>
-    </div>
+    </div> */}
 
-    <div className=" px-6">{children}</div>
-    {hideFooter == false || hideFooter === undefined ? (
-      <FooterWidgetComponent />
-    ) : (
-      <></>
-    )}
+      <div className=" px-6">{children}</div>
+      {hideFooter == false || hideFooter === undefined ? (
+        <FooterWidgetComponent />
+      ) : (
+        <></>
+      )}
+    </div>
   </div>
 );
