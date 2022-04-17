@@ -7,8 +7,6 @@ ENV APP_ENV=dev
 
 COPY . .
 
-RUN rm -rf apps/web
-
 RUN yarn install --prod --network-timeout=30000
 
 
