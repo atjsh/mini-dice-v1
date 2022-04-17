@@ -63,13 +63,11 @@ export const MapStatusBar: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (mapContainerRef.current) {
-      mapContainerRef.current.scrollLeft = 0;
-    }
-  }, [currentSkillRoute]);
-
-  useEffect(() => {
-    if (mapStops !== undefined && currentSkillRoute !== undefined) {
+    if (
+      mapStops !== undefined &&
+      currentSkillRoute !== undefined &&
+      mapContainerRef.current
+    ) {
       const sliceRange = mapStops.length;
 
       const currentSkillRouteIndex =
@@ -78,6 +76,8 @@ export const MapStatusBar: React.FC = () => {
           : 0;
 
       if (isInitalized) {
+        mapContainerRef.current.scrollLeft = 0;
+
         const prevSkillRoute = zoomedMap[0].skillRoute;
         const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
           mapStops,
@@ -131,11 +131,16 @@ export const MapStatusBar: React.FC = () => {
 
   return mapStops && skillLogs ? (
     <div
-      className="relative overflow-x-scroll flex-grow leading-none px-2 py-3 rounded-md md:rounded-2xl md:px-4 md:py-5 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white"
+      className="relative overflow-x-scroll flex flex-col md:gap-y-1 gap-0 flex-grow leading-none px-2 py-2 rounded-2xl md:px-4 md:py-3 border border-zinc-300 text-black dark:border-zinc-800 dark:text-white select-none"
       ref={mapContainerRef}
     >
+      <div className=" flex gap-x-3 md:text-sm text-xs">
+        <div className=" font-bold text-black dark:text-zinc-400">
+          현재 위치
+        </div>
+      </div>
       <div
-        className=" relative flex"
+        className=" relative flex text-base md:text-xl"
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',
@@ -149,9 +154,10 @@ export const MapStatusBar: React.FC = () => {
           <div
             className={`${
               index == 0
-                ? 'font-extrabold text-black dark:text-zinc-200'
-                : 'font-medium text-gray-700 dark:text-zinc-400'
-            } whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 border-slate-500 md:mr-4 md:pr-4`}
+                ? // ? 'font-extrabold text-black dark:text-zinc-200'
+                  ' font-extrabold text-minidice_red dark:text-zinc-200'
+                : ' font-bold text-zinc-600 dark:text-zinc-400'
+            } whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 dark:border-zinc-700 border-zinc-400 md:mr-4 md:pr-4`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}
           >
