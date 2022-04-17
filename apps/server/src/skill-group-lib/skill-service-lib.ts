@@ -77,7 +77,7 @@ export function drawDiceUserActivityMessage(
   return [
     UserActivityMessage({
       type: 'diceTossUserActivityMessage',
-      title: `${_.sum(diceUserActivity.diceResult)}칸을 이동했다`,
+      title: `오른쪽으로 ${_.sum(diceUserActivity.diceResult)}칸 이동`,
       description: `${diceUserActivity.diceResult
         .map((dice) => `🎲 ${dice}`)
         .join(' + ')}`,
