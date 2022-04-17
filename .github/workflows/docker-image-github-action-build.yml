@@ -24,4 +24,4 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
 
       - name: Build the Docker image
-        run: docker buildx -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev --platform linux/amd64,linux/arm64 --push .
+        run: docker buildx build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev --platform linux/amd64,linux/arm64 --push .
