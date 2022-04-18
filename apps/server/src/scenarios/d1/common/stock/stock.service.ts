@@ -133,7 +133,7 @@ export class CommonStockService {
     const changedStockPrice =
       BigInt(user.stockPrice) + BigInt(stockPriceDifference);
 
-    if (user.stockAmount * changedStockPrice < 1000) {
+    if (changedStockPrice < 1000) {
       const stockAmount = user.stockAmount;
       await this.userRepository.partialUpdateUser(userId, {
         stockPrice: changedStockPrice,
