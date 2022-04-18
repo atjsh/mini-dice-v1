@@ -1,7 +1,6 @@
 .dockerignore
 Dockerfile
 mini-dice.Dockerfile
-yarn.lock
 apps/web/**/*
 apps/web
 docs
