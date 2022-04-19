@@ -36,7 +36,6 @@ jobs:
       - name: Build the Docker image
         id: build-image
         run: |
-          docker buildx build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev --platform linux/arm64 --push .
           echo "::set-output name=image::${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev"
 
       - name: Configure AWS credentials
@@ -51,7 +50,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: Mini-Dice-Server-Docker
+          container-name: minidicev1
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
