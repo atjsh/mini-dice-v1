@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "lerna": "^4.0.0",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "conventional-changelog-conventionalcommits": "^4.6.3"
   }
 }

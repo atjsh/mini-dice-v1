@@ -20,10 +20,11 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Run npm-ci
-        run: yarn install --frozen-lockfile
+        run: yarn
 
       - name: 버전 높이기 | Bump Version
         run: |
+          yarn lerna:bootstrap
           yarn lerna:version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,7 +2,6 @@
   "name": "@packages/shared-types",
   "version": "1.0.0",
   "license": "MIT",
-  "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
