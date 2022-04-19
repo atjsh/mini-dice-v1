@@ -25,7 +25,7 @@ jobs:
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition Mini-Dice-Server-Docker --query taskDefinition > task-definition.json
+          aws ecs describe-task-definition --task-definition ${{ secrets.AWS_TASK_DEFINITION_NAME }} --query taskDefinition > task-definition.json
 
       - name: Download AppSpec with aws deploy cli. revisionType=AppSpecContent
         run: echo '${{ secrets.AWS_APP_SPEC }}' | base64 --decode > appspec.json
