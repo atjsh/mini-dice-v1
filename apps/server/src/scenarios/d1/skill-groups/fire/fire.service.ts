@@ -21,12 +21,12 @@ const cashChangeEventValues: DynamicValueEventCase<FireEventEnum>[] = [
       from: 10,
       to: 33,
     },
-    weight: 0.9,
+    weight: 0.7,
   },
   {
     causeName: FireEventEnum.NO_PROFIT,
     value: 0,
-    weight: 0.1,
+    weight: 0.3,
   },
 ];
 
