@@ -12,7 +12,7 @@
       "allowBranch": ["main", "develop"]
     },
     "publish": {
-      "ignoreChanges": ["integrations/*", "integrations/**"]
+      "ignoreChanges": ["packages/*", "packages/**", "docs/*", "docs/**"]
     }
   }
 }
