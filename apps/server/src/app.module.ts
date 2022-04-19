@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
+import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
@@ -113,5 +114,6 @@ import { UserModule } from './user/user.module';
       useClass: HttpExceptionLoggingFilter,
     },
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
