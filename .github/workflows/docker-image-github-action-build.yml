@@ -29,7 +29,7 @@ jobs:
 
       - name: Download AppSpec with aws deploy cli. revisionType=AppSpecContent
         run: |
-          aws deploy get-application-revision --application-name AppECS-Mini-Dice-Server-Dev-ECS-Mini-Dice-Server-Dev-BlueGreen --revision 'revisionType=AppSpecContent,appSpecContent={content=string,sha256=string}' > appspec.json
+          aws deploy get-application-revision --application-name AppECS-Mini-Dice-Server-Dev-ECS-Mini-Dice-Server-Dev-BlueGreen --revision 'revisionType=AppSpecContent,appSpecContent={content=yaml}' > appspec.json
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
