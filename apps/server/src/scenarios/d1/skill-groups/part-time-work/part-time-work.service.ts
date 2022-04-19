@@ -13,7 +13,7 @@ const cashChangeEventValues: DynamicValueEventCase[] = [
     causeName: '',
     value: {
       from: 20000,
-      to: 100000,
+      to: 90000,
     },
     weight: 1,
   },

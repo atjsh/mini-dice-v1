@@ -59,18 +59,18 @@ const cashChangeEventValues: DynamicValueEventCase<GameDevEventEnum>[] = [
   {
     causeName: GameDevEventEnum.MADE_PROFIT,
     value: {
-      from: 100000,
+      from: 50000,
       to: 200000,
     },
-    weight: 0.05,
+    weight: 0.2,
   },
   {
     causeName: GameDevEventEnum.MADE_PROFIT,
     value: {
       from: 10000,
-      to: 20000,
+      to: 50000,
     },
-    weight: 0.35,
+    weight: 0.5,
   },
   {
     causeName: GameDevEventEnum.NO_PROFIT,
@@ -81,9 +81,9 @@ const cashChangeEventValues: DynamicValueEventCase<GameDevEventEnum>[] = [
     causeName: GameDevEventEnum.LOST_PROFIT,
     value: {
       from: 1000,
-      to: 100000,
+      to: 50000,
     },
-    weight: 0.4,
+    weight: 0.1,
   },
 ];
 

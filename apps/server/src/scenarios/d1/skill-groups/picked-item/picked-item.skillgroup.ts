@@ -21,7 +21,7 @@ export class PickedItemSkillGroup implements SkillGroupController {
   constructor(private skillService: PickedItemService) {}
 
   getSkillGroupAlias() {
-    return '분실물 발견';
+    return '분실물발견';
   }
 
   @Skill(D1ScenarioRoutes.skillGroups.pickedItem.skills.index)

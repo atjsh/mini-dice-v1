@@ -17,8 +17,8 @@ const cashChangeEventValues: DynamicValueEventCase<FastCarEventEnum>[] = [
   {
     causeName: FastCarEventEnum.LOSE_MONEY,
     value: {
-      from: 50000,
-      to: 60000,
+      from: 2000,
+      to: 30000,
     },
     weight: 0.9,
   },
