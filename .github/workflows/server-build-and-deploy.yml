@@ -2,9 +2,9 @@ name: '@apps/server - Build and Deploy to AWS ECS'
 
 on:
   push:
-    tags:
-      - '@apps/server@*'
-      - '@packages/*'
+    paths:
+      - 'apps/server/**/**.**'
+      - 'packages/**/**.**'
 
 jobs:
   build:
