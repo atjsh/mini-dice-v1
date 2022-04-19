@@ -2,9 +2,8 @@ name: '@apps/server - Build and Deploy to AWS ECS'
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
+    tags:
+      - '@apps/server@*'
 
 jobs:
   build:

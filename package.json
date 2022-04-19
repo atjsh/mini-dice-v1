@@ -11,6 +11,10 @@
     "apps/*",
     "docs/*"
   ],
+  "scripts": {
+    "lerna:bootstrap": "lerna bootstrap",
+    "lerna:version": "lerna version --conventional-commits --no-private --create-release github --yes"
+  },
   "devDependencies": {
     "lerna": "^4.0.0",
     "process": "^0.11.10"
