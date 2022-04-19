@@ -12,7 +12,13 @@
       "allowBranch": ["main", "develop"]
     },
     "publish": {
-      "ignoreChanges": ["apps/web/*", "apps/web/**", "docs/*", "docs/**"]
+      "ignoreChanges": [
+        "apps/web/*",
+        "apps/web/**",
+        "docs/*",
+        "docs/**",
+        "**/CHANGELLOG.md"
+      ]
     }
   }
 }
