@@ -13,23 +13,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
       - name: Create ENV File from base64 envireoemnt value
         run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition Mini-Dice-Server-Docker --query taskDefinition
-      - name: Download task definition
-        run: |
-          aws ecs describe-task-definition --task-definition my-task-definition-family --query taskDefinition
-
-      - name: Download task definition
-        run: |
           aws ecs describe-task-definition --task-definition Mini-Dice-Server-Docker --query taskDefinition > task-definition.json
 
-      - name: Download AppSpec with aws deploy cli
+      - name: Download AppSpec with aws deploy cli. revisionType=AppSpecContent
         run: |
-          aws deploy get-application-revision --application-name
+          aws deploy get-application-revision --application-name AppECS-Mini-Dice-Server-Dev-ECS-Mini-Dice-Server-Dev-BlueGreen --revision revisionType=AppSpecContent > appspec.json
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -49,13 +49,6 @@ jobs:
         id: build-image
         run: |
           echo "::set-output name=image::${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev"
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
