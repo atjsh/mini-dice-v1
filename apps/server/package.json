@@ -1,6 +1,6 @@
 {
   "name": "@apps/server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "author": "",
   "license": "UNLICENSED",
@@ -33,7 +33,7 @@
     "@nestjs/terminus": "^8.0.6",
     "@nestjs/typeorm": "^8.0.3",
     "@packages/scenario-routing": "^1.1.0",
-    "@packages/shared-types": "^1.1.0",
+    "@packages/shared-types": "^1.2.0",
     "cache-manager": "^3.6.0",
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",

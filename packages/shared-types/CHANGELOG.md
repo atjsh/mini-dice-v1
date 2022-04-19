@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/ATJSH/mini-dice-v1/compare/@packages/shared-types@1.1.0...@packages/shared-types@1.2.0) (2022-04-19)
+
+
+### Features
+
+* update server-build-and-deploy.yml ([82edb84](https://github.com/ATJSH/mini-dice-v1/commit/82edb84cd03745347e20e6eb5dce580eca5424ba))
+
+
+
 ## 1.1.0 (2022-04-19)
 
 
