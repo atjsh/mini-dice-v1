@@ -16,8 +16,9 @@ jobs:
       - name: Create ENV File from base64 envireoemnt value
         run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
 
-      - name: Create task-definition.json from base64 envireoemnt value
-        run: echo '${{ secrets.AWS_TASK_DEFINITION_JSON }}' | base64 --decode > task-definition.json
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition Mini-Dice-Server-Docker --query taskDefinition > task-definition.json
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -60,3 +61,6 @@ jobs:
           service: ${{ secrets.ECS_SERVICE_NAME }}
           cluster: ${{ secrets.AWS_ECS_CLUSTER }}
           wait-for-service-stability: true
+          codedeploy-appspec: appspec.json
+          codedeploy-application: ${{ secrets.AWS_CODEDEPLOY_APPLICATION }}
+          codedeploy-deployment-group: ${{ secrets.AWS_CODEDEPLOY_DEPLOYMENT_GROUP }}
