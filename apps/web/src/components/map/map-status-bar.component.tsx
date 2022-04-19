@@ -154,7 +154,7 @@ export const MapStatusBar: React.FC = () => {
             <div
               className={`${
                 index == 0
-                  ? ' font-extrabold text-minidice_red dark:text-zinc-200'
+                  ? ' font-extrabold text-black dark:text-zinc-200'
                   : ' font-bold text-zinc-600 dark:text-zinc-400'
               } text-base md:text-xl`}
             >
@@ -163,11 +163,11 @@ export const MapStatusBar: React.FC = () => {
             <div
               className={`text-xs ${
                 index === 0
-                  ? ' font-bold text-black dark:text-zinc-400'
+                  ? ' font-bold text-minidice_red dark:text-zinc-400'
                   : ' dark:text-zinc-600 text-zinc-400'
               }`}
             >
-              <>{index === 0 ? '현재 위치' : `+${index}칸`}</>
+              <>{index === 0 ? '현재 칸' : `+${index}칸`}</>
             </div>
           </div>
         ))}
