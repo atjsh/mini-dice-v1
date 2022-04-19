@@ -140,7 +140,7 @@ export const MapStatusBar: React.FC = () => {
         </div>
       </div>
       <div
-        className=" relative flex text-base md:text-xl"
+        className=" relative flex"
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',
@@ -152,21 +152,32 @@ export const MapStatusBar: React.FC = () => {
       >
         {zoomedMap.map((stop, index) => (
           <div
-            className={`${
-              index == 0
-                ? // ? 'font-extrabold text-black dark:text-zinc-200'
-                  ' font-extrabold text-minidice_red dark:text-zinc-200'
-                : ' font-bold text-zinc-600 dark:text-zinc-400'
-            } whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 dark:border-zinc-700 border-zinc-400 md:mr-4 md:pr-4`}
+            className={`whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 dark:border-zinc-700 border-zinc-400 md:mr-4 md:pr-4 text-left`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}
           >
-            {stop.alias}
+            <div
+              className={`${
+                index == 0
+                  ? ' font-extrabold text-minidice_red dark:text-zinc-200'
+                  : ' font-bold text-zinc-600 dark:text-zinc-400'
+              } text-base md:text-xl`}
+            >
+              {stop.alias}
+            </div>
+            <div
+              className={`${
+                index === 0 ? 'hidden' : ''
+              } text-xs dark:text-zinc-600 text-zinc-400`}
+            >
+              +{index}칸
+            </div>
           </div>
         ))}
         {zoomedMap.length === 0 && (
           <div className="text-zinc-600 dark:text-zinc-400 pr-2 mr-2 border-r-2 md:mr-4 md:pr-4 whitespace-nowrap tracking-tighter">
-            불러오는 중
+            <div className="text-base md:text-xl">불러오는 중</div>
+            <div className={`text-xs`}>+1칸</div>
           </div>
         )}
       </div>
