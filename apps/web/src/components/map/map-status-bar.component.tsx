@@ -134,11 +134,6 @@ export const MapStatusBar: React.FC = () => {
       className="relative overflow-x-scroll flex flex-col md:gap-y-1 gap-0 flex-grow leading-none px-2 py-2 rounded-2xl md:px-4 md:py-3 border border-zinc-300 text-black dark:border-zinc-800 dark:text-white select-none"
       ref={mapContainerRef}
     >
-      <div className=" flex gap-x-3 md:text-sm text-xs">
-        <div className=" font-bold text-black dark:text-zinc-400">
-          현재 위치
-        </div>
-      </div>
       <div
         className=" relative flex"
         style={{
@@ -166,11 +161,13 @@ export const MapStatusBar: React.FC = () => {
               {stop.alias}
             </div>
             <div
-              className={`${
-                index === 0 ? 'hidden' : ''
-              } text-xs dark:text-zinc-600 text-zinc-400`}
+              className={`text-xs ${
+                index === 0
+                  ? ' font-bold text-black dark:text-zinc-400'
+                  : ' dark:text-zinc-600 text-zinc-400'
+              }`}
             >
-              +{index}칸
+              <>{index === 0 ? '현재 위치' : `+${index}칸`}</>
             </div>
           </div>
         ))}
