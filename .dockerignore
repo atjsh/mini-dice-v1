@@ -5,3 +5,4 @@ apps/web/**/*
 apps/web
 docs
 docs/**/*
+task-definition.json
