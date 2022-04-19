@@ -1,4 +1,4 @@
-name: Push To Private Docker Registry
+name: '@apps/server - Build and Deploy to AWS ECS'
 
 on:
   push:
