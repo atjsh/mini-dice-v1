@@ -77,7 +77,7 @@ export const WalletWidget: React.FC = () => {
           <ValueDisplay
             value={`${
               user.stockStatus
-                ? `${user.stockStatus.stockName} ${user.stockStatus.stockAmount}주 (TICKER: ${user.stockStatus.stockTicker})`
+                ? `${user.stockStatus.stockName} ${user.stockStatus.stockAmount}주\n (TICKER: ${user.stockStatus.stockTicker})`
                 : '-'
             }`}
             label="소유중인 주식 종목"
