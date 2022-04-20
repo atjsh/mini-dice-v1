@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - develop
+      - main
     paths:
       - 'apps/server/**/**.**'
       - 'packages/**/**.**'
+      - 'mini-dice.Dockerfile'
 
 jobs:
   build:
