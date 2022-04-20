@@ -17,7 +17,14 @@ export class PublicProfileService {
   async getUsers(limit: number, page: number): Promise<PublicProfileVo[]> {
     const rawUsers = await this.userRepository
       .createQueryBuilder('user')
-      .select(['user.userId', 'user.username', 'user.createdAt'])
+      .select([
+        'user.userId',
+        'user.username',
+        'user.createdAt',
+        'user.updatedAt',
+        'user.stockAmount',
+        'user.stockPrice',
+      ])
       .addSelect('user.cash + user.stockAmount * user.stockPrice', 'totalCash')
       .addSelect(
         'row_number () over (order by user.cash + user.stockAmount * user.stockPrice desc)',
@@ -35,6 +42,10 @@ export class PublicProfileService {
       cash: rawResultUser.totalCash,
       createdAt: rawResultUser.user_createdAt,
       rank: rawResultUser.rank,
+      stockCash: String(
+        rawResultUser.user_stockAmount * rawResultUser.user_stockPrice,
+      ),
+      updatedAt: rawResultUser.user_updatedAt,
     }));
   }
 }

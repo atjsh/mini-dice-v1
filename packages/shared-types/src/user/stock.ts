@@ -48,7 +48,7 @@ export type StockInitalDataType = {
 export const StockInitialData: StockInitalDataType[] = [
   {
     id: 1,
-    stockName: '미디코프',
+    stockName: '미니다이스',
     stockTicker: 'MIDI',
     stockStartingPrice: BigInt(5000),
     stockRisingPrice: BigInt(110),

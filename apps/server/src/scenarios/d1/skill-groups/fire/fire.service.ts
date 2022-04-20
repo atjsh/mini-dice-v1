@@ -50,18 +50,23 @@ export class FireService {
         const losing =
           (BigInt(cashChangeEvent.value) * BigInt(cash)) / BigInt(100);
         if (losing > 200000) {
+          const reducedLosing = getRandomInteger(50000, 100000);
           await this.userRepository.changeUserCash(
             props.userId,
-            -getRandomInteger(50000, 100000),
+            -reducedLosing,
           );
+          return {
+            losing: String(reducedLosing),
+            eventCase: cashChangeEvent.eventCase.causeName,
+          };
         } else {
           await this.userRepository.changeUserCash(props.userId, -losing);
+          return {
+            losing: String(losing),
+            eventCase: cashChangeEvent.eventCase.causeName,
+          };
         }
 
-        return {
-          losing: String(losing),
-          eventCase: cashChangeEvent.eventCase.causeName,
-        };
       case FireEventEnum.NO_PROFIT:
         return {
           eventCase: cashChangeEvent.eventCase.causeName,
