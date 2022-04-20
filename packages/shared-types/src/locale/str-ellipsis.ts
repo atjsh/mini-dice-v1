@@ -1,2 +1,2 @@
 export const strEllipsis = (str: string, length: number) =>
-  str.slice(0, length).concat('...');
+  str.length > length ? str.slice(0, length).concat('...') : str;

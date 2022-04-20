@@ -18,10 +18,6 @@ import {
   sleep,
 } from '../../../common/timing';
 
-function getRandomInteger(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 export const useDiceToss = () => {
   const [diceTossActivityStatus, setDiceTossActivityStatus] = useRecoilState(
     diceTossActivityStatusAtom,
@@ -34,10 +30,10 @@ export const useDiceToss = () => {
   return useMutation(tossDice, {
     onMutate: async () => {
       setDiceTossActivityStatus(DiceTossActivityEnum.Submitted);
-      await sleep(getRandomInteger(300, 600));
     },
     onSuccess: async (data) => {
       setDiceTossActivityStatus(DiceTossActivityEnum.Processing);
+      queryClient.refetchQueries([getMap.name]);
 
       addSkillLogMessages(
         data.skillLog.skillDrawResult.userRequestDrawings.map(
@@ -58,7 +54,6 @@ export const useDiceToss = () => {
       setDiceTossActivityStatus(DiceTossActivityEnum.ResultShowing);
       await sleep(200);
 
-      queryClient.refetchQueries([getMap.name]);
       setCurrentSkillRoute(data.skillLog.skillRoute);
       if (currentSkillRoute) {
         await sleep(mapMovingDelayTimeMS + 200);

@@ -19,7 +19,7 @@ export const ConnectWithOauthWidget: React.FC = () => {
       <div className="bg-white dark:md:bg-zinc-800 dark:bg-black rounded-3xl flex flex-col gap-3 py-7">
         <div className="flex flex-col gap-2 px-8">
           <div className="font-bold">
-            나중에도 시작할 수 있도록 구글 계정과 연결하기
+            나중에도 접속할 수 있도록 구글 계정과 연결하기
           </div>
           <div className="text-sm">
             "바로 시작"으로 이용하고 있습니다.{' '}

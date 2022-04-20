@@ -1,5 +1,12 @@
 export const WordmarkComponent: React.FC = () => (
   <>
-    Mini <span className="text-minidice_red">Dice</span>
+    Mini <span className="text-minidice_red">Dice</span>{' '}
+  </>
+);
+
+export const KoreanWordmarkComponent: React.FC = () => (
+  <>
+    <span className="whitespace-nowrap">미니다이스</span>{' '}
+    <span className="text-minidice_red whitespace-nowrap">인생게임</span>
   </>
 );

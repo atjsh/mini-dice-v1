@@ -108,13 +108,17 @@ export const WalletWidget: React.FC = () => {
           <ValueDisplay
             value={`${
               user.stockStatus
-                ? BigInt(user?.stockStatus?.stockCurrentPrice).toLocaleString(
-                    'ko-kr',
-                    {
-                      style: 'currency',
-                      currency: 'KRW',
-                    },
-                  )
+                ? `시작가 ${BigInt(
+                    user?.stockStatus?.stockStartingPrice,
+                  ).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })} → \n 현재 ${BigInt(
+                    user?.stockStatus?.stockCurrentPrice,
+                  ).toLocaleString('ko-kr', {
+                    style: 'currency',
+                    currency: 'KRW',
+                  })}`
                 : '-'
             }`}
             label="1주당 금액"

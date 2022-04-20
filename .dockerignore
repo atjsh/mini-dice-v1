@@ -1,3 +1,8 @@
 .dockerignore
 Dockerfile
 mini-dice.Dockerfile
+apps/web/**/*
+apps/web
+docs
+docs/**/*
+task-definition.json

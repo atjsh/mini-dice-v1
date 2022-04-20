@@ -22,6 +22,7 @@ function App(props) {
           <Switch>
             {protectedRoutes.map((route) => (
               <Route
+                key={route.path}
                 path={route.path}
                 exact={route.exact}
                 render={() =>
@@ -40,7 +41,7 @@ function App(props) {
                       />
                     )
                   ) : route.protection == 'authed' ? (
-                    isNotAuthed == true ? (
+                    isNotAuthed ? (
                       <Redirect
                         to={{
                           pathname: ServicePageURL,

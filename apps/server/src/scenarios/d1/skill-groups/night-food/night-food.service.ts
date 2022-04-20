@@ -43,7 +43,7 @@ const cashChangeEventValues: DynamicValueEventCase[] = [
     causeName: 'ff',
     value: {
       from: 1000,
-      to: 25000,
+      to: 50000,
     },
     weight: 1,
   },
@@ -98,11 +98,11 @@ export class NightFoodService {
     const event = selectEventCaseRandomly([
       {
         causeName: PROFIT_STATUS.MADE_PROFIT,
-        weight: 0.5,
+        weight: 0.7,
       },
       {
         causeName: PROFIT_STATUS.LOST_PROFIT,
-        weight: 0.3,
+        weight: 0.1,
       },
       {
         causeName: PROFIT_STATUS.NO_PROFIT,

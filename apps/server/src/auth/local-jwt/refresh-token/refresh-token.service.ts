@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { v4 as uuid4 } from 'uuid';
-import { REFRESH_TOKEN_EXPIRES_IN } from '../constants';
+import { REFRESH_TOKEN_EXPIRES_IN_MS } from '../constants';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { RefreshTokenEntity } from './entity/refresh-token.entity';
 import { FastifyReply } from 'fastify';
@@ -28,7 +28,7 @@ export class RefreshTokenService {
       this.getCacheKey(tokenValue),
       createRefreshTokenDto.userId,
       {
-        ttl: 1000 * REFRESH_TOKEN_EXPIRES_IN,
+        ttl: 1000 * REFRESH_TOKEN_EXPIRES_IN_MS,
       },
     );
 
@@ -44,7 +44,7 @@ export class RefreshTokenService {
     refreshTokenEntity: RefreshTokenEntity,
   ) {
     expressResponse.cookie('refreshToken', refreshTokenEntity.value, {
-      maxAge: 1000 * REFRESH_TOKEN_EXPIRES_IN,
+      maxAge: REFRESH_TOKEN_EXPIRES_IN_MS,
       httpOnly: true,
       secure: true,
       sameSite: 'none',

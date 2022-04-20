@@ -10,7 +10,10 @@ import { skillLogMessagesState } from '../components/skill-log-message/atoms/ski
 import { RenderedSkillLogMessages } from '../components/skill-log-message/rendered-skill-log-messages.component';
 import { useSkillLogMessages } from '../components/skill-log-message/use-skill-log-messages.hook';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
-import { WordmarkComponent } from '../components/wordmark/wordmark.component';
+import {
+  KoreanWordmarkComponent,
+  WordmarkComponent,
+} from '../components/wordmark/wordmark.component';
 import { useDiceToss, useSkillLogs, useUser } from '../libs';
 
 const Messages = () => {
@@ -92,9 +95,8 @@ export function Ingame({
         </div>
         <Messages />
 
-        <div className="md:p-7 p-3 text-center  sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter pt-3 pb-15 z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300">
-          <div className="flex gap-x-3 items-center text-sm md:text-xl max-w-7xl w-full">
-            <div className="md:text-3xl text-base">🗺</div>
+        <div className="md:p-3 p-3 pt-3 pb-15 text-center sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300">
+          <div className="flex gap-x-3 items-start max-w-7xl w-full">
             <MapStatusBar />
           </div>
           <div className=" ">
@@ -103,7 +105,7 @@ export function Ingame({
                 setisSidebarShowing(!isSidebarShowing);
               }}
               className={`${
-                isSidebarShowing == false
+                !isSidebarShowing
                   ? 'border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
               } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95  md:hidden`}
@@ -171,11 +173,16 @@ export function ServicePage() {
     <div className="custom-h-screen w-screen flex relative overflow-x-hidden">
       <div
         className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
-          isSidebarShowing == false ? ' -right-[100vw]' : 'right-0'
+          !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
       >
-        <div className=" text-5xl md:text-6xl font-bold tracking-tight select-none">
-          <WordmarkComponent />
+        <div className="font-bold tracking-tight pt-3 text-center md:text-left md:pl-3 md:pt-3">
+          <div className="text-4xl md:text-4xl">
+            <KoreanWordmarkComponent />
+          </div>
+          <div className="text-2xl md:text-2xl">
+            <WordmarkComponent />
+          </div>
         </div>
         <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />

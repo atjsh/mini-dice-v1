@@ -67,35 +67,35 @@ export const landInitalDataList = [
     landName: '빈',
     tollFee: 10000,
     landPrice: 7000,
-    landTTLsecs: 60 * 30,
+    landTTLsecs: 60 * 5,
   },
   {
     id: LandIdEnum.LAND3,
     landName: '빈',
     tollFee: 20000,
     landPrice: 20000,
-    landTTLsecs: 60 * 60,
+    landTTLsecs: 60 * 10,
   },
   {
     id: LandIdEnum.LAND4,
     landName: '빈',
     tollFee: 5000,
     landPrice: 4000,
-    landTTLsecs: 60 * 75,
+    landTTLsecs: 60 * 5,
   },
   {
     id: LandIdEnum.LAND5,
     landName: '빈',
     tollFee: 1000,
     landPrice: 1000,
-    landTTLsecs: 60 * 3,
+    landTTLsecs: 60 * 5,
   },
   {
     id: LandIdEnum.LAND6,
     landName: '빈',
     tollFee: 10000,
     landPrice: 8000,
-    landTTLsecs: 60 * 10,
+    landTTLsecs: 60 * 5,
   },
 ] as const;
 
@@ -210,7 +210,7 @@ export class CommonLandService {
       return {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
       };
-    } else if (landStatus.isLandExpired == true) {
+    } else if (landStatus.isLandExpired) {
       if (
         BigInt(user.cash) - BigInt(landStatus.landPrice + landStatus.tollFee) <
         0
@@ -247,7 +247,7 @@ export class CommonLandService {
       throw new LandAlreadyBought({ landId, userId });
     }
 
-    if (land.isLandExpired == false) {
+    if (!land.isLandExpired) {
       throw new LandNotForSaleYet({ landId, buyableAt: land.expiresAt });
     }
 
@@ -307,9 +307,9 @@ export class CommonLandService {
     );
     // 통행세 걷기
     if (
-      [LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU].includes(
+      ![LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU].includes(
         landBuyableByUserStatus.status,
-      ) == false &&
+      ) &&
       landStatus.landOwnedBy != null
     ) {
       await Promise.all([

@@ -14,6 +14,7 @@ import {
   CompleteSignupUserDto,
   UpdateUserDto,
   UserIdType,
+  UserVo,
 } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
@@ -46,12 +47,18 @@ export class PublicProfileController {
   @JwtAuth()
   @Get('me')
   async getProfile(@UserJwt() userJwt: UserJwtDto) {
-    return await this.profileService.getUser(userJwt, true);
+    return await this.profileService.getUser(userJwt);
   }
 
   @JwtAuth()
   @Patch('me')
   updateUserById(@UserJwt() userJwt: UserJwtDto, @Body() user: UpdateUserDto) {
+    if ((user as UserVo).cash) {
+      return {
+        error: '치트는 금지됩니다. 당신의 시도는 로그에 남습니다.',
+      };
+    }
+
     return this.userRepository.partialUpdateUser(userJwt.userId, {
       username: user.username,
       countryCode3: user.countryCode3,
@@ -62,12 +69,6 @@ export class PublicProfileController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async getOthersProfiles(@Query() { limit, page }: PageDto) {
     return await this.profileService.getUsers(limit, page);
-  }
-
-  @JwtAuth()
-  @Get('others/:otherUserId')
-  async getOthersProfile(@Param('otherUserId') otherUserId: UserIdType) {
-    return await this.profileService.getUser({ userId: otherUserId }, false);
   }
 
   @JwtAuth()

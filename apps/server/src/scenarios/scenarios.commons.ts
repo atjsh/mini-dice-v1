@@ -13,7 +13,8 @@ export function getUserCanTossDice(
     case SCENARIO_NAMES.D1: {
       const currentDate = new Date();
       currentDate.setSeconds(
-        currentDate.getSeconds() + getRandomInteger(13, 20),
+        // currentDate.getSeconds() + getRandomInteger(13, 20),
+        currentDate.getSeconds() + getRandomInteger(3, 4),
       );
       return currentDate;
     }

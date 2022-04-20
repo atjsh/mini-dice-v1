@@ -75,7 +75,7 @@ export class DiceTossService {
     const uniqueDiceResult = _.uniq(diceResult);
     const isDiceResultEqual = uniqueDiceResult.length == 1;
 
-    if (isDiceResultEqual == true) {
+    if (isDiceResultEqual) {
       const user = await this.userRepository.findUserWithCache(userId);
       if (user.stockId) {
         const { stockRisingPrice, stockFallingPrice } = getStockInitialData(
@@ -89,8 +89,6 @@ export class DiceTossService {
         } else {
           stockChanging = stockRisingPrice;
         }
-        console.log(stockChanging);
-        console.log(typeof stockChanging);
 
         return await this.commonStockService.changeStockPrice(
           userId,
@@ -108,7 +106,7 @@ export class DiceTossService {
   ): Promise<DiceTossOutputDto> {
     const user = await this.userRepository.findUserWithCache(userJwt.userId);
     isUserThrowingDiceTossAllowedOrThrow(user);
-    if (user.signupCompleted == false) {
+    if (!user.signupCompleted) {
       throw new ForbiddenException('finish signup fist');
     }
 
@@ -125,7 +123,7 @@ export class DiceTossService {
       },
     });
 
-    if (lastSkillLog.isCreated == true) {
+    if (lastSkillLog.isCreated) {
       const skillDrawResult =
         await this.scenarioRouteCallService.callSkillDraw<MessageResponseType>(
           getSkillRouteFromPath(lastSkillLog.log.skillRoute),

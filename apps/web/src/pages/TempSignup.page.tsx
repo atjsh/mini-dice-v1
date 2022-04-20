@@ -114,7 +114,7 @@ function TempSignupForm() {
         />
       </div>
       <a
-        className="inline-block text-base text-blue-600 hover:underline p-5 text-center"
+        className="inline-block text-base text-blue-600 hover:underline p-5 text-center hidden"
         href={getGoogleOAuthPageUrl()}
       >
         <span className=" text-black dark:text-white">

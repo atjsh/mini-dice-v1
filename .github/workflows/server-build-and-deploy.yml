@@ -1,0 +1,71 @@
+name: '@apps/server - Build and Deploy to AWS ECS'
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'apps/server/**/**.**'
+      - 'packages/**/**.**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: ENV파일 생성 | Create ENV File from base64 envireoemnt value
+        run: echo '${{ secrets.MINIDICE_SERVER_DEV_ENV }}' | base64 --decode > apps/server/tdol-process.env.dev
+
+      - name: Task definition 다운로드 Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ secrets.AWS_TASK_DEFINITION_NAME }} --query taskDefinition > task-definition.json
+
+      - name: AppSpec 생성 | Create AppSpec file from base64 envireoemnt value
+        run: echo '${{ secrets.AWS_APP_SPEC }}' | base64 --decode > appspec.json
+
+      - name: Docker Registry에 로그인 | Login to Docker Registry
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+
+      - name: Docker buildx를 위해 QEMU 셋업 | Set up QEMU for Docker buildx
+        uses: docker/setup-qemu-action@v1
+
+      - name: Docker buildx 셋업 Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Docker 이미지 빌드 & 푸시 | Build the Docker image and push it to the registry
+        id: build-image
+        run: |
+          docker buildx build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev --platform linux/arm64 --push .
+          echo "::set-output name=image::${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev"
+
+      - name: Task Definition 개정 | Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: minidicev1
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: 새 Task Definition으로 CodeDeploy를 통한 ECS 배포 시작 | Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_NAME }}
+          cluster: ${{ secrets.AWS_ECS_CLUSTER }}
+          codedeploy-appspec: appspec.json
+          codedeploy-application: ${{ secrets.AWS_CODEDEPLOY_APPLICATION }}
+          codedeploy-deployment-group: ${{ secrets.AWS_CODEDEPLOY_DEPLOYMENT_GROUP }}

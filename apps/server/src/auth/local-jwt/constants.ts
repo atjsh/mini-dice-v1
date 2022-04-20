@@ -2,5 +2,6 @@ export const jwtConstants = {
   secret: 'secretKey',
 };
 
-export const REFRESH_TOKEN_EXPIRES_IN = 60 * 60 * 24; // 24h
+// 1year
+export const REFRESH_TOKEN_EXPIRES_IN_MS = 1000 * 60 * 60 * 24 * 365;
 export const ACCESS_TOKEN_EXPIRES_IN = '60m';

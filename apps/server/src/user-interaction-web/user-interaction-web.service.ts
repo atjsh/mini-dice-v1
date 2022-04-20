@@ -30,7 +30,7 @@ export class UserInteractionWebService {
     timezone: string,
   ): Promise<UserInteractionOutputDto> {
     const user = await this.userRepository.findUserWithCache(userJwt.userId);
-    if (user.signupCompleted == false) {
+    if (!user.signupCompleted) {
       throw new ForbiddenException('finish signup fist');
     }
 

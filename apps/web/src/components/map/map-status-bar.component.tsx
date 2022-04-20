@@ -1,6 +1,6 @@
 import { SkillRouteType } from '@packages/scenario-routing';
 import * as _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { mapMovingDelayTimeMS } from '../../common/timing';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
@@ -60,8 +60,14 @@ export const MapStatusBar: React.FC = () => {
 
   const currentSkillRoute = useRecoilValue(currentSkillRouteAtom);
 
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (mapStops !== undefined && currentSkillRoute !== undefined) {
+    if (
+      mapStops !== undefined &&
+      currentSkillRoute !== undefined &&
+      mapContainerRef.current
+    ) {
       const sliceRange = mapStops.length;
 
       const currentSkillRouteIndex =
@@ -69,7 +75,9 @@ export const MapStatusBar: React.FC = () => {
           ? getSkillRouteIndexBySkillGroup(mapStops, currentSkillRoute)
           : 0;
 
-      if (isInitalized == true) {
+      if (isInitalized) {
+        mapContainerRef.current.scrollLeft = 0;
+
         const prevSkillRoute = zoomedMap[0].skillRoute;
         const prevSkillRouteIndex = getSkillRouteIndexBySkillGroup(
           mapStops,
@@ -122,9 +130,12 @@ export const MapStatusBar: React.FC = () => {
   }, [currentSkillRoute, mapStops]);
 
   return mapStops && skillLogs ? (
-    <div className="relative overflow-x-hidden md:h-6 h-4 flex-grow leading-none">
+    <div
+      className="relative overflow-x-scroll flex flex-col md:gap-y-1 gap-0 flex-grow leading-none px-2 py-2 rounded-2xl md:px-4 md:py-3 border border-zinc-300 text-black dark:border-zinc-800 dark:text-white select-none"
+      ref={mapContainerRef}
+    >
       <div
-        className="absolute flex"
+        className=" relative flex"
         style={{
           left: `-${left}px`,
           transitionProperty: 'left',
@@ -136,17 +147,36 @@ export const MapStatusBar: React.FC = () => {
       >
         {zoomedMap.map((stop, index) => (
           <div
-            className={`${
-              index == 0
-                ? 'font-extrabold text-black dark:text-zinc-200'
-                : 'font-medium text-gray-700 dark:text-zinc-400'
-            } whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 border-slate-500 md:mr-4 md:pr-4`}
+            className={`whitespace-nowrap tracking-tighter pr-2 mr-2 border-r-2 dark:border-zinc-700 border-zinc-400 md:mr-4 md:pr-4 text-left`}
             ref={index == relativeMovingCount ? measuredRef : undefined}
             key={`${stop.skillRouteUrl}${index}`}
           >
-            {stop.alias}
+            <div
+              className={`${
+                index == 0
+                  ? ' font-extrabold text-black dark:text-zinc-200'
+                  : ' font-bold text-zinc-600 dark:text-zinc-400'
+              } text-base md:text-xl`}
+            >
+              {stop.alias}
+            </div>
+            <div
+              className={`text-xs ${
+                index === 0
+                  ? ' font-bold text-minidice_red dark:text-zinc-400'
+                  : ' dark:text-zinc-600 text-zinc-400'
+              }`}
+            >
+              <>{index === 0 ? '현재 칸' : `+${index}칸`}</>
+            </div>
           </div>
         ))}
+        {zoomedMap.length === 0 && (
+          <div className="text-zinc-600 dark:text-zinc-400 pr-2 mr-2 border-r-2 md:mr-4 md:pr-4 whitespace-nowrap tracking-tighter">
+            <div className="text-base md:text-xl">불러오는 중</div>
+            <div className={`text-xs`}>+1칸</div>
+          </div>
+        )}
       </div>
     </div>
   ) : (

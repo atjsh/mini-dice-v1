@@ -1,7 +1,4 @@
 # Mini Dice V1 Source Code
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## What is Mini Dice?
 
@@ -44,29 +41,17 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
 - @apps/web
   - Parcel로 빌드 / 웹 서버 실행
 
-## Maintainer
+## Contributors
 
-- Mini Dice's Source code and Infrastructures are maintained by MDT (Mini Dice Team)
+이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/MuxLee"><img src="https://avatars.githubusercontent.com/u/37520438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mux</b></sub></a><br /><a href="#tool-MuxLee" title="Tools">🔧</a></td>
     <td align="center"><a href="https://velog.io/@atjsh"><img src="https://avatars.githubusercontent.com/u/35552274?v=4?s=100" width="100px;" alt=""/><br /><sub><b>전성훈 / SUNG HOON CHON</b></sub></a><br /><a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Code">💻</a> <a href="#design-ATJSH" title="Design">🎨</a> <a href="#blog-ATJSH" title="Blogposts">📝</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=ATJSH" title="Documentation">📖</a> <a href="#infra-ATJSH" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><img src="./md/logo.png" width="100px;" alt=""/><br/><sub>Miyobi <br /><a href="#design-ATJSH" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/MuxLee"><img src="https://avatars.githubusercontent.com/u/37520438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mux</b></sub></a><br /><a href="#tool-MuxLee" title="Tools">🔧</a></td>
     <td align="center"><a href="https://github.com/jipark0716"><img src="https://avatars.githubusercontent.com/u/37520386?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Park JungIn</b></sub></a><br /><a href="#ideas-jipark0716" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=jipark0716" title="Code">💻</a> <a href="https://github.com/ATJSH/mini-dice-v1/pulls?q=is%3Apr+reviewed-by%3Ajipark0716" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/hywlss9"><img src="https://avatars.githubusercontent.com/u/37681882?v=4?s=100" width="100px;" alt=""/><br /><sub><b>HyeongJin Park</b></sub></a><br /><a href="#ideas-hywlss9" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/ATJSH/mini-dice-v1/commits?author=hywlss9" title="Code">💻</a> <a href="https://github.com/ATJSH/mini-dice-v1/pulls?q=is%3Apr+reviewed-by%3Ahywlss9" title="Reviewed Pull Requests">👀</a></td>
+    
   </tr>
 </table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

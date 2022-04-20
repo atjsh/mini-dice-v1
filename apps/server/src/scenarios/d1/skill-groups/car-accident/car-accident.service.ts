@@ -43,19 +43,11 @@ export class CarAccidentService {
         },
       },
       {
-        causeName: '거... 거기',
-        weight: 0.16,
-        value: {
-          from: 10000,
-          to: 40000,
-        },
-      },
-      {
         causeName: '손톱',
-        weight: 0.16,
+        weight: 0.36,
         value: {
-          from: 10000,
-          to: 30000,
+          from: 1000,
+          to: 3000,
         },
       },
       {

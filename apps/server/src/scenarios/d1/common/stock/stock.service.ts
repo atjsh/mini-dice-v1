@@ -46,7 +46,7 @@ export class CommonStockService {
     stockId: StockIdType,
     stockAmount: bigint,
   ) {
-    if (stockAmount > 0 == false) {
+    if (!(stockAmount > 0)) {
       throw new ForbiddenException('not enough stock amount');
     }
 
@@ -57,12 +57,9 @@ export class CommonStockService {
 
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
-        console.log(userId);
-
         const user = await transactionManager
           .getCustomRepository(UserRepository)
           .findUserWithCache(userId);
-        console.log(user);
 
         if (user.stockId != null) {
           return StockOwningStatusEnum.SELLABLE;

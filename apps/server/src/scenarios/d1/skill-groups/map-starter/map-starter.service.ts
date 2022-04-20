@@ -4,7 +4,7 @@ import { UserRepository } from 'apps/server/src/user/user.repository';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
-export const MAP_STARTER_REWARD_CASH = 10000;
+export const MAP_STARTER_REWARD_CASH = 100000;
 
 @Injectable()
 export class MapStarterService {
