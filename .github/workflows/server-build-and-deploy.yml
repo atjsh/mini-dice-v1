@@ -2,6 +2,8 @@ name: '@apps/server - Build and Deploy to AWS ECS'
 
 on:
   push:
+    branches:
+      - develop
     paths:
       - 'apps/server/**/**.**'
       - 'packages/**/**.**'
