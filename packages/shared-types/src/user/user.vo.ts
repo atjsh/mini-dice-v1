@@ -113,8 +113,10 @@ export type UserEntityJson = Omit<UserVo, 'cash' | 'rank'> & {
 };
 
 export type PublicProfileVo = Omit<
-  Pick<UserVo, 'id' | 'username' | 'cash' | 'createdAt' | 'rank'>,
+  Pick<UserVo, 'id' | 'username' | 'cash' | 'createdAt' | 'rank' | 'updatedAt'>,
   'cash'
 > & {
   cash: string;
+
+  stockCash: string;
 };
