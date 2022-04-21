@@ -145,7 +145,7 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
             <img
               src={plainMessage.thumbnail.imageUrl}
               alt=""
-              className=" w-24 h-24 md:w-32 md:h-32 rounded-lg mt-3 mb-2 bg-white dark:bg-black object-cover"
+              className=" w-24 h-24 md:w-32 md:h-32 rounded-lg mt-3 mb-2 bg-white dark:bg-black object-contain object-bottom"
             />
           </div>
         )}
