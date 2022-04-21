@@ -74,7 +74,9 @@ export class MapStarterSkillGroup implements SkillGroupController {
           PlainMessage({
             thumbnail: {
               altName: '시작 일러스트',
-              imageUrl: D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
+              ),
             },
             title: `${this.getSkillGroupAlias()} 칸`,
             description: `기념으로 ${cashLocale(
