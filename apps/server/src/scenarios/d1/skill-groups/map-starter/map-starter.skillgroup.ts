@@ -78,7 +78,11 @@ export class MapStarterSkillGroup implements SkillGroupController {
                 D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
               ),
             },
-            title: `${this.getSkillGroupAlias()} 칸`,
+            title: `시작 칸`,
+            description: '시작 칸에 도착했습니다.',
+          }),
+          PlainMessage({
+            title: '고생했어요',
             description: `기념으로 ${cashLocale(
               props.skillServiceResult?.rewarded_cash,
             )} 받았습니다.`,

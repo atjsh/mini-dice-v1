@@ -30,7 +30,7 @@ const Text: React.FC<{ t?: string }> = ({ t: text }) => {
     <>
       {text
         ? text.split('\n').map((line, index) => (
-            <div key={index}>
+            <div key={index} className="break-all">
               {line}
               <br />
             </div>
@@ -130,7 +130,7 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
   return (
     <div className="flex flex-row">
       <div
-        className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl flex gap-x-3 flex-wrap-reverse`}
+        className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl flex gap-x-3`}
       >
         <div>
           <div className="font-bold text-xl">
@@ -141,7 +141,7 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
           </div>
         </div>
         {plainMessage.thumbnail && (
-          <div>
+          <div className=" flex-shrink-0">
             <img
               src={plainMessage.thumbnail.imageUrl}
               alt=""
