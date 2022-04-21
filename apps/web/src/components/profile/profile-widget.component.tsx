@@ -26,7 +26,9 @@ export const ProfileWidget: React.FC = () => {
               {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
             </div>
             <div
-              className="text-white cursor-pointer hover:underline w-fit"
+              className={`text-white w-fit ${
+                user.email ? 'cursor-pointer hover:underline' : ''
+              }`}
               onClick={() => setisEmailShowing(!isEmailShowing)}
             >
               {user.email ? (
