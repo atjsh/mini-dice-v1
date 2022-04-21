@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { useUser } from '../../libs';
+import { RankingPgaeURL } from '../../pages/routes';
 
 export const ProfileWidget: React.FC = () => {
   const { data: user } = useUser();
@@ -19,6 +21,14 @@ export const ProfileWidget: React.FC = () => {
             <div className="font-bold text-xl break-all">@{user.username}</div>
             <div className="font-bold text-base text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
               {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
+            </div>
+            <div>
+              <Link
+                className="text-blue-600 dark:text-white hover:underline"
+                to={RankingPgaeURL}
+              >
+                랭킹 →
+              </Link>
             </div>
           </div>
         </div>
