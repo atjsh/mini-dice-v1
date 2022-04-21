@@ -17,8 +17,8 @@ const cashChangeEventValues: DynamicValueEventCase<StockUpAmountEnum>[] = [
   {
     causeName: StockUpAmountEnum.ONE,
     value: {
-      from: 20,
-      to: 50,
+      from: 5,
+      to: 30,
     },
     weight: 0.7,
   },
