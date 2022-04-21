@@ -29,8 +29,14 @@ export const ProfileWidget: React.FC = () => {
               className="text-white cursor-pointer hover:underline w-fit"
               onClick={() => setisEmailShowing(!isEmailShowing)}
             >
-              내 이메일 {isEmailShowing ? '닫기: ' : '보기'}
-              {isEmailShowing ? user.email : ''}
+              {user.email ? (
+                <>
+                  내 이메일 {isEmailShowing ? '닫기: ' : '보기'}
+                  {isEmailShowing ? user.email : ''}
+                </>
+              ) : (
+                '등록된 이메일 없음'
+              )}
             </div>
             <div>
               <Link
