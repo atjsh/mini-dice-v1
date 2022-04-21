@@ -130,21 +130,25 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
   return (
     <div className="flex flex-row">
       <div
-        className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl`}
+        className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl flex gap-x-3 flex-wrap-reverse`}
       >
-        {plainMessage.thumbnail && (
-          <img
-            src={plainMessage.thumbnail.imageUrl}
-            alt=""
-            className=" w-32 h-32 rounded-lg mt-3 mb-2 bg-white dark:bg-black"
-          />
-        )}
-        <div className="font-bold text-xl">
-          <Text t={plainMessage.title} />
-        </div>
         <div>
-          <Text t={plainMessage.description} />
+          <div className="font-bold text-xl">
+            <Text t={plainMessage.title} />
+          </div>
+          <div>
+            <Text t={plainMessage.description} />
+          </div>
         </div>
+        {plainMessage.thumbnail && (
+          <div>
+            <img
+              src={plainMessage.thumbnail.imageUrl}
+              alt=""
+              className=" w-24 h-24 md:w-32 md:h-32 rounded-lg mt-3 mb-2 bg-white dark:bg-black"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
