@@ -91,7 +91,8 @@ export const FooterWidgetComponent: React.FC = () => {
       </div>
 
       <div className="text-gray-400">
-        Copyright © 2022 Mini Dice Team. All rights reserved. <br />
+        일러스트 및 이미지 저작권 © Miyobi (미요비). 모든 권리 보유.
+        <br /> Mini Dice 저작권 © 2022 Mini Dice Team. 모든 권리 보유. <br />
       </div>
     </div>
   );
