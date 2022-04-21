@@ -3,6 +3,7 @@ import { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { serializeUserToJson } from '../user/entity/user.entity';
 import { UserRepository } from '../user/user.repository';
+import { v4 as uuid4 } from 'uuid';
 
 @Injectable()
 export class PublicProfileService {
@@ -37,7 +38,7 @@ export class PublicProfileService {
       .getRawMany();
 
     return rawUsers.map((rawResultUser) => ({
-      id: rawResultUser.userId,
+      id: uuid4(),
       username: rawResultUser.user_username,
       cash: rawResultUser.totalCash,
       createdAt: rawResultUser.user_createdAt,
