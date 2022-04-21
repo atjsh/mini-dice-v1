@@ -13,6 +13,7 @@ import {
   SkillGroup,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import { StockDownService, StockUpAmountEnum } from './stock-down.service';
 
@@ -41,6 +42,12 @@ export class StockDownSkillGroup implements SkillGroupController {
         userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [
           PlainMessage({
+            thumbnail: {
+              altName: '대폭락 칸 일러스트',
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.stockDown.skillGroupName,
+              ),
+            },
             title: `${this.getSkillGroupAlias()} 칸`,
             description: '주식의 가치가 하락합니다.',
           }),

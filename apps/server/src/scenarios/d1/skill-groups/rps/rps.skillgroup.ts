@@ -23,6 +23,7 @@ import {
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
 import { UserRepository } from 'apps/server/src/user/user.repository';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import {
   getRpsMoveAsKoreanText,
@@ -62,6 +63,12 @@ export class RpsSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '가위바위보 칸 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.rps.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description: `모르는 사람과 가위바위보 게임을 합니다. 이기면 ${cashLocale(
             5000,

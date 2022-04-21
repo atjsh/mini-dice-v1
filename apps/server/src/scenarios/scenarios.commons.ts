@@ -28,3 +28,7 @@ export function getUserCanTossDice(
     }
   }
 }
+
+export function getStopImageUrl(imageName: string) {
+  return `${process.env.WEB_URL}/stop-images/${imageName}.png`;
+}

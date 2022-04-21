@@ -26,6 +26,7 @@ import {
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { StockOwningStatusEnum } from '../../common/stock/stock.service';
 import { D1ScenarioRoutes } from '../../routes';
 import { StockService } from './stock.service';
@@ -58,6 +59,12 @@ export class StockSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '주식 칸 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.stock.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description:
             '주식 칸에 도착했습니다. 이 칸에서는 주식을 사거나, 보유중인 주식을 처분할 수 있습니다.',

@@ -13,6 +13,7 @@ import {
   SkillGroup,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import {
   PickedWalletService,
@@ -43,6 +44,12 @@ export class PickedWalletSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '지갑을 줍다 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.pickedWallet.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description: '지갑을 발견했습니다.',
         }),

@@ -17,6 +17,7 @@ import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import {
   CommonLandService,
   LandBuyableByUserEnum,
@@ -147,6 +148,10 @@ export function commonLandSkillGroupWebIndexDraw(
     userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
     actionResultDrawings: [
       PlainMessage({
+        thumbnail: {
+          altName: '토지 칸 일러스트',
+          imageUrl: getStopImageUrl(submitSkillRoute.skillGroupName),
+        },
         title: '토지 칸',
         description: `${
           props.skillServiceResult.landStatus.landName

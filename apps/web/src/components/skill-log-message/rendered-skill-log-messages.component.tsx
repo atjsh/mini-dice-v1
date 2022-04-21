@@ -74,7 +74,8 @@ const UserActivityMessage: React.FC<{
   }, [diceTossActivityStatus]);
 
   if (
-    userActivityMessage.type == 'diceTossUserActivityMessage' && isLast &&
+    userActivityMessage.type == 'diceTossUserActivityMessage' &&
+    isLast &&
     diceTossActivityStatus == DiceTossActivityEnum.Processing
   ) {
     return (
@@ -131,6 +132,13 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
       <div
         className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl`}
       >
+        {plainMessage.thumbnail && (
+          <img
+            src={plainMessage.thumbnail.imageUrl}
+            alt=""
+            className=" w-32 h-32 rounded-lg mt-2 mb-1"
+          />
+        )}
         <div className="font-bold text-xl">
           <Text t={plainMessage.title} />
         </div>

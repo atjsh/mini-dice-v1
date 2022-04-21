@@ -17,6 +17,7 @@ import {
   DiceUserActivitySkillDrawPropsType,
   GameStartUserAcitvitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import { MapStarterService } from './map-starter.service';
 
@@ -52,6 +53,12 @@ export class MapStarterSkillGroup implements SkillGroupController {
         date: props.date,
         actionResultDrawings: [
           PlainMessage({
+            thumbnail: {
+              altName: '시작 일러스트',
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
+              ),
+            },
             description: `주사위를 굴려 다음 칸으로 이동하세요.`,
           }),
         ],
@@ -65,6 +72,10 @@ export class MapStarterSkillGroup implements SkillGroupController {
         userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [
           PlainMessage({
+            thumbnail: {
+              altName: '시작 일러스트',
+              imageUrl: D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
+            },
             title: `${this.getSkillGroupAlias()} 칸`,
             description: `기념으로 ${cashLocale(
               props.skillServiceResult?.rewarded_cash,

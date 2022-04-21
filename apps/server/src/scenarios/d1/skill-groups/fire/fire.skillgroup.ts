@@ -13,6 +13,7 @@ import {
   SkillGroup,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import { FireService, FireEventEnum } from './fire.service';
 
@@ -40,6 +41,12 @@ export class FireSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '화재 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.fire.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description: '화재가 발생합니다.',
         }),
