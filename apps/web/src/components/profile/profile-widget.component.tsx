@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../libs';
 import { RankingPgaeURL } from '../../pages/routes';
 
 export const ProfileWidget: React.FC = () => {
   const { data: user } = useUser();
+
+  const [isEmailShowing, setisEmailShowing] = useState(false);
 
   return (
     <div>
@@ -21,6 +24,13 @@ export const ProfileWidget: React.FC = () => {
             <div className="font-bold text-xl break-all">@{user.username}</div>
             <div className="font-bold text-base text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
               {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
+            </div>
+            <div
+              className="text-white cursor-pointer hover:underline w-fit"
+              onClick={() => setisEmailShowing(!isEmailShowing)}
+            >
+              내 이메일 {isEmailShowing ? '닫기: ' : '보기'}
+              {isEmailShowing ? user.email : ''}
             </div>
             <div>
               <Link
