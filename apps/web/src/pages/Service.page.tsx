@@ -81,13 +81,17 @@ export function Ingame({
 
   return (
     <div
-      className={` flex-1 overflow-y-auto transition-colors duration-300 ${
-        isSidebarShowing
-          ? ' bg-gray-300 dark:bg-zinc-800'
-          : 'bg-white dark:bg-black'
-      } md:bg-white md:dark:bg-black md:transition-none`}
+      className={` flex-1 overflow-y-auto transition-colors duration-300 ${'bg-white dark:bg-black'} md:bg-white md:dark:bg-black md:transition-none`}
     >
       <div className="mx-auto my-0 max-w-7xl">
+        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full text-center py-2 backdrop-blur-lg font-bold md:hidden">
+          <div className=" text-lg">
+            <KoreanWordmarkComponent />
+          </div>
+          <div className=" text-xs">
+            <WordmarkComponent />
+          </div>
+        </div>
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
             <p className="text-xl">
@@ -183,9 +187,9 @@ export function ServicePage() {
       <div
         className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
           !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
-        } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-2xl md:drop-shadow-none md:right-auto md:w-auto bg-opacity-90`}
+        } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-800 transition-[right] drop-shadow-none md:right-auto md:w-auto`}
       >
-        <div className="font-bold tracking-tight pt-3 text-center md:text-left md:pl-3 md:pt-3">
+        <div className="font-bold tracking-tight pt-3 text-center md:text-left md:pl-3 md:pt-3 hidden md:block">
           <div className="text-4xl md:text-4xl">
             <KoreanWordmarkComponent />
           </div>
@@ -193,6 +197,7 @@ export function ServicePage() {
             <WordmarkComponent />
           </div>
         </div>
+        <div className=" mt-10 md:m-0"></div>
         <div className="md:bg-gray-100 dark:md:bg-black rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />
           <WalletWidget />
