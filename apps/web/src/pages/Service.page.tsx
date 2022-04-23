@@ -97,11 +97,11 @@ export function Ingame({
         </div>
         <Messages />
 
-        <div className="md:p-3 p-3 pt-3 pb-15 text-center sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
-          <div className="flex gap-x-3 items-start max-w-7xl w-full">
+        <div className=" pt-3 pb-15 text-center sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
+          <div className="flex gap-x-3 items-start max-w-7xl w-full px-3">
             <MapStatusBar />
           </div>
-          <div className=" w-full overflow-x-auto whitespace-nowrap">
+          <div className=" w-full overflow-x-auto whitespace-nowrap px-1.5 box-border">
             <button
               onClick={() => {
                 setisSidebarShowing(!isSidebarShowing);
@@ -155,18 +155,20 @@ export function Ingame({
               🥇🥈🥉 순위 보기
             </Link>
           </div>
-          <DiceTossButton
-            canTossDiceAfter={
-              user?.canTossDiceAfter
-                ? new Date(user.canTossDiceAfter)
-                : undefined
-            }
-            isDiceTossForbidden={user?.isUserDiceTossForbidden}
-            onClick={() => {
-              mutation.mutate();
-            }}
-            setisSidebarShowing={() => setisSidebarShowing(false)}
-          />
+          <div className=" w-full px-1.5 pb-3">
+            <DiceTossButton
+              canTossDiceAfter={
+                user?.canTossDiceAfter
+                  ? new Date(user.canTossDiceAfter)
+                  : undefined
+              }
+              isDiceTossForbidden={user?.isUserDiceTossForbidden}
+              onClick={() => {
+                mutation.mutate();
+              }}
+              setisSidebarShowing={() => setisSidebarShowing(false)}
+            />
+          </div>
         </div>
       </div>
     </div>
