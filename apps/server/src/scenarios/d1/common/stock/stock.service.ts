@@ -10,9 +10,9 @@ import { EntityManager } from 'typeorm';
 import { UserRepository } from '../../../../user/user.repository';
 
 export enum StockOwningStatusEnum {
-  BUYABLE,
-  SELLABLE,
-  NOT_ENOUGH_MONEY,
+  NOT_OWNING_STOCK = 0,
+  OWNING_STOCK = 1,
+  CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY = 2,
 }
 
 export type StockBuyableByUserStatus = {
@@ -36,9 +36,19 @@ export class CommonStockService {
   async getStockBuyableStatus(userId: UserIdType) {
     const user = await this.userRepository.findUserWithCache(userId);
     if (user.stockId == null) {
-      return StockOwningStatusEnum.BUYABLE;
+      return StockOwningStatusEnum.NOT_OWNING_STOCK;
     }
-    return StockOwningStatusEnum.SELLABLE;
+
+    const stockInitialData = getStockInitialData(user.stockId);
+    if (stockInitialData == undefined) {
+      throw new ForbiddenException('Stock Not Found');
+    }
+
+    if (BigInt(user.cash) < BigInt(user.stockPrice)) {
+      return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
+    }
+
+    return StockOwningStatusEnum.OWNING_STOCK;
   }
 
   async buyStock(
@@ -62,14 +72,14 @@ export class CommonStockService {
           .findUserWithCache(userId);
 
         if (user.stockId != null) {
-          return StockOwningStatusEnum.SELLABLE;
+          return StockOwningStatusEnum.OWNING_STOCK;
         }
 
         if (
           BigInt(user.cash) <
           stockInitialData.stockStartingPrice * BigInt(stockAmount)
         ) {
-          return StockOwningStatusEnum.NOT_ENOUGH_MONEY;
+          return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
         }
 
         await transactionManager
@@ -91,6 +101,44 @@ export class CommonStockService {
     );
   }
 
+  async buyMoreStock(userId: UserIdType, addingStockAmount: bigint) {
+    return await this.userRepository.manager.transaction(
+      async (transactionManager: EntityManager) => {
+        const {
+          stockId,
+          stockPrice,
+          cash,
+          stockAmount: currentStockAmount,
+        } = await transactionManager
+          .getCustomRepository(UserRepository)
+          .findUserWithCache(userId);
+
+        if (stockId == null) {
+          return StockOwningStatusEnum.NOT_OWNING_STOCK;
+        }
+
+        if (cash < stockPrice * addingStockAmount) {
+          return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
+        }
+
+        await transactionManager
+          .getCustomRepository(UserRepository)
+          .partialUpdateUser(userId, {
+            cash: cash - stockPrice * addingStockAmount,
+            stockAmount: addingStockAmount + currentStockAmount,
+          });
+
+        return {
+          stockTotalAmount: addingStockAmount + currentStockAmount,
+          stockBoughtAmount: addingStockAmount,
+          stockPrice: stockPrice,
+          stockName: getStockInitialData(stockId).stockName,
+          stockTotalCash: stockPrice * (addingStockAmount + currentStockAmount),
+        };
+      },
+    );
+  }
+
   async sellStock(userId: UserIdType) {
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
@@ -98,7 +146,7 @@ export class CommonStockService {
           .getCustomRepository(UserRepository)
           .findUserWithCache(userId);
         if (user.stockId == null) {
-          return StockOwningStatusEnum.BUYABLE;
+          return StockOwningStatusEnum.NOT_OWNING_STOCK;
         }
 
         const { stockName } = getStockInitialData(user.stockId);

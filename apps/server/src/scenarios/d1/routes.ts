@@ -14,7 +14,7 @@ export const D1ScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
   moneyCollectionHungeum: [IndexSkill],
   pickedItem: [IndexSkill],
   fire: [IndexSkill],
-  stock: [IndexSkill, 'buy', 'sell'],
+  stock: [IndexSkill, 'buy', 'sell', 'buyMore'],
   minigameEasy: [IndexSkill],
   lottery: [IndexSkill],
   land2: [IndexSkill, 'submit'],

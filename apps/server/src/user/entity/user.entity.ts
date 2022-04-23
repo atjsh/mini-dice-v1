@@ -108,7 +108,7 @@ export class UserEntity {
     nullable: true,
     default: null,
     type: 'varchar',
-    length: 40,
+    length: 80,
   })
   submitAllowedMapStop: string | null;
 

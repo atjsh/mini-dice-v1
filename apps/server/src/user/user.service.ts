@@ -12,7 +12,9 @@ export class UserService {
     user: UserEntity,
     callingSkillRoute: SkillRouteType,
   ) {
-    return user.submitAllowedMapStop == getSkillRoutePath(callingSkillRoute);
+    return user.submitAllowedMapStop
+      ?.split(',')
+      .includes(getSkillRoutePath(callingSkillRoute));
   }
 
   async isUserCallingSkillAllowedOrThrow(
@@ -23,11 +25,11 @@ export class UserService {
 
     if (!(await this.isUserCallingSkillAllowed(user, callingSkillRoute))) {
       throw new ForbiddenException(
-        `${JSON.stringify(user.submitAllowedMapStop)} != ${JSON.stringify(
+        `${JSON.stringify(user.submitAllowedMapStop)} not in ${JSON.stringify(
           callingSkillRoute,
-        )} || ${JSON.stringify(user.submitAllowedMapStop)} != ${JSON.stringify(
-          callingSkillRoute,
-        )}`,
+        )} || ${JSON.stringify(
+          user.submitAllowedMapStop,
+        )} not in ${JSON.stringify(callingSkillRoute)}`,
       );
     }
 

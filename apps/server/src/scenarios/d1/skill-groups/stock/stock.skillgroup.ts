@@ -9,6 +9,7 @@ import {
   MessageResponseFactory,
   PlainMessage,
   StockIdType,
+  StockStatusJson,
   UserActivityMessage,
 } from '@packages/shared-types';
 import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
@@ -36,6 +37,10 @@ class StockBuySubmitDto {
   stockId: string;
 }
 
+class StockBuyMoreSubmitDto {
+  amount: string;
+}
+
 @SkillGroup(D1ScenarioRoutes.skillGroups.stock)
 export class StockSkillGroup implements SkillGroupController {
   constructor(private skillService: StockService) {}
@@ -46,6 +51,70 @@ export class StockSkillGroup implements SkillGroupController {
   @Skill(D1ScenarioRoutes.skillGroups.stock.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
+  }
+
+  stockBuyMoreFormMessage(
+    stockStatus: StockStatusJson,
+    maxBuyableAmount: bigint,
+  ) {
+    return FormMessage({
+      title: `${stockStatus.stockName} 주식 더 구매하기`,
+      description: stockStatus.stockTicker,
+      inputFields: [
+        InputField({
+          label: '구매량',
+          name: 'amount',
+          placeholder:
+            BigInt(maxBuyableAmount) > 0
+              ? `1 이상, ${maxBuyableAmount} 이하`
+              : '구매 불가 (현금 부족)',
+          maxNumber: `maxBuyableAmount`,
+          minNumber: `${1}`,
+          type: 'number',
+        }),
+        InputField({
+          label: 'stockId',
+          name: 'stockId',
+          type: 'string',
+          isHidden: true,
+          defaultValue: stockStatus.id,
+        }),
+      ],
+      dataFields: [
+        DataField({
+          isCash: false,
+          label: '이름',
+          value: stockStatus.stockName,
+          inline: true,
+        }),
+        DataField({
+          isCash: true,
+          label: '1주당 가격',
+          value: String(stockStatus.stockCurrentPrice),
+          inline: true,
+        }),
+        DataField({
+          isCash: false,
+          label: '더블 시 주가 증감',
+          value: `↑${cashLocale(
+            BigInt(stockStatus.stockRisingPrice),
+          )} ↓${cashLocale(BigInt(stockStatus.stockFallingPrice))}`,
+          inline: true,
+        }),
+        DataField({
+          isCash: false,
+          label: '잔고 대비 현재 구매 가능한 수량',
+          value: `${maxBuyableAmount}개`,
+          inline: false,
+        }),
+      ],
+      submitButtonLabel:
+        BigInt(maxBuyableAmount) > 0 ? '구매하기' : '구매불가 (현금 부족)',
+      isSubmitButtonDisabled: BigInt(maxBuyableAmount) > 0 ? false : true,
+      submitSkillRouteURL: getSkillRoutePath(
+        D1ScenarioRoutes.skillGroups.stock.skills.buyMore,
+      ),
+    });
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.stock.skills.index)
@@ -69,8 +138,8 @@ export class StockSkillGroup implements SkillGroupController {
           description:
             '주식 칸에 도착했습니다. 이 칸에서는 주식을 사거나, 보유중인 주식을 처분할 수 있습니다.',
         }),
-        ...(props.skillServiceResult.buyable !=
-          StockOwningStatusEnum.SELLABLE &&
+        ...(props.skillServiceResult.buyable ==
+          StockOwningStatusEnum.NOT_OWNING_STOCK &&
         props.skillServiceResult.stocks != undefined
           ? [
               PlainMessage({
@@ -153,10 +222,16 @@ export class StockSkillGroup implements SkillGroupController {
             ]
           : [
               PlainMessage({
-                description: '앗! 이미 주식을 보유중이시네요.',
+                description: `주식을 더 구매하거나 처분할 수 있습니다. \n${
+                  props.skillServiceResult.status!.stockName
+                } 주식을 더 구매하시겠습니까?`,
               }),
+              this.stockBuyMoreFormMessage(
+                props.skillServiceResult.status!,
+                BigInt(props.skillServiceResult.maxBuyableAmount!),
+              ),
               LinkGroup({
-                description: `주식을 처분하시겠습니까? 처분하면 현금으로 ${cashLocale(
+                description: `또는, 주식을 처분하시겠습니까? 처분하면 현금으로 ${cashLocale(
                   BigInt(props.skillServiceResult.status!.stockAmount) *
                     BigInt(props.skillServiceResult.status!.stockCurrentPrice),
                 )} 지급됩니다. \n물론 나중에 처분해도 됩니다.`,
@@ -202,7 +277,46 @@ export class StockSkillGroup implements SkillGroupController {
       ],
       actionResultDrawings: [
         PlainMessage({
+          title: '주식 매입 완료',
           description: `${props.skillServiceResult.stockName} 주식을 ${props.skillServiceResult.stockAmount}주 구매했습니다.`,
+        }),
+      ],
+    });
+  }
+
+  @Skill(D1ScenarioRoutes.skillGroups.stock.skills.buyMore)
+  buyMore(
+    props: SkillPropsType<InteractionUserActivity<StockBuyMoreSubmitDto>>,
+  ) {
+    return this.skillService.buyMore({
+      ...props,
+      amount: BigInt(props.userActivity.params.amount),
+    });
+  }
+
+  @SkillDraw(D1ScenarioRoutes.skillGroups.stock.skills.buyMore)
+  buyMoreDraw(
+    props: InteractionUserActivitySkillDrawPropsType<
+      MethodReturnType<StockService, 'buyMore'>
+    >,
+  ) {
+    return MessageResponseFactory({
+      date: props.date,
+      userRequestDrawings: [
+        UserActivityMessage({
+          title: `${props.skillServiceResult.stockName} 주식 구매`,
+          description: `${props.skillServiceResult.stockBoughtAmount}주 구매`,
+          type: 'interactionUserActivityMessage',
+        }),
+      ],
+      actionResultDrawings: [
+        PlainMessage({
+          title: '주식 추가 매입 완료',
+          description: `${
+            props.skillServiceResult.stockName
+          } 주식을 ${cashLocale(props.skillServiceResult.stockPrice)}에 ${
+            props.skillServiceResult.stockBoughtAmount
+          }주 추가 구매했습니다.`,
         }),
       ],
     });
@@ -229,6 +343,7 @@ export class StockSkillGroup implements SkillGroupController {
       ],
       actionResultDrawings: [
         PlainMessage({
+          title: '주식 처분 완료',
           description: `${
             props.skillServiceResult.stockName
           } 주식을 처분하였습니다. ${cashLocale(

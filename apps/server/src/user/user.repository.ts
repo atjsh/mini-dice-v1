@@ -153,11 +153,13 @@ export class UserRepository extends Repository<UserEntity> {
 
   async setUserAllowedSkillRoute(
     userId: UserIdType,
-    allowedSkillRouteOrNull: SkillRouteType,
+    allowedSkillRouteOrNull: SkillRouteType | SkillRouteType[],
     isUserDiceTossForbidden: boolean,
   ) {
     return await this.partialUpdateUser(userId, {
-      submitAllowedMapStop: getSkillRoutePath(allowedSkillRouteOrNull),
+      submitAllowedMapStop: Array.isArray(allowedSkillRouteOrNull)
+        ? allowedSkillRouteOrNull.map(getSkillRoutePath).join(',')
+        : getSkillRoutePath(allowedSkillRouteOrNull),
       isUserDiceTossForbidden,
     });
   }
