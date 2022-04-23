@@ -34,7 +34,7 @@ const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
         <div className="font-bold text-xl break-all">{profile.username}</div>
       </div>
       <div className=" flex flex-col gap-x-5 gap-y-2 flex-wrap">
-        <div className=" flex flex-row gap-x-5 flex-wrap">
+        <div className="">
           <div className="font-bold text-base text-gray-500">
             잔고{' '}
             {`${BigInt(profile.cash).toLocaleString('en-us', {

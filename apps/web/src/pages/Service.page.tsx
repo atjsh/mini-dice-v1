@@ -84,12 +84,14 @@ export function Ingame({
       className={` flex-1 overflow-y-auto transition-colors duration-300 ${'bg-white dark:bg-black'} md:bg-white md:dark:bg-black md:transition-none`}
     >
       <div className="mx-auto my-0 max-w-7xl">
-        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full text-center py-2 backdrop-blur-lg font-bold md:hidden">
-          <div className=" text-lg">
-            <KoreanWordmarkComponent />
-          </div>
-          <div className=" text-xs">
-            <WordmarkComponent />
+        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-2 px-7 backdrop-blur-lg font-bold md:hidden flex">
+          <div className="text-left ">
+            <div className=" text-xs text-zinc-500">
+              <WordmarkComponent colored={false} />
+            </div>
+            <div className=" text-lg">
+              <KoreanWordmarkComponent />
+            </div>
           </div>
         </div>
         <div className=" px-3">
