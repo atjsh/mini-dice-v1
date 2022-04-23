@@ -91,11 +91,7 @@ authedAxios.interceptors.request.use(async (config: any) => {
 
 authedAxios.interceptors.response.use(async (response) => {
   if (response.status != 200 && response.status != 201) {
-    const accessToken = await getUserAccessTokenFromServer();
-
-    if (accessToken) {
-      localStorage.setItem(LocalStrageAccessTokenKey, accessToken);
-    }
+    revokeUserAccessToken();
   }
 
   return response;

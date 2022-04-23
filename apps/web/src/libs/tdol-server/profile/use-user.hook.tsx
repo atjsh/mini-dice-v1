@@ -5,10 +5,7 @@ import { getUserVo } from './user-profile';
 
 export const UseUserHookKey = getUserVo.name;
 
-export const useUser = () =>
-  useQuery(UseUserHookKey, getUserVo, {
-    retry: false,
-  });
+export const useUser = () => useQuery(UseUserHookKey, getUserVo);
 
 export const useMutateUser = () =>
   useMutation(updateUserVo.name, {
