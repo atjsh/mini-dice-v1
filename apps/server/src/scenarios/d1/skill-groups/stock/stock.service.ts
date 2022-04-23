@@ -73,9 +73,7 @@ export class StockService implements SkillService {
         status: serializeStockStatusToJson(
           getStockStatus(stockId!, stockAmount, stockPrice),
         ),
-        maxBuyableAmount: String(
-          getMaxStockBuyableAmount(stockId!, BigInt(cash)),
-        ),
+        maxBuyableAmount: String(cash / stockPrice),
       };
     }
   }
