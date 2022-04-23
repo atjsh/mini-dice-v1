@@ -4,7 +4,6 @@ import { JwtModule } from '@nestjs/jwt';
 import * as redisStore from 'cache-manager-redis-store';
 import { AccessTokenController } from './access-token/access-token.controller';
 import { AccessTokenService } from './access-token/access-token.service';
-import { jwtConstants } from './constants';
 import { JwtAuthGuard } from './jwt.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalJwtController } from './local-jwt.controller';
@@ -13,8 +12,12 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: jwtConstants.secret,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+      }),
     }),
     CacheModule.registerAsync({
       imports: [ConfigModule],

@@ -15,8 +15,6 @@ export class DiceTossController {
     @UserJwt() userJwt: UserJwtDto,
     @TimeZone() timeZone: string,
   ): Promise<DiceTossOutputDto> {
-    console.log(timeZone);
-
     return await this.diceTossService.tossDiceAndGetWebMessageResponse(
       userJwt,
       timeZone,
