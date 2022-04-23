@@ -34,6 +34,9 @@ class PageDto {
   @Min(1)
   @Max(10)
   page = 1;
+
+  @Type(() => Date)
+  updatedAfter?: Date;
 }
 
 @ApiTags(USER_PROFILE_APIS)
@@ -67,8 +70,8 @@ export class PublicProfileController {
 
   @Get('others')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async getOthersProfiles(@Query() { limit, page }: PageDto) {
-    return await this.profileService.getUsers(limit, page);
+  async getOthersProfiles(@Query() { limit, page, updatedAfter }: PageDto) {
+    return await this.profileService.getUsers(limit, page, updatedAfter);
   }
 
   @JwtAuth()

@@ -17,7 +17,7 @@ export function IndexSkeletonPage() {
               <WordmarkComponent />
             </h2>
             <h2 className=" self-center mt-5 text-xl">
-              주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 랭킹에 오르세요.
+              주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 순위에 오르세요.
               <br />
               <br />
             </h2>

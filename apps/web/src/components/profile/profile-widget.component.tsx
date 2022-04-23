@@ -45,7 +45,7 @@ export const ProfileWidget: React.FC = () => {
                 className="text-blue-600 dark:text-white hover:underline"
                 to={RankingPgaeURL}
               >
-                랭킹 →
+                순위 확인하기→
               </Link>
             </div>
           </div>

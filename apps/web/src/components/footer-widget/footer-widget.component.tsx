@@ -24,7 +24,7 @@ export const FooterWidgetComponent: React.FC = () => {
             Mini Dice
           </a>
           <Link className="hover:underline" to={RankingPgaeURL}>
-            랭킹
+            순위
           </Link>
         </div>
       </div>

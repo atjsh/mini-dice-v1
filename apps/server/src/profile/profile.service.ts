@@ -15,8 +15,12 @@ export class PublicProfileService {
     );
   }
 
-  async getUsers(limit: number, page: number): Promise<PublicProfileVo[]> {
-    const rawUsers = await this.userRepository
+  async getUsers(
+    limit: number,
+    page: number,
+    updatedAfter?: Date,
+  ): Promise<PublicProfileVo[]> {
+    const rawUsersQuery = this.userRepository
       .createQueryBuilder('user')
       .select([
         'user.userId',
@@ -32,10 +36,17 @@ export class PublicProfileService {
         'rank',
       )
       .where('user.isTerminated = :isTerminated', { isTerminated: false })
+
       .orderBy('totalCash', 'DESC')
       .take(limit)
-      .skip(limit * (page - 1))
-      .getRawMany();
+      .skip(limit * (page - 1));
+
+    if (updatedAfter) {
+      rawUsersQuery.andWhere('user.updatedAt > :updatedAt', {
+        updatedAt: updatedAfter,
+      });
+    }
+    const rawUsers = await rawUsersQuery.getRawMany();
 
     return rawUsers.map((rawResultUser) => ({
       id: uuid4(),

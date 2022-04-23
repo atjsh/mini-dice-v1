@@ -72,10 +72,21 @@ const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
   );
 };
 
+const UPDATED_AT_OFFSET_24H = 1000 * 60 * 60 * 24;
+const UPDATED_AT_OFFSET_7DAYS = 1000 * 60 * 60 * 24 * 7;
+const UPDATED_AT_OFFSET_ALLTIME = undefined;
+
 export function RankingPage() {
   const limit = 50;
   const [page, setPage] = useState(1);
-  const { data: othersProfiles, isLoading } = useOthersProfiles(limit, page);
+  const [updatedAtOffset, setupdatedAtOffset] = useState<number | undefined>(
+    UPDATED_AT_OFFSET_24H,
+  );
+  const { data: othersProfiles, isLoading } = useOthersProfiles(
+    limit,
+    page,
+    updatedAtOffset,
+  );
   return (
     <ServiceLayout>
       <div className="self-center px-3 m-auto">
@@ -86,26 +97,60 @@ export function RankingPage() {
           >
             ← Mini Dice로 돌아가기
           </Link>
-          <h1 className=" text-4xl font-bold">랭킹</h1>
+          <h1 className=" text-4xl font-bold">순위</h1>
         </div>
         <div className="flex flex-col gap-3 max-w-5xl">
           <div className="flex flex-col gap-3 my-5 sticky top-0 z-50 dark:bg-black bg-white py-5">
-            <div className="flex flex-row gap-x-3 text-xl font-bold">
-              <button
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-                className="hover:underline disabled:text-gray-500"
-              >
-                이전 페이지
-              </button>
-              <button
-                onClick={() => setPage(page + 1)}
-                disabled={page === 10 || othersProfiles?.length! < limit}
-                className="hover:underline disabled:text-gray-500"
-              >
-                다음 페이지
-              </button>
+            <div>
+              <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+                순위 선택
+              </div>
+              <div className="flex flex-row gap-x-3 text-xl font-bold">
+                <button
+                  onClick={() => setupdatedAtOffset(UPDATED_AT_OFFSET_24H)}
+                  disabled={updatedAtOffset === UPDATED_AT_OFFSET_24H}
+                  className="hover:underline disabled:font-bold disabled:underline"
+                >
+                  24시간 순위
+                </button>
+                <button
+                  onClick={() => setupdatedAtOffset(UPDATED_AT_OFFSET_7DAYS)}
+                  disabled={updatedAtOffset === UPDATED_AT_OFFSET_7DAYS}
+                  className="hover:underline disabled:font-bold disabled:underline"
+                >
+                  일주일 순위
+                </button>
+                <button
+                  onClick={() => setupdatedAtOffset(UPDATED_AT_OFFSET_ALLTIME)}
+                  disabled={updatedAtOffset === UPDATED_AT_OFFSET_ALLTIME}
+                  className="hover:underline disabled:font-bold disabled:underline"
+                >
+                  전체 순위
+                </button>
+              </div>
             </div>
+            <div>
+              <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+                페이지 이동
+              </div>
+              <div className="flex flex-row gap-x-3 text-xl font-bold">
+                <button
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                  className="hover:underline disabled:text-gray-500"
+                >
+                  이전 페이지
+                </button>
+                <button
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === 10 || othersProfiles?.length! < limit}
+                  className="hover:underline disabled:text-gray-500"
+                >
+                  다음 페이지
+                </button>
+              </div>
+            </div>
+
             <p className=" text-sm">
               유저 닉네임을 클릭하여 상세정보 조회 가능
             </p>

@@ -18,11 +18,15 @@ export async function getUserVo(): Promise<UserEntityJson> {
 export async function getOthersProfiles(
   limit: number,
   page: number,
+  updatedAfterOffset?: number,
 ): Promise<PublicProfileVo[]> {
   const response = await authedAxios.get<PublicProfileVo[]>('profile/others', {
     params: {
       limit,
       page,
+      updatedAfter: updatedAfterOffset
+        ? new Date(Date.now() - updatedAfterOffset)
+        : undefined,
     },
   });
 
