@@ -31,7 +31,7 @@ export const DiceTossButton: React.FC<{
   const diceButtonState = useRecoilValue(diceTossActivityStatusAtom);
 
   const baseButtonClassNames =
-    'text-white md:px-5 md:py-7 px-5 py-5 max-w-lg w-full rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
+    'text-white md:px-5 md:py-7 px-5 py-5 max-w-2xl w-full rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
 
   if (
     diceButtonState == DiceTossActivityEnum.Processing ||
