@@ -1,11 +1,11 @@
 import { PublicProfileVo } from '@packages/shared-types';
+import { formatDistance } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useOthersProfiles } from '../libs/tdol-server/profile/use-others-profiles.hook';
 import { IndexPageURL } from './routes';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import { ko } from 'date-fns/locale';
 
 const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
   profile,
