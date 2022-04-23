@@ -1,6 +1,6 @@
 export const WordmarkComponent: React.FC = () => (
   <>
-    Mini <span className="text-minidice_red">Dice</span>{' '}
+    Mini Dice <span className="text-minidice_red"> Life</span>
   </>
 );
 

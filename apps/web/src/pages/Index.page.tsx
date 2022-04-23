@@ -18,10 +18,10 @@ export function IndexPage() {
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
-            <h1 className="text-5xl font-bold">
+            <h1 className="text-4xl font-bold">
               <KoreanWordmarkComponent />
             </h1>
-            <h2 className="text-3xl font-bold">
+            <h2 className="text-2xl font-bold">
               <WordmarkComponent />
             </h2>
             <HealthCheckComponent />

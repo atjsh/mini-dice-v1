@@ -83,14 +83,14 @@ const UserActivityMessage: React.FC<{
         <div
           className={`${MessageCommon} ${UserActivityMessageCommon} text-right peer`}
         >
-          <div className="text-xs mb-1">주사위 굴리는 중</div>
+          <div className="text-xs mb-1 whitespace-nowrap">주사위 굴리는 중</div>
           <div>
             <span className=" text-white">
               {diceTossingNumbers.map((dice) => `🎲 ${dice}`).join(' · ')}
             </span>
           </div>
         </div>
-        <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
+        <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2 text-right">
           {date.toLocaleString()}
         </div>
       </div>
@@ -105,7 +105,7 @@ const UserActivityMessage: React.FC<{
       >
         {userActivityMessage.description ? (
           <>
-            <div className="text-xs mb-1">
+            <div className="text-xs mb-1 whitespace-nowrap">
               <Text t={userActivityMessage.title} />
             </div>
             <div>
@@ -116,7 +116,7 @@ const UserActivityMessage: React.FC<{
           <Text t={userActivityMessage.title} />
         )}
       </div>
-      <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2">
+      <div className="peer-hover:opacity-100 opacity-0 transition-opacity duration-150 text-gray-400 font-bold text-xs pl-2 text-right">
         {date.toLocaleString()}
       </div>
       <br style={{ fontSize: '0px' }} />
@@ -144,8 +144,8 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
           <div className=" flex-shrink-0">
             <img
               src={plainMessage.thumbnail.imageUrl}
-              alt=""
-              className=" w-24 h-24 md:w-32 md:h-32 rounded-lg mt-3 mb-2 bg-white dark:bg-black object-contain object-bottom"
+              alt={plainMessage.thumbnail.altName}
+              className=" w-24 h-24 md:w-32 md:h-32 rounded-lg mt-3 mb-2 md:my-3 bg-white dark:bg-black object-contain object-bottom"
             />
           </div>
         )}
