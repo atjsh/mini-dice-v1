@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
@@ -15,6 +16,7 @@ import {
   WordmarkComponent,
 } from '../components/wordmark/wordmark.component';
 import { useDiceToss, useSkillLogs, useUser } from '../libs';
+import { RankingPgaeURL } from './routes';
 
 const Messages = () => {
   const skillLogMessages = useRecoilValue(skillLogMessagesState);
@@ -95,11 +97,11 @@ export function Ingame({
         </div>
         <Messages />
 
-        <div className="md:p-3 p-3 pt-3 pb-15 text-center sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300">
+        <div className="md:p-3 p-3 pt-3 pb-15 text-center sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-3 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
           <div className="flex gap-x-3 items-start max-w-7xl w-full">
             <MapStatusBar />
           </div>
-          <div className=" ">
+          <div className=" w-full overflow-x-auto whitespace-nowrap">
             <button
               onClick={() => {
                 setisSidebarShowing(!isSidebarShowing);
@@ -108,7 +110,7 @@ export function Ingame({
                 !isSidebarShowing
                   ? 'border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
-              } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95  md:hidden`}
+              } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95 md:hidden inline-block`}
             >
               💵{' '}
               {user
@@ -145,21 +147,26 @@ export function Ingame({
                     style: 'currency',
                     currency: 'KRW',
                   })}`}
-            </div>
-            <div className=" mb-3"></div>
-            <DiceTossButton
-              canTossDiceAfter={
-                user?.canTossDiceAfter
-                  ? new Date(user.canTossDiceAfter)
-                  : undefined
-              }
-              isDiceTossForbidden={user?.isUserDiceTossForbidden}
-              onClick={() => {
-                mutation.mutate();
-              }}
-              setisSidebarShowing={() => setisSidebarShowing(false)}
-            />
+            </div>{' '}
+            <Link
+              to={RankingPgaeURL}
+              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95"
+            >
+              순위 보기
+            </Link>
           </div>
+          <DiceTossButton
+            canTossDiceAfter={
+              user?.canTossDiceAfter
+                ? new Date(user.canTossDiceAfter)
+                : undefined
+            }
+            isDiceTossForbidden={user?.isUserDiceTossForbidden}
+            onClick={() => {
+              mutation.mutate();
+            }}
+            setisSidebarShowing={() => setisSidebarShowing(false)}
+          />
         </div>
       </div>
     </div>
