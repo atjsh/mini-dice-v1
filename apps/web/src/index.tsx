@@ -14,7 +14,7 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       refetchOnMount: true,
       refetchOnReconnect: true,
-      retry: false,
+      retry: 2,
       // staleTime: twentyFourHoursInMs
     },
   },

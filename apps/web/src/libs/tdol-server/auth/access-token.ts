@@ -95,7 +95,6 @@ authedAxios.interceptors.response.use(async (response) => {
 
     if (accessToken) {
       localStorage.setItem(LocalStrageAccessTokenKey, accessToken);
-      location.reload();
     }
   }
 
