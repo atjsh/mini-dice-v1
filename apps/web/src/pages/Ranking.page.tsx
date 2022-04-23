@@ -77,7 +77,7 @@ const UPDATED_AT_OFFSET_7DAYS = 1000 * 60 * 60 * 24 * 7;
 const UPDATED_AT_OFFSET_ALLTIME = undefined;
 
 export function RankingPage() {
-  const limit = 50;
+  const limit = 25;
   const [page, setPage] = useState(1);
   const [updatedAtOffset, setupdatedAtOffset] = useState<number | undefined>(
     UPDATED_AT_OFFSET_24H,
@@ -107,21 +107,30 @@ export function RankingPage() {
               </div>
               <div className="flex flex-row gap-x-3 text-xl font-bold">
                 <button
-                  onClick={() => setupdatedAtOffset(UPDATED_AT_OFFSET_24H)}
+                  onClick={() => {
+                    setupdatedAtOffset(UPDATED_AT_OFFSET_24H);
+                    setPage(1);
+                  }}
                   disabled={updatedAtOffset === UPDATED_AT_OFFSET_24H}
                   className="hover:underline disabled:font-bold disabled:underline"
                 >
                   24시간 순위
                 </button>
                 <button
-                  onClick={() => setupdatedAtOffset(UPDATED_AT_OFFSET_7DAYS)}
+                  onClick={() => {
+                    setupdatedAtOffset(UPDATED_AT_OFFSET_7DAYS);
+                    setPage(1);
+                  }}
                   disabled={updatedAtOffset === UPDATED_AT_OFFSET_7DAYS}
                   className="hover:underline disabled:font-bold disabled:underline"
                 >
                   일주일 순위
                 </button>
                 <button
-                  onClick={() => setupdatedAtOffset(UPDATED_AT_OFFSET_ALLTIME)}
+                  onClick={() => {
+                    setupdatedAtOffset(UPDATED_AT_OFFSET_ALLTIME);
+                    setPage(1);
+                  }}
                   disabled={updatedAtOffset === UPDATED_AT_OFFSET_ALLTIME}
                   className="hover:underline disabled:font-bold disabled:underline"
                 >
