@@ -1,4 +1,7 @@
-import { WordmarkComponent } from '../components/wordmark/wordmark.component';
+import {
+  KoreanWordmarkComponent,
+  WordmarkComponent,
+} from '../components/wordmark/wordmark.component';
 import { ServiceLayout } from '../layouts/service.layout';
 
 export function IndexSkeletonPage() {
@@ -8,12 +11,10 @@ export function IndexSkeletonPage() {
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
-            <h1 className="text-5xl font-bold">
-              <div>
-                미니다이스 <span className="text-minidice_red">인생게임</span>
-              </div>
+            <h1 className="text-4xl font-bold">
+              <KoreanWordmarkComponent />
             </h1>
-            <h2 className="text-3xl font-bold">
+            <h2 className="text-2xl font-bold">
               <WordmarkComponent />
             </h2>
             <h2 className=" self-center mt-5 text-xl">

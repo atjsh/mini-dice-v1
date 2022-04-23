@@ -18,7 +18,7 @@ const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
   };
   return (
     <button
-      className=" w-fit border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95 text-left block"
+      className=" w-full border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95 text-left block"
       onClick={() => setIsProfileDetailShowing(!isProfileDetailShowing)}
     >
       <div
@@ -89,7 +89,7 @@ export function RankingPage() {
   );
   return (
     <ServiceLayout>
-      <div className="self-center px-3 m-auto">
+      <div className="self-center px-3 max-w-5xl m-auto">
         <div className="">
           <Link
             className=" text-lg text-blue-500 hover:underline"
@@ -99,7 +99,7 @@ export function RankingPage() {
           </Link>
           <h1 className=" text-4xl font-bold">순위</h1>
         </div>
-        <div className="flex flex-col gap-3 max-w-5xl">
+        <div className="flex flex-col gap-3 ">
           <div className="flex flex-col gap-3 my-5 sticky top-0 z-50 dark:bg-black bg-white py-5">
             <div>
               <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
