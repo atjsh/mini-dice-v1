@@ -228,12 +228,14 @@ export class StockSkillGroup implements SkillGroupController {
               }),
               this.stockBuyMoreFormMessage(
                 props.skillServiceResult.status!,
-                BigInt(props.skillServiceResult.maxBuyableAmount!),
+                BigInt(props.skillServiceResult.maxBuyableAmount! || 0),
               ),
               LinkGroup({
                 description: `또는, 주식을 처분하시겠습니까? 처분하면 현금으로 ${cashLocale(
-                  BigInt(props.skillServiceResult.status!.stockAmount) *
-                    BigInt(props.skillServiceResult.status!.stockCurrentPrice),
+                  BigInt(props.skillServiceResult.status!.stockAmount || 0) *
+                    BigInt(
+                      props.skillServiceResult.status!.stockCurrentPrice || 0,
+                    ),
                 )} 지급됩니다. \n물론 나중에 처분해도 됩니다.`,
                 type: 'linkGroup',
                 links: [
