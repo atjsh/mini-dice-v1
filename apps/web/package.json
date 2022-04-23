@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^0.3.7",
-    "@packages/shared-types": "^1.1.0",
     "@packages/scenario-routing": "^1.1.0",
+    "@packages/shared-types": "^1.1.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -14,6 +14,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "axios": "^0.22.0",
+    "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "glob-parent": "^6.0.2",
     "lodash": "^4.17.21",

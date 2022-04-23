@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useOthersProfiles } from '../libs/tdol-server/profile/use-others-profiles.hook';
 import { IndexPageURL } from './routes';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
   profile,
@@ -41,7 +43,10 @@ const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
             })}`}{' '}
           </div>
           <div className="font-bold text-base text-gray-500">
-            {new Date(profile.updatedAt).toLocaleString('ko-kr')} 마지막 활동
+            {formatDistance(new Date(profile.updatedAt), new Date(), {
+              locale: ko,
+            }).toString()}{' '}
+            전 마지막 활동
           </div>
         </div>
         {isProfileDetailShowing && (
@@ -63,7 +68,10 @@ const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
               })}`}{' '}
             </div>
             <div className="font-bold text-base text-gray-500">
-              {new Date(profile.createdAt).toLocaleDateString('ko-kr')} 시작
+              {formatDistance(new Date(profile.createdAt), new Date(), {
+                locale: ko,
+              }).toString()}{' '}
+              전 시작
             </div>
           </div>
         )}
@@ -100,10 +108,15 @@ export function RankingPage() {
           <h1 className=" text-4xl font-bold">순위</h1>
         </div>
         <div className="flex flex-col gap-3 ">
-          <div className="flex flex-col gap-3 my-5 sticky top-0 z-50 dark:bg-black bg-white py-5">
+          <div className="flex flex-col gap-3 mt-5 mb-10 sticky top-0 z-50 dark:bg-black bg-white py-5">
             <div>
               <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
-                순위 선택
+                {new Date().toLocaleString('ko-kr', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                })}{' '}
               </div>
               <div className="flex flex-row gap-x-3 text-xl font-bold">
                 <button
