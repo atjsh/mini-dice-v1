@@ -101,7 +101,7 @@ export function Ingame({
           <div className="flex gap-x-3 items-start max-w-7xl w-full px-1.5">
             <MapStatusBar />
           </div>
-          <div className=" w-full overflow-x-auto whitespace-nowrap px-1.5 box-border">
+          <div className=" w-full overflow-x-auto whitespace-nowrap px-1.5 box-border text-left sm:text-center">
             <button
               onClick={() => {
                 setisSidebarShowing(!isSidebarShowing);
@@ -152,7 +152,7 @@ export function Ingame({
               to={RankingPgaeURL}
               className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95"
             >
-              🥇🥈🥉 순위 보기
+              🥇 순위 보기
             </Link>
           </div>
           <div className=" w-full px-1.5 pb-3">
