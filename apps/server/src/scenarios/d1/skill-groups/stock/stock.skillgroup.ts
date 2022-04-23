@@ -146,7 +146,7 @@ export class StockSkillGroup implements SkillGroupController {
               ),
               PlainMessage({
                 title: '주식: 규칙',
-                description: `- "주식 총평가금액"이 ${cashLocale(
+                description: `- "1주당 금액"이 ${cashLocale(
                   1000,
                 )} 이하로 폭락하면 강제로 판매됩니다. \n - 주식은 1종류만 구매 가능합니다. \n - "더블 시 주가 증감"이란? 주사위를 굴렸을 때, 동일한 주사위 눈이 나오면 주가가 "더블 시 주가 증감" 값에 맞춰 바뀝니다. 눈이 짝수면 오르고, 눈이 홀수면 떨어집니다.`,
               }),
