@@ -4,7 +4,6 @@
   "main": "index.js",
   "repository": "https://github.com/ATJSH/mini-dice-v1",
   "author": "ATJSH <letaem77@gmail.com>",
-  "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/*",
