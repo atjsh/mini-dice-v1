@@ -10,7 +10,8 @@ export const WordmarkComponent: React.FC<{ colored?: boolean }> = ({
     >
       {' '}
       Life
-    </span>
+    </span>{' '}
+    <span>Beta</span>
   </>
 );
 
@@ -25,6 +26,7 @@ export const KoreanWordmarkComponent: React.FC<{ colored?: boolean }> = ({
       } whitespace-nowrap`}
     >
       인생게임
-    </span>
+    </span>{' '}
+    <span>베타</span>
   </>
 );
