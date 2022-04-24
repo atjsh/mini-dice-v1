@@ -1,7 +1,13 @@
 import { UserVo } from '@packages/shared-types';
 import { useMutation } from 'react-query';
+import { useRecoilState } from 'recoil';
 import { submitUserInteraction } from '.';
-import { getMap, UseUserHookKey } from '..';
+import {
+  DiceTossActivityEnum,
+  diceTossActivityStatusAtom,
+  getMap,
+  UseUserHookKey,
+} from '..';
 import { queryClient } from '../../..';
 import {
   getSkillLogMessageAddingDelayTiming,
@@ -13,10 +19,23 @@ export const useSubmitUserInteraction = (
   onErrorCallback?: (error: unknown) => any,
 ) => {
   const { addSkillLogMessages } = useSkillLogMessages();
+  const [diceTossActivityStatus, setDiceTossActivityStatus] = useRecoilState(
+    diceTossActivityStatusAtom,
+  );
 
   return useMutation(submitUserInteraction, {
     onError: onErrorCallback,
+    onMutate: async () => {
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Submitted,
+        reason: '처리 중...',
+      });
+    },
     onSuccess: async (data) => {
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Processing,
+        reason: '처리 중...',
+      });
       queryClient.refetchQueries([getMap.name]);
 
       addSkillLogMessages(
@@ -49,9 +68,16 @@ export const useSubmitUserInteraction = (
 
       await sleep(
         getSkillLogMessageAddingDelayTiming(
-          data.skillLog.skillDrawResult.actionResultDrawings.length - 1,
+          data.skillLog.skillDrawResult.userRequestDrawings.length +
+            data.skillLog.skillDrawResult.actionResultDrawings.length -
+            1,
         ),
       );
+
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Idle,
+        reason: null,
+      });
       queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
     },
   });

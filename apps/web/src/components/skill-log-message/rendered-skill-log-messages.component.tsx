@@ -57,7 +57,7 @@ const UserActivityMessage: React.FC<{
   ]);
 
   useEffect(() => {
-    if (diceTossActivityStatus == DiceTossActivityEnum.Processing) {
+    if (diceTossActivityStatus.enum == DiceTossActivityEnum.Processing) {
       const numberChangingInterval = setInterval(
         () =>
           setDiceTossingNumbers([
@@ -76,7 +76,7 @@ const UserActivityMessage: React.FC<{
   if (
     userActivityMessage.type == 'diceTossUserActivityMessage' &&
     isLast &&
-    diceTossActivityStatus == DiceTossActivityEnum.Processing
+    diceTossActivityStatus.enum == DiceTossActivityEnum.Processing
   ) {
     return (
       <div className="flex flex-row-reverse items-end">

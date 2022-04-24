@@ -29,10 +29,16 @@ export const useDiceToss = () => {
 
   return useMutation(tossDice, {
     onMutate: async () => {
-      setDiceTossActivityStatus(DiceTossActivityEnum.Submitted);
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Submitted,
+        reason: null,
+      });
     },
     onSuccess: async (data) => {
-      setDiceTossActivityStatus(DiceTossActivityEnum.Processing);
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Processing,
+        reason: null,
+      });
 
       addSkillLogMessages(
         data.skillLog.skillDrawResult.userRequestDrawings.map(
@@ -50,7 +56,10 @@ export const useDiceToss = () => {
         await sleep(diceTossingDelayTimeMS);
       }
 
-      setDiceTossActivityStatus(DiceTossActivityEnum.ResultShowing);
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.ResultShowing,
+        reason: null,
+      });
       await sleep(200);
 
       queryClient.refetchQueries([getMap.name]);
@@ -77,7 +86,10 @@ export const useDiceToss = () => {
         ),
       );
 
-      setDiceTossActivityStatus(DiceTossActivityEnum.Idle);
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Idle,
+        reason: null,
+      });
       queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
     },
   });
