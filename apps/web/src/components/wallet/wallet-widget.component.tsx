@@ -124,7 +124,7 @@ export const WalletWidget: React.FC = () => {
             label="1주당 금액"
             fontSize="text-md"
           />
-          <ValueDisplay
+          {/* <ValueDisplay
             value={`${
               user.stockStatus
                 ? BigInt(
@@ -139,7 +139,7 @@ export const WalletWidget: React.FC = () => {
             }`}
             label="평가손익"
             fontSize="text-md"
-          />
+          /> */}
         </ValueDisplayContainer>
       </div>
     </div>
