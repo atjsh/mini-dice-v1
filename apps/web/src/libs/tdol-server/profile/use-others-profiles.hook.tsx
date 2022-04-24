@@ -6,6 +6,6 @@ export const useOthersProfiles = (
   page: number,
   updatedAfterOffset?: number,
 ) =>
-  useQuery([getOthersProfiles.name, limit, page, updatedAfterOffset], () =>
+  useQuery([getOthersProfiles.name, { limit, page, updatedAfterOffset }], () =>
     getOthersProfiles(limit, page, updatedAfterOffset),
   );

@@ -86,7 +86,7 @@ function TempSignupForm() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col items-center gap-2 hidden">
+      <div className=" flex-col items-center gap-2 hidden">
         <div className=" font-medium text-lg text-center">
           당신이 거주중인 국가를 선택하세요.
         </div>
@@ -114,7 +114,7 @@ function TempSignupForm() {
         />
       </div>
       <a
-        className="inline-block text-base text-blue-600 hover:underline p-5 text-center hidden"
+        className=" text-base text-blue-600 hover:underline p-5 text-center hidden"
         href={getGoogleOAuthPageUrl()}
       >
         <span className=" text-black dark:text-white">
