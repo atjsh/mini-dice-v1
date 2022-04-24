@@ -7,7 +7,6 @@ import {
   serializeStockStatusToJson,
   StockIdType,
   UserEntityJson,
-  UserVo,
 } from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
@@ -198,6 +197,11 @@ export class UserEntity {
   })
   stockAmount: bigint;
 
+  @Column('bigint', {
+    default: null,
+  })
+  stockCashPurchaseSum: bigint | null;
+
   /** 객체가 생성된 날짜 */
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
@@ -225,6 +229,7 @@ export function serializeUserToJson(user: UserEntity): UserEntityJson {
               user.stockId,
               BigInt(user.stockAmount),
               BigInt(user.stockPrice),
+              BigInt(user.stockCashPurchaseSum || 0),
             ),
           ),
     cash: user.cash.toString(),

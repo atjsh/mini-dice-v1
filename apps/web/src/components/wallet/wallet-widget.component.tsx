@@ -124,22 +124,26 @@ export const WalletWidget: React.FC = () => {
             label="1주당 금액"
             fontSize="text-md"
           />
-          {/* <ValueDisplay
-            value={`${
-              user.stockStatus
-                ? BigInt(
-                    BigInt(user.stockStatus.stockAmount) *
-                      (BigInt(user.stockStatus.stockCurrentPrice) -
-                        BigInt(user.stockStatus.stockStartingPrice)),
-                  ).toLocaleString('ko-kr', {
-                    style: 'currency',
-                    currency: 'KRW',
-                  })
-                : '-'
-            }`}
-            label="평가손익"
-            fontSize="text-md"
-          /> */}
+          {user.stockStatus &&
+            BigInt(user.stockStatus.stockCashPurchaseSum || 0) > 0 && (
+              <ValueDisplay
+                value={`${
+                  user.stockStatus &&
+                  BigInt(user.stockStatus.stockCashPurchaseSum) > 0
+                    ? (
+                        BigInt(user.stockStatus.stockAmount) *
+                          BigInt(user.stockStatus.stockCurrentPrice) -
+                        BigInt(user.stockStatus.stockCashPurchaseSum)
+                      ).toLocaleString('ko-kr', {
+                        style: 'currency',
+                        currency: 'KRW',
+                      })
+                    : '-'
+                }`}
+                label="평가손익"
+                fontSize="text-md"
+              />
+            )}
         </ValueDisplayContainer>
       </div>
     </div>

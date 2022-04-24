@@ -91,6 +91,8 @@ export class CommonStockService {
             stockId,
             stockAmount,
             stockPrice: stockInitialData.stockStartingPrice,
+            stockCashPurchaseSum:
+              stockInitialData.stockStartingPrice * BigInt(stockAmount),
           });
 
         return {
@@ -109,6 +111,7 @@ export class CommonStockService {
           stockPrice,
           cash,
           stockAmount: currentStockAmount,
+          stockCashPurchaseSum: currentStockCashPurchaseSum,
         } = await transactionManager
           .getCustomRepository(UserRepository)
           .findUserWithCache(userId);
@@ -126,6 +129,9 @@ export class CommonStockService {
           .partialUpdateUser(userId, {
             cash: cash - stockPrice * addingStockAmount,
             stockAmount: addingStockAmount + currentStockAmount,
+            stockCashPurchaseSum: currentStockCashPurchaseSum
+              ? currentStockCashPurchaseSum + stockPrice * addingStockAmount
+              : undefined,
           });
 
         return {
@@ -162,6 +168,7 @@ export class CommonStockService {
             stockId: null,
             stockAmount: BigInt(0),
             stockPrice: BigInt(0),
+            stockCashPurchaseSum: BigInt(0),
           });
 
         return {

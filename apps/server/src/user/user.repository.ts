@@ -35,6 +35,10 @@ export class UserRepository extends Repository<UserEntity> {
       stockAmount: BigInt(user.stockAmount),
       createdAt: new Date(user.createdAt),
       updatedAt: new Date(user.updatedAt),
+      stockCashPurchaseSum:
+        user.stockCashPurchaseSum != null
+          ? BigInt(user.stockCashPurchaseSum)
+          : BigInt(0),
     } as UserEntity;
   }
 

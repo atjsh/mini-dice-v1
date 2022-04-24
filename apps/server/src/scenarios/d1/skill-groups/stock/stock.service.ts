@@ -30,7 +30,7 @@ export class StockService implements SkillService {
       props.userId,
     );
 
-    const { cash, stockId, stockAmount, stockPrice } =
+    const { cash, stockId, stockAmount, stockPrice, stockCashPurchaseSum } =
       await this.userRepository.findUserWithCache(props.userId);
 
     await this.userRepository.setUserCanTossDice(
@@ -71,7 +71,12 @@ export class StockService implements SkillService {
       return {
         buyable: buyableStatus,
         status: serializeStockStatusToJson(
-          getStockStatus(stockId!, stockAmount, stockPrice),
+          getStockStatus(
+            stockId!,
+            stockAmount,
+            stockPrice,
+            stockCashPurchaseSum || BigInt(0),
+          ),
         ),
         maxBuyableAmount: String(cash / stockPrice),
       };

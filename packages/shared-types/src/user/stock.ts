@@ -19,6 +19,7 @@ export interface StockStatus {
   stockFallingPrice: StockData['stockFallingPrice'];
   stockAmount: bigint;
   stockCurrentPrice: bigint;
+  stockCashPurchaseSum: bigint;
 }
 
 export type StockStatusJson = Omit<
@@ -28,12 +29,14 @@ export type StockStatusJson = Omit<
   | 'stockAmount'
   | 'stockCurrentPrice'
   | 'stockStartingPrice'
+  | 'stockCashPurchaseSum'
 > & {
   stockRisingPrice: string;
   stockFallingPrice: string;
   stockAmount: string;
   stockCurrentPrice: string;
   stockStartingPrice: string;
+  stockCashPurchaseSum: string;
 };
 
 export type StockInitalDataType = {
@@ -88,6 +91,7 @@ export function getStockStatus(
   stockId: StockIdType,
   stockAmount: StockStatus['stockAmount'],
   stockCurrentPrice: StockStatus['stockCurrentPrice'],
+  stockCashPurchaseSum: StockStatus['stockCashPurchaseSum'],
 ): StockStatus {
   const stockInitialData = StockInitialData.find(
     (stock) => stock.id === stockId,
@@ -104,6 +108,7 @@ export function getStockStatus(
     stockFallingPrice: stockInitialData.stockFallingPrice,
     stockAmount,
     stockCurrentPrice,
+    stockCashPurchaseSum,
   };
 }
 
@@ -119,6 +124,7 @@ export function serializeStockStatusToJson(
     stockFallingPrice: stockStatus.stockFallingPrice.toString(),
     stockAmount: stockStatus.stockAmount.toString(),
     stockCurrentPrice: stockStatus.stockCurrentPrice.toString(),
+    stockCashPurchaseSum: stockStatus.stockCashPurchaseSum.toString(),
   };
 }
 
