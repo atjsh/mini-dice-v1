@@ -93,6 +93,11 @@ export class StockService implements SkillService {
       throw new ForbiddenException('cannot buy stock; not enough money');
     }
 
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1, true),
+    );
+
     return {
       stockName: result.stockInitialData.stockName,
       stockAmount: String(result.stockAmount),
@@ -111,6 +116,11 @@ export class StockService implements SkillService {
       throw new ForbiddenException('cannot buy more stock; not enough money');
     }
 
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1, true),
+    );
+
     return {
       stockName: result.stockName,
       stockPrice: result.stockPrice,
@@ -124,6 +134,11 @@ export class StockService implements SkillService {
     if (result == StockOwningStatusEnum.NOT_OWNING_STOCK) {
       throw new ForbiddenException('cannot sell stock; not owning stocks');
     }
+
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1, true),
+    );
     return result;
   }
 }
