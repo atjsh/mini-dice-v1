@@ -168,7 +168,7 @@ export class CommonStockService {
             stockId: null,
             stockAmount: BigInt(0),
             stockPrice: BigInt(0),
-            stockCashPurchaseSum: BigInt(0),
+            stockCashPurchaseSum: null,
           });
 
         return {
