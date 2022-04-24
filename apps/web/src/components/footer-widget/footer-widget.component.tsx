@@ -18,7 +18,7 @@ export const FooterWidgetComponent: React.FC = () => {
       <hr className=" border-gray-300" />
       <div className=" flex gap-y-1 flex-col ">
         <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
-          클라이언트 버전
+          현재 클라이언트 버전
         </div>
         <div className="flex gap-x-5 gap-y-3 flex-wrap">
           <div>
