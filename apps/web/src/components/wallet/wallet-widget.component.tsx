@@ -3,7 +3,7 @@ import { useUser } from '../../libs';
 const ValueDisplay: React.FC<{
   value: string;
   label: string;
-  fontSize: 'text-md' | 'text-3xl' | 'text-4xl';
+  fontSize: 'text-xs' | 'text-md' | 'text-3xl' | 'text-4xl';
 }> = ({ value, label, fontSize }) => (
   <div className="flex-1">
     <div className="font-extrabold text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
@@ -125,25 +125,29 @@ export const WalletWidget: React.FC = () => {
             fontSize="text-md"
           />
           {user.stockStatus &&
-            BigInt(user.stockStatus.stockCashPurchaseSum || 0) > 0 && (
-              <ValueDisplay
-                value={`${
-                  user.stockStatus &&
-                  BigInt(user.stockStatus.stockCashPurchaseSum) > 0
-                    ? (
-                        BigInt(user.stockStatus.stockAmount) *
-                          BigInt(user.stockStatus.stockCurrentPrice) -
-                        BigInt(user.stockStatus.stockCashPurchaseSum)
-                      ).toLocaleString('ko-kr', {
-                        style: 'currency',
-                        currency: 'KRW',
-                      })
-                    : '-'
-                }`}
-                label="평가손익"
-                fontSize="text-md"
-              />
-            )}
+          BigInt(user.stockStatus.stockCashPurchaseSum || 0) > 0 ? (
+            <ValueDisplay
+              value={`${(
+                BigInt(user.stockStatus.stockAmount) *
+                  BigInt(user.stockStatus.stockCurrentPrice) -
+                BigInt(user.stockStatus.stockCashPurchaseSum!)
+              ).toLocaleString('ko-kr', {
+                style: 'currency',
+                currency: 'KRW',
+              })}`}
+              label="평가손익"
+              fontSize="text-md"
+            />
+          ) : user.stockStatus ? (
+            <ValueDisplay
+              label="평가손익"
+              value={`주식 재구매 후 
+              확인 가능`}
+              fontSize="text-md"
+            />
+          ) : (
+            <ValueDisplay label="평가손익" value="-" fontSize="text-md" />
+          )}
         </ValueDisplayContainer>
       </div>
     </div>
