@@ -1,3 +1,4 @@
+import { strEllipsis } from '@packages/shared-types';
 import { Link } from 'react-router-dom';
 import { useAccessToken } from '../../libs';
 import {
@@ -15,6 +16,23 @@ export const FooterWidgetComponent: React.FC = () => {
   return (
     <div className="self-center mb-10 flex flex-col gap-5 max-w-7xl px-2">
       <hr className=" border-gray-300" />
+      <div className=" flex gap-y-1 flex-col ">
+        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+          클라이언트 버전
+        </div>
+        <div className="flex gap-x-5 gap-y-3 flex-wrap">
+          <div>
+            {strEllipsis(
+              process.env.VERCEL_GIT_COMMIT_SHA ||
+                process.env.BUILD_VERSION ||
+                'unknown',
+              10,
+              '+',
+            )}
+          </div>
+          <div>"{process.env.WEB_VERSION_KIND || 'unknown'}" 환경</div>
+        </div>
+      </div>
       <div className=" flex gap-y-1 flex-col ">
         <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
           서비스
@@ -89,7 +107,6 @@ export const FooterWidgetComponent: React.FC = () => {
           </a>
         </div>
       </div>
-
       <div className="text-gray-400">
         일러스트 및 이미지 저작권 © Miyobi (미요비). 모든 권리 보유.
         <br /> Mini Dice 저작권 © 2022 Mini Dice Team. 모든 권리 보유. <br />
