@@ -2,12 +2,11 @@
 FROM node:17.9-slim
 WORKDIR /app
 
-ENV NODE_ENV=production
 ENV APP_ENV=dev
 
 COPY . .
 
-RUN yarn install --network-timeout=1000000
+RUN yarn install
 
 
 RUN yarn workspace @apps/server build
