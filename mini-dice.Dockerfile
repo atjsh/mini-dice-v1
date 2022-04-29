@@ -1,5 +1,6 @@
 # 1. npm 패키지를 모두 설치한 이미지 1개를 생성함
-FROM node:17.9
+FROM node:17.9-slim
+WORKDIR /app
 
 ENV APP_ENV=dev
 
