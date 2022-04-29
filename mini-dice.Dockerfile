@@ -9,7 +9,7 @@ ENV APP_ENV=dev
 
 COPY . .
 
-RUN yarn install
+RUN yarn workspaces focus @apps/server
 
 
 RUN yarn workspace @apps/server build
