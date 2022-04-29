@@ -7,7 +7,7 @@ ENV APP_ENV=dev
 
 COPY . .
 
-RUN yarn install --prod --network-timeout=1000000
+RUN yarn install --network-timeout=1000000
 
 
 RUN yarn workspace @apps/server build
