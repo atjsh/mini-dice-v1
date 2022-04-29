@@ -6,7 +6,7 @@ ENV APP_ENV=dev
 
 COPY . .
 
-RUN yarn install
+RUN yarn install --silent
 
 
 RUN yarn workspace @apps/server build
