@@ -9,13 +9,22 @@ import { MapStatusBar } from '../components/map/map-status-bar.component';
 import { ProfileWidget } from '../components/profile/profile-widget.component';
 import { skillLogMessagesState } from '../components/skill-log-message/atoms/skill-log-messages.atom';
 import { RenderedSkillLogMessages } from '../components/skill-log-message/rendered-skill-log-messages.component';
-import { useSkillLogMessages } from '../components/skill-log-message/use-skill-log-messages.hook';
+import {
+  usePageTimeout,
+  useSkillLogMessages,
+} from '../components/skill-log-message/use-skill-log-messages.hook';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
 import {
   KoreanWordmarkComponent,
   WordmarkComponent,
 } from '../components/wordmark/wordmark.component';
-import { useDiceToss, useSkillLogs, useUser } from '../libs';
+import {
+  DiceTossActivityEnum,
+  diceTossActivityStatusAtom,
+  useDiceToss,
+  useSkillLogs,
+  useUser,
+} from '../libs';
 import { RankingPgaeURL } from './routes';
 
 const Messages = () => {
@@ -48,8 +57,23 @@ export function Ingame({
   const [currentSkillRoute, setCurrentSkillRoute] = useRecoilState(
     currentSkillRouteAtom,
   );
+  const { pageTimeouts } = usePageTimeout();
+  const [diceTossActivity, setDiceTossActivity] = useRecoilState(
+    diceTossActivityStatusAtom,
+  );
 
   useEffect(() => {
+    pageTimeouts.map(clearTimeout);
+    setDiceTossActivity({
+      enum: DiceTossActivityEnum.Idle,
+      reason: null,
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log('initSkillLogMessages');
+    console.log(skillLogs != undefined);
+
     if (skillLogs != undefined) {
       if (skillLogs.length > 0) {
         setCurrentSkillRoute(skillLogs[skillLogs.length - 1].skillRoute);
@@ -77,7 +101,7 @@ export function Ingame({
         setCurrentSkillRoute(null);
       }
     }
-  }, [skillLogs]);
+  }, [skillLogs != undefined]);
 
   return (
     <div
@@ -86,9 +110,6 @@ export function Ingame({
       <div className="mx-auto my-0 max-w-7xl">
         <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-2 px-7 backdrop-blur-lg font-bold md:hidden flex items-center justify-between">
           <div className="text-left ">
-            <div className=" text-xs text-zinc-500">
-              <WordmarkComponent colored={false} />
-            </div>
             <div className=" text-lg">
               <KoreanWordmarkComponent />
             </div>

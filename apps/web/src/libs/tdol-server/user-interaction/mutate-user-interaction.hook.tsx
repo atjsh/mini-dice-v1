@@ -5,7 +5,9 @@ import { submitUserInteraction } from '.';
 import {
   DiceTossActivityEnum,
   diceTossActivityStatusAtom,
+  ExposedSkillLogType,
   getMap,
+  getSkillLogs,
   UseUserHookKey,
 } from '..';
 import { queryClient } from '../../..';
@@ -13,7 +15,18 @@ import {
   getSkillLogMessageAddingDelayTiming,
   sleep,
 } from '../../../common/timing';
-import { useSkillLogMessages } from '../../../components/skill-log-message/use-skill-log-messages.hook';
+import {
+  usePageTimeout,
+  useSkillLogMessages,
+} from '../../../components/skill-log-message/use-skill-log-messages.hook';
+
+function getDelayClosure() {
+  let delay = 0;
+  return function closure(addingDelay: number) {
+    delay += addingDelay;
+    return delay;
+  };
+}
 
 export const useSubmitUserInteraction = (
   onErrorCallback?: (error: unknown) => any,
@@ -22,6 +35,7 @@ export const useSubmitUserInteraction = (
   const [diceTossActivityStatus, setDiceTossActivityStatus] = useRecoilState(
     diceTossActivityStatusAtom,
   );
+  const { pushPageTimeout } = usePageTimeout();
 
   return useMutation(submitUserInteraction, {
     onError: onErrorCallback,
@@ -32,6 +46,11 @@ export const useSubmitUserInteraction = (
       });
     },
     onSuccess: async (data) => {
+      queryClient.setQueryData<ExposedSkillLogType[]>(
+        getSkillLogs.name,
+        (prevData) => [...(prevData ? prevData : []), data.skillLog],
+      );
+
       setDiceTossActivityStatus({
         enum: DiceTossActivityEnum.Processing,
         reason: '처리 중...',
@@ -66,19 +85,15 @@ export const useSubmitUserInteraction = (
         ].flat(),
       );
 
-      await sleep(
-        getSkillLogMessageAddingDelayTiming(
-          data.skillLog.skillDrawResult.userRequestDrawings.length +
-            data.skillLog.skillDrawResult.actionResultDrawings.length -
-            1,
-        ),
+      pushPageTimeout(
+        setTimeout(() => {
+          setDiceTossActivityStatus({
+            enum: DiceTossActivityEnum.Idle,
+            reason: null,
+          });
+          queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
+        }, getSkillLogMessageAddingDelayTiming(data.skillLog.skillDrawResult.userRequestDrawings.length + data.skillLog.skillDrawResult.actionResultDrawings.length - 1)),
       );
-
-      setDiceTossActivityStatus({
-        enum: DiceTossActivityEnum.Idle,
-        reason: null,
-      });
-      queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
     },
   });
 };

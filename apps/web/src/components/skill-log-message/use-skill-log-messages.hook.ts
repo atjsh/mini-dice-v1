@@ -1,4 +1,4 @@
-import { useRecoilState } from 'recoil';
+import { atom, useRecoilState } from 'recoil';
 import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
 
@@ -7,19 +7,36 @@ export interface PushSkillLogMessageInterface {
   delay?: number;
 }
 
+export const pageTimeoutsAtom = atom<ReturnType<typeof setTimeout>[]>({
+  key: 'pageTimeoutsAtom',
+  default: [],
+});
+
+export const usePageTimeout = () => {
+  const [pageTimeouts, setPageTimeout] = useRecoilState(pageTimeoutsAtom);
+
+  const pushPageTimeout = (timeout: ReturnType<typeof setTimeout>) =>
+    setPageTimeout((old) => [...(old ? old : []), timeout]);
+
+  return { pageTimeouts, pushPageTimeout };
+};
+
 export const useSkillLogMessages = () => {
   const [skillLogMessages, setSkillLogMessages] = useRecoilState(
     skillLogMessagesState,
   );
+  const { pushPageTimeout } = usePageTimeout();
 
   function addSkillLogMessages(
     pushSkillLogMessages: PushSkillLogMessageInterface[],
   ) {
     pushSkillLogMessages.map(({ skillLogMessage, delay }) => {
       if (delay) {
-        setTimeout(() => {
-          setSkillLogMessages((old) => [...old, skillLogMessage]);
-        }, delay);
+        pushPageTimeout(
+          setTimeout(() => {
+            setSkillLogMessages((old) => [...old, skillLogMessage]);
+          }, delay),
+        );
       } else {
         setSkillLogMessages((old) => [...old, skillLogMessage]);
       }

@@ -19,7 +19,7 @@ export type Protection =
 
 export interface ProtectedRoute {
   path: string;
-  component: React.ComponentType<any>;
+  component: React.ComponentType;
   title: string;
   exact: boolean;
   protection: Protection;
