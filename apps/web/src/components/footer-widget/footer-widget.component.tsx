@@ -39,7 +39,7 @@ export const FooterWidgetComponent: React.FC = () => {
             className="hover:underline"
             target="_blank"
           >
-            커뮤니티↗
+            커뮤니티(디스코드)↗
           </a>
           <a
             href="https://twitter.com/TeamMiniDice1"

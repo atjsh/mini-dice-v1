@@ -21,6 +21,7 @@ import { StockModule } from './stock/stock.module';
 import { StockUpModule } from './stock-up/stock-up.module';
 import { StockDownModule } from './stock-down/stock-down.module';
 import { PickedWalletModule } from './picked-wallet/picked-wallet.module';
+import { MoneyCollection1Module } from './money-collection-1/money-collection-1.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { PickedWalletModule } from './picked-wallet/picked-wallet.module';
     StockUpModule,
     StockDownModule,
     Land6Module,
+    MoneyCollection1Module,
   ],
 })
 export class D1SkillGroupsModule {}
