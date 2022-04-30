@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { strEllipsis } from '@packages/shared-types';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserRepository } from 'apps/server/src/user/user.repository';
+import { getUserCanTossDice } from '../../../scenarios.commons';
+import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import {
   CommonMoneyCollectionService,
   MoneyCollectionIdEnum,
@@ -28,6 +30,11 @@ export class MoneyCollection1Service {
   ) {}
 
   async index(props: SkillServiceProps) {
+    await this.userRepository.setUserCanTossDice(
+      props.userId,
+      getUserCanTossDice(SCENARIO_NAMES.D1),
+    );
+
     const { username, cash } = await this.userRepository.findUserWithCache(
       props.userId,
     );
