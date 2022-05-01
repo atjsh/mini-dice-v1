@@ -42,7 +42,7 @@ export const useDiceToss = () => {
     onMutate: async () => {
       setDiceTossActivityStatus({
         enum: DiceTossActivityEnum.Submitted,
-        reason: null,
+        reason: '서버와 통신 중...',
       });
     },
     onSuccess: async (data) => {
