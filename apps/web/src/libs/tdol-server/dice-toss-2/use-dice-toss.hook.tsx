@@ -55,7 +55,7 @@ export const useDiceToss = () => {
 
       setDiceTossActivityStatus({
         enum: DiceTossActivityEnum.Processing,
-        reason: null,
+        reason: '🎲 주사위를 굴리는 중 ...',
       });
 
       addSkillLogMessages(
