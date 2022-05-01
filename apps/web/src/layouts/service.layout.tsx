@@ -4,7 +4,7 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
   children,
   hideFooter,
 }) => (
-  <div className="flex flex-col gap-14 pt-10 mx-auto">
+  <div className="flex flex-col gap-14 md:mt-28 mt-14 mx-auto">
     {/* <div className="flex flex-col select-none">
       <img
         className="object-cover h-32 dark:hidden"
