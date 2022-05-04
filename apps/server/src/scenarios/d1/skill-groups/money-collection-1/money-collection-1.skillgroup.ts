@@ -71,7 +71,10 @@ export class MoneyCollection1SkillGroup implements SkillGroupController {
                     (props.skillServiceResult.usernamesLength ?? 1) * 1000,
                   )} 모여있는 상태입니다. ${cashLocale(
                     props.skillServiceResult.payedCash,
-                  )} 입금했습니다.`,
+                  )} 입금했습니다. \n이제 모임통장에 ${cashLocale(
+                    ((props.skillServiceResult.usernamesLength ?? 1) + 1) *
+                      1000,
+                  )} 모였습니다.`,
                 }),
               ];
             case MoneyCollection1ResultEnum.RECIEVED:
