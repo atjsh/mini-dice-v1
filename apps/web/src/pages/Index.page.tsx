@@ -7,7 +7,8 @@ import {
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useQueryString } from '../libs';
-import { TempSignupPageURL } from './routes';
+import { TempSignupPageURL, UpdatesPageURL } from './routes';
+import { NewestEntrySummary } from './Updates.page';
 
 export function IndexPage() {
   const loginRequired = useQueryString().get('loginRequired') === 'true';
@@ -37,6 +38,15 @@ export function IndexPage() {
               )}
             </h2>
           </div>
+        </div>
+        <div className=" text-center">
+          <Link
+            to={UpdatesPageURL}
+            className=" hover:underline py-3 px-6 border border-zinc-500 rounded-full inline-block w-fit"
+          >
+            <div className=" text-xs opacity-70">새로운 소식</div>
+            <NewestEntrySummary />
+          </Link>
         </div>
         <div className=" flex flex-col text-center gap-5">
           <div>
