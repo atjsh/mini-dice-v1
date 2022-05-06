@@ -51,8 +51,8 @@ jobs:
       - name: Docker 이미지 빌드 & 푸시 | Build the Docker image and push it to the registry
         id: build-image
         run: |
-          docker buildx build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:${GITHUB_SHA::6}.dev --platform linux/arm64 --push .
-          echo "::set-output name=image::${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:${GITHUB_SHA::6}.dev"
+          docker buildx build -f "mini-dice.Dockerfile" -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev --platform linux/arm64 --push .
+          echo "::set-output name=image::${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev"
 
       - name: Task Definition 개정 | Fill in the new image ID in the Amazon ECS task definition
         id: task-def
