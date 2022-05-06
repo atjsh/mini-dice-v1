@@ -8,6 +8,7 @@ import {
   RankingPgaeURL,
   TerminatePageURL,
   TermsPageURL,
+  UpdatesPageURL,
 } from '../../pages/routes';
 
 export const FooterWidgetComponent: React.FC = () => {
@@ -26,6 +27,9 @@ export const FooterWidgetComponent: React.FC = () => {
           </a>
           <Link className="hover:underline" to={RankingPgaeURL}>
             순위
+          </Link>
+          <Link className="hover:underline" to={UpdatesPageURL}>
+            새로운 소식
           </Link>
         </div>
       </div>

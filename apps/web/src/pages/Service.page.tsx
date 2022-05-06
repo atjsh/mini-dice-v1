@@ -25,7 +25,8 @@ import {
   useSkillLogs,
   useUser,
 } from '../libs';
-import { RankingPgaeURL } from './routes';
+import { RankingPgaeURL, UpdatesPageURL } from './routes';
+import { NewestEntrySummary } from './Updates.page';
 
 const Messages = () => {
   const skillLogMessages = useRecoilValue(skillLogMessagesState);
@@ -114,9 +115,6 @@ export function Ingame({
               <KoreanWordmarkComponent />
             </div>
           </div>
-          <div className=" font-normal bg-zinc-600 text-white px-3 py-1 rounded-full text-xs">
-            이제 주식 추가매수 가능
-          </div>
         </div>
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
@@ -183,6 +181,12 @@ export function Ingame({
               className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95"
             >
               🥇 순위 보기
+            </Link>{' '}
+            <Link
+              to={UpdatesPageURL}
+              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95"
+            >
+              🎙️ <NewestEntrySummary />
             </Link>
           </div>
           <div className=" w-full px-1.5 pb-3">
@@ -221,9 +225,6 @@ export function ServicePage() {
           </div>
           <div className="text-2xl md:text-2xl">
             <WordmarkComponent />
-          </div>
-          <div className=" font-normal bg-zinc-600 text-white px-3 py-1 rounded-full w-fit mt-3">
-            이제 주식 추가매수 가능
           </div>
         </div>
         <div className=" mt-12 md:m-0"></div>
