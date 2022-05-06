@@ -1,19 +1,30 @@
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { IndexPageURL } from './routes';
-import { formatDistance, formatDistanceStrict } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-const Entry: React.FC<{ title: string; date: Date; updates: string[] }> = ({
-  title,
-  date,
-  updates,
-}) => {
+const Entry: React.FC<{
+  emoji: string;
+  title: string;
+  author: string;
+  date: Date;
+  updates: string[];
+}> = ({ emoji, title, author, date, updates }) => {
   return (
-    <div className=" border-b-zinc-500 border-b py-6 last:border-b-0 flex flex-col gap-y-3">
-      <h2 className="text-2xl font-bold">{title}</h2>
-      <p className=" text-sm text-zinc-500">
-        {date.toLocaleDateString('ko-KR')}
+    <div className=" border-b-zinc-500 border-b py-6 last:border-b-0 flex flex-col">
+      <div className=" text-7xl">{emoji}</div>
+      <h2 className="text-2xl font-bold my-2">{title}</h2>
+      <p className=" text-sm text-zinc-500 my-3">
+        {date.toLocaleString('ko-KR', {
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        })}{' '}
+        (
+        {formatDistance(new Date(date), new Date(), {
+          locale: ko,
+          addSuffix: true,
+        })}
+        )
       </p>
       <ul className="list-disc ml-10">
         {updates.map((update) => (
@@ -24,9 +35,17 @@ const Entry: React.FC<{ title: string; date: Date; updates: string[] }> = ({
   );
 };
 
-const entries: { title: string; date: Date; updates: string[] }[] = [
+const entries: {
+  emoji: string;
+  title: string;
+  author: string;
+  date: Date;
+  updates: string[];
+}[] = [
   {
+    emoji: '👋',
     title: "이제 '새로운 소식'이 제공됩니다",
+    author: 'ATJSH',
     date: new Date('2022-05-06T22:18:00+09:00'),
     updates: [
       '새로운 소식들이 이 페이지를 통해 공지됩니다.',
@@ -66,7 +85,7 @@ export const NewestEntrySummary: React.FC = () => {
     <>
       {lastEntry.title}{' '}
       <span className=" opacity-50 ml-2">
-        {formatDistanceStrict(new Date(lastEntry.date), new Date(), {
+        {formatDistance(new Date(lastEntry.date), new Date(), {
           locale: ko,
           addSuffix: true,
         }).toString()}{' '}
