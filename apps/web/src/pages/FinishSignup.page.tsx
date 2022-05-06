@@ -136,7 +136,7 @@ export function LoginSuccessPage() {
       <div className=" flex flex-col gap-10">
         <div className="text-center">
           <div className="flex-col flex gap-2">
-            <h1 className="text-5xl font-bold">
+            <h1 className="text-4xl font-bold">
               <WordmarkComponent />
             </h1>
             <div className="font-medium text-xl">회원가입 완료하기</div>

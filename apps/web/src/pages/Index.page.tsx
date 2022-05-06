@@ -42,7 +42,7 @@ export function IndexPage() {
         <div className=" text-center">
           <Link
             to={UpdatesPageURL}
-            className=" hover:underline py-3 px-6 border border-zinc-500 rounded-full inline-block w-fit"
+            className=" hover:underline py-2 px-5 md:py-3 md:px-7 text-sm md:text-base border border-zinc-500 rounded-full inline-block w-fit "
           >
             <div className=" text-xs opacity-70">새로운 소식</div>
             <NewestEntrySummary />
