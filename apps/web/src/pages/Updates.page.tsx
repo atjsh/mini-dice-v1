@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { IndexPageURL } from './routes';
-import { formatDistance } from 'date-fns';
+import { formatDistance, formatDistanceStrict } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 const Entry: React.FC<{ title: string; date: Date; updates: string[] }> = ({
@@ -27,7 +27,7 @@ const Entry: React.FC<{ title: string; date: Date; updates: string[] }> = ({
 const entries: { title: string; date: Date; updates: string[] }[] = [
   {
     title: "이제 '새로운 소식'이 제공됩니다",
-    date: new Date('2022-05-06'),
+    date: new Date('2022-05-06T22:18:00+09:00'),
     updates: [
       '새로운 소식들이 이 페이지를 통해 공지됩니다.',
       '오늘은 "모금" 칸을 제작 중입니다. 다음 업데이트를 기대해 주세요!',
@@ -66,7 +66,7 @@ export const NewestEntrySummary: React.FC = () => {
     <>
       {lastEntry.title}{' '}
       <span className=" opacity-50 ml-2">
-        {formatDistance(new Date(lastEntry.date), new Date(), {
+        {formatDistanceStrict(new Date(lastEntry.date), new Date(), {
           locale: ko,
           addSuffix: true,
         }).toString()}{' '}
