@@ -2,16 +2,16 @@ export const WordmarkComponent: React.FC<{ colored?: boolean }> = ({
   colored,
 }) => (
   <>
-    <span className="whitespace-nowrap">Mini Dice</span>{' '}
+    <span className="whitespace-nowrap">Mini</span>{' '}
     <span
       className={`${
         colored == undefined || colored == true ? 'text-minidice_red' : ''
       } whitespace-nowrap`}
     >
       {' '}
-      Life
+      Dice
     </span>{' '}
-    <span>Beta</span>
+    <span className=" font-light">Beta</span>
   </>
 );
 
@@ -27,6 +27,6 @@ export const KoreanWordmarkComponent: React.FC<{ colored?: boolean }> = ({
     >
       인생게임
     </span>{' '}
-    <span>베타</span>
+    <span className="font-light">베타</span>
   </>
 );

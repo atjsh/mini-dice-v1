@@ -15,6 +15,7 @@ interface FooterLinkSpec {
   type: 'internal' | 'external';
   link: string;
   label: string;
+  openInNewPage?: boolean;
 }
 
 interface FooterLinkGroupSpec {
@@ -23,13 +24,26 @@ interface FooterLinkGroupSpec {
   isHidden?: boolean;
 }
 
-const FooterLink: React.FC<FooterLinkSpec> = ({ type, link, label }) =>
+const FooterLink: React.FC<FooterLinkSpec> = ({
+  type,
+  link,
+  label,
+  openInNewPage,
+}) =>
   type === 'internal' ? (
     <Link className="hover:underline" to={link}>
       {label}
     </Link>
   ) : (
-    <a className="hover:underline" href={link} target="_blank">
+    <a
+      className="hover:underline"
+      href={link}
+      target={
+        openInNewPage != undefined && openInNewPage == false
+          ? '_parent'
+          : '_blank'
+      }
+    >
       {label}
     </a>
   );
@@ -62,7 +76,8 @@ export const FooterWidgetComponent: React.FC = () => {
         {
           label: 'Mini Dice',
           link: IndexPageURL,
-          type: 'internal',
+          type: 'external',
+          openInNewPage: false,
         },
         {
           label: '순위',

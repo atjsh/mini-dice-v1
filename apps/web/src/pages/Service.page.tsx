@@ -110,9 +110,9 @@ export function Ingame({
     >
       <div className="mx-auto my-0 max-w-7xl">
         <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg md:hidden flex items-center justify-between">
-          <div className="text-left ">
-            <div className=" text-lg font-medium">
-              <KoreanWordmarkComponent />
+          <div className="text-left">
+            <div className="text-lg font-extrabold">
+              <WordmarkComponent />
             </div>
           </div>
         </div>
@@ -220,14 +220,11 @@ export function ServicePage() {
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-900 transition-[right] drop-shadow-none md:right-auto md:w-auto`}
       >
         <div className="font-bold tracking-tight pt-3 text-center md:text-left md:pl-3 md:pt-3 hidden md:block">
-          <div className="text-4xl md:text-4xl">
-            <KoreanWordmarkComponent />
-          </div>
-          <div className="text-2xl md:text-2xl">
+          <div className="text-5xl">
             <WordmarkComponent />
           </div>
         </div>
-        <div className=" mt-12 md:m-0"></div>
+        <div className=" mt-10 md:m-0"></div>
         <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />
           <WalletWidget />

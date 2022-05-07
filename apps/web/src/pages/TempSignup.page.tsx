@@ -6,7 +6,10 @@ import {
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { WordmarkComponent } from '../components/wordmark/wordmark.component';
+import {
+  KoreanWordmarkComponent,
+  WordmarkComponent,
+} from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import {
@@ -165,7 +168,7 @@ export const TempSignupPage: React.FC = () => {
       <div className=" flex flex-col gap-10">
         <div className="text-center">
           <div className="flex-col flex gap-2">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-4xl md:text-6xl font-extrabold">
               <WordmarkComponent />
             </h1>
             <div className="font-medium text-xl">바로 시작 계정 생성</div>
