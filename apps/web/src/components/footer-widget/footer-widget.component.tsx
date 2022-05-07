@@ -11,89 +11,135 @@ import {
   UpdatesPageURL,
 } from '../../pages/routes';
 
+interface FooterLinkSpec {
+  type: 'internal' | 'external';
+  link: string;
+  label: string;
+}
+
+interface FooterLinkGroupSpec {
+  label: string;
+  links: FooterLinkSpec[];
+  isHidden?: boolean;
+}
+
+const FooterLink: React.FC<FooterLinkSpec> = ({ type, link, label }) =>
+  type === 'internal' ? (
+    <Link className="hover:underline" to={link}>
+      {label}
+    </Link>
+  ) : (
+    <a className="hover:underline" href={link} target="_blank">
+      {label}
+    </a>
+  );
+
+const FooterLinkGroup: React.FC<FooterLinkGroupSpec> = ({
+  label,
+  links,
+  isHidden,
+}) =>
+  isHidden ? null : (
+    <div className={`flex gap-y-1 flex-col`}>
+      <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
+        {label}
+      </div>
+      <div className="flex gap-x-5 gap-y-3 flex-wrap">
+        {links.map((link) => (
+          <FooterLink key={link.link} {...link} />
+        ))}
+      </div>
+    </div>
+  );
+
 export const FooterWidgetComponent: React.FC = () => {
   const { data: accessToken } = useAccessToken();
 
+  const footerLinkGroupData: FooterLinkGroupSpec[] = [
+    {
+      label: '서비스',
+      links: [
+        {
+          label: 'Mini Dice',
+          link: IndexPageURL,
+          type: 'internal',
+        },
+        {
+          label: '순위',
+          link: RankingPgaeURL,
+          type: 'internal',
+        },
+        {
+          label: '새로운 소식',
+          link: UpdatesPageURL,
+          type: 'internal',
+        },
+      ],
+    },
+    {
+      label: '외부 링크',
+      links: [
+        {
+          label: '커뮤니티(디스코드)↗',
+          link: 'https://discord.gg/2dhUGXwmBq',
+          type: 'external',
+        },
+        {
+          label: '트위터↗',
+          link: 'https://twitter.com/TeamMiniDice1',
+          type: 'external',
+        },
+        {
+          label: '서버비용 후원(토스)↗',
+          link: 'https://toss.me/%EB%AF%B8%EB%8B%88%EB%8B%A4%EC%9D%B4%EC%8A%A4',
+          type: 'external',
+        },
+      ],
+    },
+    {
+      label: '관리',
+      isHidden: accessToken ? false : true,
+      links: [
+        {
+          label: '로그아웃',
+          link: LogoutPageURL,
+          type: 'internal',
+        },
+        {
+          label: '회원탈퇴',
+          link: TerminatePageURL,
+          type: 'internal',
+        },
+      ],
+    },
+    {
+      label: '정보',
+      links: [
+        {
+          label: '개인정보 처리방침',
+          link: PrivacyPolicyPageURL,
+          type: 'internal',
+        },
+        {
+          label: '이용약관',
+          link: TermsPageURL,
+          type: 'internal',
+        },
+        {
+          label: '문의(이메일)↗',
+          link: 'mailto:lifegame2021team@gmail.com',
+          type: 'external',
+        },
+      ],
+    },
+  ];
+
   return (
-    <div className="self-center mb-10 flex flex-col gap-5 max-w-7xl px-2">
+    <div className="self-center mb-10 flex flex-col gap-5 max-w-7xl px-2 text-sm md:text-base">
       <hr className=" border-gray-300" />
-      <div className=" flex gap-y-1 flex-col ">
-        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
-          서비스
-        </div>
-        <div className="flex gap-x-5 gap-y-3 flex-wrap">
-          <a className="hover:underline" href={IndexPageURL}>
-            Mini Dice
-          </a>
-          <Link className="hover:underline" to={RankingPgaeURL}>
-            순위
-          </Link>
-          <Link className="hover:underline" to={UpdatesPageURL}>
-            새로운 소식
-          </Link>
-        </div>
-      </div>
-      <div className=" flex gap-y-1 flex-col ">
-        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500 ">
-          외부 링크
-        </div>
-        <div className="flex gap-x-5 gap-y-3 flex-wrap">
-          <a
-            href="https://discord.gg/2dhUGXwmBq"
-            className="hover:underline"
-            target="_blank"
-          >
-            커뮤니티(디스코드)↗
-          </a>
-          <a
-            href="https://twitter.com/TeamMiniDice1"
-            target="_blank"
-            className="hover:underline"
-          >
-            트위터↗
-          </a>
-          <a
-            target="_blank"
-            className="hover:underline"
-            href="https://toss.me/%EB%AF%B8%EB%8B%88%EB%8B%A4%EC%9D%B4%EC%8A%A4"
-          >
-            서버비용 후원(토스)↗
-          </a>
-        </div>
-      </div>
-      <div className={`flex gap-y-1 flex-col ${accessToken ? '' : 'hidden'}`}>
-        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
-          관리
-        </div>
-        <div className="flex gap-x-5 gap-y-3 flex-wrap">
-          <Link className={`hover:underline`} to={LogoutPageURL}>
-            로그아웃
-          </Link>
-          <Link className={`hover:underline`} to={TerminatePageURL}>
-            회원탈퇴
-          </Link>
-        </div>
-      </div>
-      <div className=" flex gap-y-1 flex-col ">
-        <div className="font-bold select-none text-zinc-400 dark:text-zinc-500">
-          정보
-        </div>
-        <div className="flex gap-x-5 gap-y-3 flex-wrap">
-          <Link className="hover:underline" to={PrivacyPolicyPageURL}>
-            개인정보 처리방침
-          </Link>
-          <Link className="hover:underline" to={TermsPageURL}>
-            이용약관
-          </Link>
-          <a
-            className="hover:underline"
-            href="mailto:lifegame2021team@gmail.com"
-            target="_blank"
-          >
-            문의(이메일)↗
-          </a>
-        </div>
-      </div>
+      {footerLinkGroupData.map((group) => (
+        <FooterLinkGroup key={group.label} {...group} />
+      ))}
       <div className="text-gray-400">
         클라이언트 버전:{' '}
         {strEllipsis(

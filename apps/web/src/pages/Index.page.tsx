@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { HealthCheckComponent } from '../components/health-check/health-check.component';
 import {
   KoreanWordmarkComponent,
   WordmarkComponent,
@@ -19,14 +18,14 @@ export function IndexPage() {
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-3xl md:text-4xl font-bold">
               <KoreanWordmarkComponent />
             </h1>
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-xl md:text-2xl font-bold">
               <WordmarkComponent />
             </h2>
 
-            <h2 className=" self-center mt-5 text-xl">
+            <h2 className=" self-center mt-5 text-base md:text-xl">
               {loginRequired ? (
                 '계속하려면 로그인하세요.'
               ) : (

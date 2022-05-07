@@ -11,13 +11,13 @@ export function IndexSkeletonPage() {
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-3xl md:text-4xl font-bold">
               <KoreanWordmarkComponent />
             </h1>
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-xl md:text-2xl font-bold">
               <WordmarkComponent />
             </h2>
-            <h2 className=" self-center mt-5 text-xl">
+            <h2 className=" self-center mt-5 text-base md:text-xl">
               주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 순위에 오르세요.
               <br />
               <br />
