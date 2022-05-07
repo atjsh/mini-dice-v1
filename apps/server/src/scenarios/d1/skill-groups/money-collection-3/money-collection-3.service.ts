@@ -10,7 +10,7 @@ import {
   MoneyCollectionIdEnum,
 } from '../../common/money-collection/common-money-collection.service';
 
-export enum MoneyCollection1ResultEnum {
+export enum MoneyCollection3ResultEnum {
   // 돈을 지불하지 않았음
   SKIPPED,
 
@@ -21,8 +21,12 @@ export enum MoneyCollection1ResultEnum {
   RECIEVED,
 }
 
+export const moneyCollection3Fee = 10000;
+export const moneyCollection3MinimumCashOwningThreshold = 10000;
+export const moneyCollection3ReceiveAtCount = 50;
+
 @Injectable()
-export class MoneyCollection1Service {
+export class MoneyCollection3Service {
   constructor(
     private commonMoneyCollectionService: CommonMoneyCollectionService,
     @InjectRepository(UserRepository)
@@ -39,51 +43,57 @@ export class MoneyCollection1Service {
       props.userId,
     );
 
-    if (cash < 1000) {
-      const usernameLength =
-        await this.commonMoneyCollectionService.getMoneyCollectionUsernamesLength(
-          MoneyCollectionIdEnum.MONEY_COLLECTION_1,
-        );
+    const usernameLength =
+      await this.commonMoneyCollectionService.getMoneyCollectionUsernamesLength(
+        MoneyCollectionIdEnum.MONEY_COLLECTION_3,
+      );
 
+    if (
+      cash < moneyCollection3MinimumCashOwningThreshold &&
+      usernameLength.length < moneyCollection3ReceiveAtCount
+    ) {
       return {
-        result: MoneyCollection1ResultEnum.SKIPPED,
+        result: MoneyCollection3ResultEnum.SKIPPED,
         usernamesLength: usernameLength.length,
       };
     }
 
     const moneyCollectionUsernames =
       await this.commonMoneyCollectionService.getMoneyCollectionUsernamesLength(
-        MoneyCollectionIdEnum.MONEY_COLLECTION_1,
+        MoneyCollectionIdEnum.MONEY_COLLECTION_3,
       );
-    if (moneyCollectionUsernames.length >= 10) {
+    if (moneyCollectionUsernames.length >= moneyCollection3ReceiveAtCount) {
       await this.userRepository.changeUserCash(
         props.userId,
-        1000 * moneyCollectionUsernames.length,
+        moneyCollection3Fee * moneyCollectionUsernames.length,
       );
       await this.commonMoneyCollectionService.resetUsernamesOnMoneyCollection(
-        MoneyCollectionIdEnum.MONEY_COLLECTION_1,
+        MoneyCollectionIdEnum.MONEY_COLLECTION_3,
       );
 
       return {
-        result: MoneyCollection1ResultEnum.RECIEVED,
-        earnedCash: 1000 * moneyCollectionUsernames.length,
+        result: MoneyCollection3ResultEnum.RECIEVED,
+        earnedCash: moneyCollection3Fee * moneyCollectionUsernames.length,
         usernames: moneyCollectionUsernames.map((username) =>
-          strEllipsis(username, 6),
+          strEllipsis(username, 4),
         ),
         usernamesLength: moneyCollectionUsernames.length,
       };
     } else {
-      await this.userRepository.changeUserCash(props.userId, -1000);
+      await this.userRepository.changeUserCash(
+        props.userId,
+        -moneyCollection3Fee,
+      );
       await this.commonMoneyCollectionService.addUsernameToMoneyCollection(
-        MoneyCollectionIdEnum.MONEY_COLLECTION_1,
+        MoneyCollectionIdEnum.MONEY_COLLECTION_3,
         username,
       );
 
       return {
-        result: MoneyCollection1ResultEnum.PAYED,
-        payedCash: 1000,
+        result: MoneyCollection3ResultEnum.PAYED,
+        payedCash: moneyCollection3Fee,
         usernames: moneyCollectionUsernames.map((username) =>
-          strEllipsis(username, 6),
+          strEllipsis(username, 4),
         ),
         usernamesLength: moneyCollectionUsernames.length,
       };

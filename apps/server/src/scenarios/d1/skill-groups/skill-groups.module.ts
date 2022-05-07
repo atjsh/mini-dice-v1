@@ -22,6 +22,8 @@ import { StockUpModule } from './stock-up/stock-up.module';
 import { StockDownModule } from './stock-down/stock-down.module';
 import { PickedWalletModule } from './picked-wallet/picked-wallet.module';
 import { MoneyCollection1Module } from './money-collection-1/money-collection-1.module';
+import { MoneyCollection2Module } from './money-collection-2/money-collection-2.module';
+import { MoneyCollection3Module } from './money-collection-3/money-collection-3.module';
 
 @Module({
   imports: [
@@ -40,8 +42,10 @@ import { MoneyCollection1Module } from './money-collection-1/money-collection-1.
     PartTimeWorkModule,
     Land4Module,
     PickedWalletModule,
+    MoneyCollection2Module,
     BookModule,
     Land5Module,
+    MoneyCollection3Module,
     DragonMoneyModule,
     FastCarModule,
     StockUpModule,

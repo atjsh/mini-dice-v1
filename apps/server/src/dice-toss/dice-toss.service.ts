@@ -47,7 +47,7 @@ export class DiceTossService {
     return Array(dices)
       .fill(0)
       .map(() => getRandomInteger(1, 6));
-    // return [3];
+    // return [25];
   }
 
   private moveUserForward(

@@ -15,27 +15,29 @@ import {
 import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
 import {
-  MoneyCollection1ResultEnum,
-  MoneyCollection1Service,
-} from './money-collection-1.service';
+  moneyCollection3Fee,
+  moneyCollection3ReceiveAtCount,
+  MoneyCollection3ResultEnum,
+  MoneyCollection3Service,
+} from './money-collection-3.service';
 
-@SkillGroup(D1ScenarioRoutes.skillGroups.moneyCollection1)
-export class MoneyCollection1SkillGroup implements SkillGroupController {
-  constructor(private skillService: MoneyCollection1Service) {}
+@SkillGroup(D1ScenarioRoutes.skillGroups.moneyCollection3)
+export class MoneyCollection3SkillGroup implements SkillGroupController {
+  constructor(private skillService: MoneyCollection3Service) {}
 
   getSkillGroupAlias(): string | Promise<string> {
-    return '모임통장';
+    return '일확천금 노리기';
   }
 
-  @Skill(D1ScenarioRoutes.skillGroups.moneyCollection1.skills.index)
+  @Skill(D1ScenarioRoutes.skillGroups.moneyCollection3.skills.index)
   async index(indexSkillProps: IndexSkillPropsType) {
     return await this.skillService.index(indexSkillProps);
   }
 
-  @SkillDraw(D1ScenarioRoutes.skillGroups.moneyCollection1.skills.index)
+  @SkillDraw(D1ScenarioRoutes.skillGroups.moneyCollection3.skills.index)
   async indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
-      MethodReturnType<MoneyCollection1Service, 'index'>
+      MethodReturnType<MoneyCollection3Service, 'index'>
     >,
   ) {
     return MessageResponseFactory({
@@ -43,19 +45,19 @@ export class MoneyCollection1SkillGroup implements SkillGroupController {
       date: props.date,
       actionResultDrawings: [
         PlainMessage({
-          title: '모임통장 칸',
-          description: `친구들과 함께 통장을 관리합니다. \n칸에 도착할 때마다 모임통장에 ${cashLocale(
-            1000,
-          )} 입금하고, 모임통장에 돈이 ${cashLocale(
-            1000 * 10,
-          )} 모였을 때 이 칸에 도착하면 돈을 인출해갈 수 있습니다.`,
+          title: '일확천금 노리기 칸',
+          description: `일확천금 노리기 칸에 도착했습니다. \n이 칸에 도착할 때마다 이 곳에 ${cashLocale(
+            moneyCollection3Fee,
+          )} 내고, 이 곳에 돈이 ${cashLocale(
+            moneyCollection3Fee * moneyCollection3ReceiveAtCount,
+          )} 모였을 때 도착하면 모인 돈을 받아갈 수 있습니다.`,
         }),
         ...(() => {
           switch (props.skillServiceResult.result) {
-            case MoneyCollection1ResultEnum.PAYED:
+            case MoneyCollection3ResultEnum.PAYED:
               return [
                 PlainMessage({
-                  title: '모임통장 입금 내역은 다음과 같습니다',
+                  title: "'일확천금 노리기' 입금 내역은 다음과 같습니다.",
                   description: `${
                     props.skillServiceResult.usernames &&
                     props.skillServiceResult.usernames.length > 0
@@ -67,20 +69,21 @@ export class MoneyCollection1SkillGroup implements SkillGroupController {
                 }),
                 PlainMessage({
                   title: '돈을 냈습니다',
-                  description: `모임통장에 총 ${cashLocale(
-                    (props.skillServiceResult.usernamesLength ?? 1) * 1000,
+                  description: `총 ${cashLocale(
+                    (props.skillServiceResult.usernamesLength ?? 1) *
+                      moneyCollection3Fee,
                   )} 모여있는 상태입니다. ${cashLocale(
                     props.skillServiceResult.payedCash,
-                  )} 입금했습니다. \n이제 모임통장에 ${cashLocale(
+                  )} 냈습니다. \n이제 여기에 ${cashLocale(
                     ((props.skillServiceResult.usernamesLength ?? 1) + 1) *
-                      1000,
+                      moneyCollection3Fee,
                   )} 모였습니다.`,
                 }),
               ];
-            case MoneyCollection1ResultEnum.RECIEVED:
+            case MoneyCollection3ResultEnum.RECIEVED:
               return [
                 PlainMessage({
-                  title: '모임통장 입금 내역은 다음과 같습니다',
+                  title: "'일확천금 노리기' 입금 내역은 다음과 같습니다.",
                   description: `${
                     props.skillServiceResult.usernames &&
                     props.skillServiceResult.usernames.length > 0
@@ -92,19 +95,20 @@ export class MoneyCollection1SkillGroup implements SkillGroupController {
                 }),
                 PlainMessage({
                   title: '돈을 가져갔습니다.',
-                  description: `현재 모임통장에 총 ${cashLocale(
-                    (props.skillServiceResult.usernamesLength ?? 1) * 1000,
-                  )} 모여 있습니다. 당신은 통장에서 돈을 인출해갈 수 있습니다!\n${cashLocale(
+                  description: `현재 여기에 총 ${cashLocale(
+                    props.skillServiceResult.earnedCash,
+                  )} 모여 있습니다. 당신은 일확천금 노리기에 성공했습니다!\n${cashLocale(
                     props.skillServiceResult.earnedCash,
                   )} 가져갔습니다.`,
                 }),
               ];
-            case MoneyCollection1ResultEnum.SKIPPED:
+            case MoneyCollection3ResultEnum.SKIPPED:
               return [
                 PlainMessage({
                   title: '스킵되었어요',
                   description: `당신이 보유중인 돈이 부족하기 때문에 아무것도 하지 않았습니다. 현재 ${cashLocale(
-                    (props.skillServiceResult.usernamesLength ?? 1) * 1000,
+                    (props.skillServiceResult.usernamesLength ?? 1) *
+                      moneyCollection3Fee,
                   )} 모여 있습니다.`,
                 }),
               ];
