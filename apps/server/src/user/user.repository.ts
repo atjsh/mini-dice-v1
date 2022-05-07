@@ -19,10 +19,10 @@ export class UserRepository extends Repository<UserEntity> {
    */
   async findUserWithCache(userId: UserIdType): Promise<UserEntity> {
     const user = await this.findOneOrFail(userId, {
-      // cache: {
-      //   id: getCacheKey(userId),
-      //   milliseconds: CACHE_DURATION_MS,
-      // },
+      cache: {
+        id: getCacheKey(userId),
+        milliseconds: CACHE_DURATION_MS,
+      },
     });
 
     return {
@@ -87,22 +87,20 @@ export class UserRepository extends Repository<UserEntity> {
     await this.manager.connection.queryResultCache?.remove([
       getCacheKey(userId),
     ]);
-
-    await this.update(userId, {
-      ...partialUserDto,
-      ..._.omitBy(
+    return await this.save(
+      _.omitBy(
         {
+          ...partialUserDto,
           cash: partialUserDto.cash
             ? partialUserDto.cash < BigInt(0)
               ? BigInt(0)
               : partialUserDto.cash
             : undefined,
+          id: userId,
         },
-        _.isNil,
+        _.isUndefined,
       ),
-    });
-
-    return this.findOneOrFail(userId);
+    );
   }
 
   /**
