@@ -5,9 +5,8 @@ export const HealthCheckComponent: React.FC = () => {
   return isLoading || (!isLoading && isServerOn != false) ? (
     <></>
   ) : (
-    <div className=" bg-yellow-600 text-center text-black font-bold px-6 py-2 text-base w-fit block mx-auto my-3 rounded-2xl cursor-default select-none">
-      서버 점검 중입니다. <br /> 서버의 기능이 동작하지 않을 수 있습니다. <br />
-      <br />
+    <div className=" bg-yellow-600 text-center text-black font-bold py-2 text-base w-full block mx-auto cursor-default">
+      서버 점검 중입니다. 서버의 기능이 동작하지 않을 수 있습니다. <br />
       <a
         href="https://discord.gg/2dhUGXwmBq"
         className="hover:underline"

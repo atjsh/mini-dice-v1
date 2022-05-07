@@ -25,7 +25,6 @@ export function IndexPage() {
             <h2 className="text-2xl font-bold">
               <WordmarkComponent />
             </h2>
-            <HealthCheckComponent />
 
             <h2 className=" self-center mt-5 text-xl">
               {loginRequired ? (

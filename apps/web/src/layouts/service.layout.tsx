@@ -1,11 +1,14 @@
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
+import { HealthCheckComponent } from '../components/health-check/health-check.component';
 
 export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
   children,
   hideFooter,
 }) => (
-  <div className="flex flex-col gap-14 md:mt-28 mt-14 mx-auto">
-    {/* <div className="flex flex-col select-none">
+  <>
+    <HealthCheckComponent />
+    <div className="flex flex-col gap-14 md:mt-28 mt-14 mx-auto">
+      {/* <div className="flex flex-col select-none">
       <img
         className="object-cover h-32 dark:hidden"
         src={new URL('~/src/assets/openstreetmap.png', import.meta.url).href}
@@ -25,11 +28,12 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
       </div>
     </div> */}
 
-    <div className=" px-6">{children}</div>
-    {hideFooter == false || hideFooter === undefined ? (
-      <FooterWidgetComponent />
-    ) : (
-      <></>
-    )}
-  </div>
+      <div className=" px-6">{children}</div>
+      {hideFooter == false || hideFooter === undefined ? (
+        <FooterWidgetComponent />
+      ) : (
+        <></>
+      )}
+    </div>
+  </>
 );
