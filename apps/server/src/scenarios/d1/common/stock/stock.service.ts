@@ -104,6 +104,9 @@ export class CommonStockService {
   }
 
   async buyMoreStock(userId: UserIdType, addingStockAmount: bigint) {
+    if (!(addingStockAmount > 0)) {
+      throw new ForbiddenException('not enough stock amount');
+    }
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
         const {
