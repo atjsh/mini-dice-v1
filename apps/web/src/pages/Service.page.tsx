@@ -37,7 +37,7 @@ const Messages = () => {
   useEffect(scrollToBottom, [skillLogMessages.length]);
 
   return (
-    <div className="px-5 flex-grow md:pb-0 custom-min-h-screen">
+    <div className="flex-grow md:pb-0 px-2 custom-min-h-screen">
       <RenderedSkillLogMessages />
       <div ref={messagesEndRef} />
     </div>
@@ -125,7 +125,7 @@ export function Ingame({
         </div>
         <Messages />
 
-        <div className="pt-1.5 pb-15 text-center sticky w-full bottom-0 mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-1.5 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
+        <div className="pt-1.5 pb-15 text-center sticky w-full bottom-0 mt-1 md:mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-1.5 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
           <div className="flex gap-x-3 items-start max-w-7xl w-full px-1.5">
             <MapStatusBar />
           </div>

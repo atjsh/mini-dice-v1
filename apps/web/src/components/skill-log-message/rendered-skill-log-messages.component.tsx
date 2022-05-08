@@ -19,7 +19,7 @@ import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
 
 const MessageWidth = 'w-max min-w ';
-const MessageCommon = `${MessageWidth} my-1 ml-1 leading-7 `;
+const MessageCommon = `${MessageWidth} my-0.5 md:my-1 leading-7 `;
 
 const UserActivityMessageRadius = 'rounded-xl';
 const UserActivityMessagePadding = 'p-5';
@@ -133,10 +133,10 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
         className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl flex gap-x-3`}
       >
         <div>
-          <div className="font-bold text-xl">
+          <div className="font-bold text-lg md:text-xl">
             <Text t={plainMessage.title} />
           </div>
-          <div>
+          <div className="text-sm md:text-base">
             <Text t={plainMessage.description} />
           </div>
         </div>
@@ -155,7 +155,7 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
 };
 
 const linkMessageButtonBaseClassName =
-  'px-10 py-3 mx-0.5 rounded-xl transition duration-150 select-none transform active:scale-95';
+  'px-10 py-3 mx-0.5 rounded-xl transition duration-150 select-none transform active:scale-95 text-sm md:text-base ';
 
 const LinkMessage: React.FC<{
   link: LinkType;
@@ -228,7 +228,7 @@ const LinkGroupMessage: React.FC<{
     <div
       className={`${MessageCommon} bg-gray-200 dark:bg-zinc-700 px-5 py-2 rounded-3xl`}
     >
-      <div className="mt-1">
+      <div className="mt-1 text-sm md:text-base">
         <Text t={linkGroup.description} />
       </div>
       <div className="mt-3">
@@ -256,12 +256,12 @@ const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
     <div
       className={`${
         dataField.inline ? 'inline-block' : 'block'
-      } mr-5 mb-5 rounded-xl `}
+      } mr-5 mb-5 rounded-xl`}
     >
-      <div className="font-bold text-sm text-gray-600 dark:text-zinc-400">
+      <div className="font-bold text-xs md:text-sm text-gray-600 dark:text-zinc-400">
         {dataField.label}
       </div>
-      <div className="text-xl">
+      <div className="text-base md:text-xl">
         {dataField.isCash
           ? `${BigInt(dataField.value).toLocaleString('ko-kr', {
               style: 'currency',
@@ -294,7 +294,7 @@ const InputFieldMessage: React.FC<{
         </>
       ) : (
         <div className="flex flex-col">
-          <label htmlFor={id} className="text-sm font-bold">
+          <label htmlFor={id} className="text-xs md:text-sm font-bold">
             {inputField.label}
           </label>
           <input
@@ -313,7 +313,7 @@ const InputFieldMessage: React.FC<{
               inputField.isDisabled != undefined ? inputField.isDisabled : false
             }
             required
-            className={`border-2 border-gray-400 rounded-md p-2 dark:text-black ${
+            className={`text-sm md:text-base border-2 border-gray-400 rounded-md p-2 dark:text-black ${
               inputField.isDisabled == true ? 'cursor-not-allowed' : ''
             }`}
           />
@@ -323,7 +323,8 @@ const InputFieldMessage: React.FC<{
   );
 };
 
-const submitButtonBaseClassName = 'px-10 py-3 mx-0.5 rounded-xl';
+const submitButtonBaseClassName =
+  'px-10 py-3 mx-0.5 rounded-xl text-sm md:text-base';
 
 const SubmitButton: React.FC<{
   label: string;
@@ -378,7 +379,7 @@ const FormMessage: React.FC<{
 
   return isLast ? (
     <form
-      className={`w-max min-w ml-1 bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6 flex-shrink-0 max-w-xs `}
+      className={`w-max min-w ml-1 bg-white dark:bg-zinc-900 px-3 py-4 md:px-5 md:py-6 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 flex-shrink-0 max-w-xs`}
       onSubmit={(e) => {
         e.preventDefault();
         setIsButtonClicked(true);
@@ -401,10 +402,12 @@ const FormMessage: React.FC<{
         );
       }}
     >
-      <div className="font-bold text-sm text-gray-600 dark:text-zinc-400">
+      <div className="font-bold text-xs md:text-sm text-gray-600 dark:text-zinc-400">
         {form.title}
       </div>
-      <div className="font-bold text-2xl mb-3">{form.description}</div>
+      <div className="font-bold text-xl md:text-2xl mb-3">
+        {form.description}
+      </div>
       <div className="">
         {form.dataFields.map((dataField) => (
           <DataFieldMessage
@@ -435,10 +438,12 @@ const FormMessage: React.FC<{
     </form>
   ) : (
     <div
-      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-5 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 py-6`}
+      className={`${MessageCommon} bg-white dark:bg-zinc-900 px-3 py-4 md:px-5 md:py-6 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 `}
     >
-      <div className="font-bold text-2xl mb-3">{form.description}</div>
-      완료되었습니다.
+      <div className="font-bold text-lg md:text-2xl md:mb-1">
+        {form.description}
+      </div>
+      <div className="text-sm md:text-base">완료되었습니다.</div>
     </div>
   );
 };

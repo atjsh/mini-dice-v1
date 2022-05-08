@@ -60,7 +60,7 @@ const FooterLinkGroup: React.FC<FooterLinkGroupSpec> = ({
       </div>
       <div className="flex gap-x-5 gap-y-3 flex-wrap">
         {links.map((link) => (
-          <FooterLink key={link.link} {...link} />
+          <FooterLink key={`${link.link}${link.label}`} {...link} />
         ))}
       </div>
     </div>
