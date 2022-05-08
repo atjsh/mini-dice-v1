@@ -51,7 +51,7 @@ export class GameDevSkillGroup implements SkillGroupController {
           ) {
             case GameDevEventEnum.MADE_PROFIT:
               return PlainMessage({
-                title: nightFoodPlainMessageTitle,
+                title: '수익을 남겼습니다',
                 description: `'${
                   props.skillServiceResult.game
                 }' 게임을 개발하여 ${cashLocale(
@@ -60,7 +60,7 @@ export class GameDevSkillGroup implements SkillGroupController {
               });
             case GameDevEventEnum.LOST_PROFIT:
               return PlainMessage({
-                title: nightFoodPlainMessageTitle,
+                title: '손해를 입었습니다',
                 description: `'${
                   props.skillServiceResult.game
                 }' 게임을 개발하여 팔아 보았지만 결국 손해를 봤습니다. ${cashLocale(
@@ -69,7 +69,7 @@ export class GameDevSkillGroup implements SkillGroupController {
               });
             case GameDevEventEnum.NO_PROFIT:
               return PlainMessage({
-                title: nightFoodPlainMessageTitle,
+                title: '본전 쳤네요',
                 description: `'${props.skillServiceResult.game}' 게임을 판매해봤지만 본전치기 했습니다.`,
               });
           }

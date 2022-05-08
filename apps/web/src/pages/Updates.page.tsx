@@ -62,6 +62,16 @@ const entries: {
       "현재 '동전 던지기 중급', '동전 던지기 고급' 칸을 제작 중입니다. 다음 업데이트를 기대해 주세요.",
     ],
   },
+  {
+    emoji: '🤯',
+    title: "'책을 내다', '게임개발' 칸을 새로 꾸몄습니다",
+    author: 'ATJSH',
+    date: new Date('2022-05-08T17:37:00+09:00'),
+    updates: [
+      "'책을 내다' 칸에서 출판되는 책의 제목들을 재미나게 바꾸었습니다. 모두 https://www.dogdrip.net/403195883 의 댓글란에서 영감을 받았습니다. 모두 참여해주셔서 감사합니다.",
+      "마찬가지로 '게임개발' 칸에서 개발되는 게임들의 이름을 재미나게 바꾸었습니다.",
+    ],
+  },
 ].reverse();
 
 export function UpdatesPage() {
@@ -94,7 +104,7 @@ export const NewestEntrySummary: React.FC = () => {
   return (
     <>
       {lastEntry.title}{' '}
-      <span className=" opacity-50 ml-2">
+      <span className=" opacity-50 ml-2 whitespace-nowrap">
         {formatDistance(new Date(lastEntry.date), new Date(), {
           locale: ko,
           addSuffix: true,

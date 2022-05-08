@@ -1,8 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useQueryString } from '../libs';
@@ -37,9 +34,9 @@ export function IndexPage() {
         <div className=" text-center">
           <Link
             to={UpdatesPageURL}
-            className=" hover:underline py-2 px-5 md:py-3 md:px-7 text-sm md:text-base border border-zinc-500 rounded-full inline-block w-fit "
+            className=" hover:underline py-2 px-5 md:py-3 md:px-7 text-base md:text-lg border border-zinc-500 rounded-full inline-block w-fit "
           >
-            <div className=" text-xs opacity-70">새로운 소식</div>
+            <div className=" text-xs">새로운 소식</div>
             <NewestEntrySummary />
           </Link>
         </div>
