@@ -5,11 +5,17 @@
   "repository": "https://github.com/ATJSH/mini-dice-v1",
   "author": "ATJSH <letaem77@gmail.com>",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "docs/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "apps/*",
+      "docs/*"
+    ],
+    "nohoist": [
+      "**/rn",
+      "**/rn/**"
+    ]
+  },
   "scripts": {
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:version": "lerna version --conventional-commits --no-private --create-release github --yes"
