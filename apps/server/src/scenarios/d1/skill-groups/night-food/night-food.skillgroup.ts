@@ -43,7 +43,7 @@ export class NightFoodSkillGroup implements SkillGroupController {
       actionResultDrawings: [
         PlainMessage({
           title: `${this.getSkillGroupAlias()} 칸`,
-          description: '야식을 사업을 합니다.',
+          description: '야식 사업을 합니다.',
         }),
         (() => {
           switch (props.skillServiceResult.profitStatus) {
