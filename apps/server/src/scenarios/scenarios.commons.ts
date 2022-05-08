@@ -14,7 +14,8 @@ export function getUserCanTossDice(
       const currentDate = new Date();
       currentDate.setSeconds(
         // currentDate.getSeconds() + getRandomInteger(13, 20),
-        currentDate.getSeconds() + getRandomInteger(8, 9),
+        // currentDate.getSeconds() + getRandomInteger(1, 2),
+        currentDate.getSeconds() + 2,
       );
       return currentDate;
     }
