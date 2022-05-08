@@ -145,6 +145,11 @@ export const FooterWidgetComponent: React.FC = () => {
           link: 'mailto:lifegame2021team@gmail.com',
           type: 'external',
         },
+        {
+          label: '제휴 및 광고 문의(이메일)↗',
+          link: 'mailto:lifegame2021team@gmail.com',
+          type: 'external',
+        },
       ],
     },
   ];
