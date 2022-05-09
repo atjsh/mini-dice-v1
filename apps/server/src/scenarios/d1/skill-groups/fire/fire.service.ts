@@ -18,15 +18,40 @@ const cashChangeEventValues: DynamicValueEventCase<FireEventEnum>[] = [
   {
     causeName: FireEventEnum.LOSE_MONEY,
     value: {
+      from: 1,
+      to: 3,
+    },
+    weight: 0.4,
+  },
+  {
+    causeName: FireEventEnum.LOSE_MONEY,
+    value: {
+      from: 4,
+      to: 7,
+    },
+    weight: 0.04,
+  },
+
+  {
+    causeName: FireEventEnum.LOSE_MONEY,
+    value: {
+      from: 7,
+      to: 10,
+    },
+    weight: 0.03,
+  },
+  {
+    causeName: FireEventEnum.LOSE_MONEY,
+    value: {
       from: 10,
       to: 33,
     },
-    weight: 0.7,
+    weight: 0.03,
   },
   {
     causeName: FireEventEnum.NO_PROFIT,
     value: 0,
-    weight: 0.3,
+    weight: 0.5,
   },
 ];
 
@@ -43,6 +68,7 @@ export class FireService {
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );
+    console.log(cashChangeEvent);
     switch (cashChangeEvent.eventCase.causeName) {
       case FireEventEnum.LOSE_MONEY:
         const cash = (await this.userRepository.findUserWithCache(props.userId))
