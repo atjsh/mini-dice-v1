@@ -139,7 +139,7 @@ export function RankingPage() {
                 >
                   일주일 순위
                 </button> */}
-                <button
+           {/*     <button
                   onClick={() => {
                     setupdatedAtOffset(UPDATED_AT_OFFSET_ALLTIME);
                     setPage(1);
@@ -148,7 +148,7 @@ export function RankingPage() {
                   className="hover:underline disabled:font-bold disabled:underline"
                 >
                   전체 순위
-                </button>
+                </button> */}
               </div>
             </div>
             <div>
