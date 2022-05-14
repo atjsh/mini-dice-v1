@@ -24,6 +24,8 @@ import { PickedWalletModule } from './picked-wallet/picked-wallet.module';
 import { MoneyCollection1Module } from './money-collection-1/money-collection-1.module';
 import { MoneyCollection2Module } from './money-collection-2/money-collection-2.module';
 import { MoneyCollection3Module } from './money-collection-3/money-collection-3.module';
+import { MinigameEasyModule } from './minigame-easy/minigame-easy';
+import { MinigameHardModule } from './minigame-hard/minigame-hard';
 
 @Module({
   imports: [
@@ -36,8 +38,9 @@ import { MoneyCollection3Module } from './money-collection-3/money-collection-3.
     PickedItemModule,
     FireModule,
     StockModule,
-    LotteryModule,
     Land2Module,
+    MinigameEasyModule,
+    LotteryModule,
     Land3Module,
     PartTimeWorkModule,
     Land4Module,
@@ -50,6 +53,7 @@ import { MoneyCollection3Module } from './money-collection-3/money-collection-3.
     FastCarModule,
     StockUpModule,
     StockDownModule,
+    MinigameHardModule,
     Land6Module,
     MoneyCollection1Module,
   ],
