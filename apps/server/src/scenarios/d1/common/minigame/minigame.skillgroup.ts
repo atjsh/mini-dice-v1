@@ -15,7 +15,7 @@ import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { D1ScenarioRoutes } from '../../routes';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import {
   calculateEarningFromMinigameScore,
   CommonMinigameService,
@@ -38,6 +38,10 @@ export function commonMinigameIndexDraw(
     userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
     actionResultDrawings: [
       PlainMessage({
+        thumbnail: {
+          altName: '미니게임 칸 일러스트',
+          imageUrl: getStopImageUrl(submitSkillRoute.skillGroupName),
+        },
         title: minigameName,
         description: `${minigameName} 칸에 도착했습니다.`,
       }),
