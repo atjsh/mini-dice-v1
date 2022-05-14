@@ -36,7 +36,7 @@ export class MinigameEasyService {
   public async index(props: IndexSkillPropsType) {
     return this.commonMinigameService.commonIndex(
       props.userId,
-      D1ScenarioRoutes.skillGroups.minigameHard.skills.submit,
+      D1ScenarioRoutes.skillGroups.minigameEasy.skills.submit,
     );
   }
 
