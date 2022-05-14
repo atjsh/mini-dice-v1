@@ -57,13 +57,13 @@ const minigameEasyEventValues: DynamicValueEventCase<MinigameResultEnum>[] = [
   {
     causeName: MinigameResultEnum.WIN,
     value: 1,
-    weight: 1,
+    weight: 0.5,
   },
-  // {
-  //   causeName: MinigameResultEnum.LOSE,
-  //   value: 0,
-  //   weight: 0.5,
-  // },
+  {
+    causeName: MinigameResultEnum.LOSE,
+    value: 0,
+    weight: 0.5,
+  },
 ];
 
 export function calculateEarningFromMinigameScore(
