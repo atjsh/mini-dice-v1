@@ -26,6 +26,7 @@ import { MoneyCollection2Module } from './money-collection-2/money-collection-2.
 import { MoneyCollection3Module } from './money-collection-3/money-collection-3.module';
 import { MinigameEasyModule } from './minigame-easy/minigame-easy';
 import { MinigameHardModule } from './minigame-hard/minigame-hard';
+import { MinigameInfinityModule } from './minigame-infinity/minigame-infinity';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { MinigameHardModule } from './minigame-hard/minigame-hard';
     MinigameHardModule,
     Land6Module,
     MoneyCollection1Module,
+    MinigameInfinityModule,
   ],
 })
 export class D1SkillGroupsModule {}

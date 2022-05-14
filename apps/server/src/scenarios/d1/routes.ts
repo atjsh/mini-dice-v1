@@ -38,6 +38,7 @@ export const D1ScenarioRoutes = getScenarioRoute(SCENARIO_NAMES.D1, {
   land6: [IndexSkill, 'submit'],
   travel: [IndexSkill],
   witch: [IndexSkill],
+  minigameInfinity: [IndexSkill, 'submit'],
   moneyCollection4: [IndexSkill],
 } as const);
 
@@ -69,4 +70,5 @@ export const OrderedD1ScenarioRoutes: SkillRouteType[] = [
   D1ScenarioRoutes.skillGroups.stockDown,
   D1ScenarioRoutes.skillGroups.minigameHard,
   D1ScenarioRoutes.skillGroups.land6,
+  D1ScenarioRoutes.skillGroups.minigameInfinity,
 ].map((skillGroup) => skillGroup.skills[IndexSkill]);

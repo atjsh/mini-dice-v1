@@ -158,7 +158,7 @@ export class CommonMinigameService {
         startingEarningCash,
       );
 
-      if (minigameHistory.score >= maximumScore) {
+      if (maximumScore != -1 && minigameHistory.score >= maximumScore) {
         await this.userRepository.changeUserCash(userId, earningCash);
         await this.userRepository.setUserCanTossDice(
           userId,

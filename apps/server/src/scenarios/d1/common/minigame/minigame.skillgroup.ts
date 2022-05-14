@@ -32,22 +32,29 @@ export function commonMinigameIndexDraw(
   minigameName: string,
   maximumScore: number,
   submitSkillRoute: SkillRouteType,
+  showThumbnail = true,
 ) {
   return MessageResponseFactory({
     date: props.date,
     userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
     actionResultDrawings: [
       PlainMessage({
-        thumbnail: {
-          altName: '미니게임 칸 일러스트',
-          imageUrl: getStopImageUrl(submitSkillRoute.skillGroupName),
-        },
+        ...(showThumbnail
+          ? {
+              thumbnail: {
+                altName: '미니게임 칸 일러스트',
+                imageUrl: getStopImageUrl(submitSkillRoute.skillGroupName),
+              },
+            }
+          : {}),
         title: minigameName,
         description: `${minigameName} 칸에 도착했습니다.`,
       }),
       LinkGroup({
         type: 'linkGroup',
-        description: `동전 던지기의 결과를 예측하고, 연속해서 예측이 맞으면 돈을 받습니다. 최대 ${maximumScore}회 연속으로 예측할 수 있습니다.\n하지만 중간에 1회라도 실패하면 아무것도 받지 못합니다! \n당신의 예측은?`,
+        description: `동전 던지기의 결과를 예측하고, 연속해서 예측이 맞으면 돈을 받습니다. \n${
+          maximumScore == -1 ? '최대 횟수 제한 없이' : `최대 ${maximumScore}회`
+        } 연속으로 예측할 수 있습니다.\n하지만 중간에 1회라도 실패하면 아무것도 받지 못합니다! \n당신의 예측은?`,
         links: [
           Link({
             displayText: '앞면이 나올 것이다',
@@ -129,7 +136,7 @@ export function commonMinigameSubmitDraw(
           } else {
             return [
               PlainMessage({
-                title: '예측 성공!',
+                title: `${minigameName} - 예측 성공!`,
                 description: `예측 성공했습니다! 지금까지 총 ${props.skillServiceResult.score}회 맞췄습니다.`,
               }),
               LinkGroup({
@@ -141,7 +148,7 @@ export function commonMinigameSubmitDraw(
                     props.skillServiceResult.score + 1,
                     startingEarningCash,
                   ),
-                )} 받을 수 있습니다. \당신의 예측은?`,
+                )} 받을 수 있습니다. \n당신의 예측은?`,
                 links: [
                   Link({
                     displayText: '앞면이 나올 것이다',
