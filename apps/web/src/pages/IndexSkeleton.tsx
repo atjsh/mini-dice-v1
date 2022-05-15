@@ -15,8 +15,7 @@ export function IndexSkeletonPage() {
               <WordmarkComponent />
             </h1>
             <h2 className=" self-center mt-5 text-base md:text-xl">
-              주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 순위에 오르세요.{' '}
-              <br /> 추억의 '인생게임'이 돌아왔습니다.
+              주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 순위에 오르세요.
               <br />
               <br />
             </h2>
