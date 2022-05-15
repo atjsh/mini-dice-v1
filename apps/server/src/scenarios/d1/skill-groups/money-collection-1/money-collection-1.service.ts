@@ -76,7 +76,7 @@ export class MoneyCollection1Service {
       await this.userRepository.changeUserCash(props.userId, -1000);
       await this.commonMoneyCollectionService.addUsernameToMoneyCollection(
         MoneyCollectionIdEnum.MONEY_COLLECTION_1,
-        username,
+        props.userId,
       );
 
       return {

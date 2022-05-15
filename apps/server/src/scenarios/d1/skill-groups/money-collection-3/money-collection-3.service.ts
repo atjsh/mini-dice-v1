@@ -86,7 +86,7 @@ export class MoneyCollection3Service {
       );
       await this.commonMoneyCollectionService.addUsernameToMoneyCollection(
         MoneyCollectionIdEnum.MONEY_COLLECTION_3,
-        username,
+        props.userId,
       );
 
       return {

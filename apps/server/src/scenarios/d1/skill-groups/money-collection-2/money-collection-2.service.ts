@@ -85,7 +85,7 @@ export class MoneyCollection2Service {
       const { usernames: addedUsernames } =
         await this.commonMoneyCollectionService.addUsernameToMoneyCollection(
           MoneyCollectionIdEnum.MONEY_COLLECTION_2,
-          username,
+          props.userId,
         );
 
       return {

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserIdType } from '@packages/shared-types';
 import { Repository } from 'typeorm';
-import { MoneyCollectionEntity } from './entity/money-collection.entity';
+import { MoneyCollectionParticipantsEntity } from './entity/money-collection-participants.entity';
 
 export enum MoneyCollectionIdEnum {
   MONEY_COLLECTION_1 = 1,
@@ -18,60 +19,42 @@ export class MoneyCollectionStatus {
 @Injectable()
 export class CommonMoneyCollectionService {
   constructor(
-    @InjectRepository(MoneyCollectionEntity)
-    private moneyCollectionRepository: Repository<MoneyCollectionEntity>,
+    @InjectRepository(MoneyCollectionParticipantsEntity)
+    private moneyCollectionParticipantsRepository: Repository<MoneyCollectionParticipantsEntity>,
   ) {}
 
   async resetUsernamesOnMoneyCollection(
     moneyCollectionId: MoneyCollectionIdEnum,
   ): Promise<void> {
-    await this.moneyCollectionRepository.update(moneyCollectionId, {
-      usernames: null,
+    await this.moneyCollectionParticipantsRepository.delete({
+      moneyCollectionId: moneyCollectionId,
     });
   }
 
   async addUsernameToMoneyCollection(
     moneyCollectionId: MoneyCollectionIdEnum,
-    username: string,
+    userId: UserIdType,
   ): Promise<MoneyCollectionStatus> {
-    return await this.moneyCollectionRepository.manager.transaction(
-      async (entityManager) => {
-        const moneyCollectionRepository = entityManager.getRepository(
-          MoneyCollectionEntity,
-        );
+    await this.moneyCollectionParticipantsRepository.insert({
+      moneyCollectionId: moneyCollectionId,
+      userId: userId,
+    });
 
-        const moneyCollection = await moneyCollectionRepository.findOne(
-          moneyCollectionId,
-        );
-        if (moneyCollection != undefined) {
-          const updatedUsernames = [
-            ...(moneyCollection.usernames
-              ? moneyCollection.usernames.split(',')
-              : []),
-            username,
-          ];
-          await moneyCollectionRepository.update(moneyCollectionId, {
-            usernames: updatedUsernames.join(','),
-          });
-
-          return {
-            id: moneyCollectionId,
-            usernames: updatedUsernames,
-          };
-        }
-
-        const usernames = [username];
-        await moneyCollectionRepository.insert(
-          moneyCollectionRepository.create({
-            id: moneyCollectionId,
-            usernames: usernames.join(','),
-          }),
-        );
-
-        return {
-          id: moneyCollectionId,
-          usernames,
-        };
+    return (
+      await this.moneyCollectionParticipantsRepository.find({
+        relations: ['user'],
+        where: {
+          moneyCollectionId: moneyCollectionId,
+        },
+      })
+    ).reduce(
+      (acc, cur) => {
+        cur.user ? acc.usernames.push(cur.user.username) : null;
+        return acc;
+      },
+      {
+        id: moneyCollectionId,
+        usernames: [] as string[],
       },
     );
   }
@@ -79,21 +62,18 @@ export class CommonMoneyCollectionService {
   async getMoneyCollectionUsernamesLength(
     moneyCollectionId: MoneyCollectionIdEnum,
   ): Promise<string[]> {
-    return await this.moneyCollectionRepository.manager.transaction(
-      async (entityManager) => {
-        const moneyCollectionRepository = entityManager.getRepository(
-          MoneyCollectionEntity,
-        );
-
-        const moneyCollection = await moneyCollectionRepository.findOne(
-          moneyCollectionId,
-        );
-        if (moneyCollection && moneyCollection.usernames) {
-          return moneyCollection.usernames.split(',');
-        }
-
-        return [];
-      },
-    );
+    return (
+      await this.moneyCollectionParticipantsRepository.find({
+        relations: ['user'],
+        where: {
+          moneyCollectionId: moneyCollectionId,
+        },
+      })
+    )
+      .map(
+        (moneyCollectionParticipants) =>
+          moneyCollectionParticipants.user?.username,
+      )
+      .filter((username) => typeof username != 'undefined') as string[];
   }
 }

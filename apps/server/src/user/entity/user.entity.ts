@@ -22,6 +22,7 @@ import {
 import { getSequentialPk } from '../../common';
 import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-error.entity';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
+import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 
 const UserEntityTableName = 'tb_user';
 
@@ -170,6 +171,14 @@ export class UserEntity {
   @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
   lands: LandEntity[];
+
+  @ApiProperty({ readOnly: true })
+  @OneToMany(
+    () => MoneyCollectionParticipantsEntity,
+    (moneyCollectionParticipantsEntity) =>
+      moneyCollectionParticipantsEntity.user,
+  )
+  moneyCollectionParticipants: MoneyCollectionParticipantsEntity[];
 
   @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
