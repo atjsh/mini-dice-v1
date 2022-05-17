@@ -138,7 +138,7 @@ export function Ingame({
                 !isSidebarShowing
                   ? 'border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
-              } border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95 md:hidden inline-block`}
+              } border-2 px-3.5 py-1.5 rounded-xl transition duration-150 text-sm font-semibold select-none transform active:scale-95 md:hidden inline-block`}
             >
               💵{' '}
               {user
@@ -178,13 +178,13 @@ export function Ingame({
             </div>{' '}
             <Link
               to={RankingPgaeURL}
-              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95"
+              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-semibold select-none transform active:scale-95"
             >
               🥇 순위 보기
             </Link>{' '}
             <Link
               to={UpdatesPageURL}
-              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-4 py-2 rounded-2xl transition duration-150 text-base font-semibold select-none transform active:scale-95"
+              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-semibold select-none transform active:scale-95"
             >
               🎙️ <NewestEntrySummary />
             </Link>
@@ -215,16 +215,15 @@ export function ServicePage() {
   return (
     <div className="custom-h-screen w-screen flex relative overflow-x-hidden">
       <div
-        className={`custom-h-screen px-3 p-2 flex-col gap-1 md:gap-3  flex-shrink-0 flex md:relative absolute w-screen ${
+        className={`custom-h-screen px-3 p-3 flex-col gap-1 md:gap-2 flex-shrink-0 flex md:relative absolute w-screen ${
           !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-900 transition-[right] drop-shadow-none md:right-auto md:w-auto`}
       >
-        <div className="font-bold tracking-tight pt-3 text-center md:text-left md:pl-3 md:pt-3 hidden md:block">
+        <div className="font-bold tracking-tight pl-2 text-center md:text-left hidden md:block">
           <div className="text-5xl">
             <WordmarkComponent />
           </div>
         </div>
-        <div className=" mt-10 md:m-0"></div>
         <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />
           <WalletWidget />
