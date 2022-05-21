@@ -20,6 +20,7 @@ import { D1Module } from './scenarios/d1/d1.module';
 import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
 import { TempSignupModule } from './temp-signup/temp-signup.module';
 import { UpbitApiModule } from './upbit-api/upbit-api.module';
+import { UserActivityModule } from './user-activity/user-activity.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
 import { UserModule } from './user/user.module';
 
@@ -91,6 +92,7 @@ import { UserModule } from './user/user.module';
     FrontendErrorModule,
 
     UserModule,
+    UserActivityModule,
     ProfileModule,
     UserInteractionWebModule,
     DiceTossModule,
