@@ -104,11 +104,11 @@ export const FooterWidgetComponent: React.FC = () => {
           link: 'https://twitter.com/TeamMiniDice1',
           type: 'external',
         },
-        {
-          label: '서버비용 후원(토스)↗',
-          link: 'https://toss.me/%EB%AF%B8%EB%8B%88%EB%8B%A4%EC%9D%B4%EC%8A%A4',
-          type: 'external',
-        },
+        // {
+        //   label: '서버비용 후원(토스)↗',
+        //   link: 'https://toss.me/%EB%AF%B8%EB%8B%88%EB%8B%A4%EC%9D%B4%EC%8A%A4',
+        //   type: 'external',
+        // },
       ],
     },
     {

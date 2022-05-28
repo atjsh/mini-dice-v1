@@ -224,7 +224,7 @@ export function ServicePage() {
             <WordmarkComponent />
           </div>
         </div>
-        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
+        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-10 md:mt-auto pt-6 md:pt-3 px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
           <ConnectWithOauthWidget />
           <WalletWidget />
           <ProfileWidget />
