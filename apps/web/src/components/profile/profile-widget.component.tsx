@@ -15,7 +15,7 @@ export const ProfileWidget: React.FC = () => {
           <div className="flex flex-col gap-2 md:gap-4 justify-center">
             <div className="text-2xl md:text-4xl font-bold">😀 내 계정</div>
             <div>
-              <div className="font-bold text-xl break-all text-zinc-800 dark:text-zinc-300 md:dark:text-zinc-300">
+              <div className="font-bold text-lg break-all text-zinc-800 dark:text-zinc-300 md:dark:text-zinc-300">
                 {user.username}
               </div>
               <div className="font-bold text-base text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
