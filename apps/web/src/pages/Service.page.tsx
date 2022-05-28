@@ -138,27 +138,8 @@ export function Ingame({
                 !isSidebarShowing
                   ? 'border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white'
                   : ' border-gray-600  bg-gray-900 hover:bg-gray-700 active:bg-gray-500 text-white dark:border-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-500 dark:text-white'
-              } border-2 px-3.5 py-1.5 rounded-xl transition duration-150 text-sm font-semibold select-none transform active:scale-95 md:hidden inline-block`}
+              } border-2 px-3.5 py-1.5 rounded-xl transition duration-150 text-sm font-normal select-none transform active:scale-95 md:hidden inline-block`}
             >
-              💵{' '}
-              {user
-                ? `${BigInt(
-                    BigInt(user.cash) +
-                      (user.stockStatus
-                        ? BigInt(user.stockStatus.stockAmount) *
-                          BigInt(user.stockStatus.stockCurrentPrice)
-                        : BigInt(0)),
-                  ).toLocaleString('ko-kr', {
-                    style: 'currency',
-                    currency: 'KRW',
-                  })}`
-                : `${BigInt(0).toLocaleString('ko-kr', {
-                    style: 'currency',
-                    currency: 'KRW',
-                  })}`}{' '}
-              | <span className=" whitespace-nowrap">자산 더보기</span>
-            </button>
-            <div className="px-4 py-2 rounded-2xl text-base font-semibold select-none md:inline-block bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white hidden">
               💵{' '}
               {user
                 ? `${BigInt(
@@ -175,16 +156,16 @@ export function Ingame({
                     style: 'currency',
                     currency: 'KRW',
                   })}`}
-            </div>{' '}
+            </button>{' '}
             <Link
               to={RankingPgaeURL}
-              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-semibold select-none transform active:scale-95"
+              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
             >
-              🥇 순위 보기
+              🥇 순위
             </Link>{' '}
             <Link
               to={UpdatesPageURL}
-              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-semibold select-none transform active:scale-95"
+              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
             >
               🎙️ <NewestEntrySummary />
             </Link>
@@ -224,10 +205,10 @@ export function ServicePage() {
             <WordmarkComponent />
           </div>
         </div>
-        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-10 md:mt-auto pt-6 md:pt-3 px-3 h-full overflow-y-auto md:w-96 p-3 flex flex-col gap-3 pb-60 md:pb-3 md:dark:border md:dark:border-zinc-800 box-border ">
+        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
           <ConnectWithOauthWidget />
-          <WalletWidget />
           <ProfileWidget />
+          <WalletWidget />
           <FooterWidgetComponent />
         </div>
       </div>
