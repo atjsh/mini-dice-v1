@@ -10,7 +10,7 @@ export const ConnectWithOauthWidget: React.FC = () => {
   return user && user.email == null ? (
     isCollapsed ? (
       <button
-        className="bg-white dark:md:bg-zinc-800 dark:bg-black rounded-3xl flex flex-col gap-3 py-4 px-8 hover:bg-gray-200 active:bg-gray-300 transition-colors border border-white hover:border-gray-400 font-bold dark:hover:bg-zinc-700 dark:active:bg-zinc-600 dark:border-black dark:hover:border-zinc-500"
+        className="bg-white dark:md:bg-zinc-800 dark:bg-black rounded-3xl flex flex-col gap-3 px-5 py-5 hover:bg-gray-200 active:bg-gray-300 transition-colors border border-white hover:border-gray-400 font-bold dark:hover:bg-zinc-700 dark:active:bg-zinc-600 dark:border-black dark:hover:border-zinc-500"
         onClick={() => setIsCollapsed(false)}
       >
         🔒✅ 구글 계정과 연결하기 →
