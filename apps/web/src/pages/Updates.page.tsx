@@ -128,6 +128,17 @@ export function UpdatesPage() {
   );
 }
 
+export const getNewestEntryDetail = () => {
+  const entry = entries[0];
+  return {
+    title: entry.title,
+    dateFormatDistance: formatDistance(entry.date, new Date(), {
+      locale: ko,
+      addSuffix: true,
+    }),
+  };
+};
+
 export const NewestEntrySummary: React.FC = () => {
   const lastEntry = entries[0];
   return (

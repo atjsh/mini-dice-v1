@@ -13,6 +13,7 @@ import {
   usePageTimeout,
   useSkillLogMessages,
 } from '../components/skill-log-message/use-skill-log-messages.hook';
+import { UpdatesWidget } from '../components/updates-widget/updates-widget.component';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
 import {
   KoreanWordmarkComponent,
@@ -159,13 +160,13 @@ export function Ingame({
             </button>{' '}
             <Link
               to={RankingPgaeURL}
-              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
+              className="md:hidden inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
             >
               🥇 순위
             </Link>{' '}
             <Link
               to={UpdatesPageURL}
-              className="inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
+              className="md:hidden inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
             >
               🎙️ <NewestEntrySummary />
             </Link>
@@ -209,6 +210,7 @@ export function ServicePage() {
           <ConnectWithOauthWidget />
           <ProfileWidget />
           <WalletWidget />
+          <UpdatesWidget />
           <FooterWidgetComponent />
         </div>
       </div>
