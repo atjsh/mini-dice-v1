@@ -1,7 +1,9 @@
-import { ApiHideProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
+import { IsNotEmpty } from 'class-validator';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -35,9 +37,12 @@ export class UserActivityEntity {
   })
   skillDrawProps: Record<string, any>;
 
-  @Column({
-    type: 'json',
-    nullable: true,
-  })
-  skillDrawResult: Record<string, any>;
+  @IsNotEmpty()
+  @Column({})
+  skillRoute: string;
+
+  /** 객체가 생성된 날짜 */
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
+  createdAt: Date;
 }
