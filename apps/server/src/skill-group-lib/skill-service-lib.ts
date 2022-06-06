@@ -6,6 +6,8 @@ import {
   SkillRouteType,
 } from '@packages/scenario-routing';
 import {
+  LandEventDrawMetadataKey,
+  LandEventsSummarizeMetadataKey,
   SkillDrawMetadataKey,
   SkillGroupMetadataKey,
   SkillMetadataKey,
@@ -70,6 +72,12 @@ export const SkillGroup = (skillGroup: SkillGroupRouteType) =>
     SetMetadata(SkillGroupMetadataKey, getSkillGroupPath(skillGroup)),
     Injectable(),
   );
+
+export const LandEventDraw = (land: SkillRouteType) =>
+  SetMetadata(LandEventDrawMetadataKey, getSkillRoutePath(land));
+
+export const LandEventsSummarize = (land: SkillRouteType) =>
+  SetMetadata(LandEventsSummarizeMetadataKey, getSkillRoutePath(land));
 
 export function drawDiceUserActivityMessage(
   diceUserActivity: DiceUserActivity,

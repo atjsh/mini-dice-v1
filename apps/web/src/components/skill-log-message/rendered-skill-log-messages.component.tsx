@@ -154,6 +154,12 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
   );
 };
 
+export const NotificationPlainMessage: React.FC<{
+  plainMessage: PlainMessageType;
+}> = ({ plainMessage }) => {
+  return <PlainMessage plainMessage={plainMessage} />;
+};
+
 const linkMessageButtonBaseClassName =
   'px-10 py-3 mx-0.5 rounded-xl transition duration-150 select-none transform active:scale-95 text-sm md:text-base ';
 

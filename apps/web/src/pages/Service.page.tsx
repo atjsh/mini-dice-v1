@@ -15,10 +15,7 @@ import {
 } from '../components/skill-log-message/use-skill-log-messages.hook';
 import { UpdatesWidget } from '../components/updates-widget/updates-widget.component';
 import { WalletWidget } from '../components/wallet/wallet-widget.component';
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import {
   DiceTossActivityEnum,
   diceTossActivityStatusAtom,

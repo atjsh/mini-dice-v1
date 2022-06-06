@@ -10,6 +10,7 @@ import { TerminatePage } from './Terminate.page';
 import { RankingPage } from './Ranking.page';
 import { FinishLoginPage } from './FinishLogin.page';
 import { UpdatesPage } from './Updates.page';
+import { NotificationPage } from './NotificationCenter.page';
 
 export type Protection =
   | 'public'
@@ -36,6 +37,7 @@ export const TermsPageURL = '/terms';
 export const TerminatePageURL = '/terminate';
 export const RankingPgaeURL = '/ranking';
 export const UpdatesPageURL = '/updates';
+export const NotificationPageURL = '/notification';
 
 function getTitle(subTitle?: string) {
   return `미니다이스 인생게임 | Mini Dice ${subTitle ? '-' : ''} ${
@@ -127,6 +129,13 @@ const protectedRoutesUnreversed: ProtectedRoute[] = [
     title: getTitle('Finishing Login'),
     exact: true,
     protection: 'public',
+  },
+  {
+    path: NotificationPageURL,
+    component: NotificationPage,
+    title: getTitle('Notification'),
+    exact: true,
+    protection: 'signupCompleted',
   },
 ];
 

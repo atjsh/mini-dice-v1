@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -16,6 +17,7 @@ export class UserActivityEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column({
     type: 'char',
     length: '36',
@@ -38,10 +40,15 @@ export class UserActivityEntity {
   skillDrawProps: Record<string, any>;
 
   @IsNotEmpty()
-  @Column({})
+  @Column({ nullable: false })
   skillRoute: string;
 
+  @Index()
+  @Column({ nullable: false, default: false })
+  read: boolean;
+
   /** 객체가 생성된 날짜 */
+  @Index()
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
   createdAt: Date;

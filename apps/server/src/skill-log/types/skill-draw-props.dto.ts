@@ -1,3 +1,4 @@
+import { PlainMessageType } from '@packages/shared-types';
 import {
   UserActivityType,
   DiceUserActivity,
@@ -25,3 +26,19 @@ export type DiceUserActivitySkillDrawPropsType<SkillServiceResult> =
 
 export type InteractionUserActivitySkillDrawPropsType<SkillServiceResult> =
   SkillDrawPropsType<InteractionUserActivity, SkillServiceResult>;
+
+export interface LandEventDrawPropsType<LandEventResult> {
+  landEventResult: LandEventResult;
+  date: Date;
+  timezone: string;
+}
+
+export type LandEventDrawResultType = PlainMessageType;
+
+export type LandEventsSummarizePropsType<LandEventResult> =
+  LandEventDrawPropsType<LandEventResult>[];
+
+export interface LandEventsSummarizeResultType {
+  summaryText: string;
+  cashChangeAmount: bigint;
+}
