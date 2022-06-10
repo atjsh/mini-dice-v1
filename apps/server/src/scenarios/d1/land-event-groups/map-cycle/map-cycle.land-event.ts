@@ -31,7 +31,7 @@ export class MapCycleLandEventGroup {
   ): LandEventDrawResultType {
     return NotificationMessage({
       title: '맵 돌기',
-      description: `맵을 한바퀴 돌았습니다! 보상으로 ${cashLocale(
+      description: `맵을 한 바퀴 돌았습니다! 보상으로 ${cashLocale(
         props.landEventResult.earnedCash,
       )} 받았습니다.`,
       date: String(props.date),
@@ -52,7 +52,7 @@ export class MapCycleLandEventGroup {
       props.map((r) => r.landEventResult.earnedCash),
     );
     return {
-      summaryText: `맵을 한바퀴 돌았습니다! 보상으로 ${cashLocale(
+      summaryText: `맵을 한 바퀴 돌았습니다! 보상으로 ${cashLocale(
         totalEarnedCash,
       )} 받았습니다.`,
       cashChangeAmount: BigInt(totalEarnedCash),
