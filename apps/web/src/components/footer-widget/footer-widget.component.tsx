@@ -4,6 +4,7 @@ import { useAccessToken } from '../../libs';
 import {
   IndexPageURL,
   LogoutPageURL,
+  NotificationPageURL,
   PrivacyPolicyPageURL,
   RankingPgaeURL,
   TerminatePageURL,
@@ -84,6 +85,7 @@ export const FooterWidgetComponent: React.FC = () => {
           link: RankingPgaeURL,
           type: 'internal',
         },
+        { label: '알림 센터', link: NotificationPageURL, type: 'internal' },
         {
           label: '새로운 소식',
           link: UpdatesPageURL,

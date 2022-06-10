@@ -2,11 +2,11 @@ import { PickType } from '@nestjs/swagger';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserActivityEntity } from './user-activity.entity';
 
-export class CreateUserActivityInputDto extends PickType(UserActivityEntity, [
-  'skillDrawProps',
-  'skillRoute',
-  'userId',
-]) {}
+export class CreateUserActivityInputDto<
+  LandEventResult extends Record<string, any>,
+> extends PickType(UserActivityEntity, ['skillRoute', 'userId']) {
+  skillDrawProps: LandEventResult;
+}
 
 export class CreateUserActivityOutputDto extends PickType(UserActivityEntity, [
   'id',
@@ -42,8 +42,8 @@ export class SearchUserActivityOutputDto extends PickType(UserActivityEntity, [
 
 @EntityRepository(UserActivityEntity)
 export class LandEventRepository extends Repository<UserActivityEntity> {
-  public async createLandEvent(
-    createUserActivityInputDto: CreateUserActivityInputDto,
+  public async createLandEvent<LandEventResult extends Record<string, any>>(
+    createUserActivityInputDto: CreateUserActivityInputDto<LandEventResult>,
   ): Promise<CreateUserActivityOutputDto> {
     return await this.save(
       this.create({
@@ -77,11 +77,11 @@ export class LandEventRepository extends Repository<UserActivityEntity> {
     );
     return await this.createQueryBuilder('userActivity')
       .where('userActivity.userId = :userId', { userId })
-      .where('userActivity.createdAt >= :createdAtFrom', {
+      .andWhere('userActivity.createdAt >= :createdAtFrom', {
         createdAtFrom:
           createdAtFrom > date14daysAgo ? createdAtFrom : date14daysAgo,
       })
-      .where('userActivity.createdAt <= :createdAtTo', { createdAtTo })
+      .andWhere('userActivity.createdAt <= :createdAtTo', { createdAtTo })
       .orderBy('userActivity.createdAt', 'ASC')
       .getMany();
   }

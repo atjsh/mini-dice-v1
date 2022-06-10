@@ -4,6 +4,7 @@ import {
   InputFieldType,
   LinkGroupType,
   LinkType,
+  NotificationMessageType,
   PlainMessageType,
   UserActivityMessageType,
 } from '@packages/shared-types';
@@ -17,6 +18,8 @@ import {
 import { useSubmitUserInteraction } from '../../libs/tdol-server/user-interaction';
 import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
+import { formatDistance } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const MessageWidth = 'w-max min-w ';
 const MessageCommon = `${MessageWidth} my-0.5 md:my-1 leading-7 `;
@@ -155,9 +158,35 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
 };
 
 export const NotificationPlainMessage: React.FC<{
-  plainMessage: PlainMessageType;
-}> = ({ plainMessage }) => {
-  return <PlainMessage plainMessage={plainMessage} />;
+  notificationMessage: NotificationMessageType;
+}> = ({ notificationMessage }) => {
+  return (
+    <div className="leading-7 w-full bg-gray-200 dark:bg-zinc-700 px-3 py-3 rounded-xl flex items-center gap-x-3">
+      {notificationMessage.thumbnail && (
+        <div className=" flex-shrink-0">
+          <img
+            src={notificationMessage.thumbnail.imageUrl}
+            alt={notificationMessage.thumbnail.altName}
+            className="w-12 h-12 md:w-15 md:h-15 rounded-lg mt-3 mb-2 md:my-3 bg-white dark:bg-black object-contain object-bottom"
+          />
+        </div>
+      )}
+      <div>
+        <div className="font-bold text-lg md:text-xl">
+          <Text t={notificationMessage.title} />
+        </div>
+        <div className="text-sm md:text-base">
+          <Text t={notificationMessage.description} />
+        </div>
+        <div className=" text-sm opacity-50">
+          {formatDistance(new Date(notificationMessage.date), new Date(), {
+            locale: ko,
+          }).toString()}{' '}
+          전
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const linkMessageButtonBaseClassName =

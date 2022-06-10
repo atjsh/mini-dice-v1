@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { getSkillRouteFromPath } from '@packages/scenario-routing';
 import { LandEventsSummarizeMetadataKey } from '@packages/scenario-routing/constants';
-import { PlainMessageType } from '@packages/shared-types';
+import { NotificationMessageType } from '@packages/shared-types';
 import * as _ from 'lodash';
 import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
 import { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
@@ -10,7 +10,6 @@ import {
   LandEventRepository,
   SearchUserActivityByDateInputDto,
   SearchUserActivityByPageInputDto,
-  SearchUserActivityOutputDto,
 } from './land-event.repository';
 
 interface GroupedArrayElements<
@@ -38,7 +37,9 @@ export class UserActivityService {
     private scenarioRouteCallService: ScenarioRouteCallService,
   ) {}
 
-  async create(createUserActivityInputDto: CreateUserActivityInputDto) {
+  async create<LandEventResult extends Record<string, any>>(
+    createUserActivityInputDto: CreateUserActivityInputDto<LandEventResult>,
+  ) {
     return await this.userActivityRepository.createLandEvent(
       createUserActivityInputDto,
     );
@@ -47,7 +48,7 @@ export class UserActivityService {
   async renderRecentLandEvent(
     searchUserActivityByPageInputDto: SearchUserActivityByPageInputDto,
     timezone: string,
-  ): Promise<PlainMessageType[]> {
+  ): Promise<NotificationMessageType[]> {
     return await Promise.all(
       (
         await this.userActivityRepository.searchByPage(

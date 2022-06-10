@@ -1,9 +1,9 @@
-import { PlainMessageType } from '@packages/shared-types';
+import { NotificationMessageType } from '@packages/shared-types';
 import {
-  UserActivityType,
   DiceUserActivity,
   GameStartUserAcitvity,
   InteractionUserActivity,
+  UserActivityType,
 } from './user-activity.dto';
 
 export type SkillDrawPropsType<
@@ -33,7 +33,7 @@ export interface LandEventDrawPropsType<LandEventResult> {
   timezone: string;
 }
 
-export type LandEventDrawResultType = PlainMessageType;
+export type LandEventDrawResultType = NotificationMessageType;
 
 export type LandEventsSummarizePropsType<LandEventResult> =
   LandEventDrawPropsType<LandEventResult>[];

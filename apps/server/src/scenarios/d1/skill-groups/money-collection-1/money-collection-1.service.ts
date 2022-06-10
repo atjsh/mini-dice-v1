@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { getSkillRoutePath } from '@packages/scenario-routing';
 import { strEllipsis } from '@packages/shared-types';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
+import { UserActivityService } from 'apps/server/src/user-activity/user-activity.service';
 import { UserRepository } from 'apps/server/src/user/user.repository';
+import * as _ from 'lodash';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import {
   CommonMoneyCollectionService,
   MoneyCollectionIdEnum,
 } from '../../common/money-collection/common-money-collection.service';
+import { MoneyCollectionOtherUserReceivedCashLandEventResult } from '../../land-event-groups/money-collection/money-collection.land-event';
+import { D1ScenarioRoutes } from '../../routes';
 
 export enum MoneyCollection1ResultEnum {
   // 돈을 지불하지 않았음
@@ -27,6 +32,7 @@ export class MoneyCollection1Service {
     private commonMoneyCollectionService: CommonMoneyCollectionService,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
+    private userActivityService: UserActivityService,
   ) {}
 
   async index(props: SkillServiceProps) {
@@ -64,10 +70,33 @@ export class MoneyCollection1Service {
         MoneyCollectionIdEnum.MONEY_COLLECTION_1,
       );
 
+      await Promise.all(
+        _.uniqBy(moneyCollectionUsernames, (e) => e.userId)
+          .filter((e) => e.userId != props.userId)
+          .map(
+            async (participants) =>
+              await this.userActivityService.create<MoneyCollectionOtherUserReceivedCashLandEventResult>(
+                {
+                  userId: participants.userId,
+                  skillRoute: getSkillRoutePath(
+                    D1ScenarioRoutes.skillGroups.landEventMoneyCollection.skills
+                      .otherUserReceivedCash,
+                  ),
+                  skillDrawProps: {
+                    earnedCash: 1000 * moneyCollectionUsernames.length,
+                    moneyCollectionName: '모임통장',
+                    otherUserUsername: username,
+                    participantHeadcount: moneyCollectionUsernames.length,
+                  },
+                },
+              ),
+          ),
+      );
+
       return {
         result: MoneyCollection1ResultEnum.RECIEVED,
         earnedCash: 1000 * moneyCollectionUsernames.length,
-        usernames: moneyCollectionUsernames.map((username) =>
+        usernames: moneyCollectionUsernames.map(({ username }) =>
           strEllipsis(username, 6),
         ),
         usernamesLength: moneyCollectionUsernames.length,
@@ -82,7 +111,7 @@ export class MoneyCollection1Service {
       return {
         result: MoneyCollection1ResultEnum.PAYED,
         payedCash: 1000,
-        usernames: moneyCollectionUsernames.map((username) =>
+        usernames: moneyCollectionUsernames.map(({ username }) =>
           strEllipsis(username, 6),
         ),
         usernamesLength: moneyCollectionUsernames.length,

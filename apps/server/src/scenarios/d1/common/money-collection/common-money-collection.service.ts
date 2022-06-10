@@ -61,7 +61,7 @@ export class CommonMoneyCollectionService {
 
   async getMoneyCollectionUsernamesLength(
     moneyCollectionId: MoneyCollectionIdEnum,
-  ): Promise<string[]> {
+  ): Promise<{ username: string; userId: UserIdType }[]> {
     return (
       await this.moneyCollectionParticipantsRepository.find({
         relations: ['user'],
@@ -70,10 +70,13 @@ export class CommonMoneyCollectionService {
         },
       })
     )
-      .map(
-        (moneyCollectionParticipants) =>
-          moneyCollectionParticipants.user?.username,
-      )
-      .filter((username) => typeof username != 'undefined') as string[];
+      .map((moneyCollectionParticipants) => ({
+        username: moneyCollectionParticipants.user?.username,
+        userId: moneyCollectionParticipants.user?.id,
+      }))
+      .filter((username) => typeof username != 'undefined') as {
+      username: string;
+      userId: UserIdType;
+    }[];
   }
 }

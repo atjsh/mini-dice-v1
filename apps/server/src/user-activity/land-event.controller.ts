@@ -17,7 +17,7 @@ export class LandEventController {
     return this.landEventService.renderRecentLandEvent(
       {
         pageNo: 1,
-        pageSize: 10,
+        pageSize: 50,
         userId: userJwt.userId,
       },
       timeZone,

@@ -5,12 +5,12 @@ import { useNotifications } from '../libs';
 import { IndexPageURL } from './routes';
 
 export function NotificationPage() {
-  const { data: notifications } = useNotifications();
+  const { data: notifications, isLoading } = useNotifications();
 
   return (
     <ServiceLayout>
-      <div className="self-center px-3 max-w-5xl m-auto">
-        <div className="">
+      <div className="self-center max-w-lg m-auto">
+        <div className=" flex flex-col gap-2">
           <Link
             className=" text-lg text-blue-500 hover:underline"
             to={IndexPageURL}
@@ -19,10 +19,16 @@ export function NotificationPage() {
           </Link>
           <h1 className=" text-4xl font-bold">알림 센터</h1>
         </div>
-        <div className="mt-4 flex flex-col p-3 dark:bg-zinc-900 rounded-3xl">
-          {notifications?.map((notification) => (
-            <NotificationPlainMessage plainMessage={notification} />
-          ))}
+        <div className="mt-4 flex flex-col gap-3 items-center">
+          {notifications && notifications?.length > 0 ? (
+            notifications?.map((notification) => (
+              <NotificationPlainMessage notificationMessage={notification} />
+            ))
+          ) : isLoading ? (
+            <></>
+          ) : (
+            <div>알림 없음</div>
+          )}
         </div>
       </div>
     </ServiceLayout>

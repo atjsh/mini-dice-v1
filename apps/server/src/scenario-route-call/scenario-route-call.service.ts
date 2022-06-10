@@ -7,7 +7,7 @@ import {
   SkillDrawMetadataKey,
   SkillMetadataKey,
 } from '@packages/scenario-routing/constants';
-import { PlainMessageType } from '@packages/shared-types';
+import { NotificationMessageType } from '@packages/shared-types';
 import { SkillPropsType } from '../skill-group-lib/skill-service-lib';
 import {
   LandEventDrawPropsType,
@@ -87,8 +87,8 @@ export class ScenarioRouteCallService {
   public async callLandEventDraw(
     land: SkillRouteType,
     landEventDrawProps: LandEventDrawPropsType<unknown>,
-  ): Promise<PlainMessageType> {
-    return await this.callBySkill<PlainMessageType>(
+  ): Promise<NotificationMessageType> {
+    return await this.callBySkill<NotificationMessageType>(
       land,
       landEventDrawProps,
       LandEventDrawMetadataKey,

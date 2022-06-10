@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 
-@Entity()
+@Entity({ orderBy: { createdAt: 'DESC' } })
 export class UserActivityEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -43,7 +43,6 @@ export class UserActivityEntity {
   @Column({ nullable: false })
   skillRoute: string;
 
-  @Index()
   @Column({ nullable: false, default: false })
   read: boolean;
 

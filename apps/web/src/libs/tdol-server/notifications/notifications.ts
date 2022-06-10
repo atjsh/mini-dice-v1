@@ -1,8 +1,8 @@
-import { PlainMessageType } from '@packages/shared-types';
+import { NotificationMessageType } from '@packages/shared-types';
 import { authedAxios } from '../auth';
 
-export async function getNotifications(): Promise<PlainMessageType[]> {
-  const response = await authedAxios.get<PlainMessageType[]>('/land-events');
+export async function getNotifications(): Promise<NotificationMessageType[]> {
+  const response = await authedAxios.get<NotificationMessageType[]>('/land-events');
 
-  return response.data.reverse();
+  return response.data
 }

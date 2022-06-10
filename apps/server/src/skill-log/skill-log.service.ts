@@ -46,7 +46,7 @@ export class SkillLogService {
     });
   }
 
-  private async getLastLog(userId: UserEntity['id']) {
+  async getLastLog(userId: UserEntity['id']) {
     const log = await this.repository.findOne({
       where: {
         userId,

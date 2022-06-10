@@ -5,11 +5,8 @@ import {
   SkillRouteType,
 } from '@packages/scenario-routing';
 import {
-  cashLocale,
   getStockInitialData,
   MessageResponseType,
-  PlainMessage,
-  PlainMessageType,
   UserIdType,
 } from '@packages/shared-types';
 import * as _ from 'lodash';
@@ -26,8 +23,8 @@ import {
   OrderedD1ScenarioRoutes,
 } from '../scenarios/d1/routes';
 import { SkillLogService } from '../skill-log/skill-log.service';
-import { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
 import { DiceUserActivity } from '../skill-log/types/user-activity.dto';
+import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
 import { UserActivityService } from '../user-activity/user-activity.service';
 import {
   isUserThrowingDiceTossAllowedOrThrow,
@@ -76,30 +73,6 @@ export class DiceTossService {
       currentSkillRouteIndex + movingCount >= orderedSkillRoutes.length;
 
     return { movedLandCode: orderedSkillRoutes[nextSkillRouteIndex], isCycled };
-  }
-
-  private renderRecentLandEventSummary(
-    landEventSummaries: LandEventsSummarizeResultType[],
-  ): PlainMessageType {
-    const changedCashAmountSum = _.sum(
-      landEventSummaries.map((summary) => summary.cashChangeAmount),
-    );
-
-    return PlainMessage({
-      title: '알림: 주사위를 굴리는 동안...',
-      description: `${landEventSummaries
-        .map((summary) => `- ${summary.summaryText}`)
-        .join('\n')}
-      
-      ${
-        changedCashAmountSum != 0
-          ? `잔고에 변화가 있었습니다. 합쳐서 총 ${cashLocale(
-              changedCashAmountSum,
-            )} ${changedCashAmountSum > 0 ? '벌었습니다' : '잃었습니다'}`
-          : `${'잔고에 다른 변화는 없었습니다.'}`
-      }
-      자세한 알림은 '알림 센터'에서 확인 가능합니다.`,
-    });
   }
 
   private async createChangeOnStock(
@@ -191,8 +164,9 @@ export class DiceTossService {
     );
 
     if (isCycled) {
+      await this.userRepository.changeUserCash(userJwt.userId, 10000);
       const landEventResult: MapCycleLandEventResult = {
-        earnedCash: 1000,
+        earnedCash: 10000,
       };
       await this.userActivityService.create({
         userId: userJwt.userId,
@@ -248,7 +222,7 @@ export class DiceTossService {
 
     if (landEventSummaries.length > 0) {
       skillDrawResult.actionResultDrawings.push(
-        this.renderRecentLandEventSummary(landEventSummaries),
+        renderRecentLandEventSummary(landEventSummaries),
       );
     }
 
