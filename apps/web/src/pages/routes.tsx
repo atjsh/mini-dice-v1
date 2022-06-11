@@ -37,7 +37,7 @@ export const TermsPageURL = '/terms';
 export const TerminatePageURL = '/terminate';
 export const RankingPgaeURL = '/ranking';
 export const UpdatesPageURL = '/updates';
-export const NotificationPageURL = '/notification';
+export const NotificationPageURL = '/notifications';
 
 function getTitle(subTitle?: string) {
   return `미니다이스 인생게임 | Mini Dice ${subTitle ? '-' : ''} ${
