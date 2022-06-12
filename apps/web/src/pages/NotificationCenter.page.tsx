@@ -25,7 +25,7 @@ export function NotificationPage() {
               <NotificationPlainMessage notificationMessage={notification} />
             ))
           ) : isLoading ? (
-            <></>
+            <div>로딩 중...</div>
           ) : (
             <div>알림 없음</div>
           )}
