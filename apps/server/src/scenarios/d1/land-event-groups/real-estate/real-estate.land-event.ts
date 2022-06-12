@@ -69,7 +69,7 @@ export class RealEstateLandEventGroup {
   ): LandEventDrawResultType {
     return NotificationMessage({
       title: '다른 유저가 내 토지를 차지했음',
-      description: `보유 시간이 지난 내 '${props.landEventResult.takenOverByUsername}' 토지를 '${props.landEventResult.landName}' 유저가 소유하게 되었습니다.`,
+      description: `보유 시간이 지난 내 '${props.landEventResult.landName}' 토지를 '${props.landEventResult.takenOverByUsername}' 유저가 소유하게 되었습니다.`,
       date: String(props.date),
     });
   }
