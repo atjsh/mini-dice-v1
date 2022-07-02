@@ -2,13 +2,14 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import { UserIdType } from '@packages/shared-types';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserActivityService } from 'apps/server/src/user-activity/user-activity.service';
 import {
   UserCashStrType,
   UserEntity,
 } from 'apps/server/src/user/entity/user.entity';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { Repository } from 'typeorm';
 import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
@@ -157,11 +158,12 @@ export enum LandBuyingResult {
 @Injectable()
 export class CommonLandService {
   constructor(
-    private userRepository: UserRepository,
+    private userService: UserService,
     @InjectRepository(LandEntity)
     private landRepository: Repository<LandEntity>,
     private skillGroupAliasesService: SkillGroupAliasesService,
     private userActivityService: UserActivityService,
+    private diceTossService: DiceTossService,
   ) {}
 
   private async initLand(id: LandEntity['id']): Promise<LandEntity> {
@@ -210,7 +212,7 @@ export class CommonLandService {
     landStatus: LandStatus,
     userId: UserIdType,
   ): Promise<LandBuyableByUserStatus> {
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
     if (landStatus.landOwnedBy?.id == userId) {
       return {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
@@ -260,7 +262,7 @@ export class CommonLandService {
       (land) => land.id == landId,
     )!;
 
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
 
     if (user.cash < initalLandData.landPrice) {
       throw new LandTooExpensive({
@@ -284,7 +286,7 @@ export class CommonLandService {
 
     await this.landRepository.save(saveObject);
 
-    await this.userRepository.changeUserCash(
+    await this.userService.changeUserCash(
       userId,
       -initalLandData.landPrice,
       user.cash,
@@ -320,9 +322,7 @@ export class CommonLandService {
       landSubmitSkillRoute: SkillRouteType;
     }>,
   ) {
-    const { username } = await this.userRepository.findUserWithCache(
-      props.userId,
-    );
+    const { username } = await this.userService.findUserWithCache(props.userId);
     const landStatus = await this.getLandStatusById(props.landId);
     const landBuyableByUserStatus = await this.isLandBuyableByUser(
       landStatus,
@@ -347,22 +347,22 @@ export class CommonLandService {
         },
       });
       await Promise.all([
-        this.userRepository.changeUserCash(props.userId, -landStatus.tollFee),
-        this.userRepository.changeUserCash(
+        this.userService.changeUserCash(props.userId, -landStatus.tollFee),
+        this.userService.changeUserCash(
           landStatus.landOwnedBy!.id,
           landStatus.tollFee,
         ),
       ]);
     }
     if (landBuyableByUserStatus.status == LandBuyableByUserEnum.BUYABLE) {
-      await this.userRepository.setUserAllowedSkillRoute(
+      await this.userService.setUserAllowedSkillRoute(
         props.userId,
         props.landSubmitSkillRoute,
         false,
       );
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
       false,

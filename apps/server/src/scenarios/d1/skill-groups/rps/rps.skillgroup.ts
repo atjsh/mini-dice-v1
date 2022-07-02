@@ -22,7 +22,7 @@ import {
   InteractionUserActivitySkillDrawPropsType,
 } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
 import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import {
@@ -40,7 +40,7 @@ class RpsSubmitParamType {
 export class RpsSkillGroup implements SkillGroupController {
   constructor(
     private skillService: RpsService,
-    private userRepository: UserRepository,
+    private userService: UserService,
   ) {}
 
   getSkillGroupAlias() {
@@ -98,7 +98,7 @@ export class RpsSkillGroup implements SkillGroupController {
     userActivity,
     userId,
   }: SkillPropsType<InteractionUserActivity<RpsSubmitParamType>>) {
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
     return this.skillService.submit({
       userId: userId,
       rpsMove: userActivity.params.move,

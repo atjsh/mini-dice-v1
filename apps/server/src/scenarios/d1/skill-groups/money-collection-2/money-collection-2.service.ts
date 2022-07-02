@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import { strEllipsis } from '@packages/shared-types';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
 import { UserActivityService } from 'apps/server/src/user-activity/user-activity.service';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import * as _ from 'lodash';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
@@ -35,18 +36,18 @@ const fee = 2000;
 export class MoneyCollection2Service {
   constructor(
     private commonMoneyCollectionService: CommonMoneyCollectionService,
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
+    private userService: UserService,
     private userActivityService: UserActivityService,
+    private diceTossService: DiceTossService,
   ) {}
 
   async index(props: SkillServiceProps) {
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );
 
-    const { username, cash } = await this.userRepository.findUserWithCache(
+    const { username, cash } = await this.userService.findUserWithCache(
       props.userId,
     );
 
@@ -66,7 +67,7 @@ export class MoneyCollection2Service {
         };
       } else {
         const earning = fee * participants.length;
-        const { cash: updatedCash } = await this.userRepository.changeUserCash(
+        const { cash: updatedCash } = await this.userService.changeUserCash(
           props.userId,
           earning,
         );
@@ -108,7 +109,7 @@ export class MoneyCollection2Service {
         };
       }
     } else {
-      await this.userRepository.changeUserCash(props.userId, -fee);
+      await this.userService.changeUserCash(props.userId, -fee);
       const usernames =
         await this.commonMoneyCollectionService.getMoneyCollectionUsernamesLength(
           MoneyCollectionIdEnum.MONEY_COLLECTION_2,

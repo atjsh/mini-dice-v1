@@ -22,8 +22,8 @@ export class RecentSkillLogsService {
       limit: limit,
     });
     return await Promise.all(
-      recentSkillLogs.map(async (skillLog) => {
-        const skillDrawResult =
+      recentSkillLogs.map(async (skillLog) => ({
+        skillDrawResult:
           await this.scenarioRoutingService.callSkillDraw<MessageResponseType>(
             getSkillRouteFromPath(skillLog.skillRoute),
             {
@@ -32,14 +32,10 @@ export class RecentSkillLogsService {
               userActivity: skillLog.userActivity,
               timezone: timezone,
             },
-          );
-
-        return {
-          skillDrawResult: skillDrawResult,
-          id: skillLog.id,
-          skillRoute: getSkillRouteFromPath(skillLog.skillRoute),
-        };
-      }),
+          ),
+        id: skillLog.id,
+        skillRoute: getSkillRouteFromPath(skillLog.skillRoute),
+      })),
     );
   }
 }

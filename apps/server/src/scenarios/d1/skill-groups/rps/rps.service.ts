@@ -1,9 +1,10 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import {
   SkillService,
   SkillServiceProps,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { Cache } from 'cache-manager';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
@@ -63,7 +64,8 @@ export type RpsLog = {
 export class RpsService implements SkillService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private userRepository: UserRepository,
+    private userService: UserService,
+    private diceTossService: DiceTossService,
   ) {}
 
   private async getLastRpsLog(): Promise<RpsLog | undefined> {
@@ -92,7 +94,7 @@ export class RpsService implements SkillService {
   }
 
   public async index(props: SkillServiceProps) {
-    await this.userRepository.setUserAllowedSkillRoute(
+    await this.userService.setUserAllowedSkillRoute(
       props.userId,
       D1ScenarioRoutes.skillGroups.rps.skills.submit,
       true,
@@ -122,13 +124,10 @@ export class RpsService implements SkillService {
         : 0;
 
     if (cashChangingAmount != 0) {
-      await this.userRepository.changeUserCash(
-        props.userId,
-        cashChangingAmount,
-      );
+      await this.userService.changeUserCash(props.userId, cashChangingAmount);
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1, true),
     );

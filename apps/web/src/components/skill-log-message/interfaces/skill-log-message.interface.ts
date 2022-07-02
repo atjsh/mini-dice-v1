@@ -3,6 +3,8 @@ import {
   PlainMessageType,
   FormMessageType,
   LinkGroupType,
+  LandCommentVo,
+  LandCommentsMessageType,
 } from '@packages/shared-types';
 import { ExposedSkillLogType } from '../../../libs';
 
@@ -13,7 +15,8 @@ export interface SkillLogMessageInerface {
     | FormMessageType
     | PlainMessageType[]
     | FormMessageType[]
-    | LinkGroupType;
+    | LinkGroupType
+    | LandCommentsMessageType;
 
   date: Date;
 

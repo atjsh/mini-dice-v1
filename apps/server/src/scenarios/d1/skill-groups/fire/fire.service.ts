@@ -4,8 +4,9 @@ import {
   DynamicValueEventCase,
 } from 'apps/server/src/common/random/event-case-processing';
 import { getRandomInteger } from 'apps/server/src/common/random/random-number';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
@@ -57,27 +58,30 @@ const cashChangeEventValues: DynamicValueEventCase<FireEventEnum>[] = [
 
 @Injectable()
 export class FireService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userService: UserService,
+    private diceTossService: DiceTossService,
+  ) {}
 
   async index(props: SkillServiceProps) {
     const cashChangeEvent = calcRandomCashChangeEvent<FireEventEnum>(
       cashChangeEventValues,
     );
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );
     console.log(cashChangeEvent);
     switch (cashChangeEvent.eventCase.causeName) {
       case FireEventEnum.LOSE_MONEY:
-        const cash = (await this.userRepository.findUserWithCache(props.userId))
+        const cash = (await this.userService.findUserWithCache(props.userId))
           .cash;
         const losing =
           (BigInt(cashChangeEvent.value) * BigInt(cash)) / BigInt(100);
         // if (losing > 500000) {
         //   const reducedLosing = getRandomInteger(50000, 100000);
-        //   await this.userRepository.changeUserCash(
+        //   await this.userService.changeUserCash(
         //     props.userId,
         //     -reducedLosing,
         //   );
@@ -88,7 +92,7 @@ export class FireService {
         // } else {
 
         // }
-        await this.userRepository.changeUserCash(props.userId, -losing);
+        await this.userService.changeUserCash(props.userId, -losing);
         return {
           losing: String(losing),
           eventCase: cashChangeEvent.eventCase.causeName,

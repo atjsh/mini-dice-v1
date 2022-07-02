@@ -1,17 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { serializeUserToJson } from '../user/entity/user.entity';
-import { UserRepository } from '../user/user.repository';
+import { serializeUserToJson, UserEntity } from '../user/entity/user.entity';
+import { UserService } from '../user/user.service';
 import { v4 as uuid4 } from 'uuid';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PublicProfileService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+    private userService: UserService,
+  ) {}
 
   async getUser(userJwt: UserJwtDto): Promise<UserEntityJson> {
     return serializeUserToJson(
-      await this.userRepository.findUserWithCache(userJwt.userId),
+      await this.userService.findUserWithCache(userJwt.userId),
     );
   }
 

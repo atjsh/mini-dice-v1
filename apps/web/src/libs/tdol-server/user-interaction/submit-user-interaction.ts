@@ -1,6 +1,6 @@
-import { UserVo } from "@packages/shared-types";
-import { AxiosResponse } from "axios";
-import { authedAxios, ExposedSkillLogType } from "..";
+import { UserVo } from '@packages/shared-types';
+import { AxiosResponse } from 'axios';
+import { authedAxios, ExposedSkillLogType } from '..';
 
 class UserInteractionDto {
   callingSkillRoute: string;
@@ -13,13 +13,13 @@ export class UserInteractionResult {
 }
 
 export async function submitUserInteraction(
-  dto: UserInteractionDto
+  dto: UserInteractionDto,
 ): Promise<UserInteractionResult> {
   try {
     const response = await authedAxios.post<
       UserInteractionDto,
       AxiosResponse<UserInteractionResult>
-    >("/user-interaction-web", dto);
+    >('/user-interaction-web', dto);
 
     return response.data;
   } catch (error) {

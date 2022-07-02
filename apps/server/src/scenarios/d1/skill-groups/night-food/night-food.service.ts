@@ -5,8 +5,9 @@ import {
   selectEventCaseRandomly,
 } from 'apps/server/src/common/random/event-case-processing';
 import { selectRandomItemFromList } from 'apps/server/src/common/random/random-item-from-array';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
@@ -51,7 +52,10 @@ const cashChangeEventValues: DynamicValueEventCase[] = [
 
 @Injectable()
 export class NightFoodService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userService: UserService,
+    private diceTossService: DiceTossService,
+  ) {}
 
   private getRandomEventAndFood() {
     return {
@@ -62,7 +66,7 @@ export class NightFoodService {
 
   private async madeProfit(props: SkillServiceProps) {
     const eventResult = this.getRandomEventAndFood();
-    await this.userRepository.changeUserCash(
+    await this.userService.changeUserCash(
       props.userId,
       eventResult.changingAmount,
     );
@@ -74,7 +78,7 @@ export class NightFoodService {
 
   private async lostProfit(props: SkillServiceProps) {
     const eventResult = this.getRandomEventAndFood();
-    await this.userRepository.changeUserCash(
+    await this.userService.changeUserCash(
       props.userId,
       -eventResult.changingAmount,
     );
@@ -110,7 +114,7 @@ export class NightFoodService {
       },
     ]).causeName;
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );

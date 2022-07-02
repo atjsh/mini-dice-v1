@@ -13,7 +13,10 @@ import {
 import { UserEntity } from '../../user/entity/user.entity';
 import { UserActivityType } from '../types/user-activity.dto';
 
+const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
+
 @Entity()
+@Index(SEARCH_BY_USER_ID_PAGED_INDEX_NAME, ['userId', 'date'])
 export class SkillLogEntity<
   T extends Record<string, any> | undefined = Record<string, any> | undefined,
 > {
@@ -53,7 +56,6 @@ export class SkillLogEntity<
   })
   skillServiceResult: T;
 
-  @Index()
   @CreateDateColumn()
   date: Date;
 }

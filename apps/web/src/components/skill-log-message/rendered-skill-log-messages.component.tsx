@@ -2,6 +2,8 @@ import {
   DataFieldType,
   FormMessageType,
   InputFieldType,
+  LandCommentsMessageType,
+  LandCommentVo,
   LinkGroupType,
   LinkType,
   NotificationMessageType,
@@ -9,7 +11,7 @@ import {
   UserActivityMessageType,
 } from '@packages/shared-types';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import {
   DiceTossActivityEnum,
@@ -20,6 +22,7 @@ import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
 import { formatDistance } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { mutateUserLandComment, useUser } from '../../libs';
 
 const MessageWidth = 'w-max min-w ';
 const MessageCommon = `${MessageWidth} my-0.5 md:my-1 leading-7 `;
@@ -27,6 +30,11 @@ const MessageCommon = `${MessageWidth} my-0.5 md:my-1 leading-7 `;
 const UserActivityMessageRadius = 'rounded-xl';
 const UserActivityMessagePadding = 'p-5';
 const UserActivityMessageCommon = `${UserActivityMessagePadding} ${UserActivityMessageRadius} bg-gray-800 text-gray-400 font-bold`;
+
+const addedCommentsAtom = atom<Record<string, string>>({
+  key: 'added-comments',
+  default: {},
+});
 
 const Text: React.FC<{ t?: string }> = ({ t: text }) => {
   return (
@@ -517,12 +525,84 @@ const FormMessageGroup: React.FC<{
   );
 };
 
+const LandCommentsMessage: React.FC<{
+  isLast: boolean;
+  landComments: LandCommentVo[];
+  messageKey: string;
+}> = ({ isLast, landComments, messageKey }) => {
+  const [addedComments, setAddedComments] = useRecoilState(addedCommentsAtom);
+  const mutate = mutateUserLandComment();
+
+  const thisComment = addedComments[messageKey];
+
+  const { data: user } = useUser();
+
+  const canAddComment = user?.canAddLandComment == true && isLast;
+
+  return (isLast && user?.canAddLandComment == true) ||
+    ((landComments.length > 0 || thisComment != undefined) &&
+      isLast == false) ? (
+    <div className=" text-xs md:text-sm pl-5 pr-2 pt-3 pb-5 flex flex-col gap-y-1">
+      <div className=" font-bold text-sm md:text-base">댓글</div>
+      <div className=" flex flex-col gap-y-0.5">
+        {thisComment == undefined && landComments.length == 0 && (
+          <span className="opacity-50">이 칸에 첫 번째 댓글을 달아보세요</span>
+        )}
+        {thisComment && (
+          <div className=" flex gap-x-5">
+            <div className=" opacity-50">{user?.username ?? '나'}</div>
+            <div className=" break-all">{thisComment}</div>
+          </div>
+        )}
+        {landComments.map((landComment, index) => (
+          <div className=" flex gap-x-5">
+            <div className=" opacity-50">{landComment.username}</div>
+            <div className=" break-all">{landComment.comment}</div>
+          </div>
+        ))}
+      </div>
+      <div>
+        <button
+          className={`${
+            isLast && thisComment == undefined
+              ? 'underline'
+              : ' disabled:opacity-30'
+          } text-sm md:text-base`}
+          disabled={isLast == false || thisComment != undefined}
+          onClick={() => {
+            const comment = prompt('댓글을 입력하세요 (최대 100자)');
+
+            if (comment) {
+              mutate.mutate({
+                comment,
+              });
+              setAddedComments({
+                ...addedComments,
+                [messageKey]: comment,
+              });
+            }
+          }}
+        >
+          {thisComment
+            ? '댓글을 달았습니다'
+            : canAddComment
+            ? '이 칸에 댓글 달기'
+            : '이 칸에 댓글 달기'}
+        </button>
+      </div>
+    </div>
+  ) : (
+    <></>
+  );
+};
+
 const RenderedMessageByType: React.FC<{
   message:
     | FormMessageType
     | LinkGroupType
     | PlainMessageType
-    | UserActivityMessageType;
+    | UserActivityMessageType
+    | LandCommentsMessageType;
   isLastSkillLog: boolean;
   messageKey: string;
 
@@ -562,6 +642,15 @@ const RenderedMessageByType: React.FC<{
           key={`${messageKey}-form`}
         />
       </div>
+    );
+  } else if (message.type == 'landComments') {
+    return (
+      <LandCommentsMessage
+        isLast={isLast}
+        landComments={message.landComments}
+        key={`${messageKey}-lcm`}
+        messageKey={messageKey}
+      />
     );
   }
 
@@ -622,14 +711,18 @@ export const RenderedSkillLogMessages: React.FC<{}> = () => {
 
   return (
     <>
-      {skillLogMessages.map((message, index) => (
-        <RenderedSkillLogMessage
-          skillLogMessage={message}
-          index={index}
-          isLastSkillLog={message.skillLogId == lastSkillLogId}
-          key={`slm${message.skillLogId}${index}${message.date}`}
-        />
-      ))}
+      {skillLogMessages.map((message, index) => {
+        const isLastSkillLog = message.skillLogId == lastSkillLogId;
+
+        return (
+          <RenderedSkillLogMessage
+            skillLogMessage={message}
+            index={index}
+            isLastSkillLog={isLastSkillLog}
+            key={`slm${message.skillLogId}${index}${message.date}`}
+          />
+        );
+      })}
     </>
   );
 };

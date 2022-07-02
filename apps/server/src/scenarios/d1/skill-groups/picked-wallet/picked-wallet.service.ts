@@ -3,8 +3,9 @@ import {
   calcRandomCashChangeEvent,
   DynamicValueEventCase,
 } from 'apps/server/src/common/random/event-case-processing';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
@@ -31,7 +32,10 @@ const cashChangeEventValues: DynamicValueEventCase<PickedWalletEventEnum>[] = [
 
 @Injectable()
 export class PickedWalletService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userService: UserService,
+    private diceTossService: DiceTossService,
+  ) {}
 
   async index(props: SkillServiceProps) {
     const cashChangeEvent = calcRandomCashChangeEvent<PickedWalletEventEnum>(
@@ -39,7 +43,7 @@ export class PickedWalletService {
     );
     switch (cashChangeEvent.eventCase.causeName) {
       case PickedWalletEventEnum.MADE_PROFIT:
-        await this.userRepository.changeUserCash(
+        await this.userService.changeUserCash(
           props.userId,
           cashChangeEvent.value,
         );
@@ -47,7 +51,7 @@ export class PickedWalletService {
         break;
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );

@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   getStockInitialData,
   StockIdType,
@@ -6,8 +7,9 @@ import {
   StockInitialData,
   UserIdType,
 } from '@packages/shared-types';
-import { EntityManager } from 'typeorm';
-import { UserRepository } from '../../../../user/user.repository';
+import { UserEntity } from 'apps/server/src/user/entity/user.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { UserService } from '../../../../user/user.service';
 
 export enum StockOwningStatusEnum {
   NOT_OWNING_STOCK = 0,
@@ -27,14 +29,18 @@ export interface StockPriceChangeResult {
 
 @Injectable()
 export class CommonStockService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userService: UserService,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+  ) {}
 
   async getStockDatas(): Promise<StockInitalDataType[]> {
     return StockInitialData;
   }
 
   async getStockBuyableStatus(userId: UserIdType) {
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
     if (user.stockId == null) {
       return StockOwningStatusEnum.NOT_OWNING_STOCK;
     }
@@ -68,7 +74,7 @@ export class CommonStockService {
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
         const user = await transactionManager
-          .getCustomRepository(UserRepository)
+          .getCustomRepository(UserService)
           .findUserWithCache(userId);
 
         if (user.stockId != null) {
@@ -83,7 +89,7 @@ export class CommonStockService {
         }
 
         await transactionManager
-          .getCustomRepository(UserRepository)
+          .getCustomRepository(UserService)
           .partialUpdateUser(userId, {
             cash:
               BigInt(user.cash) -
@@ -116,7 +122,7 @@ export class CommonStockService {
           stockAmount: currentStockAmount,
           stockCashPurchaseSum: currentStockCashPurchaseSum,
         } = await transactionManager
-          .getCustomRepository(UserRepository)
+          .getCustomRepository(UserService)
           .findUserWithCache(userId);
 
         if (stockId == null) {
@@ -128,7 +134,7 @@ export class CommonStockService {
         }
 
         await transactionManager
-          .getCustomRepository(UserRepository)
+          .getCustomRepository(UserService)
           .partialUpdateUser(userId, {
             cash: cash - stockPrice * addingStockAmount,
             stockAmount: addingStockAmount + currentStockAmount,
@@ -152,7 +158,7 @@ export class CommonStockService {
     return await this.userRepository.manager.transaction(
       async (transactionManager: EntityManager) => {
         const user = await transactionManager
-          .getCustomRepository(UserRepository)
+          .getCustomRepository(UserService)
           .findUserWithCache(userId);
         if (user.stockId == null) {
           return StockOwningStatusEnum.NOT_OWNING_STOCK;
@@ -165,7 +171,7 @@ export class CommonStockService {
           BigInt(user.stockAmount) * BigInt(user.stockPrice);
 
         await transactionManager
-          .getCustomRepository(UserRepository)
+          .getCustomRepository(UserService)
           .partialUpdateUser(userId, {
             cash: userCash,
             stockId: null,
@@ -187,13 +193,13 @@ export class CommonStockService {
     userId: UserIdType,
     stockPriceDifference: bigint | number,
   ): Promise<StockPriceChangeResult> {
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
     const changedStockPrice =
       BigInt(user.stockPrice) + BigInt(stockPriceDifference);
 
     if (changedStockPrice < 1000) {
       const stockAmount = user.stockAmount;
-      await this.userRepository.partialUpdateUser(userId, {
+      await this.userService.partialUpdateUser(userId, {
         stockPrice: changedStockPrice,
       });
       await this.sellStock(userId);
@@ -205,7 +211,7 @@ export class CommonStockService {
       };
     }
 
-    await this.userRepository.partialUpdateUser(userId, {
+    await this.userService.partialUpdateUser(userId, {
       stockPrice: changedStockPrice,
     });
 

@@ -6,11 +6,12 @@ import {
   StockIdType,
   StockInitialData,
 } from '@packages/shared-types';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
 import {
   SkillServiceProps,
   SkillService,
 } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { UserService } from 'apps/server/src/user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import {
@@ -22,8 +23,9 @@ import { D1ScenarioRoutes } from '../../routes';
 @Injectable()
 export class StockService implements SkillService {
   constructor(
-    private userRepository: UserRepository,
+    private userService: UserService,
     private commonStockService: CommonStockService,
+    private diceTossService: DiceTossService,
   ) {}
   async index(props: SkillServiceProps) {
     const buyableStatus = await this.commonStockService.getStockBuyableStatus(
@@ -31,16 +33,16 @@ export class StockService implements SkillService {
     );
 
     const { cash, stockId, stockAmount, stockPrice, stockCashPurchaseSum } =
-      await this.userRepository.findUserWithCache(props.userId);
+      await this.userService.findUserWithCache(props.userId);
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
       false,
     );
 
     if (buyableStatus == StockOwningStatusEnum.NOT_OWNING_STOCK) {
-      await this.userRepository.setUserAllowedSkillRoute(
+      await this.userService.setUserAllowedSkillRoute(
         props.userId,
         D1ScenarioRoutes.skillGroups.stock.skills.buy,
         false,
@@ -59,7 +61,7 @@ export class StockService implements SkillService {
         })),
       };
     } else {
-      await this.userRepository.setUserAllowedSkillRoute(
+      await this.userService.setUserAllowedSkillRoute(
         props.userId,
         [
           D1ScenarioRoutes.skillGroups.stock.skills.sell,
@@ -98,7 +100,7 @@ export class StockService implements SkillService {
       throw new ForbiddenException('cannot buy stock; not enough money');
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1, true),
     );
@@ -121,7 +123,7 @@ export class StockService implements SkillService {
       throw new ForbiddenException('cannot buy more stock; not enough money');
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1, true),
     );
@@ -140,7 +142,7 @@ export class StockService implements SkillService {
       throw new ForbiddenException('cannot sell stock; not owning stocks');
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1, true),
     );

@@ -26,11 +26,12 @@ import { SkillLogService } from '../skill-log/skill-log.service';
 import { DiceUserActivity } from '../skill-log/types/user-activity.dto';
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
 import { UserActivityService } from '../user-activity/user-activity.service';
+import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
 import {
   isUserThrowingDiceTossAllowedOrThrow,
   serializeUserToJson,
 } from '../user/entity/user.entity';
-import { UserRepository } from '../user/user.repository';
+import { UserService } from '../user/user.service';
 import { DiceTossOutputDto } from './interface';
 
 function isOdd(num: number | bigint) {
@@ -40,18 +41,18 @@ function isOdd(num: number | bigint) {
 @Injectable()
 export class DiceTossService {
   constructor(
-    private userRepository: UserRepository,
+    private userService: UserService,
     private skillLogService: SkillLogService,
     private commonStockService: CommonStockService,
     private scenarioRouteCallService: ScenarioRouteCallService,
     private userActivityService: UserActivityService,
+    private userCommentService: UserLandCommentService,
   ) {}
 
   private throwDices(dices: number): number[] {
     return Array(dices)
       .fill(0)
       .map(() => getRandomInteger(1, 6));
-    // return [28];
   }
 
   private moveUserForward(
@@ -83,7 +84,7 @@ export class DiceTossService {
     const isDiceResultEqual = uniqueDiceResult.length == 1;
 
     if (isDiceResultEqual) {
-      const user = await this.userRepository.findUserWithCache(userId);
+      const user = await this.userService.findUserWithCache(userId);
       if (user.stockId) {
         const { stockRisingPrice, stockFallingPrice } = getStockInitialData(
           user.stockId,
@@ -107,11 +108,35 @@ export class DiceTossService {
     return undefined;
   }
 
+  /**
+   * 유저가 주사위를 굴릴 수 있도록 조정한다.
+   * @param userId
+   * @param canTossDiceAt
+   * @param resetSubmitAllowedMapStop
+   * @returns
+   */
+  async setUserCanTossDice(
+    userId: UserIdType,
+    canTossDiceAt: Date,
+    resetSubmitAllowedMapStop = true,
+  ) {
+    await this.userCommentService.setUserCanAddLandComment(userId, true);
+    return await this.userService.partialUpdateUser(userId, {
+      isUserDiceTossForbidden: false,
+      canTossDiceAfter: canTossDiceAt,
+      submitAllowedMapStop: resetSubmitAllowedMapStop ? null : undefined,
+    });
+  }
+
   async tossDiceAndGetWebMessageResponse(
     userJwt: UserJwtDto,
     timezone: string,
   ): Promise<DiceTossOutputDto> {
-    const user = await this.userRepository.findUserWithCache(userJwt.userId);
+    await this.userCommentService.setUserCanAddLandComment(
+      userJwt.userId,
+      false,
+    );
+    const user = await this.userService.findUserWithCache(userJwt.userId);
     isUserThrowingDiceTossAllowedOrThrow(user);
     if (!user.signupCompleted) {
       throw new ForbiddenException('finish signup fist');
@@ -146,10 +171,21 @@ export class DiceTossService {
 
       return {
         user: serializeUserToJson(
-          await this.userRepository.findUserWithCache(userJwt.userId),
+          await this.userService.findUserWithCache(userJwt.userId),
         ),
         skillLog: {
-          skillDrawResult: skillDrawResult,
+          skillDrawResult: {
+            ...skillDrawResult,
+            actionResultDrawings: [
+              ...skillDrawResult.actionResultDrawings,
+              {
+                type: 'landComments',
+                landComments: await this.userCommentService.getLandComments(
+                  lastSkillLog.log.skillRoute,
+                ),
+              },
+            ],
+          },
           skillRoute: getSkillRouteFromPath(lastSkillLog.log.skillRoute),
           id: lastSkillLog.log.id,
         },
@@ -164,7 +200,7 @@ export class DiceTossService {
     );
 
     if (isCycled) {
-      await this.userRepository.changeUserCash(userJwt.userId, 10000);
+      await this.userService.changeUserCash(userJwt.userId, 10000);
       const landEventResult: MapCycleLandEventResult = {
         earnedCash: 10000,
       };
@@ -228,10 +264,21 @@ export class DiceTossService {
 
     return {
       user: serializeUserToJson(
-        await this.userRepository.findUserWithCache(userJwt.userId),
+        await this.userService.findUserWithCache(userJwt.userId),
       ),
       skillLog: {
-        skillDrawResult: skillDrawResult,
+        skillDrawResult: {
+          ...skillDrawResult,
+          actionResultDrawings: [
+            ...skillDrawResult.actionResultDrawings,
+            {
+              type: 'landComments',
+              landComments: await this.userCommentService.getLandComments(
+                skillServiceLog.skillRoute,
+              ),
+            },
+          ],
+        },
         skillRoute: movedLandCode,
         id: skillServiceLog.id,
       },

@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Query,
   UsePipes,
@@ -13,14 +12,13 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   CompleteSignupUserDto,
   UpdateUserDto,
-  UserIdType,
   UserVo,
 } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { USER_PROFILE_APIS } from '../common';
-import { UserRepository } from '../user/user.repository';
+import { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
 import { PublicProfileService } from './profile.service';
 
@@ -44,7 +42,7 @@ class PageDto {
 export class PublicProfileController {
   constructor(
     private readonly profileService: PublicProfileService,
-    private userRepository: UserRepository,
+    private userService: UserService,
   ) {}
 
   @JwtAuth()
@@ -62,7 +60,7 @@ export class PublicProfileController {
       };
     }
 
-    return this.userRepository.partialUpdateUser(userJwt.userId, {
+    return this.userService.partialUpdateUser(userJwt.userId, {
       username: user.username,
       countryCode3: user.countryCode3,
     });
@@ -80,7 +78,7 @@ export class PublicProfileController {
     @UserJwt() userJwt: UserJwtDto,
     @Body() completeSignupUserDto: CompleteSignupUserDto,
   ) {
-    return this.userRepository.completeSignup(
+    return this.userService.completeSignup(
       userJwt.userId,
       completeSignupUserDto,
     );
@@ -89,6 +87,6 @@ export class PublicProfileController {
   @JwtAuth()
   @Delete('')
   terminateUser(@UserJwt() userJwt: UserJwtDto) {
-    return this.userRepository.terminateUser(userJwt.userId);
+    return this.userService.terminateUser(userJwt.userId);
   }
 }

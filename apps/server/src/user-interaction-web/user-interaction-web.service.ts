@@ -12,18 +12,18 @@ import { SkillLogService } from '../skill-log/skill-log.service';
 import { InteractionUserActivity } from '../skill-log/types/user-activity.dto';
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
 import { UserActivityService } from '../user-activity/user-activity.service';
+import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
 import { serializeUserToJson } from '../user/entity/user.entity';
-import { UserRepository } from '../user/user.repository';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class UserInteractionWebService {
   constructor(
     private scenarioRoutingService: ScenarioRouteCallService,
-    private userRepository: UserRepository,
     private userService: UserService,
     private skillLogService: SkillLogService,
     private userActivityService: UserActivityService,
+    private userLandCommentService: UserLandCommentService,
   ) {}
 
   async callSkillFromWebUserInteraction(
@@ -32,7 +32,7 @@ export class UserInteractionWebService {
     userJwt: UserJwtDto,
     timezone: string,
   ): Promise<UserInteractionOutputDto> {
-    const user = await this.userRepository.findUserWithCache(userJwt.userId);
+    const user = await this.userService.findUserWithCache(userJwt.userId);
     if (!user.signupCompleted) {
       throw new ForbiddenException('finish signup fist');
     }
@@ -75,7 +75,7 @@ export class UserInteractionWebService {
         },
       );
 
-    const updatedUser = await this.userRepository.findUserWithCache(
+    const updatedUser = await this.userService.findUserWithCache(
       userJwt.userId,
     );
 
@@ -96,13 +96,23 @@ export class UserInteractionWebService {
         );
       }
     }
-
     return {
       user: serializeUserToJson(updatedUser),
       skillLog: {
         id: skillServiceLog.id,
         skillRoute: getSkillRouteFromPath(skillServiceLog.skillRoute),
-        skillDrawResult: skillDrawResult,
+        skillDrawResult: {
+          ...skillDrawResult,
+          actionResultDrawings: [
+            ...skillDrawResult.actionResultDrawings,
+            {
+              type: 'landComments',
+              landComments: await this.userLandCommentService.getLandComments(
+                skillServiceLog.skillRoute,
+              ),
+            },
+          ],
+        },
       },
     };
   }

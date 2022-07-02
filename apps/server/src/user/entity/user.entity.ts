@@ -219,6 +219,12 @@ export class UserEntity {
   })
   stockCashPurchaseSum: bigint | null;
 
+  @Column({
+    default: false,
+    nullable: false,
+  })
+  canAddLandComment: boolean;
+
   /** 객체가 생성된 날짜 */
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })

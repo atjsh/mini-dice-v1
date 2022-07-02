@@ -12,7 +12,10 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 
+const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
+
 @Entity({ orderBy: { createdAt: 'DESC' } })
+@Index(SEARCH_BY_USER_ID_PAGED_INDEX_NAME, ['userId', 'createdAt'])
 export class UserActivityEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -47,7 +50,6 @@ export class UserActivityEntity {
   read: boolean;
 
   /** 객체가 생성된 날짜 */
-  @Index()
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
   createdAt: Date;

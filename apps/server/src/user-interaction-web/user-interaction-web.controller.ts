@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { getSkillRouteFromPath } from '@packages/scenario-routing';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';

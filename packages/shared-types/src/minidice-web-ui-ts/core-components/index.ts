@@ -8,3 +8,4 @@ export * from './UserActivityMessage.component';
 export * from './Link.component';
 export * from './LinkGroup.component';
 export * from './NotificationMessage.component';
+export * from './LandCommentMessage.component';

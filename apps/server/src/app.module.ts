@@ -21,6 +21,7 @@ import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/s
 import { TempSignupModule } from './temp-signup/temp-signup.module';
 import { UpbitApiModule } from './upbit-api/upbit-api.module';
 import { UserActivityModule } from './user-activity/user-activity.module';
+import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
 import { UserModule } from './user/user.module';
 
@@ -92,6 +93,7 @@ import { UserModule } from './user/user.module';
     FrontendErrorModule,
 
     UserModule,
+    UserLandCommentModule,
     UserActivityModule,
     ProfileModule,
     UserInteractionWebModule,

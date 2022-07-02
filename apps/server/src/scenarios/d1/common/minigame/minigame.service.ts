@@ -6,7 +6,8 @@ import {
   calcRandomCashChangeEvent,
   DynamicValueEventCase,
 } from 'apps/server/src/common/random/event-case-processing';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
+import { UserService } from 'apps/server/src/user/user.service';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { sign as signJWT, verify as verifyJWT } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
@@ -77,7 +78,8 @@ export function calculateEarningFromMinigameScore(
 export class CommonMinigameService {
   constructor(
     private configService: ConfigService,
-    private userRepository: UserRepository,
+    private userService: UserService,
+    private diceTossService: DiceTossService,
   ) {}
 
   signMinigameHistory(minigameHistory: MinigameHistory): string {
@@ -108,7 +110,7 @@ export class CommonMinigameService {
   }
 
   async commonIndex(userId: UserIdType, submitSkillRoute: SkillRouteType) {
-    await this.userRepository.setUserAllowedSkillRoute(
+    await this.userService.setUserAllowedSkillRoute(
       userId,
       submitSkillRoute,
       true,
@@ -133,9 +135,9 @@ export class CommonMinigameService {
         startingEarningCash,
       );
 
-      await this.userRepository.changeUserCash(userId, earningCash);
+      await this.userService.changeUserCash(userId, earningCash);
 
-      await this.userRepository.setUserCanTossDice(
+      await this.diceTossService.setUserCanTossDice(
         userId,
         getUserCanTossDice(SCENARIO_NAMES.D1, true),
       );
@@ -159,8 +161,8 @@ export class CommonMinigameService {
       );
 
       if (maximumScore != -1 && minigameHistory.score >= maximumScore) {
-        await this.userRepository.changeUserCash(userId, earningCash);
-        await this.userRepository.setUserCanTossDice(
+        await this.userService.changeUserCash(userId, earningCash);
+        await this.diceTossService.setUserCanTossDice(
           userId,
           getUserCanTossDice(SCENARIO_NAMES.D1, true),
         );
@@ -183,7 +185,7 @@ export class CommonMinigameService {
         };
       }
     } else {
-      await this.userRepository.setUserCanTossDice(
+      await this.diceTossService.setUserCanTossDice(
         userId,
         getUserCanTossDice(SCENARIO_NAMES.D1, true),
       );
