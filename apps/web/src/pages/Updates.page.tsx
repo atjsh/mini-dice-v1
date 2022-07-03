@@ -128,6 +128,13 @@ const entries: {
       "알림 센터에서 '다른 유저가 내 토지를 차지했음' 알림의 내용이 잘못 표시되는 버그를 수정하였습니다.",
     ],
   },
+  {
+    emoji: '💬',
+    title: '댓글 기능이 추가됩니다',
+    date: new Date('2022-07-03T00:00:00+09:00'),
+    author: 'ATJSH',
+    updates: ['칸에 도착했을 때, 이제 댓글을 달 수 있습니다.'],
+  },
 ].reverse();
 
 export function UpdatesPage() {
