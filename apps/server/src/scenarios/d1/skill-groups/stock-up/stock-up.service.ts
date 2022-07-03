@@ -58,6 +58,11 @@ export class StockUpService {
         stockPrice: risedStockPrice,
       });
 
+      await this.diceTossService.setUserCanTossDice(
+        props.userId,
+        getUserCanTossDice(SCENARIO_NAMES.D1),
+      );
+
       return {
         originalStockPrice: String(stockPrice),
         risedStockPrice: String(risedStockPrice),

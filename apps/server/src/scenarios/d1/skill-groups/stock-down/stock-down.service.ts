@@ -60,6 +60,11 @@ export class StockDownService {
           -stockFalling,
         );
 
+      await this.diceTossService.setUserCanTossDice(
+        props.userId,
+        getUserCanTossDice(SCENARIO_NAMES.D1),
+      );
+
       return {
         originalStockPrice: String(stockPrice),
         falledStockPrice: String(changedStockPrice),
