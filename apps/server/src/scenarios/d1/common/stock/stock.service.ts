@@ -1,5 +1,4 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import {
   getStockInitialData,
   StockIdType,
@@ -7,8 +6,6 @@ import {
   StockInitialData,
   UserIdType,
 } from '@packages/shared-types';
-import { UserEntity } from 'apps/server/src/user/entity/user.entity';
-import { EntityManager, Repository } from 'typeorm';
 import { UserService } from '../../../../user/user.service';
 
 export enum StockOwningStatusEnum {
@@ -29,11 +26,7 @@ export interface StockPriceChangeResult {
 
 @Injectable()
 export class CommonStockService {
-  constructor(
-    private userService: UserService,
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-  ) {}
+  constructor(private userService: UserService) {}
 
   async getStockDatas(): Promise<StockInitalDataType[]> {
     return StockInitialData;
@@ -71,122 +64,97 @@ export class CommonStockService {
       throw new ForbiddenException('Stock Not Found');
     }
 
-    return await this.userRepository.manager.transaction(
-      async (transactionManager: EntityManager) => {
-        const user = await transactionManager
-          .getCustomRepository(UserService)
-          .findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
 
-        if (user.stockId != null) {
-          return StockOwningStatusEnum.OWNING_STOCK;
-        }
+    if (user.stockId != null) {
+      return StockOwningStatusEnum.OWNING_STOCK;
+    }
 
-        if (
-          BigInt(user.cash) <
-          stockInitialData.stockStartingPrice * BigInt(stockAmount)
-        ) {
-          return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
-        }
+    if (
+      BigInt(user.cash) <
+      stockInitialData.stockStartingPrice * BigInt(stockAmount)
+    ) {
+      return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
+    }
 
-        await transactionManager
-          .getCustomRepository(UserService)
-          .partialUpdateUser(userId, {
-            cash:
-              BigInt(user.cash) -
-              stockInitialData.stockStartingPrice * BigInt(stockAmount),
-            stockId,
-            stockAmount,
-            stockPrice: stockInitialData.stockStartingPrice,
-            stockCashPurchaseSum:
-              stockInitialData.stockStartingPrice * BigInt(stockAmount),
-          });
+    await this.userService.partialUpdateUser(userId, {
+      cash:
+        BigInt(user.cash) -
+        stockInitialData.stockStartingPrice * BigInt(stockAmount),
+      stockId,
+      stockAmount,
+      stockPrice: stockInitialData.stockStartingPrice,
+      stockCashPurchaseSum:
+        stockInitialData.stockStartingPrice * BigInt(stockAmount),
+    });
 
-        return {
-          stockInitialData,
-          stockAmount,
-        };
-      },
-    );
+    return {
+      stockInitialData,
+      stockAmount,
+    };
   }
 
   async buyMoreStock(userId: UserIdType, addingStockAmount: bigint) {
     if (!(addingStockAmount > 0)) {
       throw new ForbiddenException('not enough stock amount');
     }
-    return await this.userRepository.manager.transaction(
-      async (transactionManager: EntityManager) => {
-        const {
-          stockId,
-          stockPrice,
-          cash,
-          stockAmount: currentStockAmount,
-          stockCashPurchaseSum: currentStockCashPurchaseSum,
-        } = await transactionManager
-          .getCustomRepository(UserService)
-          .findUserWithCache(userId);
+    const {
+      stockId,
+      stockPrice,
+      cash,
+      stockAmount: currentStockAmount,
+      stockCashPurchaseSum: currentStockCashPurchaseSum,
+    } = await this.userService.findUserWithCache(userId);
 
-        if (stockId == null) {
-          return StockOwningStatusEnum.NOT_OWNING_STOCK;
-        }
+    if (stockId == null) {
+      return StockOwningStatusEnum.NOT_OWNING_STOCK;
+    }
 
-        if (cash < stockPrice * addingStockAmount) {
-          return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
-        }
+    if (cash < stockPrice * addingStockAmount) {
+      return StockOwningStatusEnum.CANNOT_BUY_STOCK_NOT_ENOUGH_MONEY;
+    }
 
-        await transactionManager
-          .getCustomRepository(UserService)
-          .partialUpdateUser(userId, {
-            cash: cash - stockPrice * addingStockAmount,
-            stockAmount: addingStockAmount + currentStockAmount,
-            stockCashPurchaseSum: currentStockCashPurchaseSum
-              ? currentStockCashPurchaseSum + stockPrice * addingStockAmount
-              : undefined,
-          });
+    await this.userService.partialUpdateUser(userId, {
+      cash: cash - stockPrice * addingStockAmount,
+      stockAmount: addingStockAmount + currentStockAmount,
+      stockCashPurchaseSum: currentStockCashPurchaseSum
+        ? currentStockCashPurchaseSum + stockPrice * addingStockAmount
+        : undefined,
+    });
 
-        return {
-          stockTotalAmount: addingStockAmount + currentStockAmount,
-          stockBoughtAmount: addingStockAmount,
-          stockPrice: stockPrice,
-          stockName: getStockInitialData(stockId).stockName,
-          stockTotalCash: stockPrice * (addingStockAmount + currentStockAmount),
-        };
-      },
-    );
+    return {
+      stockTotalAmount: addingStockAmount + currentStockAmount,
+      stockBoughtAmount: addingStockAmount,
+      stockPrice: stockPrice,
+      stockName: getStockInitialData(stockId).stockName,
+      stockTotalCash: stockPrice * (addingStockAmount + currentStockAmount),
+    };
   }
 
   async sellStock(userId: UserIdType) {
-    return await this.userRepository.manager.transaction(
-      async (transactionManager: EntityManager) => {
-        const user = await transactionManager
-          .getCustomRepository(UserService)
-          .findUserWithCache(userId);
-        if (user.stockId == null) {
-          return StockOwningStatusEnum.NOT_OWNING_STOCK;
-        }
+    const user = await this.userService.findUserWithCache(userId);
+    if (user.stockId == null) {
+      return StockOwningStatusEnum.NOT_OWNING_STOCK;
+    }
 
-        const { stockName } = getStockInitialData(user.stockId);
+    const { stockName } = getStockInitialData(user.stockId);
 
-        const userCash =
-          BigInt(user.cash) +
-          BigInt(user.stockAmount) * BigInt(user.stockPrice);
+    const userCash =
+      BigInt(user.cash) + BigInt(user.stockAmount) * BigInt(user.stockPrice);
 
-        await transactionManager
-          .getCustomRepository(UserService)
-          .partialUpdateUser(userId, {
-            cash: userCash,
-            stockId: null,
-            stockAmount: BigInt(0),
-            stockPrice: BigInt(0),
-            stockCashPurchaseSum: null,
-          });
+    await this.userService.partialUpdateUser(userId, {
+      cash: userCash,
+      stockId: null,
+      stockAmount: BigInt(0),
+      stockPrice: BigInt(0),
+      stockCashPurchaseSum: null,
+    });
 
-        return {
-          stockSold: BigInt(user.stockAmount) * BigInt(user.stockPrice),
-          userCash,
-          stockName,
-        };
-      },
-    );
+    return {
+      stockSold: BigInt(user.stockAmount) * BigInt(user.stockPrice),
+      userCash,
+      stockName,
+    };
   }
 
   async changeStockPrice(
