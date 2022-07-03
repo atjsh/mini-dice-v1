@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SkillRoutePath } from '@packages/scenario-routing';
+import {
+  getSkillGroupPath,
+  getSkillRouteFromPath,
+  SkillRoutePath,
+} from '@packages/scenario-routing';
 import { LandCommentVo, UserIdType } from '@packages/shared-types';
 import { Repository } from 'typeorm';
 import { SkillLogService } from '../skill-log/skill-log.service';
@@ -46,7 +50,7 @@ export class UserLandCommentService {
         this.userCommentRepository.create({
           userId,
           comment,
-          landId,
+          landId: getSkillGroupPath(getSkillRouteFromPath(landId)),
         }),
         { reload: false },
       );
@@ -61,7 +65,7 @@ export class UserLandCommentService {
     return (
       await this.userCommentRepository.find({
         relations: ['user'],
-        where: { landId },
+        where: { landId: getSkillGroupPath(getSkillRouteFromPath(landId)) },
         order: { date: 'DESC' },
         take: 20,
       })
