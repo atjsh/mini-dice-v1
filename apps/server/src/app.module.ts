@@ -68,7 +68,7 @@ import { UserModule } from './user/user.module';
         database: configService.get('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: true,
-        logging: true,
+        logging: false,
         cache: {
           type: 'redis',
           options: {
@@ -109,10 +109,10 @@ import { UserModule } from './user/user.module';
     HealthModule,
   ],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: HttpRequestResponseLoggingInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: HttpRequestResponseLoggingInterceptor,
+    // },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionLoggingFilter,

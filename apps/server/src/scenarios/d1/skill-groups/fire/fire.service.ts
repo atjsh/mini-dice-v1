@@ -72,7 +72,6 @@ export class FireService {
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );
-    console.log(cashChangeEvent);
     switch (cashChangeEvent.eventCase.causeName) {
       case FireEventEnum.LOSE_MONEY:
         const cash = (await this.userService.findUserWithCache(props.userId))

@@ -70,9 +70,6 @@ export function Ingame({
   }, []);
 
   useEffect(() => {
-    console.log('initSkillLogMessages');
-    console.log(skillLogs != undefined);
-
     if (skillLogs != undefined) {
       if (skillLogs.length > 0) {
         setCurrentSkillRoute(skillLogs[skillLogs.length - 1].skillRoute);
