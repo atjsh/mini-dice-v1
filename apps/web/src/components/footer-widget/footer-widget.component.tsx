@@ -103,7 +103,7 @@ export const FooterWidgetComponent: React.FC = () => {
         },
         {
           label: '트위터↗',
-          link: 'https://twitter.com/TeamMiniDice1',
+          link: 'https://twitter.com/TeamMiniDice',
           type: 'external',
         },
         // {
