@@ -54,4 +54,4 @@ jobs:
 
       - name: AWS EC2에 SSH 접속 (ec2-user), docker pull, docker stop, docker rm, docker run | SSH to AWS EC2 (ec2-user), docker pull, docker stop, docker rm, docker run
         run: |
-          ssh -o StrictHostKeyChecking=no -i "mini-dice-server.pem" ec2-user@${{ secrets.AWS_EC2_INSTANCE_IP }} "docker pull ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev && docker stop mini-dice-server && docker rm mini-dice-server && docker run -p 8080:80 -idt --name mini-dice-server registry.gitlab.com/md-dev1/mini-dice-docker-images:latest.dev"
+          ssh -o StrictHostKeyChecking=no -i "mini-dice-server.pem" ec2-user@${{ secrets.AWS_EC2_INSTANCE_IP }} "docker pull ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev && docker stop mini-dice-server && docker rm mini-dice-server && docker run -p 8080:80 -idt --name mini-dice-server ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest.dev"
