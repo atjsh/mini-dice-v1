@@ -139,9 +139,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@apps/web@workspace:apps/web"
   dependencies:
-    "@hcaptcha/react-hcaptcha": ^0.3.7
-    "@packages/scenario-routing": ^1.1.0
-    "@packages/shared-types": ^1.1.0
+    "@hcaptcha/react-hcaptcha": ^1.4.4
+    "@packages/scenario-routing": "workspace:*"
+    "@packages/shared-types": "workspace:*"
     "@parcel/transformer-typescript-tsc": ^2.6.2
     "@swc/cli": ^0.1.62
     "@swc/core": ^1.3.41
@@ -1592,6 +1592,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.17.9":
+  version: 7.21.0
+  resolution: "@babel/runtime@npm:7.21.0"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 7b33e25bfa9e0e1b9e8828bb61b2d32bdd46b41b07ba7cb43319ad08efc6fda8eb89445193e67d6541814627df0ca59122c0ea795e412b99c5183a0540d338ab
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.16.7, @babel/template@npm:^7.3.3":
   version: 7.16.7
   resolution: "@babel/template@npm:7.16.7"
@@ -2260,13 +2269,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hcaptcha/react-hcaptcha@npm:^0.3.7":
-  version: 0.3.10
-  resolution: "@hcaptcha/react-hcaptcha@npm:0.3.10"
+"@hcaptcha/react-hcaptcha@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "@hcaptcha/react-hcaptcha@npm:1.4.4"
+  dependencies:
+    "@babel/runtime": ^7.17.9
   peerDependencies:
     react: ">= 16.3.0"
     react-dom: ">= 16.3.0"
-  checksum: 3b0d6a8c7da8072ba226663d9904051231cc1754936a1082b46764a966004406876971adb8917d3d7c6920283501c1bd5b7886c83e33885c4b8d5218fdc25ff5
+  checksum: 16b046702957f4ca5041c37f2a5012e07415469667fee0396b4764baa7ce0fe5a8577cf652b977732f026d745c999f7e1522bca3b3ca6effea5cfff189ddff2f
   languageName: node
   linkType: hard
 
@@ -2985,18 +2996,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@packages/scenario-routing@^1.1.0, @packages/scenario-routing@workspace:*, @packages/scenario-routing@workspace:packages/scenario-routing":
+"@packages/scenario-routing@workspace:*, @packages/scenario-routing@workspace:packages/scenario-routing":
   version: 0.0.0-use.local
   resolution: "@packages/scenario-routing@workspace:packages/scenario-routing"
   languageName: unknown
   linkType: soft
 
-"@packages/shared-types@^1.1.0, @packages/shared-types@workspace:*, @packages/shared-types@workspace:packages/shared-types":
+"@packages/shared-types@workspace:*, @packages/shared-types@workspace:packages/shared-types":
   version: 0.0.0-use.local
   resolution: "@packages/shared-types@workspace:packages/shared-types"
   dependencies:
-    "@nestjs/common": ^8.4.1
-    chat-element-json-ts: ^3.0.0
     class-transformer: ^0.5.1
     class-validator: ^0.13.2
   languageName: unknown
@@ -5570,15 +5579,6 @@ __metadata:
   version: 0.7.0
   resolution: "chardet@npm:0.7.0"
   checksum: 6fd5da1f5d18ff5712c1e0aed41da200d7c51c28f11b36ee3c7b483f3696dabc08927fc6b227735eb8f0e1215c9a8abd8154637f3eff8cada5959df7f58b024d
-  languageName: node
-  linkType: hard
-
-"chat-element-json-ts@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "chat-element-json-ts@npm:3.0.0"
-  dependencies:
-    lodash: ^4.17.21
-  checksum: d8f3f2566fc5da40097166aa06e89f82c6e92dcc21bccae35e19ee9db0bbb13a6630031c431007e09f34f5b62851b3b6d0709ec6afa2e251558691ce4470cb87
   languageName: node
   linkType: hard
 
@@ -12673,6 +12673,13 @@ __metadata:
   version: 0.1.13
   resolution: "reflect-metadata@npm:0.1.13"
   checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.13.11":
+  version: 0.13.11
+  resolution: "regenerator-runtime@npm:0.13.11"
+  checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
   languageName: node
   linkType: hard
 

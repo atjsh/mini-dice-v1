@@ -1,4 +1,4 @@
-import { UserLandCommentInputDto } from '@packages/shared-types';
+import { type UserLandCommentInputDto } from '@packages/shared-types';
 import { AxiosResponse } from 'axios';
 import { authedAxios } from '../auth';
 

@@ -6,7 +6,7 @@ export type AccessTokenType = string;
 const LocalStrageAccessTokenKey = ReactQueryAccessTokenKey;
 
 export const authedAxios = axios.create({
-  baseURL: process.env.SERVER_URL,
+  baseURL: import.meta.env.SERVER_URL,
   validateStatus: () => true,
 });
 
@@ -27,7 +27,7 @@ async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
   try {
     const response = await axios.get<string>(`/auth/access-token`, {
       withCredentials: true,
-      baseURL: process.env.SERVER_URL,
+      baseURL: import.meta.env.SERVER_URL,
     });
 
     return response.data;
@@ -67,7 +67,7 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
 
 async function revokeUserRefreshToken() {
   const result = await axios.post<any, AxiosResponse<{ success: boolean }>>(
-    `${process.env.SERVER_URL}/auth/logout`,
+    `${import.meta.env.SERVER_URL}/auth/logout`,
     {},
     { withCredentials: true },
   );

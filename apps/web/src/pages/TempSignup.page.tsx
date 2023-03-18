@@ -6,10 +6,7 @@ import {
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import {
@@ -112,7 +109,7 @@ function TempSignupForm() {
       </div>
       <div className="flex flex-col gap-1 text-center">
         <HCaptcha
-          sitekey={`${process.env.HCAPTCHA_SITE_KEY}`}
+          sitekey={`${import.meta.env.HCAPTCHA_SITE_KEY}`}
           onVerify={(token) => setHCaptchaToken(token)}
         />
       </div>
