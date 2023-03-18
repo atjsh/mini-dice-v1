@@ -1,15 +1,15 @@
 import { Injectable, Module } from '@nestjs/common';
-import { cashLocale, NotificationMessage } from '@packages/shared-types';
+import { NotificationMessage, cashLocale } from '@packages/shared-types';
 import {
   LandEventDraw,
   LandEventsSummarize,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
   LandEventDrawPropsType,
   LandEventDrawResultType,
   LandEventsSummarizePropsType,
   LandEventsSummarizeResultType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
 
 export class MoneyCollectionOtherUserReceivedCashLandEventResult {

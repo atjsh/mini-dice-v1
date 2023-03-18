@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PickType } from '@nestjs/mapped-types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
@@ -10,12 +9,10 @@ export class GetRecentLogsDto {
   limit: number;
 }
 
-export class CreateLogDto extends PickType(SkillLogEntity, [
-  'userId',
-  'skillRoute',
-  'skillServiceResult',
-  'userActivity',
-]) {}
+export type CreateLogDto = Pick<
+  SkillLogEntity,
+  'userId' | 'skillRoute' | 'skillServiceResult' | 'userActivity'
+>;
 
 @Injectable()
 export class SkillLogService {

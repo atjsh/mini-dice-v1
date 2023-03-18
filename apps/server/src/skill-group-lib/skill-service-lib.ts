@@ -2,16 +2,14 @@ import { applyDecorators, Injectable, SetMetadata } from '@nestjs/common';
 import {
   getSkillGroupPath,
   getSkillRoutePath,
-  SkillGroupRouteType,
-  SkillRouteType,
-} from '@packages/scenario-routing';
-import {
   LandEventDrawMetadataKey,
   LandEventsSummarizeMetadataKey,
   SkillDrawMetadataKey,
   SkillGroupMetadataKey,
+  SkillGroupRouteType,
   SkillMetadataKey,
-} from '@packages/scenario-routing/constants';
+  SkillRouteType,
+} from '@packages/scenario-routing';
 import {
   cashLocale,
   UserActivityMessage,

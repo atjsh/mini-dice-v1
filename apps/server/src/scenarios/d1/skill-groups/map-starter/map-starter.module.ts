@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from 'apps/server/src/user/user.module';
-import { MapStarterSkillGroup } from './map-starter.skillgroup';
+import { UserModule } from '../../../../user/user.module';
 import { MapStarterService } from './map-starter.service';
+import { MapStarterSkillGroup } from './map-starter.skillgroup';
 
 @Module({
   imports: [UserModule],

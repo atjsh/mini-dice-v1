@@ -7,7 +7,7 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
+import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
 import {
   drawDiceUserActivityMessage,
   IndexSkillPropsType,
@@ -16,13 +16,13 @@ import {
   SkillDraw,
   SkillGroup,
   SkillPropsType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
-import { UserService } from 'apps/server/src/user/user.service';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import { UserService } from '../../../../user/user.service';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import {

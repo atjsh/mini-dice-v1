@@ -1,17 +1,17 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
+import { SkillRouteType, getSkillRoutePath } from '@packages/scenario-routing';
 import { UserIdType } from '@packages/shared-types';
-import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
-import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserActivityService } from 'apps/server/src/user-activity/user-activity.service';
+import { Repository } from 'typeorm';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
+import { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import { UserActivityService } from '../../../../user-activity/user-activity.service';
 import {
   UserCashStrType,
   UserEntity,
-} from 'apps/server/src/user/entity/user.entity';
-import { UserService } from 'apps/server/src/user/user.service';
-import { Repository } from 'typeorm';
-import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
+} from '../../../../user/entity/user.entity';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import {

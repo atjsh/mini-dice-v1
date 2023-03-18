@@ -1,5 +1,4 @@
 import { UserIdType } from '@packages/shared-types';
-import { UserEntity } from 'apps/server/src/user/entity/user.entity';
 import {
   Column,
   Entity,
@@ -8,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserEntity } from '../../../../../user/entity/user.entity';
 
 @Entity()
 export class MoneyCollectionParticipantsEntity {

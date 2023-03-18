@@ -4,8 +4,8 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import fastifyCookie from 'fastify-cookie';
-import helmet from 'fastify-helmet';
+import fastifyCookie from '@fastify/cookie';
+import helmet from '@fastify/helmet';
 import { AppModule } from './app.module';
 
 (BigInt.prototype as any).toJSON = function () {

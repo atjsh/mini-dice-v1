@@ -2,7 +2,6 @@
   "compilerOptions": {
     "strict": true,
     "noEmit": true,
-    "sourceMap": true,
     "target": "ES2020",
     "module": "ES2020",
     "moduleResolution": "node",
@@ -13,8 +12,8 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "rootDir": ".",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "isolatedModules": true
   },
-  "include": ["src/**/*.ts"],
   "exclude": ["**/*.test.ts"]
 }

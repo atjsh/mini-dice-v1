@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "noImplicitAny": true,
+    "module": "ES2022",
+    "moduleResolution": "node16",
+    "target": "es2020",
+    "allowSyntheticDefaultImports": true,
+    "strict": true
+  },
+  "include": ["./src"]
+}

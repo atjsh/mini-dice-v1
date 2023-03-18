@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { getSkillRouteFromPath } from '@packages/scenario-routing';
-import { LandEventsSummarizeMetadataKey } from '@packages/scenario-routing/constants';
+import { LandEventsSummarizeMetadataKey } from '@packages/scenario-routing';
 import { NotificationMessageType } from '@packages/shared-types';
 import * as _ from 'lodash';
 import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';

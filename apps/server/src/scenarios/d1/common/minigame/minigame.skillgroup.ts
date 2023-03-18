@@ -1,20 +1,20 @@
 import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import {
+  cashLocale,
+  Link,
+  LinkGroup,
   MessageResponseFactory,
   PlainMessage,
-  LinkGroup,
-  Link,
-  cashLocale,
   UserActivityMessage,
 } from '@packages/shared-types';
 import {
   drawDiceUserActivityMessage,
   MethodReturnType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import {
   calculateEarningFromMinigameScore,

@@ -8,7 +8,8 @@
     "packages": [
       "packages/*",
       "apps/*",
-      "docs/*"
+      "docs/*",
+      "builders/*"
     ]
   },
   "scripts": {
@@ -24,6 +25,8 @@
   },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",

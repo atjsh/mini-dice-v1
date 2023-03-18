@@ -1,11 +1,11 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
+import { Cache } from 'cache-manager';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
 import {
   SkillService,
   SkillServiceProps,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserService } from 'apps/server/src/user/user.service';
-import { Cache } from 'cache-manager';
+} from '../../../../skill-group-lib/skill-service-lib';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import { D1ScenarioRoutes } from '../../routes';

@@ -1,12 +1,13 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { Injectable } from '@nestjs/common';
-import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
 import {
+  getSkillRoutePath,
   LandEventDrawMetadataKey,
   LandEventsSummarizeMetadataKey,
   SkillDrawMetadataKey,
   SkillMetadataKey,
-} from '@packages/scenario-routing/constants';
+  SkillRouteType,
+} from '@packages/scenario-routing';
 import { NotificationMessageType } from '@packages/shared-types';
 import { SkillPropsType } from '../skill-group-lib/skill-service-lib';
 import {

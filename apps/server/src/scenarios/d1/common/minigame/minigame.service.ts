@@ -2,17 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SkillRouteType } from '@packages/scenario-routing';
 import { UserIdType } from '@packages/shared-types';
-import {
-  calcRandomCashChangeEvent,
-  DynamicValueEventCase,
-} from 'apps/server/src/common/random/event-case-processing';
-import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
-import { UserService } from 'apps/server/src/user/user.service';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { sign as signJWT, verify as verifyJWT } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
+import {
+  DynamicValueEventCase,
+  calcRandomCashChangeEvent,
+} from '../../../../common/random/event-case-processing';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import { UserService } from '../../../../user/user.service';
 
 export enum MinigameResultEnum {
   WIN = 'win',
@@ -100,7 +100,7 @@ export class CommonMinigameService {
   }
 
   createMinigameHistory(): MinigameHistory {
-    return new MinigameHistory(0, uuidv4());
+    return new MinigameHistory(0, randomUUID());
   }
 
   getGameResult() {

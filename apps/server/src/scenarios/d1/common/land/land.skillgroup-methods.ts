@@ -12,11 +12,11 @@ import {
 import {
   drawDiceUserActivityMessage,
   MethodReturnType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import {
   CommonLandService,

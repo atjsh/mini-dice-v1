@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { v4 as uuid4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { REFRESH_TOKEN_EXPIRES_IN_MS } from '../constants';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { RefreshTokenEntity } from './entity/refresh-token.entity';
@@ -23,13 +23,11 @@ export class RefreshTokenService {
   async createNewRefreshToken(
     createRefreshTokenDto: CreateRefreshTokenDto,
   ): Promise<RefreshTokenEntity> {
-    const tokenValue = uuid4();
+    const tokenValue = randomUUID();
     await this.cacheManager.set(
       this.getCacheKey(tokenValue),
       createRefreshTokenDto.userId,
-      {
-        ttl: 1000 * REFRESH_TOKEN_EXPIRES_IN_MS,
-      },
+      1000 * REFRESH_TOKEN_EXPIRES_IN_MS,
     );
 
     return {

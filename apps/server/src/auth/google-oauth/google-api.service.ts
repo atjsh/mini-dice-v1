@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { lastValueFrom } from 'rxjs';
-import { stringify } from 'qs';
+import { stringify } from 'querystring';
 import { GoogleUser } from './class/google-user.class';
 import { ConfigService } from '@nestjs/config';
 

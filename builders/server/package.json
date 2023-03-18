@@ -1,0 +1,17 @@
+{
+  "name": "@builders/server",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "yarn g:tsc && node ./dist/build-services.js"
+  },
+  "devDependencies": {
+    "@anatine/esbuild-decorators": "^0.2.19",
+    "@jgoz/esbuild-plugin-typecheck": "^3.0.1",
+    "@types/node": "^18.14.0",
+    "chalk": "^5.2.0",
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.17.10",
+    "ora": "^6.1.2"
+  }
+}

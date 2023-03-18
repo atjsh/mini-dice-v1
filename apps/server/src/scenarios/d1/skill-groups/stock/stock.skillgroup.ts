@@ -1,32 +1,32 @@
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
-  cashLocale,
-  DataField,
+  StockStatusJson,
   FormMessage,
   InputField,
-  Link,
-  LinkGroup,
+  DataField,
+  cashLocale,
   MessageResponseFactory,
   PlainMessage,
+  LinkGroup,
+  Link,
   StockIdType,
-  StockStatusJson,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
+import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
 import {
-  drawDiceUserActivityMessage,
-  IndexSkillPropsType,
-  MethodReturnType,
-  Skill,
-  SkillDraw,
   SkillGroup,
+  Skill,
+  IndexSkillPropsType,
+  SkillDraw,
+  MethodReturnType,
+  drawDiceUserActivityMessage,
   SkillPropsType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { StockOwningStatusEnum } from '../../common/stock/stock.service';
 import { D1ScenarioRoutes } from '../../routes';

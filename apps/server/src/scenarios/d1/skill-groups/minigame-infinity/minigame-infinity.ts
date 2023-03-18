@@ -1,5 +1,5 @@
 import { Injectable, Module } from '@nestjs/common';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
+import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
 import {
   IndexSkillPropsType,
   MethodReturnType,
@@ -8,12 +8,12 @@ import {
   SkillGroup,
   SkillPropsType,
   SkillServiceProps,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
 import { CommonMinigameModule } from '../../common/minigame/minigame.module';
 import {
   CommonMinigameService,

@@ -1,0 +1,45 @@
+service: sf-chat-rest
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  httpApi:
+    payload: "2.0"
+    cors:
+      allowedOrigins:
+        - http://127.0.0.1:5173
+      allowedHeaders:
+        - Content-Type
+        - Access-Control-Request-Methods
+        - Access-Control-Request-Headers
+        - Access-Control-Allow-Origin
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowCredentials: true
+      maxAge: 86400
+
+functions:
+  app:
+    handler: dist/app/index.lambdaHandler
+    events:
+      - httpApi:
+          path: /{proxy+}
+          method: any
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    host: "127.0.0.1"
+    httpPort: 4048
+    lambdaPort: 4047
+    noTimeout: true
+    reloadHandler: true

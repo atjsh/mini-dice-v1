@@ -1,12 +1,4 @@
 import { ForbiddenException } from '@nestjs/common';
-import {
-  countryCode3List,
-  CountryCode3Type,
-  getStockStatus,
-  serializeStockStatusToJson,
-  StockIdType,
-  UserEntityJson,
-} from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
@@ -18,9 +10,17 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import {
+  CountryCode3Type,
+  StockIdType,
+  UserEntityJson,
+  countryCode3List,
+  getStockStatus,
+  serializeStockStatusToJson,
+} from '@packages/shared-types';
 import { getSequentialPk } from '../../common';
 import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-error.entity';
-import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
+import { LandEntity } from '../../scenarios/d1/common';
 import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 import { UserActivityEntity } from '../../user-activity/user-activity.entity';
 
@@ -33,7 +33,6 @@ export class UserEntity {
   /**
    * PK값
    */
-  @ApiProperty({ readOnly: true })
   @PrimaryColumn({
     length: 20,
     name: 'userId',
@@ -221,12 +220,10 @@ export class UserEntity {
   canAddLandComment: boolean;
 
   /** 객체가 생성된 날짜 */
-  @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
   createdAt: Date;
 
   /** 객체가 업데이트된 날짜 */
-  @ApiProperty({ readOnly: true })
   @UpdateDateColumn({ type: 'timestamp', comment: '객체가 업데이트된 날짜' })
   updatedAt: Date;
 }

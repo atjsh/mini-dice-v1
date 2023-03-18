@@ -1,10 +1,13 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { getSkillGroupPath, SkillRouteType } from '@packages/scenario-routing';
-import { SkillGroupMetadataKey } from '@packages/scenario-routing/constants';
+import {
+  SkillGroupMetadataKey,
+  SkillRouteType,
+  getSkillGroupPath,
+} from '@packages/scenario-routing';
 import { Cache } from 'cache-manager';
-import { SkillGroupController } from '../skill-group-controller-factory';
 import { SCENARIO_NAMES } from '../../scenarios/scenarios.constants';
+import { SkillGroupController } from '../skill-group-controller-factory';
 
 const cacheKey = 'scenarios:map:';
 

@@ -3,7 +3,7 @@ import {
   MessageResponseFactory,
   PlainMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
+import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
 import {
   drawDiceUserActivityMessage,
   IndexSkillPropsType,
@@ -11,13 +11,13 @@ import {
   Skill,
   SkillDraw,
   SkillGroup,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-group-lib/skill-service-lib';
+import { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import {
-  PickedWalletService,
   PickedWalletEventEnum,
+  PickedWalletService,
 } from './picked-wallet.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.pickedWallet)
