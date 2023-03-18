@@ -6,6 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 
@@ -27,7 +28,7 @@ export class FrontendErrorEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.frontendErrors)
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user: Relation<UserEntity>;
 
   @CreateDateColumn()
   createdAt: Date;

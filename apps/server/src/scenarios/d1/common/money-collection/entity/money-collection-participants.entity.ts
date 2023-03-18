@@ -6,6 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 import { UserEntity } from '../../../../../user/entity/user.entity';
 
@@ -31,5 +32,5 @@ export class MoneyCollectionParticipantsEntity {
     eager: true,
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity | null;
+  user: Relation<UserEntity | null>;
 }

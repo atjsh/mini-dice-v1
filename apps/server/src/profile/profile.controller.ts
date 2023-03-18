@@ -16,10 +16,9 @@ import type {
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { USER_PROFILE_APIS } from '../common';
 import type { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
-import type { PublicProfileService } from './profile.service';
+import { PublicProfileService } from './profile.service';
 
 class PageDto {
   @Type(() => Number)

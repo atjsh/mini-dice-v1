@@ -5,7 +5,7 @@ import type {
   UserIdType,
 } from '@packages/shared-types';
 import { getStockInitialData, StockInitialData } from '@packages/shared-types';
-import type { UserService } from '../../../../user/user.service';
+import { UserService } from '../../../../user/user.service';
 
 export enum StockOwningStatusEnum {
   NOT_OWNING_STOCK = 0,

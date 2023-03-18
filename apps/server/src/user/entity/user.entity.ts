@@ -18,6 +18,7 @@ import {
   Entity,
   OneToMany,
   PrimaryColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { getSequentialPk } from '../../common';
@@ -170,14 +171,14 @@ export class UserEntity {
   isTerminated: boolean;
 
   @OneToMany(() => LandEntity, (land) => land.user)
-  lands: LandEntity[];
+  lands: Relation<LandEntity>[];
 
   @OneToMany(
     () => MoneyCollectionParticipantsEntity,
     (moneyCollectionParticipantsEntity) =>
       moneyCollectionParticipantsEntity.user,
   )
-  moneyCollectionParticipants: MoneyCollectionParticipantsEntity[];
+  moneyCollectionParticipants: Relation<MoneyCollectionParticipantsEntity>[];
 
   @OneToMany(
     () => UserActivityEntity,
@@ -186,7 +187,7 @@ export class UserEntity {
   userActivityEntities: UserActivityEntity[];
 
   @OneToMany(() => LandEntity, (land) => land.user)
-  frontendErrors: FrontendErrorEntity[];
+  frontendErrors: Relation<FrontendErrorEntity>[];
 
   @Column({
     type: 'int',

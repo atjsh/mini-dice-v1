@@ -1,4 +1,4 @@
-import type { DiscoveryService } from '@golevelup/nestjs-discovery';
+import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import type { SkillRouteType } from '@packages/scenario-routing';
 import {

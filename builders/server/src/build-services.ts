@@ -20,7 +20,7 @@ const serviceBuildContext = await esbuild.context({
   target: 'node19',
   outExtension: { '.js': '.mjs' },
   bundle: true,
-  minify: true,
+  minify: false,
   keepNames: true,
   legalComments: 'none',
   external: [

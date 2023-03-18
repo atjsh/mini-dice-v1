@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LandEntity } from './entity/land.entity';
 import { CommonLandService } from './land.service';
@@ -9,7 +9,7 @@ import { UserModule } from '../../../../user/user.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([LandEntity]),
-    UserModule,
+    forwardRef(() => UserModule),
     SkillGroupAliasesModule,
     UserActivityModule,
   ],

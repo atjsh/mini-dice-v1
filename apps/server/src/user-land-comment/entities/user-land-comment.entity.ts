@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 import { UserEntity } from '../../user/entity/user.entity';
 
@@ -29,7 +30,7 @@ export class UserLandCommentEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user: Relation<UserEntity>;
 
   @Column({ nullable: false })
   landId: string;

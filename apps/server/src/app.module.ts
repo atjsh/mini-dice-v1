@@ -24,6 +24,13 @@ import { UserActivityModule } from './user-activity/user-activity.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
 import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserModule } from './user/user.module';
+import { UserEntity } from './user/entity/user.entity';
+import { LandEntity } from './scenarios/d1/common';
+import { MoneyCollectionEntity } from './scenarios/d1/common/money-collection/entity/money-collection.entity';
+import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
+import { SkillLogEntity } from './skill-log/entity/skill-log.entity';
+import { UserActivityEntity } from './user-activity/user-activity.entity';
+import { UserLandCommentEntity } from './user-land-comment/entities/user-land-comment.entity';
 
 @Module({
   imports: [
@@ -60,8 +67,7 @@ import { UserModule } from './user/user.module';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
         logging: false,
         cache: {
           type: 'redis',
@@ -72,6 +78,15 @@ import { UserModule } from './user/user.module';
             prefix: `minidice:dbcache::`,
           },
         },
+        entities: [
+          UserEntity,
+          LandEntity,
+          MoneyCollectionEntity,
+          MoneyCollectionParticipantsEntity,
+          SkillLogEntity,
+          UserActivityEntity,
+          UserLandCommentEntity,
+        ],
       }),
       inject: [ConfigService],
     }),

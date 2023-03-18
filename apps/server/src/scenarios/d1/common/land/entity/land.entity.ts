@@ -1,5 +1,12 @@
 import type { UserIdType } from '@packages/shared-types';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  type Relation,
+} from 'typeorm';
 import { UserEntity } from '../../../../../user/entity/user.entity';
 
 @Entity()
@@ -27,7 +34,7 @@ export class LandEntity {
     eager: true,
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity | null;
+  user: Relation<UserEntity> | null;
 
   @Column({
     nullable: false,

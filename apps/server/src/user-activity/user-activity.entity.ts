@@ -8,6 +8,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 
@@ -32,7 +33,7 @@ export class UserActivityEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user: Relation<UserEntity>;
 
   @Column({
     type: 'json',
