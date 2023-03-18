@@ -1,7 +1,6 @@
 {
   "name": "root",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/ATJSH/mini-dice-v1",
   "author": "ATJSH <letaem77@gmail.com>",
   "private": true,
@@ -10,14 +9,10 @@
       "packages/*",
       "apps/*",
       "docs/*"
-    ],
-    "nohoist": [
-      "**/rn",
-      "**/rn/**"
     ]
   },
+  "packageManager": "yarn@3.5.0",
   "devDependencies": {
-    "process": "^0.11.10"
-  },
-  "packageManager": "yarn@3.5.0"
+    "typescript": "^5.0.2"
+  }
 }

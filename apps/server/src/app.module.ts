@@ -1,7 +1,7 @@
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
@@ -12,7 +12,6 @@ import { DiceTossModule } from './dice-toss/dice-toss.module';
 import { FrontendErrorModule } from './frontend-error-collection/frontend-error.module';
 import { HealthModule } from './health/health.module';
 import { HttpExceptionLoggingFilter } from './logging/http-exception.filter';
-import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-logger.interceptor';
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
@@ -21,8 +20,8 @@ import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/s
 import { TempSignupModule } from './temp-signup/temp-signup.module';
 import { UpbitApiModule } from './upbit-api/upbit-api.module';
 import { UserActivityModule } from './user-activity/user-activity.module';
-import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
+import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserModule } from './user/user.module';
 
 @Module({
