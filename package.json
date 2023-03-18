@@ -11,6 +11,17 @@
       "docs/*"
     ]
   },
+  "scripts": {
+    "clean": "rimraf ./**/dist && rimraf ./**/node_modules",
+    "g:tsc": "cd $INIT_CWD && tsc",
+    "g:serverless": "cd $INIT_CWD && serverless",
+    "packages:build": "yarn workspaces foreach -pvit --from '@packages/*' run build",
+    "packages:watch": "yarn workspaces foreach -pvi --from '@packages/*' run watch",
+    "server:dev": "yarn workspace @apps/server run dev",
+    "server:build": "yarn workspace @builders/server build",
+    "server:typecheck": "yarn workspace @apps/server run typecheck",
+    "web": "yarn workspace @apps/web"
+  },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
     "rimraf": "^4.4.0",
