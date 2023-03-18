@@ -158,13 +158,13 @@ __metadata:
     "@types/smoothscroll-polyfill": ^0.3.1
     "@types/uuid": ^8.3.1
     "@vitejs/plugin-react": ^3.1.0
+    autoprefixer: ^10.4.14
     axios: ^0.22.0
     date-fns: ^2.28.0
     dotenv: ^16.0.0
-    glob-parent: ^6.0.2
     lodash: ^4.17.21
+    postcss: ^8.4.21
     react: ^17.0.2
-    react-countup: ^6.0.0
     react-dom: ^17.0.2
     react-helmet: ^6.1.0
     react-query: ^3.25.0
@@ -4910,6 +4910,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"autoprefixer@npm:^10.4.14":
+  version: 10.4.14
+  resolution: "autoprefixer@npm:10.4.14"
+  dependencies:
+    browserslist: ^4.21.5
+    caniuse-lite: ^1.0.30001464
+    fraction.js: ^4.2.0
+    normalize-range: ^0.1.2
+    picocolors: ^1.0.0
+    postcss-value-parser: ^4.2.0
+  peerDependencies:
+    postcss: ^8.1.0
+  bin:
+    autoprefixer: bin/autoprefixer
+  checksum: e9f18e664a4e4a54a8f4ec5f6b49ed228ec45afaa76efcae361c93721795dc5ab644f36d2fdfc0dea446b02a8067b9372f91542ea431994399e972781ed46d95
+  languageName: node
+  linkType: hard
+
 "available-typed-arrays@npm:^1.0.5":
   version: 1.0.5
   resolution: "available-typed-arrays@npm:1.0.5"
@@ -5247,7 +5265,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.21.3":
+"browserslist@npm:^4.21.3, browserslist@npm:^4.21.5":
   version: 4.21.5
   resolution: "browserslist@npm:4.21.5"
   dependencies:
@@ -5496,7 +5514,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001449":
+"caniuse-lite@npm:^1.0.30001449, caniuse-lite@npm:^1.0.30001464":
   version: 1.0.30001467
   resolution: "caniuse-lite@npm:1.0.30001467"
   checksum: c7df36ddb8050fb366a4bedd278f4b639c1dde94b6ba62bacf960f26d488395632a0630b7932ebc52d3d04b57940d12dcb4a7d3bb744ff64c249b61fb3e0c238
@@ -5990,13 +6008,6 @@ __metadata:
     path-type: ^4.0.0
     yaml: ^1.10.0
   checksum: 4be63e7117955fd88333d7460e4c466a90f556df6ef34efd59034d2463484e339666c41f02b523d574a797ec61f4a91918c5b89a316db2ea2f834e0d2d09465b
-  languageName: node
-  linkType: hard
-
-"countup.js@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "countup.js@npm:2.1.0"
-  checksum: 735cbd2fcc79473f235f8f4031ee42ce0aaea6ba9e9bb74aa75d27f097969378d5ee61acdae5108dedd1e062bd87c53fe93d073d7502c9602edf0a1c79276d89
   languageName: node
   linkType: hard
 
@@ -7978,6 +7989,13 @@ __metadata:
   version: 0.2.0
   resolution: "forwarded@npm:0.2.0"
   checksum: fd27e2394d8887ebd16a66ffc889dc983fbbd797d5d3f01087c020283c0f019a7d05ee85669383d8e0d216b116d720fc0cef2f6e9b7eb9f4c90c6e0bc7fd28e6
+  languageName: node
+  linkType: hard
+
+"fraction.js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "fraction.js@npm:4.2.0"
+  checksum: 8c76a6e21dedea87109d6171a0ac77afa14205794a565d71cb10d2925f629a3922da61bf45ea52dbc30bce4d8636dc0a27213a88cbd600eab047d82f9a3a94c5
   languageName: node
   linkType: hard
 
@@ -11297,6 +11315,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"normalize-range@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "normalize-range@npm:0.1.2"
+  checksum: 9b2f14f093593f367a7a0834267c24f3cb3e887a2d9809c77d8a7e5fd08738bcd15af46f0ab01cc3a3d660386f015816b5c922cea8bf2ee79777f40874063184
+  languageName: node
+  linkType: hard
+
 "normalize-url@npm:^6.0.1":
   version: 6.1.0
   resolution: "normalize-url@npm:6.1.0"
@@ -12359,17 +12384,6 @@ __metadata:
   version: 1.2.1
   resolution: "range-parser@npm:1.2.1"
   checksum: 0a268d4fea508661cf5743dfe3d5f47ce214fd6b7dec1de0da4d669dd4ef3d2144468ebe4179049eff253d9d27e719c88dae55be64f954e80135a0cada804ec9
-  languageName: node
-  linkType: hard
-
-"react-countup@npm:^6.0.0":
-  version: 6.2.0
-  resolution: "react-countup@npm:6.2.0"
-  dependencies:
-    countup.js: ^2.1.0
-  peerDependencies:
-    react: ">= 16.3.0"
-  checksum: ef02d34f5771b85afc74045d2cda72c481a819c4cf243fb8dfeeeea59f23809d8ef2f16abb6e82b35eb9174c0551add4fbfc22f4d086111c516847ed3c636077
   languageName: node
   linkType: hard
 

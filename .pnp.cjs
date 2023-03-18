@@ -242,13 +242,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/smoothscroll-polyfill", "npm:0.3.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@vitejs/plugin-react", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:3.1.0"],\
+            ["autoprefixer", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:10.4.14"],\
             ["axios", "npm:0.22.0"],\
             ["date-fns", "npm:2.28.0"],\
             ["dotenv", "npm:16.0.0"],\
-            ["glob-parent", "npm:6.0.2"],\
             ["lodash", "npm:4.17.21"],\
+            ["postcss", "npm:8.4.21"],\
             ["react", "npm:17.0.2"],\
-            ["react-countup", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:6.2.0"],\
             ["react-dom", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:17.0.2"],\
             ["react-helmet", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:6.1.0"],\
             ["react-query", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:3.38.0"],\
@@ -6322,6 +6322,34 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["autoprefixer", [\
+        ["npm:10.4.14", {\
+          "packageLocation": "./.yarn/cache/autoprefixer-npm-10.4.14-1e0b8c34fb-e9f18e664a.zip/node_modules/autoprefixer/",\
+          "packageDependencies": [\
+            ["autoprefixer", "npm:10.4.14"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:10.4.14", {\
+          "packageLocation": "./.yarn/__virtual__/autoprefixer-virtual-e108a06327/0/cache/autoprefixer-npm-10.4.14-1e0b8c34fb-e9f18e664a.zip/node_modules/autoprefixer/",\
+          "packageDependencies": [\
+            ["autoprefixer", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:10.4.14"],\
+            ["@types/postcss", null],\
+            ["browserslist", "npm:4.21.5"],\
+            ["caniuse-lite", "npm:1.0.30001467"],\
+            ["fraction.js", "npm:4.2.0"],\
+            ["normalize-range", "npm:0.1.2"],\
+            ["picocolors", "npm:1.0.0"],\
+            ["postcss", "npm:8.4.21"],\
+            ["postcss-value-parser", "npm:4.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/postcss",\
+            "postcss"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["available-typed-arrays", [\
         ["npm:1.0.5", {\
           "packageLocation": "./.yarn/cache/available-typed-arrays-npm-1.0.5-88f321e4d3-20eb47b3ce.zip/node_modules/available-typed-arrays/",\
@@ -7574,15 +7602,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["parse-json", "npm:5.2.0"],\
             ["path-type", "npm:4.0.0"],\
             ["yaml", "npm:1.10.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["countup.js", [\
-        ["npm:2.1.0", {\
-          "packageLocation": "./.yarn/cache/countup.js-npm-2.1.0-9a68c97556-735cbd2fcc.zip/node_modules/countup.js/",\
-          "packageDependencies": [\
-            ["countup.js", "npm:2.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9808,6 +9827,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/forwarded-npm-0.2.0-6473dabe35-fd27e2394d.zip/node_modules/forwarded/",\
           "packageDependencies": [\
             ["forwarded", "npm:0.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["fraction.js", [\
+        ["npm:4.2.0", {\
+          "packageLocation": "./.yarn/cache/fraction.js-npm-4.2.0-28efe4afc7-8c76a6e21d.zip/node_modules/fraction.js/",\
+          "packageDependencies": [\
+            ["fraction.js", "npm:4.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13218,13 +13246,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["nanoid", [\
-        ["npm:3.3.3", {\
-          "packageLocation": "./.yarn/cache/nanoid-npm-3.3.3-25d865be84-ada019402a.zip/node_modules/nanoid/",\
-          "packageDependencies": [\
-            ["nanoid", "npm:3.3.3"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:3.3.4", {\
           "packageLocation": "./.yarn/cache/nanoid-npm-3.3.4-3d250377d6-2fddd6dee9.zip/node_modules/nanoid/",\
           "packageDependencies": [\
@@ -13501,6 +13522,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/normalize-path-npm-3.0.0-658ba7d77f-88eeb4da89.zip/node_modules/normalize-path/",\
           "packageDependencies": [\
             ["normalize-path", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["normalize-range", [\
+        ["npm:0.1.2", {\
+          "packageLocation": "./.yarn/cache/normalize-range-npm-0.1.2-bec5e259e2-9b2f14f093.zip/node_modules/normalize-range/",\
+          "packageDependencies": [\
+            ["normalize-range", "npm:0.1.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -14328,16 +14358,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["postcss", [\
-        ["npm:8.4.12", {\
-          "packageLocation": "./.yarn/cache/postcss-npm-8.4.12-e941d78a98-248e3d0f9b.zip/node_modules/postcss/",\
-          "packageDependencies": [\
-            ["postcss", "npm:8.4.12"],\
-            ["nanoid", "npm:3.3.3"],\
-            ["picocolors", "npm:1.0.0"],\
-            ["source-map-js", "npm:1.0.2"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:8.4.21", {\
           "packageLocation": "./.yarn/cache/postcss-npm-8.4.21-9ad76bf58d-e39ac60ccd.zip/node_modules/postcss/",\
           "packageDependencies": [\
@@ -14363,7 +14383,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["postcss-js", "virtual:a0cd5cf8ccb46756b69a22f18cc93f8e145aeba58f29b2abba48fb2605d77ec49f72883b85519c3dca1801160e9836190df26102b2df288bc41e7a9443b6fb08#npm:4.0.0"],\
             ["@types/postcss", null],\
             ["camelcase-css", "npm:2.0.1"],\
-            ["postcss", "npm:8.4.12"]\
+            ["postcss", "npm:8.4.21"]\
           ],\
           "packagePeers": [\
             "@types/postcss",\
@@ -14387,7 +14407,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/postcss", null],\
             ["@types/ts-node", null],\
             ["lilconfig", "npm:2.0.5"],\
-            ["postcss", "npm:8.4.12"],\
+            ["postcss", "npm:8.4.21"],\
             ["ts-node", null],\
             ["yaml", "npm:1.10.2"]\
           ],\
@@ -14413,7 +14433,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["postcss-nested", "virtual:a0cd5cf8ccb46756b69a22f18cc93f8e145aeba58f29b2abba48fb2605d77ec49f72883b85519c3dca1801160e9836190df26102b2df288bc41e7a9443b6fb08#npm:5.0.6"],\
             ["@types/postcss", null],\
-            ["postcss", "npm:8.4.12"],\
+            ["postcss", "npm:8.4.21"],\
             ["postcss-selector-parser", "npm:6.0.10"]\
           ],\
           "packagePeers": [\
@@ -14755,29 +14775,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],\
             ["loose-envify", "npm:1.4.0"],\
             ["object-assign", "npm:4.1.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["react-countup", [\
-        ["npm:6.2.0", {\
-          "packageLocation": "./.yarn/cache/react-countup-npm-6.2.0-cbf75b5cde-ef02d34f57.zip/node_modules/react-countup/",\
-          "packageDependencies": [\
-            ["react-countup", "npm:6.2.0"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:6.2.0", {\
-          "packageLocation": "./.yarn/__virtual__/react-countup-virtual-a41af1f75e/0/cache/react-countup-npm-6.2.0-cbf75b5cde-ef02d34f57.zip/node_modules/react-countup/",\
-          "packageDependencies": [\
-            ["react-countup", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:6.2.0"],\
-            ["@types/react", "npm:17.0.44"],\
-            ["countup.js", "npm:2.1.0"],\
-            ["react", "npm:17.0.2"]\
-          ],\
-          "packagePeers": [\
-            "@types/react",\
-            "react"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -16561,7 +16558,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/autoprefixer", null],\
             ["@types/postcss", null],\
             ["arg", "npm:5.0.1"],\
-            ["autoprefixer", null],\
+            ["autoprefixer", "virtual:8bd219e21d69d2a279bf0def21a40ba3d7fc16ad3822f9ada21afa06222f48e8b66fc4e767caa84d2f7595725cad3c9c94ad4d084ac1d3fa09e1eda8a01fe18b#npm:10.4.14"],\
             ["chalk", "npm:4.1.2"],\
             ["chokidar", "npm:3.5.3"],\
             ["color-name", "npm:1.1.4"],\
@@ -16574,7 +16571,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["is-glob", "npm:4.0.3"],\
             ["normalize-path", "npm:3.0.0"],\
             ["object-hash", "npm:2.2.0"],\
-            ["postcss", "npm:8.4.12"],\
+            ["postcss", "npm:8.4.21"],\
             ["postcss-js", "virtual:a0cd5cf8ccb46756b69a22f18cc93f8e145aeba58f29b2abba48fb2605d77ec49f72883b85519c3dca1801160e9836190df26102b2df288bc41e7a9443b6fb08#npm:4.0.0"],\
             ["postcss-load-config", "virtual:a0cd5cf8ccb46756b69a22f18cc93f8e145aeba58f29b2abba48fb2605d77ec49f72883b85519c3dca1801160e9836190df26102b2df288bc41e7a9443b6fb08#npm:3.1.4"],\
             ["postcss-nested", "virtual:a0cd5cf8ccb46756b69a22f18cc93f8e145aeba58f29b2abba48fb2605d77ec49f72883b85519c3dca1801160e9836190df26102b2df288bc41e7a9443b6fb08#npm:5.0.6"],\
@@ -16586,7 +16583,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/autoprefixer",\
             "@types/postcss",\
-            "autoprefixer"\
+            "autoprefixer",\
+            "postcss"\
           ],\
           "linkType": "HARD"\
         }]\
