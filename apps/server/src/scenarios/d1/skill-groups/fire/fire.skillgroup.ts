@@ -3,19 +3,22 @@ import {
   MessageResponseFactory,
   PlainMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
 } from '../../../../skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import { FireEventEnum, FireService } from './fire.service';
+import type { FireService } from './fire.service';
+import { FireEventEnum } from './fire.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.fire)
 export class FireSkillGroup implements SkillGroupController {

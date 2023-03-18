@@ -1,4 +1,4 @@
-import { UserIdType } from '@packages/shared-types';
+import type { UserIdType } from '@packages/shared-types';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import {
   Column,
@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from '../../user/entity/user.entity';
-import { UserActivityType } from '../types/user-activity.dto';
+import type { UserActivityType } from '../types/user-activity.dto';
 
 const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
 

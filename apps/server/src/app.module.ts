@@ -1,7 +1,7 @@
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
@@ -12,6 +12,7 @@ import { DiceTossModule } from './dice-toss/dice-toss.module';
 import { FrontendErrorModule } from './frontend-error-collection/frontend-error.module';
 import { HealthModule } from './health/health.module';
 import { HttpExceptionLoggingFilter } from './logging/http-exception.filter';
+import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-logger.interceptor';
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
@@ -28,13 +29,7 @@ import { UserModule } from './user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      ignoreEnvFile:
-        process.env.APP_ENV === 'prod' ||
-        process.env.APP_ENV === 'local_docker', // NODE_ENV가 pord이거나 local_docker(개인용 도커 환경)인 경우 환경변수 파일을 가져와 사용하지 않음. 대신 주입된 환경변수를 사용함.
-      envFilePath:
-        process.env.APP_ENV === 'local' || process.env.APP_ENV === undefined
-          ? 'tdol-process.env' // NODE_ENV가 local이거나 미지정된 경우
-          : `tdol-process.env.${process.env.APP_ENV}`, // NODE_ENV가 local이 아닌 값으로 지정된 경우
+      envFilePath: '.env',
       validationSchema: Joi.object({
         SERVER_URL: Joi.string().required(),
         SERVER_PORT: Joi.number().required(),
@@ -108,10 +103,10 @@ import { UserModule } from './user/user.module';
     HealthModule,
   ],
   providers: [
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: HttpRequestResponseLoggingInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpRequestResponseLoggingInterceptor,
+    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionLoggingFilter,

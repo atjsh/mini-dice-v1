@@ -3,21 +3,21 @@ import {
   MessageResponseFactory,
   PlainMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
 } from '../../../../skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import {
-  DragonMoneyEventEnum,
-  DragonMoneyService,
-} from './dragon-money.service';
+import type { DragonMoneyService } from './dragon-money.service';
+import { DragonMoneyEventEnum } from './dragon-money.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.dragonMoney)
 export class DragonMoneySkillGroup implements SkillGroupController {

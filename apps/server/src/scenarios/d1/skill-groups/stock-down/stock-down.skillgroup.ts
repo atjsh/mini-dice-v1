@@ -3,19 +3,22 @@ import {
   PlainMessage,
   cashLocale,
 } from '@packages/shared-types';
-import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
-import {
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
   Skill,
   SkillDraw,
   SkillGroup,
   drawDiceUserActivityMessage,
 } from '../../../../skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import { StockDownService, StockUpAmountEnum } from './stock-down.service';
+import type { StockDownService } from './stock-down.service';
+import { StockUpAmountEnum } from './stock-down.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.stockDown)
 export class StockDownSkillGroup implements SkillGroupController {

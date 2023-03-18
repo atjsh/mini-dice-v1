@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { TimeZone } from '../common/get-timezone';
 import { JwtAuth, UserJwt } from '../profile/decorators/user.decorator';
-import { UserActivityService } from './user-activity.service';
+import type { UserActivityService } from './user-activity.service';
 
 @Controller('land-events')
 export class LandEventController {

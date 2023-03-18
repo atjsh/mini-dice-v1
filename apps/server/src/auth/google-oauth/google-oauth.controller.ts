@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query, Req, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { GoogleOAuthService } from './google-oauth.service';
+import type { ConfigService } from '@nestjs/config';
+import type { FastifyRequest, FastifyReply } from 'fastify';
+import type { GoogleOAuthService } from './google-oauth.service';
 
 @Controller('auth/google-oauth')
 export class GoogleOAuthController {

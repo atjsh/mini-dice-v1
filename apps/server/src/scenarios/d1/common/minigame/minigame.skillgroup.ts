@@ -1,4 +1,5 @@
-import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
   cashLocale,
   Link,
@@ -7,18 +8,16 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import {
-  drawDiceUserActivityMessage,
-  MethodReturnType,
-} from '../../../../skill-group-lib/skill-service-lib';
-import {
+import type { MethodReturnType } from '../../../../skill-group-lib/skill-service-lib';
+import { drawDiceUserActivityMessage } from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
+import type { CommonMinigameService } from './minigame.service';
 import {
   calculateEarningFromMinigameScore,
-  CommonMinigameService,
   getRevercedMinigameMove,
   MinigameMoveEnum,
   minigameMoveToKorean,

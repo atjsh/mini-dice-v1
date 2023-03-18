@@ -1,4 +1,4 @@
-import { StockPriceChangeResult } from '../../scenarios/d1/common/stock/stock.service';
+import type { StockPriceChangeResult } from '../../scenarios/d1/common/stock/stock.service';
 
 export interface UserActivityInterface {
   type: string;

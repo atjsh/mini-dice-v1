@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import {
+import type {
   SkillGroupAliasesService,
   SkillGroupAliasesType,
 } from '../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';

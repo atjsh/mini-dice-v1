@@ -7,23 +7,25 @@ import { esbuildProgressPulgin } from './esbuild-progress.js';
 const projectRoot = path.resolve(process.cwd(), '..', '..');
 
 const serviceBuildContext = await esbuild.context({
-  entryPoints: [`${projectRoot}/apps/server/src/main.ts`],
+  entryPoints: [
+    {
+      in: `${projectRoot}/apps/server/src/main.ts`,
+      out: 'index',
+    },
+  ],
   outdir: `${projectRoot}/apps/server/dist`,
-  tsconfig: '../../apps/server/tsconfig.json',
+  tsconfig: `${projectRoot}/apps/server/tsconfig.json`,
   format: 'esm',
   platform: 'node',
   target: 'node19',
   outExtension: { '.js': '.mjs' },
   bundle: true,
   minify: true,
-  keepNames: false,
+  keepNames: true,
   legalComments: 'none',
   external: [
     '@nestjs/microservices',
-    'cache-manager',
     '@nestjs/platform-express',
-    'class-transformer',
-    'class-validator',
     '@nestjs/websockets',
     '@fastify/static',
     '@fastify/view',
@@ -39,7 +41,7 @@ const serviceBuildContext = await esbuild.context({
   },
   plugins: [
     esbuildDecorators({
-      tsconfig: '../../apps/server/tsconfig.json',
+      tsconfig: `${projectRoot}/apps/server/tsconfig.json`,
     }),
     esbuildProgressPulgin(),
     envCopy,

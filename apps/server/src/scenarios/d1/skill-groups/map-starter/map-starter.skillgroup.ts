@@ -4,22 +4,24 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
 } from '../../../../skill-group-lib/skill-service-lib';
-import {
+import type {
   DiceUserActivitySkillDrawPropsType,
   GameStartUserAcitvitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import { MapStarterService } from './map-starter.service';
+import type { MapStarterService } from './map-starter.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.mapStarter)
 export class MapStarterSkillGroup implements SkillGroupController {

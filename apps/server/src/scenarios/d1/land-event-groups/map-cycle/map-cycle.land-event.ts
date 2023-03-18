@@ -5,7 +5,7 @@ import {
   LandEventDraw,
   LandEventsSummarize,
 } from '../../../../skill-group-lib/skill-service-lib';
-import {
+import type {
   LandEventDrawPropsType,
   LandEventDrawResultType,
   LandEventsSummarizePropsType,

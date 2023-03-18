@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import type { JwtService } from '@nestjs/jwt';
 import { ACCESS_TOKEN_EXPIRES_IN } from '../constants';
-import { RefreshTokenService } from '../refresh-token/refresh-token.service';
-import { UserJwtDto } from './dto/user-jwt.dto';
+import type { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import type { UserJwtDto } from './dto/user-jwt.dto';
 export type AccessTokenType = string;
 
 @Injectable()

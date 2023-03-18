@@ -3,25 +3,22 @@ import { UserActivityEntity } from './user-activity.entity';
 
 export type CreateUserActivityInputDto<
   LandEventResult extends Record<string, any>,
-> = Pick<UserActivityEntity, 'skillRoute' |'userId'> & {
+> = Pick<UserActivityEntity, 'skillRoute' | 'userId'> & {
   skillDrawProps: LandEventResult;
-}
+};
 
-export type CreateUserActivityOutputDto = Pick<UserActivityEntity, 
-  'id' |
-  'skillDrawProps'|
-  'skillRoute'|
-  'userId'|
-  'createdAt'
+export type CreateUserActivityOutputDto = Pick<
+  UserActivityEntity,
+  'id' | 'skillDrawProps' | 'skillRoute' | 'userId' | 'createdAt'
 >;
 
 export type SearchUserActivityByDateInputDto = Pick<
   UserActivityEntity,
   'userId'
->& {
+> & {
   createdAtFrom: Date;
   createdAtTo: Date;
-}
+};
 
 export type SearchUserActivityByPageInputDto = Pick<
   UserActivityEntity,
@@ -29,14 +26,11 @@ export type SearchUserActivityByPageInputDto = Pick<
 > & {
   pageNo: number;
   pageSize: number;
-}
+};
 
-export type SearchUserActivityOutputDto = Pick<UserActivityEntity, 
-  'id' |
-  'skillDrawProps' |
-  'skillRoute' |
-  'userId' |
-  'createdAt' 
+export type SearchUserActivityOutputDto = Pick<
+  UserActivityEntity,
+  'id' | 'skillDrawProps' | 'skillRoute' | 'userId' | 'createdAt'
 >;
 
 @EntityRepository(UserActivityEntity)

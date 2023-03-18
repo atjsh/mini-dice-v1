@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { JwtAuth, UserJwt } from '../profile/decorators/user.decorator';
-import { FrontendErrorService } from './frontend-error.service';
+import type { FrontendErrorService } from './frontend-error.service';
 
 @Controller('frontend-error')
 export class FrontendErrorController {

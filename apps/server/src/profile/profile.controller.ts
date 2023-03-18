@@ -8,18 +8,18 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import {
+import type {
   CompleteSignupUserDto,
   UpdateUserDto,
   UserVo,
 } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { USER_PROFILE_APIS } from '../common';
-import { UserService } from '../user/user.service';
+import type { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
-import { PublicProfileService } from './profile.service';
+import type { PublicProfileService } from './profile.service';
 
 class PageDto {
   @Type(() => Number)

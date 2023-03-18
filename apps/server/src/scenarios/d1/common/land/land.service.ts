@@ -1,20 +1,21 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SkillRouteType, getSkillRoutePath } from '@packages/scenario-routing';
-import { UserIdType } from '@packages/shared-types';
-import { Repository } from 'typeorm';
-import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
-import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
-import { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
-import { UserActivityService } from '../../../../user-activity/user-activity.service';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
+import type { UserIdType } from '@packages/shared-types';
+import type { Repository } from 'typeorm';
+import type { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import type { UserActivityService } from '../../../../user-activity/user-activity.service';
 import {
-  UserCashStrType,
+  type UserCashStrType,
   UserEntity,
 } from '../../../../user/entity/user.entity';
-import { UserService } from '../../../../user/user.service';
+import type { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
-import {
+import type {
   RealEstateEarnedLandEventResult,
   RealEstateTakenOverLandEventResult,
 } from '../../land-event-groups/real-estate/real-estate.land-event';
@@ -177,8 +178,10 @@ export class CommonLandService {
     });
   }
 
-  private async getLand(id: LandEntity['id']): Promise<LandEntity | undefined> {
-    return this.landRepository.findOne(id);
+  private async getLand(id: LandEntity['id']): Promise<LandEntity | null> {
+    return this.landRepository.findOneBy({
+      id: id,
+    });
   }
 
   private async getLandOrCreate(id: LandEntity['id']): Promise<LandEntity> {

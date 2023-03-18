@@ -62,8 +62,10 @@ __metadata:
     axios: ^1.3.4
     cache-manager: ^5.1.7
     cache-manager-redis-store: ^3.0.1
+    cache-manager-redis-yet: ^4.1.1
     class-transformer: ^0.5.1
     class-validator: ^0.14.0
+    dotenv: ^16.0.3
     fastify: ^4.14.1
     joi: ^17.8.4
     jsonwebtoken: ^9.0.0
@@ -1298,7 +1300,6 @@ __metadata:
     "@jgoz/esbuild-plugin-typecheck": ^3.0.1
     "@types/node": ^18.14.0
     chalk: ^5.2.0
-    dotenv: ^16.0.3
     esbuild: ^0.17.10
     ora: ^6.1.2
   languageName: unknown
@@ -2645,7 +2646,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/bloom@npm:1.2.0":
+"@redis/bloom@npm:1.2.0, @redis/bloom@npm:^1.0.2":
   version: 1.2.0
   resolution: "@redis/bloom@npm:1.2.0"
   peerDependencies:
@@ -2654,7 +2655,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.5.6":
+"@redis/client@npm:1.5.6, @redis/client@npm:^1.3.0":
   version: 1.5.6
   resolution: "@redis/client@npm:1.5.6"
   dependencies:
@@ -2665,7 +2666,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/graph@npm:1.1.0":
+"@redis/graph@npm:1.1.0, @redis/graph@npm:^1.0.1":
   version: 1.1.0
   resolution: "@redis/graph@npm:1.1.0"
   peerDependencies:
@@ -2674,7 +2675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/json@npm:1.0.4":
+"@redis/json@npm:1.0.4, @redis/json@npm:^1.0.4":
   version: 1.0.4
   resolution: "@redis/json@npm:1.0.4"
   peerDependencies:
@@ -2683,7 +2684,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/search@npm:1.1.2":
+"@redis/search@npm:1.1.2, @redis/search@npm:^1.1.0":
   version: 1.1.2
   resolution: "@redis/search@npm:1.1.2"
   peerDependencies:
@@ -2692,7 +2693,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/time-series@npm:1.0.4":
+"@redis/time-series@npm:1.0.4, @redis/time-series@npm:^1.0.3":
   version: 1.0.4
   resolution: "@redis/time-series@npm:1.0.4"
   peerDependencies:
@@ -4418,7 +4419,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cache-manager@npm:^5.1.7":
+"cache-manager-redis-yet@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "cache-manager-redis-yet@npm:4.1.1"
+  dependencies:
+    "@redis/bloom": ^1.0.2
+    "@redis/client": ^1.3.0
+    "@redis/graph": ^1.0.1
+    "@redis/json": ^1.0.4
+    "@redis/search": ^1.1.0
+    "@redis/time-series": ^1.0.3
+    cache-manager: ^5.1.0
+    redis: ^4.3.1
+  checksum: 0376087a58e0a823fcf0025a1e2df41397ad76d6ee335efd88ac5509fb7fe49c797a083093b129b30e8bc64469ee73d4dafdb12fb4e5e1e10f3e730c3b517746
+  languageName: node
+  linkType: hard
+
+"cache-manager@npm:*, cache-manager@npm:^5.1.0, cache-manager@npm:^5.1.7":
   version: 5.1.7
   resolution: "cache-manager@npm:5.1.7"
   dependencies:
@@ -4607,10 +4624,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"class-transformer@npm:^0.5.1":
+"class-transformer@npm:*, class-transformer@npm:^0.5.1":
   version: 0.5.1
   resolution: "class-transformer@npm:0.5.1"
   checksum: f191c8b4cc4239990f5efdd790cabdd852c243ed66248e39f6616a349c910c6eed2d9fd1fbf7ee6ea89f69b4f1d0b493b27347fe0cd0ae26b47c3745a805b6d3
+  languageName: node
+  linkType: hard
+
+"class-validator@npm:*, class-validator@npm:^0.14.0":
+  version: 0.14.0
+  resolution: "class-validator@npm:0.14.0"
+  dependencies:
+    "@types/validator": ^13.7.10
+    libphonenumber-js: ^1.10.14
+    validator: ^13.7.0
+  checksum: f62e4a0ad24cee68f4b2bc70d32b96de90cb598f96bde362b4dbf4234151af8eb6ae225458312a38fc49fa3959844cf61c60e731a8205e9a570454cff8de2710
   languageName: node
   linkType: hard
 
@@ -4621,17 +4649,6 @@ __metadata:
     libphonenumber-js: ^1.9.43
     validator: ^13.7.0
   checksum: 0deb4c29faa18345f6989fd7eaaaa07b05caae5298603fcd6485531c6daad503e5d2b24cc1342e4fc88ae5ba0acffdc24d0fc333110ef3f21a667cd8a79e1258
-  languageName: node
-  linkType: hard
-
-"class-validator@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "class-validator@npm:0.14.0"
-  dependencies:
-    "@types/validator": ^13.7.10
-    libphonenumber-js: ^1.10.14
-    validator: ^13.7.0
-  checksum: f62e4a0ad24cee68f4b2bc70d32b96de90cb598f96bde362b4dbf4234151af8eb6ae225458312a38fc49fa3959844cf61c60e731a8205e9a570454cff8de2710
   languageName: node
   linkType: hard
 

@@ -44,7 +44,7 @@ export function selectEventCaseRandomly<T extends EventCase>(
   const weightedRandomParam = shuffledcases.reduce((acc, cur, index) => {
     acc[index] = cur.weight;
     return acc;
-  }, {});
+  }, {} as Record<number, number>);
 
   const result = weightedRandom(weightedRandomParam);
   return shuffledcases[result];

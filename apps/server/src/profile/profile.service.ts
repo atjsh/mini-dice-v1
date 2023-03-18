@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { serializeUserToJson, UserEntity } from '../user/entity/user.entity';
-import { UserService } from '../user/user.service';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import type { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
 import { randomUUID } from 'crypto';
+import type { Repository } from 'typeorm';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import { UserEntity, serializeUserToJson } from '../user/entity/user.entity';
+import type { UserService } from '../user/user.service';
 
 @Injectable()
 export class PublicProfileService {

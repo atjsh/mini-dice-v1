@@ -1,21 +1,23 @@
 import { Injectable, Module } from '@nestjs/common';
-import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
-import {
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
-  Skill,
-  SkillDraw,
-  SkillGroup,
   SkillPropsType,
   SkillServiceProps,
 } from '../../../../skill-group-lib/skill-service-lib';
 import {
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
 import { CommonMinigameModule } from '../../common/minigame/minigame.module';
-import {
+import type {
   CommonMinigameService,
   MinigameEasySubmitParamType,
 } from '../../common/minigame/minigame.service';

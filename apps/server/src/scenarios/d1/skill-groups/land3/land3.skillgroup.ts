@@ -1,25 +1,27 @@
-import { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
-import {
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
-  Skill,
-  SkillDraw,
-  SkillGroup,
   SkillPropsType,
 } from '../../../../skill-group-lib/skill-service-lib';
 import {
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import type { CommonLandServiceSubmitParamType } from '../../common';
 import {
-  CommonLandServiceSubmitParamType,
   commonLandSkillGroupWebIndexDraw,
   commonLandSkillGroupWebSubmitDraw,
   getCommonLandSkillGroupAlias,
 } from '../../common';
 import { D1ScenarioRoutes } from '../../routes';
-import { Land3Service } from './land3.service';
+import type { Land3Service } from './land3.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.land3)
 export class Land3SkillGroup implements SkillGroupController {

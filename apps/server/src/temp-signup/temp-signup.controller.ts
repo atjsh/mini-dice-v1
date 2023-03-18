@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { CountryCode3Type } from '@packages/shared-types';
-import { FastifyReply } from 'fastify';
-import { TempSignupService } from './temp-signup.service';
+import type { CountryCode3Type } from '@packages/shared-types';
+import type { FastifyReply } from 'fastify';
+import type { TempSignupService } from './temp-signup.service';
 
 export class TemporarySignUpDto {
   hCaptchaSuccessToken: string;

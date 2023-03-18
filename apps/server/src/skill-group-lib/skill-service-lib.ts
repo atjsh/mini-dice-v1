@@ -1,4 +1,8 @@
 import { applyDecorators, Injectable, SetMetadata } from '@nestjs/common';
+import type {
+  SkillGroupRouteType,
+  SkillRouteType,
+} from '@packages/scenario-routing';
 import {
   getSkillGroupPath,
   getSkillRoutePath,
@@ -6,18 +10,15 @@ import {
   LandEventsSummarizeMetadataKey,
   SkillDrawMetadataKey,
   SkillGroupMetadataKey,
-  SkillGroupRouteType,
   SkillMetadataKey,
-  SkillRouteType,
 } from '@packages/scenario-routing';
-import {
-  cashLocale,
-  UserActivityMessage,
+import type {
   UserActivityMessageType,
   UserIdType,
 } from '@packages/shared-types';
+import { cashLocale, UserActivityMessage } from '@packages/shared-types';
 import * as _ from 'lodash';
-import {
+import type {
   DiceUserActivity,
   UserActivityType,
 } from '../skill-log/types/user-activity.dto';

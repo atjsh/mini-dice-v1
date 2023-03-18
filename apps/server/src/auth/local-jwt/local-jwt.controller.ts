@@ -1,6 +1,6 @@
 import { Controller, Post, Res, Req, Get } from '@nestjs/common';
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { RefreshTokenService } from './refresh-token/refresh-token.service';
+import type { FastifyRequest, FastifyReply } from 'fastify';
+import type { RefreshTokenService } from './refresh-token/refresh-token.service';
 
 @Controller('auth/logout')
 export class LocalJwtController {
@@ -11,10 +11,11 @@ export class LocalJwtController {
     @Res({ passthrough: true }) response: FastifyReply,
     @Req() req: FastifyRequest,
   ) {
-    await this.refreshTokenService.deleteRefreshToken(
-      response,
-      req.cookies['refreshToken'],
-    );
+    req.cookies['refreshToken'] &&
+      (await this.refreshTokenService.deleteRefreshToken(
+        response,
+        req.cookies['refreshToken'],
+      ));
     return {
       success: true,
     };
@@ -25,10 +26,11 @@ export class LocalJwtController {
     @Res({ passthrough: true }) response: FastifyReply,
     @Req() req: FastifyRequest,
   ) {
-    await this.refreshTokenService.deleteRefreshToken(
-      response,
-      req.cookies['refreshToken'],
-    );
+    req.cookies['refreshToken'] &&
+      (await this.refreshTokenService.deleteRefreshToken(
+        response,
+        req.cookies['refreshToken'],
+      ));
     return {
       success: true,
     };

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { getSkillRouteFromPath } from '@packages/scenario-routing';
 import { LandEventsSummarizeMetadataKey } from '@packages/scenario-routing';
-import { NotificationMessageType } from '@packages/shared-types';
+import type { NotificationMessageType } from '@packages/shared-types';
 import * as _ from 'lodash';
-import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
-import { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
-import {
+import type { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import type { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
+import type {
   CreateUserActivityInputDto,
   LandEventRepository,
   SearchUserActivityByDateInputDto,

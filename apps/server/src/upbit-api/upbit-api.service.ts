@@ -1,12 +1,12 @@
-import { HttpService } from '@nestjs/axios';
+import type { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import { Cache } from 'cache-manager';
-import {
+import type { Cache } from 'cache-manager';
+import type {
   UPBIT_TICKER_COUNTRY_CURRENCY,
   UPBIT_TICKER_CRYPTO_CURRENCY,
 } from './constants';
-import { UpbitTickerInterface } from './interface/ticker.interface';
+import type { UpbitTickerInterface } from './interface/ticker.interface';
 
 const cacheKey = 'upbit:ticker:';
 

@@ -1,12 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import {
-  getStockInitialData,
+import type {
   StockIdType,
   StockInitalDataType,
-  StockInitialData,
   UserIdType,
 } from '@packages/shared-types';
-import { UserService } from '../../../../user/user.service';
+import { getStockInitialData, StockInitialData } from '@packages/shared-types';
+import type { UserService } from '../../../../user/user.service';
 
 export enum StockOwningStatusEnum {
   NOT_OWNING_STOCK = 0,

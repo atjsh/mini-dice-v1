@@ -1,38 +1,35 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import type { SkillRouteType } from '@packages/scenario-routing';
 import {
   getSkillRouteFromPath,
   getSkillRoutePath,
-  SkillRouteType,
 } from '@packages/scenario-routing';
-import {
-  getStockInitialData,
-  MessageResponseType,
-  UserIdType,
-} from '@packages/shared-types';
+import type { MessageResponseType, UserIdType } from '@packages/shared-types';
+import { getStockInitialData } from '@packages/shared-types';
 import * as _ from 'lodash';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { getRandomInteger } from '../common/random/random-number';
-import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
-import {
+import type { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import type {
   CommonStockService,
   StockPriceChangeResult,
 } from '../scenarios/d1/common/stock/stock.service';
-import { MapCycleLandEventResult } from '../scenarios/d1/land-event-groups/map-cycle/map-cycle.land-event';
+import type { MapCycleLandEventResult } from '../scenarios/d1/land-event-groups/map-cycle/map-cycle.land-event';
 import {
   D1ScenarioRoutes,
   OrderedD1ScenarioRoutes,
 } from '../scenarios/d1/routes';
-import { SkillLogService } from '../skill-log/skill-log.service';
-import { DiceUserActivity } from '../skill-log/types/user-activity.dto';
+import type { SkillLogService } from '../skill-log/skill-log.service';
+import type { DiceUserActivity } from '../skill-log/types/user-activity.dto';
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
-import { UserActivityService } from '../user-activity/user-activity.service';
-import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
+import type { UserActivityService } from '../user-activity/user-activity.service';
+import type { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
 import {
   isUserThrowingDiceTossAllowedOrThrow,
   serializeUserToJson,
 } from '../user/entity/user.entity';
-import { UserService } from '../user/user.service';
-import { DiceTossOutputDto } from './interface';
+import type { UserService } from '../user/user.service';
+import type { DiceTossOutputDto } from './interface';
 
 function isOdd(num: number | bigint) {
   return BigInt(num) % BigInt(2);

@@ -1,13 +1,13 @@
 import { ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FastifyReply } from 'fastify';
-import { Repository } from 'typeorm';
+import type { FastifyReply } from 'fastify';
+import type { Repository } from 'typeorm';
 import { getRandomInteger } from '../../common/random/random-number';
 import { getRandomString } from '../../common/random/random-string';
 import { UserEntity } from '../../user/entity/user.entity';
-import { UserService } from '../../user/user.service';
+import type { UserService } from '../../user/user.service';
 import { RefreshTokenEntity } from '../local-jwt/refresh-token/entity/refresh-token.entity';
-import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
+import type { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 
 export abstract class OauthAbstractService {
   constructor(
@@ -91,7 +91,7 @@ export abstract class OauthAbstractService {
       } catch (e) {
         // 익명 유저가 아닌 일반 유저이거나, refreshToken에 대응되는 유저가 존재하지 않거나, 유저가 삭제되었을 경우
         // 기존 계정에 로그인을 시도하거나 새로 가입함
-        const existingUsers = await this.userRepository.find({
+        const existingUsers = await this.userRepository.findBy({
           email: email,
           authProvider: provider,
           isTerminated: false,
@@ -106,7 +106,7 @@ export abstract class OauthAbstractService {
       // 정상적인 익명 유저로 확인된 경우
 
       // 기존에 구글 계정으로 가입했는지 체크
-      const existingOAuthProviderUsers = await this.userRepository.find({
+      const existingOAuthProviderUsers = await this.userRepository.findBy({
         email: email,
         authProvider: provider,
       });
@@ -164,7 +164,7 @@ export abstract class OauthAbstractService {
 
     // 로그인하지 않은 유저가 구글 계정 연동 버튼을 누른 경우
 
-    const existingUsers = await this.userRepository.find({
+    const existingUsers = await this.userRepository.findBy({
       email: email,
       authProvider: provider,
       isTerminated: false,

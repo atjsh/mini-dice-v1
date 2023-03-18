@@ -1,12 +1,12 @@
 service: sf-chat-rest
 
-frameworkVersion: "3"
+frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: nodejs18.x
   httpApi:
-    payload: "2.0"
+    payload: '2.0'
     cors:
       allowedOrigins:
         - http://127.0.0.1:5173
@@ -27,7 +27,7 @@ provider:
 
 functions:
   app:
-    handler: dist/app/index.lambdaHandler
+    handler: dist/index.lambdaHandler
     events:
       - httpApi:
           path: /{proxy+}
@@ -38,8 +38,8 @@ plugins:
 
 custom:
   serverless-offline:
-    host: "127.0.0.1"
-    httpPort: 4048
+    host: '127.0.0.1'
+    httpPort: 80
     lambdaPort: 4047
     noTimeout: true
     reloadHandler: true

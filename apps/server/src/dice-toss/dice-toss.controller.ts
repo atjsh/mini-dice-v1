@@ -1,9 +1,9 @@
 import { Controller, Post } from '@nestjs/common';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { TimeZone } from '../common/get-timezone';
 import { JwtAuth, UserJwt } from '../profile/decorators/user.decorator';
-import { DiceTossService } from './dice-toss.service';
-import { DiceTossOutputDto } from './interface';
+import type { DiceTossService } from './dice-toss.service';
+import type { DiceTossOutputDto } from './interface';
 
 @Controller('dice-toss')
 @JwtAuth()

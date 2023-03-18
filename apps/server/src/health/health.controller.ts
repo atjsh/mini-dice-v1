@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
-import {
-  HealthCheck,
+import type {
   HealthCheckService,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { HealthCheck } from '@nestjs/terminus';
 import { InjectConnection } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
+import type { Connection } from 'typeorm';
 
 @Controller('health')
 export class HealthController {

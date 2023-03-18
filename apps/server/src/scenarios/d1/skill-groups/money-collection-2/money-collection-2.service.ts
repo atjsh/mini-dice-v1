@@ -2,17 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import { strEllipsis } from '@packages/shared-types';
 import * as _ from 'lodash';
-import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
-import { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
-import { UserActivityService } from '../../../../user-activity/user-activity.service';
-import { UserService } from '../../../../user/user.service';
+import type { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import type { UserActivityService } from '../../../../user-activity/user-activity.service';
+import type { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
-import {
-  CommonMoneyCollectionService,
-  MoneyCollectionIdEnum,
-} from '../../common/money-collection/common-money-collection.service';
-import { MoneyCollectionOtherUserReceivedCashLandEventResult } from '../../land-event-groups/money-collection/money-collection.land-event';
+import type { CommonMoneyCollectionService } from '../../common/money-collection/common-money-collection.service';
+import { MoneyCollectionIdEnum } from '../../common/money-collection/common-money-collection.service';
+import type { MoneyCollectionOtherUserReceivedCashLandEventResult } from '../../land-event-groups/money-collection/money-collection.land-event';
 import { D1ScenarioRoutes } from '../../routes';
 
 export enum MoneyCollection2ResultEnum {

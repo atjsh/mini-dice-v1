@@ -141,8 +141,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:1.3.4"],\
             ["cache-manager", "npm:5.1.7"],\
             ["cache-manager-redis-store", "npm:3.0.1"],\
+            ["cache-manager-redis-yet", "npm:4.1.1"],\
             ["class-transformer", "npm:0.5.1"],\
             ["class-validator", "npm:0.14.0"],\
+            ["dotenv", "npm:16.0.3"],\
             ["fastify", "npm:4.14.1"],\
             ["joi", "npm:17.8.4"],\
             ["jsonwebtoken", "npm:9.0.0"],\
@@ -1515,7 +1517,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jgoz/esbuild-plugin-typecheck", "virtual:f54703f7f9fe3185bd8cc86948f7a87b2cbe75727239c82662b3ce19d27987f2f3593421eb9077838fd91815abfb6282c8e020a9120b9cb89c647ed2b9f4b823#npm:3.0.2"],\
             ["@types/node", "npm:18.15.3"],\
             ["chalk", "npm:5.2.0"],\
-            ["dotenv", "npm:16.0.3"],\
             ["esbuild", "npm:0.17.12"],\
             ["ora", "npm:6.1.2"]\
           ],\
@@ -2631,9 +2632,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/class-validator", null],\
             ["@types/reflect-metadata", null],\
             ["@types/rxjs", null],\
-            ["cache-manager", null],\
-            ["class-transformer", null],\
-            ["class-validator", null],\
+            ["cache-manager", "npm:5.1.7"],\
+            ["class-transformer", "npm:0.5.1"],\
+            ["class-validator", "npm:0.14.0"],\
             ["iterare", "npm:1.2.1"],\
             ["reflect-metadata", "npm:0.1.13"],\
             ["rxjs", "npm:7.8.0"],\
@@ -2645,10 +2646,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/class-transformer",\
             "@types/class-validator",\
             "@types/reflect-metadata",\
-            "@types/rxjs",\
-            "cache-manager",\
-            "class-transformer",\
-            "class-validator"\
+            "@types/rxjs"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5527,6 +5525,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/cache-manager-redis-store-npm-3.0.1-dbdf7056fc-99a6afb818.zip/node_modules/cache-manager-redis-store/",\
           "packageDependencies": [\
             ["cache-manager-redis-store", "npm:3.0.1"],\
+            ["redis", "npm:4.6.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["cache-manager-redis-yet", [\
+        ["npm:4.1.1", {\
+          "packageLocation": "./.yarn/cache/cache-manager-redis-yet-npm-4.1.1-f2e478a35b-0376087a58.zip/node_modules/cache-manager-redis-yet/",\
+          "packageDependencies": [\
+            ["cache-manager-redis-yet", "npm:4.1.1"],\
+            ["@redis/bloom", "virtual:c5adfc624d6d0e1084fd0aaea50f7884132cf812987e57eaf212d892914569309dfb2fceba799fee273cc76d0f43ed2e372e9df99a9fa749c7366bf46884b72f#npm:1.2.0"],\
+            ["@redis/client", "npm:1.5.6"],\
+            ["@redis/graph", "virtual:c5adfc624d6d0e1084fd0aaea50f7884132cf812987e57eaf212d892914569309dfb2fceba799fee273cc76d0f43ed2e372e9df99a9fa749c7366bf46884b72f#npm:1.1.0"],\
+            ["@redis/json", "virtual:c5adfc624d6d0e1084fd0aaea50f7884132cf812987e57eaf212d892914569309dfb2fceba799fee273cc76d0f43ed2e372e9df99a9fa749c7366bf46884b72f#npm:1.0.4"],\
+            ["@redis/search", "virtual:c5adfc624d6d0e1084fd0aaea50f7884132cf812987e57eaf212d892914569309dfb2fceba799fee273cc76d0f43ed2e372e9df99a9fa749c7366bf46884b72f#npm:1.1.2"],\
+            ["@redis/time-series", "virtual:c5adfc624d6d0e1084fd0aaea50f7884132cf812987e57eaf212d892914569309dfb2fceba799fee273cc76d0f43ed2e372e9df99a9fa749c7366bf46884b72f#npm:1.0.4"],\
+            ["cache-manager", "npm:5.1.7"],\
             ["redis", "npm:4.6.5"]\
           ],\
           "linkType": "HARD"\

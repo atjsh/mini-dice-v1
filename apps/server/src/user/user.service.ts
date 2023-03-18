@@ -1,9 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
-import { CompleteSignupUserDto, UserIdType } from '@packages/shared-types';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
+import type { CompleteSignupUserDto, UserIdType } from '@packages/shared-types';
 import * as _ from 'lodash';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 import { getRandomInteger } from '../common/random/random-number';
 import { getRandomString } from '../common/random/random-string';
 import { UserEntity } from './entity/user.entity';
@@ -34,7 +35,10 @@ export class UserService {
    * 유저를 찾고 캐시한다.
    */
   async findUserWithCache(userId: UserIdType): Promise<UserEntity> {
-    const user = await this.userRepository.findOneOrFail(userId, {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        id: userId,
+      },
       cache: {
         id: getCacheKey(userId),
         milliseconds: CACHE_DURATION_MS,

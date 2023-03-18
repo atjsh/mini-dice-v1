@@ -1,7 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import * as redisStore from 'cache-manager-redis-store';
+import { redisStore } from 'cache-manager-redis-yet';
 import { AccessTokenController } from './access-token/access-token.controller';
 import { AccessTokenService } from './access-token/access-token.service';
 import { JwtAuthGuard } from './jwt.guard';

@@ -1,23 +1,21 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import type { StockIdType } from '@packages/shared-types';
 import {
-  StockIdType,
   StockInitialData,
   getMaxStockBuyableAmount,
   getStockStatus,
   serializeStockStatusToJson,
 } from '@packages/shared-types';
-import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
-import {
+import type { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type {
   SkillService,
   SkillServiceProps,
 } from '../../../../skill-group-lib/skill-service-lib';
-import { UserService } from '../../../../user/user.service';
+import type { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
-import {
-  CommonStockService,
-  StockOwningStatusEnum,
-} from '../../common/stock/stock.service';
+import type { CommonStockService } from '../../common/stock/stock.service';
+import { StockOwningStatusEnum } from '../../common/stock/stock.service';
 import { D1ScenarioRoutes } from '../../routes';
 
 @Injectable()

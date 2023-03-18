@@ -1,6 +1,7 @@
-import { PlainMessageType, PlainMessage } from '@packages/shared-types';
+import type { PlainMessageType } from '@packages/shared-types';
+import { PlainMessage } from '@packages/shared-types';
 import * as _ from 'lodash';
-import { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
+import type { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
 
 export function renderRecentLandEventSummary(
   landEventSummaries: LandEventsSummarizeResultType[],

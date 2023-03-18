@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FastifyReply } from 'fastify';
-import { Repository } from 'typeorm';
+import type { FastifyReply } from 'fastify';
+import type { Repository } from 'typeorm';
 import { UserEntity } from '../../user/entity/user.entity';
 import { UserService } from '../../user/user.service';
 import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
