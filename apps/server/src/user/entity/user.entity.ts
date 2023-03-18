@@ -1,5 +1,4 @@
 import { ForbiddenException } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
 import {
   countryCode3List,
   CountryCode3Type,
@@ -169,11 +168,9 @@ export class UserEntity {
   })
   isTerminated: boolean;
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
   lands: LandEntity[];
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(
     () => MoneyCollectionParticipantsEntity,
     (moneyCollectionParticipantsEntity) =>
@@ -181,14 +178,12 @@ export class UserEntity {
   )
   moneyCollectionParticipants: MoneyCollectionParticipantsEntity[];
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(
     () => UserActivityEntity,
     (userActivityEntity) => userActivityEntity.user,
   )
   userActivityEntities: UserActivityEntity[];
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
   frontendErrors: FrontendErrorEntity[];
 

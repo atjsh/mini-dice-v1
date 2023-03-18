@@ -1,4 +1,3 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
 import { IsNotEmpty } from 'class-validator';
 import {
@@ -29,7 +28,6 @@ export class UserActivityEntity {
   })
   userId: UserIdType;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.userActivityEntities, {
     onDelete: 'CASCADE',
   })
@@ -50,7 +48,6 @@ export class UserActivityEntity {
   read: boolean;
 
   /** 객체가 생성된 날짜 */
-  @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
   createdAt: Date;
 }

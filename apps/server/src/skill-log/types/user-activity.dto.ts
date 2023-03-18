@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { StockPriceChangeResult } from '../../scenarios/d1/common/stock/stock.service';
 
 export interface UserActivityInterface {
@@ -22,7 +21,6 @@ export class InteractionUserActivity<T = Record<string, any>>
 {
   type: 'interaction';
 
-  @ApiProperty({ type: Object })
   params: T;
 }
 

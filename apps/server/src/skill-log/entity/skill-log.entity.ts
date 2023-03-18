@@ -1,4 +1,3 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import {
@@ -20,7 +19,6 @@ const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
 export class SkillLogEntity<
   T extends Record<string, any> | undefined = Record<string, any> | undefined,
 > {
-  @ApiProperty({ readOnly: true })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -32,7 +30,6 @@ export class SkillLogEntity<
   })
   userId: UserIdType;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
   })

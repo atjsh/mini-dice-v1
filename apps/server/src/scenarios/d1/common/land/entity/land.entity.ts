@@ -1,4 +1,3 @@
-import { ApiHideProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
 import { UserEntity } from 'apps/server/src/user/entity/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
@@ -23,7 +22,6 @@ export class LandEntity {
   })
   userId: UserIdType | null;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
     eager: true,

@@ -1,5 +1,4 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { getSkillRouteFromPath } from '@packages/scenario-routing';
 import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { TimeZone } from '../common/get-timezone';
@@ -12,7 +11,6 @@ class UserInteractionDto {
   callingSkillParam: Record<string, string>;
 }
 
-@ApiTags('유저 인터렉션 전송')
 @JwtAuth()
 @Controller('user-interaction-web')
 export class UserInteractionWebController {

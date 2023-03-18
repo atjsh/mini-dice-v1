@@ -1,4 +1,3 @@
-import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
 import {
   Column,
@@ -16,7 +15,6 @@ const SEARCH_BY_LAND_ID_PAGED_INDEX_NAME = 'land_id_date';
 @Entity()
 @Index(SEARCH_BY_LAND_ID_PAGED_INDEX_NAME, ['landId', 'date'])
 export class UserLandCommentEntity {
-  @ApiProperty({ readOnly: true })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,7 +25,6 @@ export class UserLandCommentEntity {
   })
   userId: UserIdType;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
   })

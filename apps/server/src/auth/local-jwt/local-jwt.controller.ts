@@ -1,9 +1,7 @@
 import { Controller, Post, Res, Req, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 
-@ApiTags('로그아웃 (delete RefreshToken)')
 @Controller('auth/logout')
 export class LocalJwtController {
   constructor(private refreshTokenService: RefreshTokenService) {}

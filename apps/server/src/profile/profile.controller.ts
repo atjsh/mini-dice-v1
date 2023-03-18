@@ -8,7 +8,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import {
   CompleteSignupUserDto,
   UpdateUserDto,
@@ -37,7 +36,6 @@ class PageDto {
   updatedAfter?: Date;
 }
 
-@ApiTags(USER_PROFILE_APIS)
 @Controller('profile')
 export class PublicProfileController {
   constructor(

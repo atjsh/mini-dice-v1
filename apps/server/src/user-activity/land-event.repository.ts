@@ -1,44 +1,43 @@
-import { PickType } from '@nestjs/swagger';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserActivityEntity } from './user-activity.entity';
 
-export class CreateUserActivityInputDto<
+export type CreateUserActivityInputDto<
   LandEventResult extends Record<string, any>,
-> extends PickType(UserActivityEntity, ['skillRoute', 'userId']) {
+> = Pick<UserActivityEntity, 'skillRoute' |'userId'> & {
   skillDrawProps: LandEventResult;
 }
 
-export class CreateUserActivityOutputDto extends PickType(UserActivityEntity, [
-  'id',
-  'skillDrawProps',
-  'skillRoute',
-  'userId',
-  'createdAt',
-]) {}
+export type CreateUserActivityOutputDto = Pick<UserActivityEntity, 
+  'id' |
+  'skillDrawProps'|
+  'skillRoute'|
+  'userId'|
+  'createdAt'
+>;
 
-export class SearchUserActivityByDateInputDto extends PickType(
+export type SearchUserActivityByDateInputDto = Pick<
   UserActivityEntity,
-  ['userId'],
-) {
+  'userId'
+>& {
   createdAtFrom: Date;
   createdAtTo: Date;
 }
 
-export class SearchUserActivityByPageInputDto extends PickType(
+export type SearchUserActivityByPageInputDto = Pick<
   UserActivityEntity,
-  ['userId'],
-) {
+  'userId'
+> & {
   pageNo: number;
   pageSize: number;
 }
 
-export class SearchUserActivityOutputDto extends PickType(UserActivityEntity, [
-  'id',
-  'skillDrawProps',
-  'skillRoute',
-  'userId',
-  'createdAt',
-]) {}
+export type SearchUserActivityOutputDto = Pick<UserActivityEntity, 
+  'id' |
+  'skillDrawProps' |
+  'skillRoute' |
+  'userId' |
+  'createdAt' 
+>;
 
 @EntityRepository(UserActivityEntity)
 export class LandEventRepository extends Repository<UserActivityEntity> {

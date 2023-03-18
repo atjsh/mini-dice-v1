@@ -1,4 +1,3 @@
-import { ApiHideProperty } from '@nestjs/swagger';
 import { UserIdType } from '@packages/shared-types';
 import {
   Column,
@@ -26,7 +25,6 @@ export class FrontendErrorEntity {
   })
   userId: UserIdType;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.frontendErrors)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
