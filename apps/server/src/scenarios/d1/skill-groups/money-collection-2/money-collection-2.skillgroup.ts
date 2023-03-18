@@ -16,8 +16,10 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import type { MoneyCollection2Service } from './money-collection-2.service';
-import { MoneyCollection2ResultEnum } from './money-collection-2.service';
+import {
+  MoneyCollection2ResultEnum,
+  MoneyCollection2Service,
+} from './money-collection-2.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.moneyCollection2)
 export class MoneyCollection2SkillGroup implements SkillGroupController {

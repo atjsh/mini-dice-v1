@@ -17,7 +17,7 @@ import {
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import type { PickedItemService } from './picked-item.service';
+import { PickedItemService } from './picked-item.service';
 import { PickedItemEventEnum } from './picked-item.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.pickedItem)

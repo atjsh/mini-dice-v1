@@ -1,6 +1,6 @@
 import { Controller, Post, Res, Req, Get } from '@nestjs/common';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import type { RefreshTokenService } from './refresh-token/refresh-token.service';
+import { RefreshTokenService } from './refresh-token/refresh-token.service';
 
 @Controller('auth/logout')
 export class LocalJwtController {

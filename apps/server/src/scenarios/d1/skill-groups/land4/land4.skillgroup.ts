@@ -21,7 +21,7 @@ import {
   getCommonLandSkillGroupAlias,
 } from '../../common';
 import { D1ScenarioRoutes } from '../../routes';
-import type { Land4Service } from './land4.service';
+import { Land4Service } from './land4.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.land4)
 export class Land4SkillGroup implements SkillGroupController {

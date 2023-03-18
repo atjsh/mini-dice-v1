@@ -17,7 +17,7 @@ import {
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import type { FireService } from './fire.service';
+import { FireService } from './fire.service';
 import { FireEventEnum } from './fire.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.fire)

@@ -24,10 +24,10 @@ import type {
   InteractionUserActivitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
-import type { UserService } from '../../../../user/user.service';
+import { UserService } from '../../../../user/user.service';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import type { RpsService } from './rps.service';
+import { RpsService } from './rps.service';
 import { getRpsMoveAsKoreanText, RpsMove, RpsResult } from './rps.service';
 
 class RpsSubmitParamType {

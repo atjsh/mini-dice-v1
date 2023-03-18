@@ -21,7 +21,7 @@ import type {
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import type { MapStarterService } from './map-starter.service';
+import { MapStarterService } from './map-starter.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.mapStarter)
 export class MapStarterSkillGroup implements SkillGroupController {

@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
-import type {
+import {
   SkillGroupAliasesService,
-  SkillGroupAliasesType,
+  type SkillGroupAliasesType,
 } from '../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
 import { SCENARIO_NAMES } from '../scenarios.constants';
 import { OrderedD1ScenarioRoutes } from './routes';

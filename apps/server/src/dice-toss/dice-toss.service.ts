@@ -9,26 +9,26 @@ import { getStockInitialData } from '@packages/shared-types';
 import * as _ from 'lodash';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { getRandomInteger } from '../common/random/random-number';
-import type { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
-import type {
-  CommonStockService,
-  StockPriceChangeResult,
-} from '../scenarios/d1/common/stock/stock.service';
+import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import { CommonStockService } from '../scenarios/d1/common/stock/stock.service';
 import type { MapCycleLandEventResult } from '../scenarios/d1/land-event-groups/map-cycle/map-cycle.land-event';
 import {
   D1ScenarioRoutes,
   OrderedD1ScenarioRoutes,
 } from '../scenarios/d1/routes';
-import type { SkillLogService } from '../skill-log/skill-log.service';
-import type { DiceUserActivity } from '../skill-log/types/user-activity.dto';
+import { SkillLogService } from '../skill-log/skill-log.service';
+import type {
+  DiceUserActivity,
+  StockPriceChangeResult,
+} from '../skill-log/types/user-activity.dto';
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
-import type { UserActivityService } from '../user-activity/user-activity.service';
-import type { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
+import { UserActivityService } from '../user-activity/user-activity.service';
+import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
 import {
   isUserThrowingDiceTossAllowedOrThrow,
   serializeUserToJson,
 } from '../user/entity/user.entity';
-import type { UserService } from '../user/user.service';
+import { UserService } from '../user/user.service';
 import type { DiceTossOutputDto } from './interface';
 
 function isOdd(num: number | bigint) {

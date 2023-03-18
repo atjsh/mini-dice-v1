@@ -16,7 +16,7 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import type { NightFoodService } from './night-food.service';
+import { NightFoodService } from './night-food.service';
 import { PROFIT_STATUS } from './night-food.service';
 
 const nightFoodPlainMessageTitle = '야식';

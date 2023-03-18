@@ -7,14 +7,14 @@ import {
 import type { MessageResponseType } from '@packages/shared-types';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import type { UserInteractionOutputDto } from '../dice-toss/interface';
-import type { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
-import type { SkillLogService } from '../skill-log/skill-log.service';
+import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import { SkillLogService } from '../skill-log/skill-log.service';
 import type { InteractionUserActivity } from '../skill-log/types/user-activity.dto';
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
-import type { UserActivityService } from '../user-activity/user-activity.service';
-import type { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
+import { UserActivityService } from '../user-activity/user-activity.service';
+import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
 import { serializeUserToJson } from '../user/entity/user.entity';
-import type { UserService } from '../user/user.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class UserInteractionWebService {

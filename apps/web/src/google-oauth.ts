@@ -7,8 +7,8 @@ export const googleOAuthCredential = {
 export const getGoogleOAuthPageUrl = () =>
   `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
     googleOAuthCredential.clientId
-  }&redirect_uri=${import.meta.env.SERVER_URL}${
+  }&redirect_uri=${import.meta.env.VITE_SERVER_URL}${
     googleOAuthCredential.redirectUri
   }/${btoa(
-    import.meta.env.WEB_URL!,
+    import.meta.env.VITE_WEB_URL!,
   ).toString()}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`;

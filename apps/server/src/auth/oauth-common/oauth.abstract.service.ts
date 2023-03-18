@@ -5,7 +5,7 @@ import type { Repository } from 'typeorm';
 import { getRandomInteger } from '../../common/random/random-number';
 import { getRandomString } from '../../common/random/random-string';
 import { UserEntity } from '../../user/entity/user.entity';
-import type { UserService } from '../../user/user.service';
+import { UserService } from '../../user/user.service';
 import { RefreshTokenEntity } from '../local-jwt/refresh-token/entity/refresh-token.entity';
 import type { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 

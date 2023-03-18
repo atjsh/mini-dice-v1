@@ -16,7 +16,7 @@ import type {
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import type { UserService } from '../user/user.service';
+import { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
 import { PublicProfileService } from './profile.service';
 

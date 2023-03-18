@@ -37,6 +37,9 @@
     "typescript": "^5.0.2"
   },
   "dependenciesMeta": {
+    "@nestjs/terminus@9.2.1": {
+      "unplugged": true
+    },
     "serverless@3.28.1": {
       "unplugged": true
     },

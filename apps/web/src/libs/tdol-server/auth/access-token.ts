@@ -6,7 +6,7 @@ export type AccessTokenType = string;
 const LocalStrageAccessTokenKey = ReactQueryAccessTokenKey;
 
 export const authedAxios = axios.create({
-  baseURL: import.meta.env.SERVER_URL,
+  baseURL: import.meta.env.VITE_SERVER_URL,
   validateStatus: () => true,
 });
 
@@ -14,7 +14,8 @@ const TWO_MINUTES = 1000 * 60 * 2;
 
 function isJwtTokenExpired(token: string) {
   const payloadBase64 = token.split('.')[1];
-  const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
+  // const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
+  const decodedJson = atob(payloadBase64);
   const decoded = JSON.parse(decodedJson);
   const exp = decoded.exp;
 
@@ -27,7 +28,7 @@ async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
   try {
     const response = await axios.get<string>(`/auth/access-token`, {
       withCredentials: true,
-      baseURL: import.meta.env.SERVER_URL,
+      baseURL: import.meta.env.VITE_SERVER_URL,
     });
 
     return response.data;
@@ -67,7 +68,7 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
 
 async function revokeUserRefreshToken() {
   const result = await axios.post<any, AxiosResponse<{ success: boolean }>>(
-    `${import.meta.env.SERVER_URL}/auth/logout`,
+    `${import.meta.env.VITE_SERVER_URL}/auth/logout`,
     {},
     { withCredentials: true },
   );

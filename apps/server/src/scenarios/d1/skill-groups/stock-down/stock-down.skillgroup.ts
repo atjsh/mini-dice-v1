@@ -17,7 +17,7 @@ import {
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import type { StockDownService } from './stock-down.service';
+import { StockDownService } from './stock-down.service';
 import { StockUpAmountEnum } from './stock-down.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.stockDown)

@@ -4,7 +4,8 @@ import type {
   StockInitalDataType,
   UserIdType,
 } from '@packages/shared-types';
-import { getStockInitialData, StockInitialData } from '@packages/shared-types';
+import { StockInitialData, getStockInitialData } from '@packages/shared-types';
+import { type StockPriceChangeResult } from '../../../../skill-log/types/user-activity.dto';
 import { UserService } from '../../../../user/user.service';
 
 export enum StockOwningStatusEnum {
@@ -16,12 +17,6 @@ export enum StockOwningStatusEnum {
 export type StockBuyableByUserStatus = {
   status: StockOwningStatusEnum;
 };
-
-export interface StockPriceChangeResult {
-  changedStockPrice: bigint;
-  stockPriceDifference: bigint;
-  forcedSoldCash: false | bigint;
-}
 
 @Injectable()
 export class CommonStockService {

@@ -3,7 +3,7 @@ import axios from 'axios';
 export async function getServerHealth() {
   try {
     const response = await axios.get('/health', {
-      baseURL: import.meta.env.SERVER_URL,
+      baseURL: import.meta.env.VITE_SERVER_URL,
     });
 
     if (response.status == 200) {

@@ -1,9 +1,8 @@
-import { Controller, Get, Headers, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { USER_PROFILE_APIS } from '../common';
 import { TimeZone } from '../common/get-timezone';
 import { JwtAuth, UserJwt } from '../profile/decorators/user.decorator';
-import type { RecentSkillLogsService } from './recent-skill-logs.service';
+import { RecentSkillLogsService } from './recent-skill-logs.service';
 
 @Controller('recent-skill-logs')
 export class RecentSkillLogsController {

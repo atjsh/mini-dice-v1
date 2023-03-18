@@ -16,7 +16,7 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import type { FastCarService } from './fast-car.service';
+import { FastCarService } from './fast-car.service';
 import { FastCarEventEnum } from './fast-car.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.fastCar)

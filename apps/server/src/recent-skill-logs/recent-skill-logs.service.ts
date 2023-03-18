@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { getSkillRouteFromPath } from '@packages/scenario-routing';
 import type { MessageResponseType, UserIdType } from '@packages/shared-types';
 import type { ExposedSkillLogType } from '../dice-toss/interface';
-import type { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
-import type { SkillLogService } from '../skill-log/skill-log.service';
+import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import { SkillLogService } from '../skill-log/skill-log.service';
 
 @Injectable()
 export class RecentSkillLogsService {

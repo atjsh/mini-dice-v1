@@ -16,7 +16,7 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import type { DragonMoneyService } from './dragon-money.service';
+import { DragonMoneyService } from './dragon-money.service';
 import { DragonMoneyEventEnum } from './dragon-money.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.dragonMoney)

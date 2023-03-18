@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 5173",
+    "dev": "vite --host 127.0.0.1 --port 1234",
     "build": "tsc --noEmit && swc ./src -d ./dist && vite build",
     "preview": "vite preview"
   },

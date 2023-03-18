@@ -15,7 +15,7 @@ import type {
   InteractionUserActivitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
-import type { CommonMinigameService } from './minigame.service';
+import { CommonMinigameService } from './minigame.service';
 import {
   calculateEarningFromMinigameScore,
   getRevercedMinigameMove,

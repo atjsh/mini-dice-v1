@@ -20,7 +20,7 @@ export async function submitTempSignup({
       countryCode3,
     },
     {
-      baseURL: import.meta.env.SERVER_URL,
+      baseURL: import.meta.env.VITE_SERVER_URL,
       withCredentials: true,
     },
   );

@@ -1,6 +1,6 @@
-import type { HttpService } from '@nestjs/axios';
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { stringify } from 'querystring';
 import { lastValueFrom } from 'rxjs';
 

@@ -4,15 +4,15 @@ import type { SkillRouteType } from '@packages/scenario-routing';
 import { getSkillRoutePath } from '@packages/scenario-routing';
 import type { UserIdType } from '@packages/shared-types';
 import type { Repository } from 'typeorm';
-import type { DiceTossService } from '../../../../dice-toss/dice-toss.service';
-import type { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
 import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
-import type { UserActivityService } from '../../../../user-activity/user-activity.service';
+import { UserActivityService } from '../../../../user-activity/user-activity.service';
 import {
-  type UserCashStrType,
   UserEntity,
+  type UserCashStrType,
 } from '../../../../user/entity/user.entity';
-import type { UserService } from '../../../../user/user.service';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import type {

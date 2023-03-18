@@ -16,7 +16,7 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import type { PartTimeWorkService } from './part-time-work.service';
+import { PartTimeWorkService } from './part-time-work.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.partTimeWork)
 export class PartTimeWorkSkillGroup implements SkillGroupController {

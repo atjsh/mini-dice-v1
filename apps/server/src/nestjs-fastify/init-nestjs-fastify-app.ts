@@ -47,13 +47,14 @@ export async function initNestJSFastifyApp<T>(
   app.enableCors({
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    origin: [process.env.FRONTEND_URL!, process.env.SERVER_URL!],
+    origin: [process.env.WEB_URL!, process.env.SERVER_URL!],
     allowedHeaders: [
       'Access-Control-Request-Methods',
       'Access-Control-Request-Headers',
       'Content-Type',
       'Access-Control-Allow-Origin',
       'Authorization',
+      'timezone',
     ],
   });
 

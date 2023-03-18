@@ -109,7 +109,7 @@ function TempSignupForm() {
       </div>
       <div className="flex flex-col gap-1 text-center">
         <HCaptcha
-          sitekey={`${import.meta.env.HCAPTCHA_SITE_KEY}`}
+          sitekey={`${import.meta.env.VITE_HCAPTCHA_SITE_KEY}`}
           onVerify={(token) => setHCaptchaToken(token)}
         />
       </div>

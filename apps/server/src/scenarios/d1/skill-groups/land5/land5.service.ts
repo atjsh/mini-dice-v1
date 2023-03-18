@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { CommonLandService } from '../../common';
+import { CommonLandService } from '../../common';
 import { LandIdEnum } from '../../common';
 import { D1ScenarioRoutes } from '../../routes';
 import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';

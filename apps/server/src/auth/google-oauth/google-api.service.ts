@@ -1,10 +1,10 @@
-import type { HttpService } from '@nestjs/axios';
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
-import { lastValueFrom } from 'rxjs';
 import { stringify } from 'querystring';
+import { lastValueFrom } from 'rxjs';
 import { GoogleUser } from './class/google-user.class';
-import type { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GoogleApiService {

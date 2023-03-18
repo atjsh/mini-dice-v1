@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { getSkillRouteFromPath } from '@packages/scenario-routing';
-import { LandEventsSummarizeMetadataKey } from '@packages/scenario-routing';
+import {
+  LandEventsSummarizeMetadataKey,
+  getSkillRouteFromPath,
+} from '@packages/scenario-routing';
 import type { NotificationMessageType } from '@packages/shared-types';
 import * as _ from 'lodash';
-import type { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
+import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
 import type { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
-import type {
-  CreateUserActivityInputDto,
+import {
   LandEventRepository,
-  SearchUserActivityByDateInputDto,
-  SearchUserActivityByPageInputDto,
+  type CreateUserActivityInputDto,
+  type SearchUserActivityByDateInputDto,
+  type SearchUserActivityByPageInputDto,
 } from './land-event.repository';
 
 interface GroupedArrayElements<

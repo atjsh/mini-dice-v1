@@ -73,6 +73,7 @@ __metadata:
     mysql2: ^3.2.0
     passport: ^0.6.0
     passport-jwt: ^4.0.1
+    redis: ^4.6.5
     reflect-metadata: ^0.1.13
     rxjs: ^7.8.0
     typeorm: ^0.3.12
@@ -2180,7 +2181,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/common@npm:*, @nestjs/common@npm:^9.3.10":
+"@nestjs/common@npm:^9.3.10":
   version: 9.3.10
   resolution: "@nestjs/common@npm:9.3.10"
   dependencies:
@@ -2220,7 +2221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/core@npm:*, @nestjs/core@npm:^9.3.10":
+"@nestjs/core@npm:^9.3.10":
   version: 9.3.10
   resolution: "@nestjs/core@npm:9.3.10"
   dependencies:
@@ -2347,7 +2348,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/typeorm@npm:^9.0.1":
+"@nestjs/typeorm@npm:*, @nestjs/typeorm@npm:^9.0.1":
   version: 9.0.1
   resolution: "@nestjs/typeorm@npm:9.0.1"
   dependencies:
@@ -10105,7 +10106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:^4.3.1":
+"redis@npm:^4.3.1, redis@npm:^4.6.5":
   version: 4.6.5
   resolution: "redis@npm:4.6.5"
   dependencies:
@@ -10367,6 +10368,8 @@ __metadata:
     serverless-offline: ^12.0.4
     typescript: ^5.0.2
   dependenciesMeta:
+    "@nestjs/terminus@9.2.1":
+      unplugged: true
     serverless-offline@12.0.4:
       unplugged: true
     serverless@3.28.1:
@@ -11512,7 +11515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typeorm@npm:^0.3.12":
+"typeorm@npm:*, typeorm@npm:^0.3.12":
   version: 0.3.12
   resolution: "typeorm@npm:0.3.12"
   dependencies:

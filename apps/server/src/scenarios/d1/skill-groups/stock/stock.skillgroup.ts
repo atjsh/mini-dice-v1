@@ -31,7 +31,7 @@ import type { InteractionUserActivity } from '../../../../skill-log/types/user-a
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { StockOwningStatusEnum } from '../../common/stock/stock.service';
 import { D1ScenarioRoutes } from '../../routes';
-import type { StockService } from './stock.service';
+import { StockService } from './stock.service';
 
 class StockBuySubmitDto {
   amount: string;

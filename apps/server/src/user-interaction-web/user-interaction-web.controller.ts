@@ -4,7 +4,7 @@ import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto
 import { TimeZone } from '../common/get-timezone';
 import type { UserInteractionOutputDto } from '../dice-toss/interface';
 import { JwtAuth, UserJwt } from '../profile/decorators/user.decorator';
-import type { UserInteractionWebService } from './user-interaction-web.service';
+import { UserInteractionWebService } from './user-interaction-web.service';
 
 class UserInteractionDto {
   callingSkillRoute: string;

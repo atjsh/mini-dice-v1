@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import type { SkillRouteType } from '@packages/scenario-routing';
 import type { UserIdType } from '@packages/shared-types';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
-import { sign as signJWT, verify as verifyJWT } from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
-import { getUserCanTossDice } from '../../../scenarios.commons';
-import { SCENARIO_NAMES } from '../../../scenarios.constants';
+import { sign as signJWT, verify as verifyJWT } from 'jsonwebtoken';
 import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
 import { calcRandomCashChangeEvent } from '../../../../common/random/event-case-processing';
-import type { DiceTossService } from '../../../../dice-toss/dice-toss.service';
-import type { UserService } from '../../../../user/user.service';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import { UserService } from '../../../../user/user.service';
+import { getUserCanTossDice } from '../../../scenarios.commons';
+import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
 export enum MinigameResultEnum {
   WIN = 'win',

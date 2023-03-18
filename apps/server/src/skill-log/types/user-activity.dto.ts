@@ -1,4 +1,8 @@
-import type { StockPriceChangeResult } from '../../scenarios/d1/common/stock/stock.service';
+export interface StockPriceChangeResult {
+  changedStockPrice: bigint;
+  stockPriceDifference: bigint;
+  forcedSoldCash: false | bigint;
+}
 
 export interface UserActivityInterface {
   type: string;

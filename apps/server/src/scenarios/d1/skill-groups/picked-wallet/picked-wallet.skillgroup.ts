@@ -17,7 +17,7 @@ import {
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import type { PickedWalletService } from './picked-wallet.service';
+import { PickedWalletService } from './picked-wallet.service';
 import { PickedWalletEventEnum } from './picked-wallet.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.pickedWallet)

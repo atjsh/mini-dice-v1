@@ -23,7 +23,7 @@ import {
 } from 'typeorm';
 import { getSequentialPk } from '../../common';
 import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-error.entity';
-import { LandEntity } from '../../scenarios/d1/common';
+import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
 import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 import { UserActivityEntity } from '../../user-activity/user-activity.entity';
 
@@ -150,6 +150,7 @@ export class UserEntity {
   @Column({
     length: 3,
     nullable: false,
+    type: 'varchar',
   })
   countryCode3: CountryCode3Type;
 

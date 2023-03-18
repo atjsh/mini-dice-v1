@@ -1,7 +1,6 @@
 import { Controller, ForbiddenException, Get, Req } from '@nestjs/common';
 import type { FastifyRequest } from 'fastify';
-import { ACCESS_TOKEN_APIS } from '../../../common';
-import type { AccessTokenService } from './access-token.service';
+import { AccessTokenService } from './access-token.service';
 
 @Controller('auth/access-token')
 export class AccessTokenController {

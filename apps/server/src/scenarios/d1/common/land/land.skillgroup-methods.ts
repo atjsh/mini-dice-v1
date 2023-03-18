@@ -17,7 +17,7 @@ import type {
   InteractionUserActivitySkillDrawPropsType,
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
-import type { CommonLandService, LandStatus } from './land.service';
+import { CommonLandService, type LandStatus } from './land.service';
 import { LandBuyableByUserEnum, LandBuyingResult } from './land.service';
 
 export function getCommonLandSkillGroupAlias(

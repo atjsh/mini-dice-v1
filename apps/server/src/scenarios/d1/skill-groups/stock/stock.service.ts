@@ -6,15 +6,15 @@ import {
   getStockStatus,
   serializeStockStatusToJson,
 } from '@packages/shared-types';
-import type { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
 import type {
   SkillService,
   SkillServiceProps,
 } from '../../../../skill-group-lib/skill-service-lib';
-import type { UserService } from '../../../../user/user.service';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
-import type { CommonStockService } from '../../common/stock/stock.service';
+import { CommonStockService } from '../../common/stock/stock.service';
 import { StockOwningStatusEnum } from '../../common/stock/stock.service';
 import { D1ScenarioRoutes } from '../../routes';
 

@@ -16,7 +16,7 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import type { LotteryService } from './lottery.service';
+import { LotteryService } from './lottery.service';
 import { LotteryEventEnum } from './lottery.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.lottery)

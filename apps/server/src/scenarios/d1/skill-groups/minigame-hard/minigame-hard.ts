@@ -17,9 +17,9 @@ import type {
 } from '../../../../skill-log/types/skill-draw-props.dto';
 import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
 import { CommonMinigameModule } from '../../common/minigame/minigame.module';
-import type {
+import {
   CommonMinigameService,
-  MinigameEasySubmitParamType,
+  type MinigameEasySubmitParamType,
 } from '../../common/minigame/minigame.service';
 import {
   commonMinigameIndexDraw,

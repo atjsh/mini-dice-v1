@@ -1,8 +1,8 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
-import type { RefreshTokenService } from '../auth/local-jwt/refresh-token/refresh-token.service';
-import type { HCaptchaService } from '../h-captcha/h-captcha.service';
-import type { UserService } from '../user/user.service';
+import { RefreshTokenService } from '../auth/local-jwt/refresh-token/refresh-token.service';
+import { HCaptchaService } from '../h-captcha/h-captcha.service';
+import { UserService } from '../user/user.service';
 import type { TemporarySignUpDto } from './temp-signup.controller';
 
 @Injectable()
