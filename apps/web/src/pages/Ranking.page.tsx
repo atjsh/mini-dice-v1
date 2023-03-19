@@ -165,7 +165,10 @@ export function RankingPage() {
                 </button>
                 <button
                   onClick={() => setPage(page + 1)}
-                  disabled={page === 10 || othersProfiles?.length! < limit}
+                  disabled={
+                    page === 10 ||
+                    (othersProfiles && othersProfiles.length < limit)
+                  }
                   className="hover:underline disabled:text-gray-500"
                 >
                   다음 페이지

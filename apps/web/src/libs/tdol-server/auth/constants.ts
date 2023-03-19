@@ -1,1 +1,1 @@
-export const ReactQueryAccessTokenKey = "at";
+export const ReactQueryAccessTokenKey = 'at';

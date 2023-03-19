@@ -5,10 +5,7 @@ import {
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useCompleteSignup } from '../libs';
 import {

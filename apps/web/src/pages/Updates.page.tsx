@@ -1,8 +1,8 @@
+import { formatDistance } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { IndexPageURL } from './routes';
-import { formatDistance } from 'date-fns';
-import { ko } from 'date-fns/locale';
 
 const Entry: React.FC<{
   emoji?: string;
@@ -10,7 +10,7 @@ const Entry: React.FC<{
   author: string;
   date: Date;
   updates: string[];
-}> = ({ emoji, title, author, date, updates }) => {
+}> = ({ emoji, title, date, updates }) => {
   return (
     <div className=" border-b-zinc-500 border-b py-6 last:border-b-0 flex flex-col">
       <div className=" text-7xl">{emoji}</div>

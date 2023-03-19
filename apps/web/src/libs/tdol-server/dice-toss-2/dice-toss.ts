@@ -1,5 +1,5 @@
-import { LandCommentVo, UserVo } from '@packages/shared-types';
-import { authedAxios, ExposedSkillLogType } from '..';
+import { UserVo } from '@packages/shared-types';
+import { ExposedSkillLogType, authedAxios } from '..';
 
 export class DiceTossResult {
   user: UserVo;

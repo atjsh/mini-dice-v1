@@ -12,7 +12,7 @@ export async function submitTempSignup({
   username,
   countryCode3,
 }: SubmitTempSignupDto): Promise<boolean> {
-  const result = await axios.post(
+  await axios.post(
     '/temp-signup',
     {
       hCaptchaSuccessToken,
