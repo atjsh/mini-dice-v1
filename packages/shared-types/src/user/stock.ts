@@ -1,5 +1,5 @@
 export const StockId = [1, 2, 3, 4] as const;
-export type StockIdType = typeof StockId[number];
+export type StockIdType = (typeof StockId)[number];
 
 export interface StockData {
   id: StockIdType;
@@ -84,7 +84,13 @@ export const StockInitialData: StockInitalDataType[] = [
 ];
 
 export function getStockInitialData(id: StockIdType): StockInitalDataType {
-  return StockInitialData.find((stock) => stock.id === id)!;
+  const result = StockInitialData.find((stock) => stock.id === id);
+
+  if (!result) {
+    throw new Error('Stock Not Found');
+  }
+
+  return result;
 }
 
 export function getStockStatus(
