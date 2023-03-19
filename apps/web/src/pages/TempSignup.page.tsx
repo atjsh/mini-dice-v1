@@ -5,7 +5,7 @@ import {
   CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
@@ -73,7 +73,7 @@ function TempSignupForm() {
   const mutation = useTempSignup();
 
   return success ? (
-    <Redirect to={ServicePageURL} push={false} />
+    <Navigate to={ServicePageURL} replace />
   ) : (
     <div className="flex flex-col items-center gap-5">
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">
@@ -109,7 +109,7 @@ function TempSignupForm() {
       </div>
       <div className="flex flex-col gap-1 text-center">
         <HCaptcha
-          sitekey={`${import.meta.env.VITE_HCAPTCHA_SITE_KEY}`}
+          sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
           onVerify={(token) => setHCaptchaToken(token)}
         />
       </div>
