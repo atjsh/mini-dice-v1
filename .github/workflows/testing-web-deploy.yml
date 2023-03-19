@@ -12,13 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 18.x
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 18.x
 
-      - name: Install dependencies
-        run: yarn
+      # - name: Install dependencies
+      #   run: yarn
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -27,16 +27,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Download and create App .env file from AWS SSM
-        run: |
-          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_APP_ENV_SSM }} \
-            --query 'Parameters[0].Value' \
-            --output text > apps/web/.env
+      # - name: Download and create App .env file from AWS SSM
+      #   run: |
+      #     aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_APP_ENV_SSM }} \
+      #       --query 'Parameters[0].Value' \
+      #       --output text > apps/web/.env
 
-      - name: Build the app
-        run: |
-          yarn packages:build
-          yarn web build
+      # - name: Build the app
+      #   run: |
+      #     yarn packages:build
+      #     yarn web build
 
       - name: Download and create Deployer .env file from AWS SSM
         run: |
@@ -45,14 +45,7 @@ jobs:
             --output text > .env
 
       - name: Setup Deployer Enviroment Value from .env file
-        run: |
-          if [ ! -f .env ]
-          then
-            export $(cat .env | xargs)
-          fi
-
-      - name: Check Project Name
-        run: echo $CLOUDFLARE_PAGES_PROJECT_NAME
+        run: export $(grep -v '^#' .env | xargs)
 
       - name: Configure CloudFlare credentials
         uses: cloudflare/pages-action@v1
