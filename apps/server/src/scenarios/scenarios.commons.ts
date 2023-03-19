@@ -2,7 +2,7 @@ import { getRandomInteger } from '../common/random/random-number';
 import { SCENARIO_NAMES } from './scenarios.constants';
 
 export function getUserCanTossDice(
-  scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+  scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   alwaysCanTossDice = false,
 ): Date {
   if (alwaysCanTossDice) {

@@ -16,10 +16,7 @@ import {
 } from '../../../../skill-group-lib/skill-service-lib';
 import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import { GameDevService } from './game-dev.service';
-import { GameDevEventEnum } from './game-dev.service';
-
-const nightFoodPlainMessageTitle = '게임 개발';
+import { GameDevEventEnum, GameDevService } from './game-dev.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.gameDev)
 export class GameDevSkillGroup implements SkillGroupController {

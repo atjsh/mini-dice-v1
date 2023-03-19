@@ -9,6 +9,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalJwtController } from './local-jwt.controller';
 import { LocalJwtService } from './local-jwt.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
+import { ENV_KEYS } from '../../config/enviorment-variable-config';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
+        secret: configService.get(ENV_KEYS.JWT_SECRET),
       }),
     }),
     CacheModule.registerAsync({
@@ -24,9 +25,9 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: +configService.get<number>('REDIS_PORT')!,
-        auth_pass: configService.get('REDIS_PASSWORD'),
+        host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
+        port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
+        auth_pass: configService.get(ENV_KEYS.REDIS_PASSWORD),
       }),
     }),
   ],

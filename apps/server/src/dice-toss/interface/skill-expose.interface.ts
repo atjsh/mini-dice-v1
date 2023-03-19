@@ -3,7 +3,6 @@ import type {
   MessageResponseType,
   UserEntityJson,
 } from '@packages/shared-types';
-import { LandCommentVo } from '@packages/shared-types';
 
 export type ExposedSkillLogType = {
   skillDrawResult: MessageResponseType;

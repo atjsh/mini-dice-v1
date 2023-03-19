@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { stringify } from 'querystring';
 import { lastValueFrom } from 'rxjs';
+import { ENV_KEYS } from '../config/enviorment-variable-config';
 
 @Injectable()
 export class HCaptchaService {
@@ -17,7 +18,7 @@ export class HCaptchaService {
         'https://hcaptcha.com/siteverify',
         stringify({
           response: clientResponse,
-          secret: this.configService.get('HCAPTCHA_SECRET_KEY'),
+          secret: this.configService.getOrThrow(ENV_KEYS.HCAPTCHA_SECRET_KEY),
         }),
       ),
     );

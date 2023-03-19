@@ -1,6 +1,7 @@
 import { CacheModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-yet';
+import { ENV_KEYS } from '../config/enviorment-variable-config';
 
 @Global()
 @Module({
@@ -10,9 +11,9 @@ import { redisStore } from 'cache-manager-redis-yet';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('REDIS_PORT'),
-        auth_pass: configService.get('REDIS_PASSWORD'),
+        host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
+        port: configService.getOrThrow(ENV_KEYS.REDIS_PORT),
+        auth_pass: configService.get(ENV_KEYS.REDIS_PASSWORD),
         ttl: 60 * 60 * 24,
       }),
     }),

@@ -7,7 +7,10 @@ import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
-import { APP_GLOBAL_CONFIG_MODULES } from './config/enviorment-variable-config';
+import {
+  APP_GLOBAL_CONFIG_MODULES,
+  ENV_KEYS,
+} from './config/enviorment-variable-config';
 import { DiceTossModule } from './dice-toss/dice-toss.module';
 import { FrontendErrorModule } from './frontend-error-collection/frontend-error.module';
 import { HealthModule } from './health/health.module';
@@ -40,19 +43,19 @@ import { UserModule } from './user/user.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get('DB_URL'),
-        port: +configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
+        host: configService.getOrThrow(ENV_KEYS.DB_URL),
+        port: +configService.getOrThrow(ENV_KEYS.DB_PORT),
+        username: configService.getOrThrow(ENV_KEYS.DB_PORT),
+        password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
+        database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
         synchronize: false,
         logging: false,
         cache: {
           type: 'redis',
           options: {
-            host: configService.get('REDIS_HOST'),
-            port: +configService.get<number>('REDIS_PORT')!,
-            auth_pass: configService.get('REDIS_PASSWORD'),
+            host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
+            port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
+            auth_pass: configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
             prefix: `minidice:dbcache::`,
           },
         },

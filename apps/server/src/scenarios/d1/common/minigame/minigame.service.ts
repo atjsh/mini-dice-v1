@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 import { sign as signJWT, verify as verifyJWT } from 'jsonwebtoken';
 import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
 import { calcRandomCashChangeEvent } from '../../../../common/random/event-case-processing';
+import { ENV_KEYS } from '../../../../config/enviorment-variable-config';
 import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
 import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
@@ -83,7 +84,7 @@ export class CommonMinigameService {
   signMinigameHistory(minigameHistory: MinigameHistory): string {
     return signJWT(
       instanceToPlain(minigameHistory),
-      this.configService.get('JWT_SECRET')!,
+      this.configService.getOrThrow(ENV_KEYS.JWT_SECRET),
     );
   }
 
@@ -92,7 +93,7 @@ export class CommonMinigameService {
       MinigameHistory,
       verifyJWT(
         signedMinigameHistory,
-        this.configService.get('JWT_SECRET')!,
+        this.configService.getOrThrow(ENV_KEYS.JWT_SECRET),
       ) as MinigameHistory,
     );
   }

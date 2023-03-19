@@ -25,7 +25,7 @@ export class SkillGroupAliasesService {
 
   private async setSkillGroupAliasesToCache(
     scenarioRoutes: SkillRouteType[],
-    scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
     const skillGroupAliases = await Promise.all(
       scenarioRoutes.map(async (skillRoute: SkillRouteType) => {
@@ -64,7 +64,7 @@ export class SkillGroupAliasesService {
 
   public async getSkillGroupAliases(
     scenarioRoutes: SkillRouteType[],
-    scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
     // const cachedSkillGroupAliases =
     //   await this.cacheManager.get<SkillGroupAliasesType>(
@@ -79,7 +79,7 @@ export class SkillGroupAliasesService {
   }
 
   public async invalidateSkillGroupAliasesCache(
-    scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<void> {
     await this.cacheManager.del(`${cacheKey}${scenarioName}`);
   }

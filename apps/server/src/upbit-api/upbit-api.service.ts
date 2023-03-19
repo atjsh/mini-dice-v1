@@ -17,7 +17,7 @@ export class UpbitApiService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   private async getTicker(
-    market: `${typeof UPBIT_TICKER_COUNTRY_CURRENCY[number]}-${typeof UPBIT_TICKER_CRYPTO_CURRENCY[number]}`,
+    market: `${(typeof UPBIT_TICKER_COUNTRY_CURRENCY)[number]}-${(typeof UPBIT_TICKER_CRYPTO_CURRENCY)[number]}`,
   ): Promise<UpbitTickerInterface> {
     const { data } = await lastValueFrom(
       this.httpService.get<UpbitTickerInterface[]>(
@@ -34,8 +34,8 @@ export class UpbitApiService {
   }
 
   public async getCryptoCurrencyPrice(
-    countryCurrency: typeof UPBIT_TICKER_COUNTRY_CURRENCY[number],
-    cryptoCurrency: typeof UPBIT_TICKER_CRYPTO_CURRENCY[number],
+    countryCurrency: (typeof UPBIT_TICKER_COUNTRY_CURRENCY)[number],
+    cryptoCurrency: (typeof UPBIT_TICKER_CRYPTO_CURRENCY)[number],
   ): Promise<UpbitTickerInterface['trade_price']> {
     const market = `${countryCurrency}-${cryptoCurrency}` as const;
     const cachedTickerPrice = await this.cacheManager.get<

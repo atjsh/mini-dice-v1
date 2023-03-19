@@ -1,14 +1,10 @@
 import { Controller, Get, Param, Query, Req, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { GoogleOAuthService } from './google-oauth.service';
 
 @Controller('auth/google-oauth')
 export class GoogleOAuthController {
-  constructor(
-    private googleOAuthService: GoogleOAuthService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private googleOAuthService: GoogleOAuthService) {}
 
   @Get(':web')
   async authUserWithGoogleOauthCode(
