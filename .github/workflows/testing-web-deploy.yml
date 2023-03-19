@@ -51,6 +51,9 @@ jobs:
             export $(cat .env | xargs)
           fi
 
+      - name: Check Project Name
+        run: echo $CLOUDFLARE_PAGES_PROJECT_NAME
+
       - name: Configure CloudFlare credentials
         uses: cloudflare/pages-action@v1
         with:
