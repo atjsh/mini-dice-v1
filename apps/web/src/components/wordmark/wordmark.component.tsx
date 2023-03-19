@@ -10,8 +10,7 @@ export const WordmarkComponent: React.FC<{ colored?: boolean }> = ({
     >
       {' '}
       Dice
-    </span>{' '}
-    <span className=" font-light">Beta</span>
+    </span>
   </>
 );
 
