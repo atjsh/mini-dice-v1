@@ -54,7 +54,7 @@ jobs:
       - name: Configure CloudFlare credentials
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ env.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ env.CLOUDFLARE_PAGES_PROJECT_NAME }}
+          apiToken: $CLOUDFLARE_API_TOKEN
+          accountId: $CLOUDFLARE_ACCOUNT_ID
+          projectName: $CLOUDFLARE_PAGES_PROJECT_NAME
           directory: apps/web/dist
