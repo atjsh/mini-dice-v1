@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../../../../../user/entity/user.entity';
 
-@Entity()
+@Entity({ name: 'land_entity' })
 export class LandEntity {
   @PrimaryColumn({
     nullable: false,

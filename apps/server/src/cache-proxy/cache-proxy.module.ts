@@ -2,6 +2,7 @@ import { CacheModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-yet';
 import { ENV_KEYS } from '../config/enviorment-variable-config';
+import { parseNullString } from '../common';
 
 @Global()
 @Module({
@@ -13,7 +14,9 @@ import { ENV_KEYS } from '../config/enviorment-variable-config';
         store: redisStore,
         host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
         port: configService.getOrThrow(ENV_KEYS.REDIS_PORT),
-        auth_pass: configService.get(ENV_KEYS.REDIS_PASSWORD),
+        auth_pass: parseNullString(
+          configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
+        ),
         ttl: 60 * 60 * 24,
       }),
     }),

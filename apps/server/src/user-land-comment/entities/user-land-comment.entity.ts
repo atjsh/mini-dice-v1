@@ -13,7 +13,7 @@ import { UserEntity } from '../../user/entity/user.entity';
 
 const SEARCH_BY_LAND_ID_PAGED_INDEX_NAME = 'land_id_date';
 
-@Entity()
+@Entity({ name: 'user_land_comment_entity' })
 @Index(SEARCH_BY_LAND_ID_PAGED_INDEX_NAME, ['landId', 'date'])
 export class UserLandCommentEntity {
   @PrimaryGeneratedColumn('uuid')

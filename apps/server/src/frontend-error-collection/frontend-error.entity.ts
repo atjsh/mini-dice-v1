@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 
-@Entity()
+@Entity({ name: 'frontend_error_entity' })
 export class FrontendErrorEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

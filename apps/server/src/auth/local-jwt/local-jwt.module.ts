@@ -10,6 +10,7 @@ import { LocalJwtController } from './local-jwt.controller';
 import { LocalJwtService } from './local-jwt.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { ENV_KEYS } from '../../config/enviorment-variable-config';
+import { parseNullString } from '../../common';
 
 @Module({
   imports: [
@@ -27,7 +28,9 @@ import { ENV_KEYS } from '../../config/enviorment-variable-config';
         store: redisStore,
         host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
         port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
-        auth_pass: configService.get(ENV_KEYS.REDIS_PASSWORD),
+        auth_pass: parseNullString(
+          configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
+        ),
       }),
     }),
   ],

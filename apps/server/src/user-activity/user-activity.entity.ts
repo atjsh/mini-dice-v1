@@ -14,7 +14,7 @@ import { UserEntity } from '../user/entity/user.entity';
 
 const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
 
-@Entity({ orderBy: { createdAt: 'DESC' } })
+@Entity({ name: 'user_activity_entity', orderBy: { createdAt: 'DESC' } })
 @Index(SEARCH_BY_USER_ID_PAGED_INDEX_NAME, ['userId', 'createdAt'])
 export class UserActivityEntity {
   @PrimaryGeneratedColumn('uuid')
