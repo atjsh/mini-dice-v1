@@ -43,7 +43,7 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
 
 ## Contributors
 
-이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key))
 
 <table>
   <tr>
