@@ -49,7 +49,6 @@ __metadata:
     "@nestjs/jwt": ^10.0.2
     "@nestjs/passport": ^9.0.3
     "@nestjs/platform-fastify": ^9.3.10
-    "@nestjs/terminus": ^9.2.1
     "@nestjs/typeorm": ^9.0.1
     "@packages/scenario-routing": "workspace:*"
     "@packages/shared-types": "workspace:*"
@@ -2228,59 +2227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/terminus@npm:^9.2.1":
-  version: 9.2.1
-  resolution: "@nestjs/terminus@npm:9.2.1"
-  dependencies:
-    boxen: 5.1.2
-    check-disk-space: 3.3.1
-  peerDependencies:
-    "@grpc/grpc-js": "*"
-    "@grpc/proto-loader": "*"
-    "@mikro-orm/core": "*"
-    "@mikro-orm/nestjs": "*"
-    "@nestjs/axios": "*"
-    "@nestjs/common": 9.x
-    "@nestjs/core": 9.x
-    "@nestjs/microservices": "*"
-    "@nestjs/mongoose": "*"
-    "@nestjs/sequelize": "*"
-    "@nestjs/typeorm": "*"
-    mongoose: "*"
-    reflect-metadata: 0.1.x
-    rxjs: 7.x
-    sequelize: "*"
-    typeorm: "*"
-  peerDependenciesMeta:
-    "@grpc/grpc-js":
-      optional: true
-    "@grpc/proto-loader":
-      optional: true
-    "@mikro-orm/core":
-      optional: true
-    "@mikro-orm/nestjs":
-      optional: true
-    "@nestjs/axios":
-      optional: true
-    "@nestjs/microservices":
-      optional: true
-    "@nestjs/mongoose":
-      optional: true
-    "@nestjs/sequelize":
-      optional: true
-    "@nestjs/typeorm":
-      optional: true
-    mongoose:
-      optional: true
-    sequelize:
-      optional: true
-    typeorm:
-      optional: true
-  checksum: ac09b7fced4bc712fc1e7b974a73b905f9fea670589477cf7e8b8c98df27f114747cc0f5b660adf327e7a6670a892a2c749e03c2b1a5d5af9cb6ea4d0300da94
-  languageName: node
-  linkType: hard
-
-"@nestjs/typeorm@npm:*, @nestjs/typeorm@npm:^9.0.1":
+"@nestjs/typeorm@npm:^9.0.1":
   version: 9.0.1
   resolution: "@nestjs/typeorm@npm:9.0.1"
   dependencies:
@@ -3341,7 +3288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-align@npm:^3.0.0, ansi-align@npm:^3.0.1":
+"ansi-align@npm:^3.0.1":
   version: 3.0.1
   resolution: "ansi-align@npm:3.0.1"
   dependencies:
@@ -3779,22 +3726,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"boxen@npm:5.1.2":
-  version: 5.1.2
-  resolution: "boxen@npm:5.1.2"
-  dependencies:
-    ansi-align: ^3.0.0
-    camelcase: ^6.2.0
-    chalk: ^4.1.0
-    cli-boxes: ^2.2.1
-    string-width: ^4.2.2
-    type-fest: ^0.20.2
-    widest-line: ^3.1.0
-    wrap-ansi: ^7.0.0
-  checksum: 82d03e42a72576ff235123f17b7c505372fe05c83f75f61e7d4fa4bcb393897ec95ce766fecb8f26b915f0f7a7227d66e5ec7cef43f5b2bd9d3aeed47ec55877
-  languageName: node
-  linkType: hard
-
 "boxen@npm:^7.0.1":
   version: 7.0.2
   resolution: "boxen@npm:7.0.2"
@@ -4066,13 +3997,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase@npm:^6.2.0":
-  version: 6.3.0
-  resolution: "camelcase@npm:6.3.0"
-  checksum: 8c96818a9076434998511251dcb2761a94817ea17dbdc37f47ac080bd088fc62c7369429a19e2178b993497132c8cbcf5cc1f44ba963e76782ba469c0474938d
-  languageName: node
-  linkType: hard
-
 "camelcase@npm:^7.0.0":
   version: 7.0.1
   resolution: "camelcase@npm:7.0.1"
@@ -4119,13 +4043,6 @@ __metadata:
   version: 0.7.0
   resolution: "chardet@npm:0.7.0"
   checksum: 6fd5da1f5d18ff5712c1e0aed41da200d7c51c28f11b36ee3c7b483f3696dabc08927fc6b227735eb8f0e1215c9a8abd8154637f3eff8cada5959df7f58b024d
-  languageName: node
-  linkType: hard
-
-"check-disk-space@npm:3.3.1":
-  version: 3.3.1
-  resolution: "check-disk-space@npm:3.3.1"
-  checksum: 90b7b77ab932be0c0a24c5f68778d3c0e9179686282b04d84b1272a511a1c55b9f184c98f12b1a1628b832934971d66e63acaa9e3c82f14d9d221a4848b4cf8b
   languageName: node
   linkType: hard
 
@@ -4207,13 +4124,6 @@ __metadata:
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
   checksum: 2ac8cd2b2f5ec986a3c743935ec85b07bc174d5421a5efc8017e1f146a1cf5f781ae962618f416352103b32c9cd7e203276e8c28241bbe946160cab16149fb68
-  languageName: node
-  linkType: hard
-
-"cli-boxes@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "cli-boxes@npm:2.2.1"
-  checksum: be79f8ec23a558b49e01311b39a1ea01243ecee30539c880cf14bf518a12e223ef40c57ead0cb44f509bffdffc5c129c746cd50d863ab879385370112af4f585
   languageName: node
   linkType: hard
 
@@ -9524,8 +9434,6 @@ __metadata:
     serverless-offline: ^12.0.4
     typescript: ^5.0.2
   dependenciesMeta:
-    "@nestjs/terminus@9.2.1":
-      unplugged: true
     serverless-offline@12.0.4:
       unplugged: true
     serverless@3.28.1:
@@ -10063,7 +9971,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^1.0.2 || 2 || 3 || 4, string-width@npm:^4.0.0, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.2, string-width@npm:^4.2.3":
+"string-width@npm:^1.0.2 || 2 || 3 || 4, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
   dependencies:
@@ -10630,7 +10538,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typeorm@npm:*, typeorm@npm:^0.3.12":
+"typeorm@npm:^0.3.12":
   version: 0.3.12
   resolution: "typeorm@npm:0.3.12"
   dependencies:
@@ -11064,15 +10972,6 @@ __metadata:
   dependencies:
     string-width: ^1.0.2 || 2 || 3 || 4
   checksum: d5fc37cd561f9daee3c80e03b92ed3e84d80dde3365a8767263d03dacfc8fa06b065ffe1df00d8c2a09f731482fcacae745abfbb478d4af36d0a891fad4834d3
-  languageName: node
-  linkType: hard
-
-"widest-line@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "widest-line@npm:3.1.0"
-  dependencies:
-    string-width: ^4.0.0
-  checksum: 03db6c9d0af9329c37d74378ff1d91972b12553c7d72a6f4e8525fe61563fa7adb0b9d6e8d546b7e059688712ea874edd5ded475999abdeedf708de9849310e0
   languageName: node
   linkType: hard
 
