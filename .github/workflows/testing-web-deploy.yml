@@ -19,17 +19,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Download and create Deployer .env file from AWS SSM
-        run: |
-          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_DEPLOY_ENV_SSM }} \ 
-            --query 'Parameters[0].Value' \ 
-            --output text > .env
-
       - name: Download and create App .env file from AWS SSM
         run: |
           aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_APP_ENV_SSM }} \ 
             --query 'Parameters[0].Value' \ 
             --output text > apps/web/.env
+
+      - name: Build the app
+        run: yarn web build
+
+      - name: Download and create Deployer .env file from AWS SSM
+        run: |
+          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_DEPLOY_ENV_SSM }} \ 
+            --query 'Parameters[0].Value' \ 
+            --output text > .env
 
       - name: Setup Deployer Enviroment Value from .env file
         run: |
@@ -37,9 +40,6 @@ jobs:
           then
             export $(cat .env | xargs)
           fi
-
-      - name: Build the app
-        run: yarn web build
 
       - name: Configure CloudFlare credentials
         uses: cloudflare/pages-action@v1
