@@ -139,7 +139,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["aws-lambda", "npm:1.0.7"],\
             ["axios", "npm:1.3.4"],\
             ["cache-manager", "npm:5.1.7"],\
-            ["cache-manager-redis-store", "npm:3.0.1"],\
             ["cache-manager-redis-yet", "npm:4.1.1"],\
             ["class-transformer", "npm:0.5.1"],\
             ["class-validator", "npm:0.14.0"],\
@@ -4812,16 +4811,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cache-manager", "npm:5.1.7"],\
             ["lodash.clonedeep", "npm:4.5.0"],\
             ["lru-cache", "npm:7.18.3"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["cache-manager-redis-store", [\
-        ["npm:3.0.1", {\
-          "packageLocation": "./.yarn/cache/cache-manager-redis-store-npm-3.0.1-dbdf7056fc-99a6afb818.zip/node_modules/cache-manager-redis-store/",\
-          "packageDependencies": [\
-            ["cache-manager-redis-store", "npm:3.0.1"],\
-            ["redis", "npm:4.6.5"]\
           ],\
           "linkType": "HARD"\
         }]\

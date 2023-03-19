@@ -42,36 +42,60 @@ import { parseNullString } from './common';
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.getOrThrow(ENV_KEYS.DB_URL),
-        port: +configService.getOrThrow(ENV_KEYS.DB_PORT),
-        username: configService.getOrThrow(ENV_KEYS.DB_USER),
-        password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
-        database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
-        synchronize: false,
-        logging: false,
-        cache: {
-          type: 'redis',
-          options: {
-            host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
-            port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
-            auth_pass: parseNullString(
-              configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
-            ),
-            prefix: `minidice:dbcache::`,
+      useFactory: (configService: ConfigService) => {
+        console.log({
+          type: 'mysql',
+          host: configService.getOrThrow(ENV_KEYS.DB_URL),
+          port: +configService.getOrThrow(ENV_KEYS.DB_PORT),
+          username: configService.getOrThrow(ENV_KEYS.DB_USER),
+          password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
+          database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
+          synchronize: false,
+          logging: false,
+          cache: {
+            type: 'redis',
+            options: {
+              host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
+              port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
+              auth_pass: parseNullString(
+                configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
+              ),
+              prefix: `minidice:dbcache::`,
+            },
           },
-        },
-        entities: [
-          UserEntity,
-          LandEntity,
-          MoneyCollectionEntity,
-          MoneyCollectionParticipantsEntity,
-          SkillLogEntity,
-          UserActivityEntity,
-          UserLandCommentEntity,
-        ],
-      }),
+        });
+
+        return {
+          type: 'mysql',
+          host: configService.getOrThrow(ENV_KEYS.DB_URL),
+          port: +configService.getOrThrow(ENV_KEYS.DB_PORT),
+          username: configService.getOrThrow(ENV_KEYS.DB_USER),
+          password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
+          database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
+          synchronize: false,
+          logging: false,
+          cache: {
+            type: 'redis',
+            options: {
+              host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
+              port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
+              auth_pass: parseNullString(
+                configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
+              ),
+              prefix: `minidice:dbcache::`,
+            },
+          },
+          entities: [
+            UserEntity,
+            LandEntity,
+            MoneyCollectionEntity,
+            MoneyCollectionParticipantsEntity,
+            SkillLogEntity,
+            UserActivityEntity,
+            UserLandCommentEntity,
+          ],
+        };
+      },
       inject: [ConfigService],
     }),
     CacheProxyModule,

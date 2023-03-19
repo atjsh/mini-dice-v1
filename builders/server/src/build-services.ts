@@ -21,7 +21,7 @@ const serviceBuildContext = await esbuild.context({
   outExtension: { '.js': '.mjs' },
   bundle: true,
   minify: true,
-  keepNames: false,
+  keepNames: true,
   legalComments: 'none',
   external: [
     '@nestjs/microservices',

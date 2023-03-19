@@ -60,7 +60,6 @@ __metadata:
     aws-lambda: ^1.0.7
     axios: ^1.3.4
     cache-manager: ^5.1.7
-    cache-manager-redis-store: ^3.0.1
     cache-manager-redis-yet: ^4.1.1
     class-transformer: ^0.5.1
     class-validator: ^0.14.0
@@ -3906,15 +3905,6 @@ __metadata:
     tar: ^6.1.11
     unique-filename: ^1.1.1
   checksum: 2155b099b7e0f0369fb1155ca4673532ca7efe2ebdbec63acca8743580b8446b5d4fd7184626b1cb059001af77b981cdc67035c7855544d365d4f048eafca2ca
-  languageName: node
-  linkType: hard
-
-"cache-manager-redis-store@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "cache-manager-redis-store@npm:3.0.1"
-  dependencies:
-    redis: ^4.3.1
-  checksum: 99a6afb818bb8064f377591ce7f3d4719565836ca8a75ba13e7d4cb4fd57f5616aa4e5f5bd4604b1836f0d03e21811750875d9c3dc238e616347af3e465d50b0
   languageName: node
   linkType: hard
 

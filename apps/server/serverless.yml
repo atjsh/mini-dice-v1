@@ -1,4 +1,4 @@
-service: sf-chat-rest
+service: mini-dice-api-lambda
 
 frameworkVersion: '3'
 
@@ -9,7 +9,7 @@ provider:
     payload: '2.0'
     cors:
       allowedOrigins:
-        - http://127.0.0.1:1234
+        - ${file(./slsconfig.yml):allowedOrigins}
       allowedHeaders:
         - Content-Type
         - Access-Control-Request-Methods

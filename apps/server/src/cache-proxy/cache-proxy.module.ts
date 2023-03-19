@@ -10,15 +10,21 @@ import { parseNullString } from '../common';
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        store: redisStore,
-        host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
-        port: configService.getOrThrow(ENV_KEYS.REDIS_PORT),
-        auth_pass: parseNullString(
-          configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
-        ),
-        ttl: 60 * 60 * 24,
-      }),
+      useFactory: async (configService: ConfigService) => {
+        console.log(configService.getOrThrow(ENV_KEYS.REDIS_HOST));
+        console.log(configService.getOrThrow(ENV_KEYS.REDIS_PORT));
+        console.log(configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD));
+
+        return {
+          store: redisStore,
+          host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
+          port: configService.getOrThrow(ENV_KEYS.REDIS_PORT),
+          auth_pass: parseNullString(
+            configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
+          ),
+          ttl: 60 * 60 * 24,
+        };
+      },
     }),
   ],
 

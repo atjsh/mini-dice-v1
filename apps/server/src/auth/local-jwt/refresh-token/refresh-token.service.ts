@@ -4,13 +4,13 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import type { UserIdType } from '@packages/shared-types';
 import type { Cache } from 'cache-manager';
 import { randomUUID } from 'crypto';
+import type { FastifyReply } from 'fastify';
 import { REFRESH_TOKEN_EXPIRES_IN_MS } from '../constants';
 import type { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import type { RefreshTokenEntity } from './entity/refresh-token.entity';
-import type { FastifyReply } from 'fastify';
-import type { UserIdType } from '@packages/shared-types';
 
 @Injectable()
 export class RefreshTokenService {
