@@ -3,11 +3,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
+import { APP_GLOBAL_CONFIG_MODULES } from './config/enviorment-variable-config';
 import { DiceTossModule } from './dice-toss/dice-toss.module';
 import { FrontendErrorModule } from './frontend-error-collection/frontend-error.module';
 import { HealthModule } from './health/health.module';
@@ -16,47 +16,25 @@ import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-lo
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
+import { LandEntity } from './scenarios/d1/common';
+import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
+import { MoneyCollectionEntity } from './scenarios/d1/common/money-collection/entity/money-collection.entity';
 import { D1Module } from './scenarios/d1/d1.module';
 import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
+import { SkillLogEntity } from './skill-log/entity/skill-log.entity';
 import { TempSignupModule } from './temp-signup/temp-signup.module';
 import { UpbitApiModule } from './upbit-api/upbit-api.module';
+import { UserActivityEntity } from './user-activity/user-activity.entity';
 import { UserActivityModule } from './user-activity/user-activity.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
-import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
-import { UserModule } from './user/user.module';
-import { UserEntity } from './user/entity/user.entity';
-import { LandEntity } from './scenarios/d1/common';
-import { MoneyCollectionEntity } from './scenarios/d1/common/money-collection/entity/money-collection.entity';
-import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
-import { SkillLogEntity } from './skill-log/entity/skill-log.entity';
-import { UserActivityEntity } from './user-activity/user-activity.entity';
 import { UserLandCommentEntity } from './user-land-comment/entities/user-land-comment.entity';
+import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
+import { UserEntity } from './user/entity/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-      validationSchema: Joi.object({
-        SERVER_URL: Joi.string().required(),
-        SERVER_PORT: Joi.number().required(),
-
-        WEB_URL: Joi.string().required(),
-
-        DB_URL: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_USER: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        DB_DATABASE: Joi.string().required(),
-
-        REDIS_HOST: Joi.string().required(),
-
-        HCAPTCHA_SECRET_KEY: Joi.string().required(),
-
-        GOOGLE_OAUTH_CLIENT_ID: Joi.string().required(),
-        GOOGLE_OAUTH_CLILENT_SECRET: Joi.string().required(),
-      }),
-    }),
+    ...APP_GLOBAL_CONFIG_MODULES,
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
