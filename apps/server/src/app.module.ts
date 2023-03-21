@@ -34,7 +34,6 @@ import { UserLandCommentEntity } from './user-land-comment/entities/user-land-co
 import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserEntity } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
-import { parseNullString } from './common';
 
 @Module({
   imports: [
@@ -43,28 +42,6 @@ import { parseNullString } from './common';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        console.log({
-          type: 'mysql',
-          host: configService.getOrThrow(ENV_KEYS.DB_URL),
-          port: +configService.getOrThrow(ENV_KEYS.DB_PORT),
-          username: configService.getOrThrow(ENV_KEYS.DB_USER),
-          password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
-          database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
-          synchronize: false,
-          logging: false,
-          cache: {
-            type: 'redis',
-            options: {
-              host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
-              port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
-              auth_pass: parseNullString(
-                configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
-              ),
-              prefix: `minidice:dbcache::`,
-            },
-          },
-        });
-
         return {
           type: 'mysql',
           host: configService.getOrThrow(ENV_KEYS.DB_URL),
@@ -74,17 +51,6 @@ import { parseNullString } from './common';
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
           synchronize: false,
           logging: false,
-          cache: {
-            type: 'redis',
-            options: {
-              host: configService.getOrThrow(ENV_KEYS.REDIS_HOST),
-              port: +configService.getOrThrow<number>(ENV_KEYS.REDIS_PORT),
-              auth_pass: parseNullString(
-                configService.getOrThrow(ENV_KEYS.REDIS_PASSWORD),
-              ),
-              prefix: `minidice:dbcache::`,
-            },
-          },
           entities: [
             UserEntity,
             LandEntity,
