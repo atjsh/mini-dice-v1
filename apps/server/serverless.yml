@@ -1,5 +1,10 @@
 service: mini-dice-api-lambda
 
+package:
+  patterns:
+    - '!**/*'
+    - 'dist/**'
+
 frameworkVersion: '3'
 
 provider:
