@@ -187,6 +187,6 @@ dist
 # Ignore build directory
 .serverless
 
-.slsconfig
+slsconfig.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/node,direnv,yarn,macos,serverless
