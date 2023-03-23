@@ -1,4 +1,4 @@
-service: mini-dice-api-test
+service: ${file(./slsconfig.yml):serviceName}
 
 package:
   patterns:
@@ -12,7 +12,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   stage: production
-  region: ap-northeast-2
+  region: ${file(./slsconfig.yml):region}
   runtime: nodejs18.x
   httpApi:
     payload: '2.0'
