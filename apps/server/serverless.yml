@@ -3,6 +3,8 @@ service: mini-dice-api-lambda
 package:
   patterns:
     - '!**/*'
+    - package.json
+    - '.env'
     - 'dist/**'
 
 frameworkVersion: '3'

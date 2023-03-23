@@ -183,4 +183,10 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
-# End of https://www.toptal.com/developers/gitignore/api/node,direnv,yarn,macos
+### Serverless ###
+# Ignore build directory
+.serverless
+
+.slsconfig
+
+# End of https://www.toptal.com/developers/gitignore/api/node,direnv,yarn,macos,serverless
