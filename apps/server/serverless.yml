@@ -1,4 +1,4 @@
-service: mini-dice-api-lambda
+service: mini-dice-api-test
 
 package:
   patterns:
@@ -11,6 +11,8 @@ frameworkVersion: '3'
 
 provider:
   name: aws
+  stage: production
+  region: ap-northeast-2
   runtime: nodejs18.x
   httpApi:
     payload: '2.0'
