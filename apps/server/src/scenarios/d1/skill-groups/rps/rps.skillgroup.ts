@@ -7,30 +7,28 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+  SkillPropsType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
-  SkillPropsType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import {
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
-import { UserService } from 'apps/server/src/user/user.service';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import { UserService } from '../../../../user/user.service';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import {
-  getRpsMoveAsKoreanText,
-  RpsMove,
-  RpsResult,
-  RpsService,
-} from './rps.service';
+import { RpsService } from './rps.service';
+import { getRpsMoveAsKoreanText, RpsMove, RpsResult } from './rps.service';
 
 class RpsSubmitParamType {
   move: RpsMove;

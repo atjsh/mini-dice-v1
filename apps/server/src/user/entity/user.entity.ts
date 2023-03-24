@@ -1,12 +1,13 @@
 import { ForbiddenException } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  countryCode3List,
+import type {
   CountryCode3Type,
-  getStockStatus,
-  serializeStockStatusToJson,
   StockIdType,
   UserEntityJson,
+} from '@packages/shared-types';
+import {
+  countryCode3List,
+  getStockStatus,
+  serializeStockStatusToJson,
 } from '@packages/shared-types';
 import { Transform, TransformationType } from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
@@ -17,6 +18,7 @@ import {
   Entity,
   OneToMany,
   PrimaryColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { getSequentialPk } from '../../common';
@@ -34,7 +36,6 @@ export class UserEntity {
   /**
    * PK값
    */
-  @ApiProperty({ readOnly: true })
   @PrimaryColumn({
     length: 20,
     name: 'userId',
@@ -149,6 +150,7 @@ export class UserEntity {
   @Column({
     length: 3,
     nullable: false,
+    type: 'varchar',
   })
   countryCode3: CountryCode3Type;
 
@@ -169,28 +171,24 @@ export class UserEntity {
   })
   isTerminated: boolean;
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
-  lands: LandEntity[];
+  lands: Relation<LandEntity>[];
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(
     () => MoneyCollectionParticipantsEntity,
     (moneyCollectionParticipantsEntity) =>
       moneyCollectionParticipantsEntity.user,
   )
-  moneyCollectionParticipants: MoneyCollectionParticipantsEntity[];
+  moneyCollectionParticipants: Relation<MoneyCollectionParticipantsEntity>[];
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(
     () => UserActivityEntity,
     (userActivityEntity) => userActivityEntity.user,
   )
   userActivityEntities: UserActivityEntity[];
 
-  @ApiProperty({ readOnly: true })
   @OneToMany(() => LandEntity, (land) => land.user)
-  frontendErrors: FrontendErrorEntity[];
+  frontendErrors: Relation<FrontendErrorEntity>[];
 
   @Column({
     type: 'int',
@@ -226,12 +224,10 @@ export class UserEntity {
   canAddLandComment: boolean;
 
   /** 객체가 생성된 날짜 */
-  @ApiProperty({ readOnly: true })
   @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
   createdAt: Date;
 
   /** 객체가 업데이트된 날짜 */
-  @ApiProperty({ readOnly: true })
   @UpdateDateColumn({ type: 'timestamp', comment: '객체가 업데이트된 날짜' })
   updatedAt: Date;
 }

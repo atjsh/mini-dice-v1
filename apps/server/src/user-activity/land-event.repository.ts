@@ -1,52 +1,52 @@
-import { PickType } from '@nestjs/swagger';
-import { EntityRepository, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UserActivityEntity } from './user-activity.entity';
 
-export class CreateUserActivityInputDto<
+export type CreateUserActivityInputDto<
   LandEventResult extends Record<string, any>,
-> extends PickType(UserActivityEntity, ['skillRoute', 'userId']) {
+> = Pick<UserActivityEntity, 'skillRoute' | 'userId'> & {
   skillDrawProps: LandEventResult;
-}
+};
 
-export class CreateUserActivityOutputDto extends PickType(UserActivityEntity, [
-  'id',
-  'skillDrawProps',
-  'skillRoute',
-  'userId',
-  'createdAt',
-]) {}
-
-export class SearchUserActivityByDateInputDto extends PickType(
+export type CreateUserActivityOutputDto = Pick<
   UserActivityEntity,
-  ['userId'],
-) {
+  'id' | 'skillDrawProps' | 'skillRoute' | 'userId' | 'createdAt'
+>;
+
+export type SearchUserActivityByDateInputDto = Pick<
+  UserActivityEntity,
+  'userId'
+> & {
   createdAtFrom: Date;
   createdAtTo: Date;
-}
+};
 
-export class SearchUserActivityByPageInputDto extends PickType(
+export type SearchUserActivityByPageInputDto = Pick<
   UserActivityEntity,
-  ['userId'],
-) {
+  'userId'
+> & {
   pageNo: number;
   pageSize: number;
-}
+};
 
-export class SearchUserActivityOutputDto extends PickType(UserActivityEntity, [
-  'id',
-  'skillDrawProps',
-  'skillRoute',
-  'userId',
-  'createdAt',
-]) {}
+export type SearchUserActivityOutputDto = Pick<
+  UserActivityEntity,
+  'id' | 'skillDrawProps' | 'skillRoute' | 'userId' | 'createdAt'
+>;
 
-@EntityRepository(UserActivityEntity)
-export class LandEventRepository extends Repository<UserActivityEntity> {
+@Injectable()
+export class LandEventRepository {
+  constructor(
+    @InjectRepository(UserActivityEntity)
+    private readonly userActivityRepository: Repository<UserActivityEntity>,
+  ) {}
+
   public async createLandEvent<LandEventResult extends Record<string, any>>(
     createUserActivityInputDto: CreateUserActivityInputDto<LandEventResult>,
   ): Promise<CreateUserActivityOutputDto> {
-    return await this.save(
-      this.create({
+    return await this.userActivityRepository.save(
+      this.userActivityRepository.create({
         ...createUserActivityInputDto,
         read: false,
       }),
@@ -56,7 +56,7 @@ export class LandEventRepository extends Repository<UserActivityEntity> {
   async searchByPage(
     searchUserActivityByPageInputDto: SearchUserActivityByPageInputDto,
   ): Promise<SearchUserActivityOutputDto[]> {
-    return await this.find({
+    return await this.userActivityRepository.find({
       where: {
         userId: searchUserActivityByPageInputDto.userId,
       },
@@ -75,7 +75,8 @@ export class LandEventRepository extends Repository<UserActivityEntity> {
     const date14daysAgo = new Date(
       createdAtFrom.getTime() - 14 * 24 * 60 * 60 * 1000,
     );
-    return await this.createQueryBuilder('userActivity')
+    return await this.userActivityRepository
+      .createQueryBuilder('userActivity')
       .where('userActivity.userId = :userId', { userId })
       .andWhere('userActivity.createdAt >= :createdAtFrom', {
         createdAtFrom:

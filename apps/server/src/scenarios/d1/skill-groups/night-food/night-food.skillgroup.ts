@@ -3,18 +3,21 @@ import {
   MessageResponseFactory,
   PlainMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-group-lib/skill-service-lib';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { D1ScenarioRoutes } from '../../routes';
-import { NightFoodService, PROFIT_STATUS } from './night-food.service';
+import { NightFoodService } from './night-food.service';
+import { PROFIT_STATUS } from './night-food.service';
 
 const nightFoodPlainMessageTitle = '야식';
 

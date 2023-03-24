@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { mapMovingDelayTimeMS } from '../../common/timing';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
-import { usePageTimeout } from '../skill-log-message/use-skill-log-messages.hook';
 import { currentSkillRouteAtom } from './current-skill-route.atom';
 
 function endlessSlice(arr: any[], from: number, to: number) {
@@ -50,8 +49,6 @@ export const MapStatusBar: React.FC = () => {
   const [isInitalized, setIsInitalized] = useState(false);
   const [left, setLeft] = useState(0);
   const [relativeMovingCount, setRelativeMovingCount] = useState(-1);
-  const { pushPageTimeout } = usePageTimeout();
-
   const [zoomedMap, setZoomedMap] = useState<MapBlock[]>([]);
 
   const measuredRef = useCallback((node) => {

@@ -129,7 +129,7 @@ export function RankingPage() {
                 >
                   24시간 순위
                 </button>
-                {/* <button
+                <button
                   onClick={() => {
                     setupdatedAtOffset(UPDATED_AT_OFFSET_7DAYS);
                     setPage(1);
@@ -138,8 +138,8 @@ export function RankingPage() {
                   className="hover:underline disabled:font-bold disabled:underline"
                 >
                   일주일 순위
-                </button> */}
-           {/*     <button
+                </button>
+                <button
                   onClick={() => {
                     setupdatedAtOffset(UPDATED_AT_OFFSET_ALLTIME);
                     setPage(1);
@@ -148,7 +148,7 @@ export function RankingPage() {
                   className="hover:underline disabled:font-bold disabled:underline"
                 >
                   전체 순위
-                </button> */}
+                </button>
               </div>
             </div>
             <div>
@@ -165,7 +165,10 @@ export function RankingPage() {
                 </button>
                 <button
                   onClick={() => setPage(page + 1)}
-                  disabled={page === 10 || othersProfiles?.length! < limit}
+                  disabled={
+                    page === 10 ||
+                    (othersProfiles && othersProfiles.length < limit)
+                  }
                   className="hover:underline disabled:text-gray-500"
                 >
                   다음 페이지

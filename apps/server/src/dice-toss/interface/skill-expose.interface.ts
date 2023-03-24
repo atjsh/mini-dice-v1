@@ -1,6 +1,5 @@
-import { SkillRouteType } from '@packages/scenario-routing';
-import {
-  LandCommentVo,
+import type { SkillRouteType } from '@packages/scenario-routing';
+import type {
   MessageResponseType,
   UserEntityJson,
 } from '@packages/shared-types';

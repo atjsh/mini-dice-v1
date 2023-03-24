@@ -1,10 +1,13 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { getSkillGroupPath, SkillRouteType } from '@packages/scenario-routing';
-import { SkillGroupMetadataKey } from '@packages/scenario-routing/constants';
-import { Cache } from 'cache-manager';
-import { SkillGroupController } from '../skill-group-controller-factory';
-import { SCENARIO_NAMES } from '../../scenarios/scenarios.constants';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import {
+  SkillGroupMetadataKey,
+  getSkillGroupPath,
+} from '@packages/scenario-routing';
+import type { Cache } from 'cache-manager';
+import type { SCENARIO_NAMES } from '../../scenarios/scenarios.constants';
+import type { SkillGroupController } from '../skill-group-controller-factory';
 
 const cacheKey = 'scenarios:map:';
 
@@ -22,7 +25,7 @@ export class SkillGroupAliasesService {
 
   private async setSkillGroupAliasesToCache(
     scenarioRoutes: SkillRouteType[],
-    scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
     const skillGroupAliases = await Promise.all(
       scenarioRoutes.map(async (skillRoute: SkillRouteType) => {
@@ -61,7 +64,7 @@ export class SkillGroupAliasesService {
 
   public async getSkillGroupAliases(
     scenarioRoutes: SkillRouteType[],
-    scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
     // const cachedSkillGroupAliases =
     //   await this.cacheManager.get<SkillGroupAliasesType>(
@@ -76,7 +79,7 @@ export class SkillGroupAliasesService {
   }
 
   public async invalidateSkillGroupAliasesCache(
-    scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<void> {
     await this.cacheManager.del(`${cacheKey}${scenarioName}`);
   }

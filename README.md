@@ -34,7 +34,7 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
 
 ### Tooling
 
-- Yarn Workspace (Yarn Classic) 사용, Lerna 사용 (기본 제공 커맨드 외 커맨드는 사용 지양)
+- Yarn Berry with PnP
 - Prettier, ESLint 사용
 - @apps/server
   - NestJS CLI로 빌드 / 실행
@@ -43,7 +43,7 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
 
 ## Contributors
 
-이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key))
 
 <table>
   <tr>

@@ -1,9 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import type { FastifyReply } from 'fastify';
 import { RefreshTokenService } from '../auth/local-jwt/refresh-token/refresh-token.service';
 import { HCaptchaService } from '../h-captcha/h-captcha.service';
 import { UserService } from '../user/user.service';
-import { TemporarySignUpDto } from './temp-signup.controller';
+import type { TemporarySignUpDto } from './temp-signup.controller';
 
 @Injectable()
 export class TempSignupService {

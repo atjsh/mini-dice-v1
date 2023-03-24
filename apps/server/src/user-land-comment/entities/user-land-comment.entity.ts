@@ -1,5 +1,4 @@
-import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
-import { UserIdType } from '@packages/shared-types';
+import type { UserIdType } from '@packages/shared-types';
 import {
   Column,
   CreateDateColumn,
@@ -8,15 +7,15 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 import { UserEntity } from '../../user/entity/user.entity';
 
 const SEARCH_BY_LAND_ID_PAGED_INDEX_NAME = 'land_id_date';
 
-@Entity()
+@Entity({ name: 'user_land_comment_entity' })
 @Index(SEARCH_BY_LAND_ID_PAGED_INDEX_NAME, ['landId', 'date'])
 export class UserLandCommentEntity {
-  @ApiProperty({ readOnly: true })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,12 +26,11 @@ export class UserLandCommentEntity {
   })
   userId: UserIdType;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user: Relation<UserEntity>;
 
   @Column({ nullable: false })
   landId: string;

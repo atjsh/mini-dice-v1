@@ -1,9 +1,15 @@
-import { ApiHideProperty } from '@nestjs/swagger';
-import { UserIdType } from '@packages/shared-types';
-import { UserEntity } from 'apps/server/src/user/entity/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import type { UserIdType } from '@packages/shared-types';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  type Relation,
+} from 'typeorm';
+import { UserEntity } from '../../../../../user/entity/user.entity';
 
-@Entity()
+@Entity({ name: 'land_entity' })
 export class LandEntity {
   @PrimaryColumn({
     nullable: false,
@@ -23,13 +29,12 @@ export class LandEntity {
   })
   userId: UserIdType | null;
 
-  @ApiHideProperty()
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
     eager: true,
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity | null;
+  user: Relation<UserEntity> | null;
 
   @Column({
     nullable: false,

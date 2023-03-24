@@ -1,15 +1,15 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import type { SkillRouteType } from '@packages/scenario-routing';
 import {
   getSkillRouteFromPath,
   getSkillRoutePath,
-  SkillRouteType,
 } from '@packages/scenario-routing';
-import { MessageResponseType } from '@packages/shared-types';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { UserInteractionOutputDto } from '../dice-toss/interface';
+import type { MessageResponseType } from '@packages/shared-types';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserInteractionOutputDto } from '../dice-toss/interface';
 import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
 import { SkillLogService } from '../skill-log/skill-log.service';
-import { InteractionUserActivity } from '../skill-log/types/user-activity.dto';
+import type { InteractionUserActivity } from '../skill-log/types/user-activity.dto';
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
 import { UserActivityService } from '../user-activity/user-activity.service';
 import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';

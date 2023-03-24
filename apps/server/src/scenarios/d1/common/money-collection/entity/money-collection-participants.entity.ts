@@ -1,5 +1,4 @@
-import { UserIdType } from '@packages/shared-types';
-import { UserEntity } from 'apps/server/src/user/entity/user.entity';
+import type { UserIdType } from '@packages/shared-types';
 import {
   Column,
   Entity,
@@ -7,9 +6,11 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
+import { UserEntity } from '../../../../../user/entity/user.entity';
 
-@Entity()
+@Entity({ name: 'money_collection_participants_entity' })
 export class MoneyCollectionParticipantsEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -31,5 +32,5 @@ export class MoneyCollectionParticipantsEntity {
     eager: true,
   })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity | null;
+  user: Relation<UserEntity | null>;
 }

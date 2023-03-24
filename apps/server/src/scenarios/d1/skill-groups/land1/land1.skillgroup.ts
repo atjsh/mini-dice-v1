@@ -1,22 +1,24 @@
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  SkillGroup,
-  Skill,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
-  SkillDraw,
   MethodReturnType,
   SkillPropsType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
+} from '../../../../skill-group-lib/skill-service-lib';
 import {
+  Skill,
+  SkillDraw,
+  SkillGroup,
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import type { CommonLandServiceSubmitParamType } from '../../common';
 import {
-  getCommonLandSkillGroupAlias,
   commonLandSkillGroupWebIndexDraw,
-  CommonLandServiceSubmitParamType,
   commonLandSkillGroupWebSubmitDraw,
+  getCommonLandSkillGroupAlias,
 } from '../../common';
 import { D1ScenarioRoutes } from '../../routes';
 import { Land1Service } from './land1.service';

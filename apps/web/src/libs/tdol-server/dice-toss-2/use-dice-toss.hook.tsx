@@ -29,7 +29,7 @@ function getDelayClosure() {
 }
 
 export const useDiceToss = () => {
-  const [diceTossActivityStatus, setDiceTossActivityStatus] = useRecoilState(
+  const [, setDiceTossActivityStatus] = useRecoilState(
     diceTossActivityStatusAtom,
   );
   const { addSkillLogMessages } = useSkillLogMessages();

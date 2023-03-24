@@ -32,9 +32,9 @@ const ValueDisplay: React.FC<{
   </div>
 );
 
-const ValueDisplayContainer: React.FC = ({ children }) => (
-  <div className="flex gap-4">{children}</div>
-);
+const ValueDisplayContainer: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className="flex gap-4">{children}</div>;
 
 export const WalletWidget: React.FC = () => {
   const { data: user } = useUser();

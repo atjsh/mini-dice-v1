@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserIdType } from '@packages/shared-types';
-import { Repository } from 'typeorm';
+import type { UserIdType } from '@packages/shared-types';
+import type { Repository } from 'typeorm';
 import { MoneyCollectionParticipantsEntity } from './entity/money-collection-participants.entity';
 
 export enum MoneyCollectionIdEnum {

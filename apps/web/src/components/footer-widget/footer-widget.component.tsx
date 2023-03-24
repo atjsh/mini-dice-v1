@@ -165,13 +165,13 @@ export const FooterWidgetComponent: React.FC = () => {
       <div className="text-gray-400">
         클라이언트 버전:{' '}
         {strEllipsis(
-          process.env.VERCEL_GIT_COMMIT_SHA ||
-            process.env.BUILD_VERSION ||
+          import.meta.env.VITE_VERCEL_GIT_COMMIT_SHA ||
+            import.meta.env.VITE_BUILD_VERSION ||
             'unknown',
           6,
           '+',
         )}
-        {process.env.WEB_VERSION_KIND || 'unknown'} -{' '}
+        {import.meta.env.VITE_WEB_VERSION_KIND || 'unknown'} -{' '}
         <a
           href="/"
           className=" underline hover:text-black hover:dark:text-white"

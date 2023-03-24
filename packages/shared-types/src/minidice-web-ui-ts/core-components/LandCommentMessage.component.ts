@@ -1,4 +1,4 @@
-import { LandCommentVo } from '@packages/shared-types/land-comment/land-comment.vo';
+import { LandCommentVo } from '../../land-comment/land-comment.vo';
 import { BaseMessage } from './Message.base.component';
 
 export class LandCommentsMessageType implements BaseMessage {

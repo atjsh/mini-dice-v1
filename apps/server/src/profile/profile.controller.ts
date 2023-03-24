@@ -8,16 +8,14 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import {
+import type {
   CompleteSignupUserDto,
   UpdateUserDto,
   UserVo,
 } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { USER_PROFILE_APIS } from '../common';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
 import { PublicProfileService } from './profile.service';
@@ -37,7 +35,6 @@ class PageDto {
   updatedAfter?: Date;
 }
 
-@ApiTags(USER_PROFILE_APIS)
 @Controller('profile')
 export class PublicProfileController {
   constructor(

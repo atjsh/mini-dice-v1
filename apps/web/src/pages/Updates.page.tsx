@@ -1,8 +1,8 @@
+import { formatDistance } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { IndexPageURL } from './routes';
-import { formatDistance } from 'date-fns';
-import { ko } from 'date-fns/locale';
 
 const Entry: React.FC<{
   emoji?: string;
@@ -10,7 +10,7 @@ const Entry: React.FC<{
   author: string;
   date: Date;
   updates: string[];
-}> = ({ emoji, title, author, date, updates }) => {
+}> = ({ emoji, title, date, updates }) => {
   return (
     <div className=" border-b-zinc-500 border-b py-6 last:border-b-0 flex flex-col">
       <div className=" text-7xl">{emoji}</div>
@@ -26,9 +26,9 @@ const Entry: React.FC<{
         })}
         )
       </p>
-      <ul className="list-disc ml-10">
+      <ul className="list-disc ml-10 leading-10">
         {updates.map((update) => (
-          <li key={update}>{update}</li>
+          <li key={update} dangerouslySetInnerHTML={{ __html: update }}></li>
         ))}
       </ul>
     </div>
@@ -134,6 +134,18 @@ const entries: {
     date: new Date('2022-07-03T00:00:00+09:00'),
     author: 'ATJSH',
     updates: ['칸에 도착했을 때, 이제 댓글을 달 수 있습니다.'],
+  },
+  {
+    emoji: '🌏',
+    title: '공식 서비스가 곧 출시됩니다.',
+    date: new Date('2023-03-25T00:00:00+09:00'),
+    author: 'ATJSH',
+    updates: [
+      '공식 서비스는 <a class="font-bold underline" href="https://www.mini-dice.com">www.mini-dice.com</a>에서, 베타 서비스는 <a class="font-bold underline" href="https://beta.mini-dice.com">beta.mini-dice.com</a>에서 접속할 수 있습니다.',
+      '베타 서비스에서 사용하던 구글 계정은 공식 서비스에서도 그대로 사용 가능합니다. 베타 서비스에서 사용하던 "바로 시작" 계정은 구글 계정과 연결해야 공식 서비스에서 사용할 수 있습니다. ',
+      '베타 서비스 계정의 이메일 연동은 <a class="font-bold underline" href="https://accounts.google.com/o/oauth2/v2/auth?client_id=445176763040-5ovst5gjp3kco6g39kifnbpgvl5j7nrj.apps.googleusercontent.com&redirect_uri=https://beta-server.mini-dice.com/auth/google-oauth/aHR0cHM6Ly9iZXRhLm1pbmktZGljZS5jb20=&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value">이 링크를 누르면 바로 진행됩니다.</a>',
+      '문의사항이 있으신 경우 <a class="font-bold underline" href="https://discord.gg/2dhUGXwmBq">디스코드</a>나 <a class="font-bold underline" href="mailto:lifegame2021team@gmail.com">이메일 주소</a>로 문의를 남겨주세요. 계정 연동을 도와드리겠습니다.',
+    ],
   },
 ].reverse();
 

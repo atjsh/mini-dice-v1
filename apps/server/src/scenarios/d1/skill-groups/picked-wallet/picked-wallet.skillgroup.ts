@@ -3,22 +3,22 @@ import {
   MessageResponseFactory,
   PlainMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-group-lib/skill-service-lib';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import {
-  PickedWalletService,
-  PickedWalletEventEnum,
-} from './picked-wallet.service';
+import { PickedWalletService } from './picked-wallet.service';
+import { PickedWalletEventEnum } from './picked-wallet.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.pickedWallet)
 export class PickedWalletSkillGroup implements SkillGroupController {

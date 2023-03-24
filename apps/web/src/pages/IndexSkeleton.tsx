@@ -1,7 +1,4 @@
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { ServiceLayout } from '../layouts/service.layout';
 
 export function IndexSkeletonPage() {

@@ -1,5 +1,5 @@
-import { NotificationMessageType } from '@packages/shared-types';
-import {
+import type { NotificationMessageType } from '@packages/shared-types';
+import type {
   DiceUserActivity,
   GameStartUserAcitvity,
   InteractionUserActivity,

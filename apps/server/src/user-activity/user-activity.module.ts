@@ -8,11 +8,11 @@ import { UserActivityService } from './user-activity.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserActivityEntity, LandEventRepository]),
+    TypeOrmModule.forFeature([UserActivityEntity]),
     ScenarioRouteCallModule,
   ],
-  providers: [UserActivityService],
+  providers: [UserActivityService, LandEventRepository],
   controllers: [LandEventController],
-  exports: [UserActivityService],
+  exports: [UserActivityService, LandEventRepository],
 })
 export class UserActivityModule {}

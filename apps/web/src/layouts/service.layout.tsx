@@ -1,10 +1,10 @@
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 import { HealthCheckComponent } from '../components/health-check/health-check.component';
 
-export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
-  children,
-  hideFooter,
-}) => (
+export const ServiceLayout: React.FC<{
+  hideFooter?: boolean;
+  children: React.ReactNode;
+}> = ({ children, hideFooter }) => (
   <>
     <HealthCheckComponent />
     <div className="flex flex-col gap-14 md:mt-28 mt-14 mx-auto">

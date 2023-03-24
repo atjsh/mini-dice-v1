@@ -1,9 +1,7 @@
 import { Controller, Post, Res, Req, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyRequest, FastifyReply } from 'fastify';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 
-@ApiTags('로그아웃 (delete RefreshToken)')
 @Controller('auth/logout')
 export class LocalJwtController {
   constructor(private refreshTokenService: RefreshTokenService) {}
@@ -13,10 +11,11 @@ export class LocalJwtController {
     @Res({ passthrough: true }) response: FastifyReply,
     @Req() req: FastifyRequest,
   ) {
-    await this.refreshTokenService.deleteRefreshToken(
-      response,
-      req.cookies['refreshToken'],
-    );
+    req.cookies['refreshToken'] &&
+      (await this.refreshTokenService.deleteRefreshToken(
+        response,
+        req.cookies['refreshToken'],
+      ));
     return {
       success: true,
     };
@@ -27,10 +26,11 @@ export class LocalJwtController {
     @Res({ passthrough: true }) response: FastifyReply,
     @Req() req: FastifyRequest,
   ) {
-    await this.refreshTokenService.deleteRefreshToken(
-      response,
-      req.cookies['refreshToken'],
-    );
+    req.cookies['refreshToken'] &&
+      (await this.refreshTokenService.deleteRefreshToken(
+        response,
+        req.cookies['refreshToken'],
+      ));
     return {
       success: true,
     };

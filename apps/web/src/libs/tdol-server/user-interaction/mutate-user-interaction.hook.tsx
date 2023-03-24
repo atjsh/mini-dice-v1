@@ -11,28 +11,17 @@ import {
   UseUserHookKey,
 } from '..';
 import { queryClient } from '../../..';
-import {
-  getSkillLogMessageAddingDelayTiming,
-  sleep,
-} from '../../../common/timing';
+import { getSkillLogMessageAddingDelayTiming } from '../../../common/timing';
 import {
   usePageTimeout,
   useSkillLogMessages,
 } from '../../../components/skill-log-message/use-skill-log-messages.hook';
 
-function getDelayClosure() {
-  let delay = 0;
-  return function closure(addingDelay: number) {
-    delay += addingDelay;
-    return delay;
-  };
-}
-
 export const useSubmitUserInteraction = (
   onErrorCallback?: (error: unknown) => any,
 ) => {
   const { addSkillLogMessages } = useSkillLogMessages();
-  const [diceTossActivityStatus, setDiceTossActivityStatus] = useRecoilState(
+  const [, setDiceTossActivityStatus] = useRecoilState(
     diceTossActivityStatusAtom,
   );
   const { pushPageTimeout } = usePageTimeout();

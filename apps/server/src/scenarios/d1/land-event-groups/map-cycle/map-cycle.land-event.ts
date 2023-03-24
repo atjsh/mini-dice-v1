@@ -1,16 +1,16 @@
 import { Injectable, Module } from '@nestjs/common';
-import { cashLocale, NotificationMessage } from '@packages/shared-types';
+import { NotificationMessage, cashLocale } from '@packages/shared-types';
+import * as _ from 'lodash';
 import {
   LandEventDraw,
   LandEventsSummarize,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import {
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   LandEventDrawPropsType,
   LandEventDrawResultType,
   LandEventsSummarizePropsType,
   LandEventsSummarizeResultType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import * as _ from 'lodash';
+} from '../../../../skill-log/types/skill-draw-props.dto';
 import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 

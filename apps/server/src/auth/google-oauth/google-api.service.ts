@@ -1,10 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
-import { lastValueFrom } from 'rxjs';
-import { stringify } from 'qs';
-import { GoogleUser } from './class/google-user.class';
 import { ConfigService } from '@nestjs/config';
+import { plainToClass } from 'class-transformer';
+import { stringify } from 'querystring';
+import { lastValueFrom } from 'rxjs';
+import { GoogleUser } from './class/google-user.class';
+import { ENV_KEYS } from '../../config/enviorment-variable-config';
 
 @Injectable()
 export class GoogleApiService {
@@ -32,10 +33,14 @@ export class GoogleApiService {
         'https://oauth2.googleapis.com/token',
         stringify({
           code: authCode,
-          client_id: this.configService.get('GOOGLE_OAUTH_CLIENT_ID'),
-          client_secret: this.configService.get('GOOGLE_OAUTH_CLILENT_SECRET'),
-          redirect_uri: `${this.configService.get(
-            'SERVER_URL',
+          client_id: this.configService.getOrThrow(
+            ENV_KEYS.GOOGLE_OAUTH_CLIENT_ID,
+          ),
+          client_secret: this.configService.getOrThrow(
+            ENV_KEYS.GOOGLE_OAUTH_CLIENT_SECRET,
+          ),
+          redirect_uri: `${this.configService.getOrThrow(
+            ENV_KEYS.SERVER_URL,
           )}/auth/google-oauth/${websiteUrl}`,
           grant_type: 'authorization_code',
         }),

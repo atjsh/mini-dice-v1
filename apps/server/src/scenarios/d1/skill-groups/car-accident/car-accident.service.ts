@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
 import {
   calcRandomCashChangeEvent,
-  DynamicValueEventCase,
   selectEventCaseRandomly,
-} from 'apps/server/src/common/random/event-case-processing';
-import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
-import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserService } from 'apps/server/src/user/user.service';
+} from '../../../../common/random/event-case-processing';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 

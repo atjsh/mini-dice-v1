@@ -1,4 +1,5 @@
-import { getScenarioRoute, SkillRouteType } from '@packages/scenario-routing';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import { getScenarioRoute } from '@packages/scenario-routing';
 import { IndexSkill } from '../../skill-group-lib/constants';
 import { SCENARIO_NAMES } from '../scenarios.constants';
 

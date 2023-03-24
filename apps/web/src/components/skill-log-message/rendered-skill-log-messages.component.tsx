@@ -10,9 +10,12 @@ import {
   PlainMessageType,
   UserActivityMessageType,
 } from '@packages/shared-types';
+import { formatDistance } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
+import { mutateUserLandComment, useUser } from '../../libs';
 import {
   DiceTossActivityEnum,
   diceTossActivityStatusAtom,
@@ -20,9 +23,6 @@ import {
 import { useSubmitUserInteraction } from '../../libs/tdol-server/user-interaction';
 import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
-import { formatDistance } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { mutateUserLandComment, useUser } from '../../libs';
 
 const MessageWidth = 'w-max min-w ';
 const MessageCommon = `${MessageWidth} my-0.5 md:my-1 leading-7 `;
@@ -554,7 +554,7 @@ const LandCommentsMessage: React.FC<{
             <div className=" break-all">{thisComment}</div>
           </div>
         )}
-        {landComments.map((landComment, index) => (
+        {landComments.map((landComment) => (
           <div className=" flex gap-x-5">
             <div className=" opacity-50">{landComment.username}</div>
             <div className=" break-all">{landComment.comment}</div>
@@ -701,7 +701,7 @@ const RenderedSkillLogMessage: React.FC<{
   );
 };
 
-export const RenderedSkillLogMessages: React.FC<{}> = () => {
+export const RenderedSkillLogMessages: React.FC = () => {
   const skillLogMessages = useRecoilValue(skillLogMessagesState);
 
   const lastSkillLogId =

@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SkillRouteType } from '@packages/scenario-routing';
-import { UserIdType } from '@packages/shared-types';
-import {
-  calcRandomCashChangeEvent,
-  DynamicValueEventCase,
-} from 'apps/server/src/common/random/event-case-processing';
-import { DiceTossService } from 'apps/server/src/dice-toss/dice-toss.service';
-import { UserService } from 'apps/server/src/user/user.service';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import type { UserIdType } from '@packages/shared-types';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { randomUUID } from 'crypto';
 import { sign as signJWT, verify as verifyJWT } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
+import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
+import { calcRandomCashChangeEvent } from '../../../../common/random/event-case-processing';
+import { ENV_KEYS } from '../../../../config/enviorment-variable-config';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
@@ -85,7 +84,7 @@ export class CommonMinigameService {
   signMinigameHistory(minigameHistory: MinigameHistory): string {
     return signJWT(
       instanceToPlain(minigameHistory),
-      this.configService.get('JWT_SECRET')!,
+      this.configService.getOrThrow(ENV_KEYS.JWT_SECRET),
     );
   }
 
@@ -94,13 +93,13 @@ export class CommonMinigameService {
       MinigameHistory,
       verifyJWT(
         signedMinigameHistory,
-        this.configService.get('JWT_SECRET')!,
+        this.configService.getOrThrow(ENV_KEYS.JWT_SECRET),
       ) as MinigameHistory,
     );
   }
 
   createMinigameHistory(): MinigameHistory {
-    return new MinigameHistory(0, uuidv4());
+    return new MinigameHistory(0, randomUUID());
   }
 
   getGameResult() {

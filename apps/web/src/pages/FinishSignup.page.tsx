@@ -4,11 +4,8 @@ import {
   CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { Link, Navigate } from 'react-router-dom';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useCompleteSignup } from '../libs';
 import {
@@ -62,7 +59,7 @@ function UserCompleteSignupForm() {
   };
 
   return success ? (
-    <Redirect to={ServicePageURL} push={false} />
+    <Navigate to={ServicePageURL} replace />
   ) : (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">

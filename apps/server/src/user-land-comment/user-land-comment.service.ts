@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import type { SkillRoutePath } from '@packages/scenario-routing';
 import {
   getSkillGroupPath,
   getSkillRouteFromPath,
-  SkillRoutePath,
 } from '@packages/scenario-routing';
-import { LandCommentVo, UserIdType } from '@packages/shared-types';
-import { Repository } from 'typeorm';
+import type { LandCommentVo, UserIdType } from '@packages/shared-types';
+import type { Repository } from 'typeorm';
 import { SkillLogService } from '../skill-log/skill-log.service';
 import { UserService } from '../user/user.service';
 import { UserLandCommentEntity } from './entities/user-land-comment.entity';

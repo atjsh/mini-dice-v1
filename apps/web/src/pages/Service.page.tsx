@@ -53,13 +53,9 @@ export function Ingame({
   const mutation = useDiceToss();
   const { data: skillLogs } = useSkillLogs();
   const { initSkillLogMessages } = useSkillLogMessages();
-  const [currentSkillRoute, setCurrentSkillRoute] = useRecoilState(
-    currentSkillRouteAtom,
-  );
+  const [, setCurrentSkillRoute] = useRecoilState(currentSkillRouteAtom);
   const { pageTimeouts } = usePageTimeout();
-  const [diceTossActivity, setDiceTossActivity] = useRecoilState(
-    diceTossActivityStatusAtom,
-  );
+  const [, setDiceTossActivity] = useRecoilState(diceTossActivityStatusAtom);
 
   useEffect(() => {
     pageTimeouts.map(clearTimeout);
