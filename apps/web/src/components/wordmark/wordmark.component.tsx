@@ -10,7 +10,10 @@ export const WordmarkComponent: React.FC<{ colored?: boolean }> = ({
     >
       {' '}
       Dice
-    </span>
+    </span>{' '}
+    {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
+      <span className=" font-light">Beta</span>
+    )}
   </>
 );
 
@@ -26,6 +29,8 @@ export const KoreanWordmarkComponent: React.FC<{ colored?: boolean }> = ({
     >
       인생게임
     </span>{' '}
-    <span className="font-light">베타</span>
+    {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
+      <span className="font-light">베타</span>
+    )}
   </>
 );
