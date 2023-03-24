@@ -33,6 +33,12 @@ jobs:
             --query 'Parameters[0].Value' \
             --output text > apps/server/.env
 
+      - name: Download and create slsconfig.yml file from AWS SSM
+        run: |
+          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_SERVER_TESTING_SLS_CONFIG_SSM }} \
+            --query 'Parameters[0].Value' \
+            --output text > apps/server/slsconfig.yml
+
       - name: Build the app
         run: |
           yarn packages:build
