@@ -4,6 +4,6 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   @Get('')
   root(): string {
-    return 'lifegame2021team@gmail.com';
+    return 'contact: lifegame2021team@gmail.com';
   }
 }

@@ -1,0 +1,44 @@
+name: '@apps/server (Testing) - Build and Deploy to AWS Lambda'
+
+on:
+  push:
+    branches:
+      - 'serverless-framework'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_SF }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_SF }}
+          aws-region: ap-northeast-2
+
+      - name: Download and create App .env file from AWS SSM
+        run: |
+          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_SERVER_TESTING_APP_ENV_SSM }} \
+            --query 'Parameters[0].Value' \
+            --output text > apps/server/.env
+
+      - name: Build the app
+        run: |
+          yarn packages:build
+          yarn server:typecheck && yarn server:build
+
+      - name: Deploy to AWS with Serverless Framework
+        run: |
+          cd apps/server
+          yarn g:serverless deploy

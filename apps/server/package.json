@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "yarn g:serverless offline",
-    "typecheck": "yarn g:tsc --noEmit --watch"
+    "typecheck": "yarn g:tsc --noEmit",
+    "typecheck:watch": "yarn g:tsc --noEmit --watch"
   },
   "dependencies": {
     "@fastify/aws-lambda": "^3.2.0",

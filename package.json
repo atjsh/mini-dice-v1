@@ -20,7 +20,9 @@
     "packages:watch": "yarn workspaces foreach -pvi --from '@packages/*' run watch",
     "server:dev": "yarn workspace @apps/server run dev",
     "server:build": "yarn workspace @builders/server build",
+    "server:build:watch": "yarn workspace @builders/server watch",
     "server:typecheck": "yarn workspace @apps/server run typecheck",
+    "server:typecheck:watch": "yarn workspace @apps/server run typecheck:watch",
     "web": "yarn workspace @apps/web"
   },
   "packageManager": "yarn@3.5.0",
