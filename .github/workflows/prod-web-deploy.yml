@@ -3,7 +3,7 @@ name: '@apps/web (Prod) - Build and Deploy to CloudFlare Pages'
 on:
   push:
     branches:
-      - 'serverless-framework'
+      - develop
 
 jobs:
   deploy:
