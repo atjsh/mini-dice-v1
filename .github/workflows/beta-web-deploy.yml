@@ -1,9 +1,9 @@
-name: '@apps/web (Testing) - Build and Deploy to CloudFlare Pages'
+name: '@apps/web (Beta) - Build and Deploy to CloudFlare Pages'
 
 on:
   push:
     branches:
-      - 'serverless-framework'
+      - 'develop'
 
 jobs:
   deploy:
@@ -29,7 +29,7 @@ jobs:
 
       - name: Download and create App .env file from AWS SSM
         run: |
-          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_APP_ENV_SSM }} \
+          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_BETA_APP_ENV_SSM }} \
             --query 'Parameters[0].Value' \
             --output text > apps/web/.env
 
@@ -43,6 +43,6 @@ jobs:
         with:
           apiToken: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_PAGES_PROJECT_NAME }}
+          projectName: ${{ secrets.MINI_DICE_WEB_BETA_CLOUDFLARE_PAGES_PROJECT_NAME }}
           directory: apps/web/dist
           branch: main
