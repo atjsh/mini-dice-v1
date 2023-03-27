@@ -43,4 +43,4 @@ jobs:
           accountId: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_PAGES_PROJECT_NAME }}
           directory: apps/web/dist
-          branch: production
+          branch: serverless-framework
