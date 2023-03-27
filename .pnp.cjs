@@ -2862,7 +2862,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@packages/shared-types", "workspace:packages/shared-types"],\
             ["class-transformer", "npm:0.5.1"],\
-            ["class-validator", "npm:0.13.2"]\
+            ["class-validator", "npm:0.14.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -5009,15 +5009,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["class-validator", [\
-        ["npm:0.13.2", {\
-          "packageLocation": "./.yarn/cache/class-validator-npm-0.13.2-915206252c-0deb4c29fa.zip/node_modules/class-validator/",\
-          "packageDependencies": [\
-            ["class-validator", "npm:0.13.2"],\
-            ["libphonenumber-js", "npm:1.9.52"],\
-            ["validator", "npm:13.7.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:0.14.0", {\
           "packageLocation": "./.yarn/cache/class-validator-npm-0.14.0-b600d5fe72-f62e4a0ad2.zip/node_modules/class-validator/",\
           "packageDependencies": [\
@@ -8534,13 +8525,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/libphonenumber-js-npm-1.10.24-9927ce085f-a79d98d398.zip/node_modules/libphonenumber-js/",\
           "packageDependencies": [\
             ["libphonenumber-js", "npm:1.10.24"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:1.9.52", {\
-          "packageLocation": "./.yarn/cache/libphonenumber-js-npm-1.9.52-0e269476dc-d7856fd674.zip/node_modules/libphonenumber-js/",\
-          "packageDependencies": [\
-            ["libphonenumber-js", "npm:1.9.52"]\
           ],\
           "linkType": "HARD"\
         }]\

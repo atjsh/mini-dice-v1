@@ -1,9 +1,7 @@
 name: '@apps/web (Testing) - Build and Deploy to CloudFlare Pages'
 
 on:
-  push:
-    branches:
-      - workflow_dispatch
+  - workflow_dispatch
 
 jobs:
   deploy:
