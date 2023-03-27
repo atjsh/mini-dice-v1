@@ -31,6 +31,12 @@ jobs:
             --query 'Parameters[0].Value' \
             --output text > apps/web/.env
 
+      - name: Download and create ads.txt file from AWS SSM
+        run: |
+          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_COMMON_ADS_TXT_SSM }} \
+            --query 'Parameters[0].Value' \
+            --output text > apps/web/public/ads.txt
+
       - name: Build the app
         run: |
           yarn packages:build

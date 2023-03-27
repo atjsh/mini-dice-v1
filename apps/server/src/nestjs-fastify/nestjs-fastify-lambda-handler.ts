@@ -6,7 +6,6 @@ import type {
   Context,
 } from 'aws-lambda';
 import { initNestJSFastifyApp } from './init-nestjs-fastify-app';
-import { config } from 'dotenv';
 
 export function getNestJSFastifyAppLambdaHandler<T>(appModuleClass: T) {
   let cachedLambdaHandler: PromiseHandler;
@@ -15,8 +14,6 @@ export function getNestJSFastifyAppLambdaHandler<T>(appModuleClass: T) {
     event: APIGatewayProxyEvent,
     context: Context,
   ): Promise<APIGatewayProxyResult> => {
-    config();
-
     if (!cachedLambdaHandler) {
       cachedLambdaHandler = awsLambdaFastify(
         await initNestJSFastifyApp(appModuleClass),

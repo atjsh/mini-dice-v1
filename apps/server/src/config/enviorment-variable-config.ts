@@ -23,6 +23,8 @@ export const ENV_KEYS = {
 
   GOOGLE_OAUTH_CLIENT_ID: 'GOOGLE_OAUTH_CLIENT_ID',
   GOOGLE_OAUTH_CLIENT_SECRET: 'GOOGLE_OAUTH_CLIENT_SECRET',
+
+  ADS_TXT: 'ADS_TXT',
 };
 
 const envFileValidationSchema = Joi.object(

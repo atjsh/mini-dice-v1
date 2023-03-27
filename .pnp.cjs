@@ -142,7 +142,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cache-manager-redis-yet", "npm:4.1.1"],\
             ["class-transformer", "npm:0.5.1"],\
             ["class-validator", "npm:0.14.0"],\
-            ["dotenv", "npm:16.0.3"],\
             ["fastify", "npm:4.14.1"],\
             ["joi", "npm:17.8.4"],\
             ["jsonwebtoken", "npm:9.0.0"],\

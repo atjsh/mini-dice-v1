@@ -1,8 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import type { Repository } from 'typeorm';
+import { ENV_KEYS } from '../../config/enviorment-variable-config';
 import { UserEntity } from '../../user/entity/user.entity';
 import type { UserJwtDto } from './access-token/dto/user-jwt.dto';
 
@@ -11,11 +13,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private configService: ConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: configService.getOrThrow(ENV_KEYS.JWT_SECRET),
     });
   }
 

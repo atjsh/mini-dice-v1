@@ -189,4 +189,8 @@ dist
 
 slsconfig.yml
 
+### Google AdSense ###
+
+ads.txt
+
 # End of https://www.toptal.com/developers/gitignore/api/node,direnv,yarn,macos,serverless
