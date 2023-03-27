@@ -1,0 +1,48 @@
+name: '@apps/web (Testing) - Build and Deploy to CloudFlare Pages'
+
+on:
+  push:
+    branches:
+      - workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Download and create App .env file from AWS SSM
+        run: |
+          aws ssm get-parameters --with-decryption --names ${{ secrets.MINI_DICE_WEB_TESTING_APP_ENV_SSM }} \
+            --query 'Parameters[0].Value' \
+            --output text > apps/web/.env
+
+      - name: Build the app
+        run: |
+          yarn packages:build
+          yarn web build
+
+      - name: Configure CloudFlare credentials
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.MINI_DICE_WEB_TESTING_CLOUDFLARE_PAGES_PROJECT_NAME }}
+          directory: apps/web/dist
+          branch: main

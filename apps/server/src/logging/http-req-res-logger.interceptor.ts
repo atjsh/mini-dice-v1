@@ -1,13 +1,12 @@
-import {
+import type {
   CallHandler,
   ExecutionContext,
-  Injectable,
-  Logger,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Injectable, Logger } from '@nestjs/common';
+import type { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Http 요청/응답 간 주고받은 데이터를 로깅하는 인터셉터.
@@ -20,7 +19,7 @@ export class HttpRequestResponseLoggingInterceptor implements NestInterceptor {
     const ctx = context.switchToHttp();
     const req = ctx.getRequest();
     const now = Date.now();
-    const requestId = uuidv4();
+    const requestId = randomUUID();
 
     const controllerName = context.getClass().name || 'UnnamedController';
     const handlerName = context.getHandler().name || 'UnnamedHandler';

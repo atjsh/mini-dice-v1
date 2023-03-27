@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom';
-import { HealthCheckComponent } from '../components/health-check/health-check.component';
-import {
-  KoreanWordmarkComponent,
-  WordmarkComponent,
-} from '../components/wordmark/wordmark.component';
+import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useQueryString } from '../libs';
-import { TempSignupPageURL } from './routes';
+import { TempSignupPageURL, UpdatesPageURL } from './routes';
+import { NewestEntrySummary } from './Updates.page';
 
 export function IndexPage() {
   const loginRequired = useQueryString().get('loginRequired') === 'true';
@@ -18,25 +15,30 @@ export function IndexPage() {
         <div className="text-center">
           <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
-            <h1 className="text-5xl font-bold">
-              <KoreanWordmarkComponent />
-            </h1>
-            <h2 className="text-3xl font-bold">
+            <h1 className="text-4xl md:text-6xl font-extrabold">
               <WordmarkComponent />
-            </h2>
-            <HealthCheckComponent />
+            </h1>
 
-            <h2 className=" self-center mt-5 text-xl">
+            <h2 className=" self-center mt-5 text-base md:text-xl">
               {loginRequired ? (
                 '계속하려면 로그인하세요.'
               ) : (
                 <>
-                  주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 랭킹에
+                  주사위를 굴리며 맵을 모험하고 <br /> 코인을 벌어 순위에
                   오르세요.
                 </>
               )}
             </h2>
           </div>
+        </div>
+        <div className=" text-center">
+          <Link
+            to={UpdatesPageURL}
+            className=" hover:underline py-2 px-5 md:py-3 md:px-7 text-base md:text-lg border border-zinc-500 rounded-full inline-block w-fit "
+          >
+            <div className=" text-xs">새로운 소식</div>
+            <NewestEntrySummary />
+          </Link>
         </div>
         <div className=" flex flex-col text-center gap-5">
           <div>

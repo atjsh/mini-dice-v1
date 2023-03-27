@@ -14,7 +14,13 @@ export enum DiceTossActivityEnum {
   ResultShowing,
 }
 
-export const diceTossActivityStatusAtom = atom({
+export const diceTossActivityStatusAtom = atom<{
+  enum: DiceTossActivityEnum;
+  reason: string | null;
+}>({
   key: 'diceTossActivity',
-  default: DiceTossActivityEnum.Idle,
+  default: {
+    enum: DiceTossActivityEnum.Idle,
+    reason: null,
+  },
 });

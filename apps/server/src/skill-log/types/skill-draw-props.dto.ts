@@ -1,8 +1,9 @@
-import {
-  UserActivityType,
+import type { NotificationMessageType } from '@packages/shared-types';
+import type {
   DiceUserActivity,
   GameStartUserAcitvity,
   InteractionUserActivity,
+  UserActivityType,
 } from './user-activity.dto';
 
 export type SkillDrawPropsType<
@@ -25,3 +26,19 @@ export type DiceUserActivitySkillDrawPropsType<SkillServiceResult> =
 
 export type InteractionUserActivitySkillDrawPropsType<SkillServiceResult> =
   SkillDrawPropsType<InteractionUserActivity, SkillServiceResult>;
+
+export interface LandEventDrawPropsType<LandEventResult> {
+  landEventResult: LandEventResult;
+  date: Date;
+  timezone: string;
+}
+
+export type LandEventDrawResultType = NotificationMessageType;
+
+export type LandEventsSummarizePropsType<LandEventResult> =
+  LandEventDrawPropsType<LandEventResult>[];
+
+export interface LandEventsSummarizeResultType {
+  summaryText: string;
+  cashChangeAmount: bigint;
+}

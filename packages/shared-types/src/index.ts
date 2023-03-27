@@ -6,3 +6,5 @@ export * from './user/stock';
 export * from './minidice-web-ui-ts';
 export * from './locale/bigint-locale';
 export * from './locale/str-ellipsis';
+export * from './land-comment/user-land-comment.input.dto';
+export * from './land-comment/land-comment.vo';

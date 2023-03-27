@@ -49,7 +49,6 @@ export const MapStatusBar: React.FC = () => {
   const [isInitalized, setIsInitalized] = useState(false);
   const [left, setLeft] = useState(0);
   const [relativeMovingCount, setRelativeMovingCount] = useState(-1);
-
   const [zoomedMap, setZoomedMap] = useState<MapBlock[]>([]);
 
   const measuredRef = useCallback((node) => {
@@ -63,6 +62,8 @@ export const MapStatusBar: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+
     if (
       mapStops !== undefined &&
       currentSkillRoute !== undefined &&
@@ -100,21 +101,25 @@ export const MapStatusBar: React.FC = () => {
           ),
         );
 
-        setTimeout(() => {
-          setRelativeMovingCount(-1);
-          setIsTransitioning(false);
-          setZoomedMap(
-            endlessSlice(
-              mapStops,
-              currentSkillRouteIndex,
-              currentSkillRouteIndex + sliceRange,
-            ),
-          );
-          setLeft(0);
+        timeouts.push(
+          setTimeout(() => {
+            setRelativeMovingCount(-1);
+            setIsTransitioning(false);
+            setZoomedMap(
+              endlessSlice(
+                mapStops,
+                currentSkillRouteIndex,
+                currentSkillRouteIndex + sliceRange,
+              ),
+            );
+            setLeft(0);
+          }, mapMovingDelayTimeMS),
+        );
+        timeouts.push(
           setTimeout(() => {
             setIsTransitioning(true);
-          }, 100);
-        }, mapMovingDelayTimeMS);
+          }, mapMovingDelayTimeMS + 100),
+        );
       } else {
         setZoomedMap(
           endlessSlice(
@@ -125,8 +130,16 @@ export const MapStatusBar: React.FC = () => {
         );
       }
 
-      setIsInitalized(true);
+      timeouts.push(
+        setTimeout(() => {
+          setIsInitalized(true);
+        }, 1000),
+      );
     }
+
+    return () => {
+      timeouts.map(clearTimeout);
+    };
   }, [currentSkillRoute, mapStops]);
 
   return mapStops && skillLogs ? (

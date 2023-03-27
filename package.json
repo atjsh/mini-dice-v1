@@ -1,23 +1,49 @@
 {
   "name": "root",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/ATJSH/mini-dice-v1",
   "author": "ATJSH <letaem77@gmail.com>",
-  "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "docs/*"
-  ],
-  "scripts": {
-    "lerna:bootstrap": "lerna bootstrap",
-    "lerna:version": "lerna version --conventional-commits --no-private --create-release github --yes"
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "apps/*",
+      "docs/*",
+      "builders/*"
+    ]
   },
+  "scripts": {
+    "clean": "rimraf ./**/dist && rimraf ./**/node_modules",
+    "g:tsc": "cd $INIT_CWD && tsc",
+    "g:serverless": "cd $INIT_CWD && serverless",
+    "packages:build": "yarn workspaces foreach -pvit --from '@packages/*' run build",
+    "packages:watch": "yarn workspaces foreach -pvi --from '@packages/*' run watch",
+    "server:dev": "yarn workspace @apps/server run dev",
+    "server:build": "yarn workspace @builders/server build",
+    "server:build:watch": "yarn workspace @builders/server watch",
+    "server:typecheck": "yarn workspace @apps/server run typecheck",
+    "server:typecheck:watch": "yarn workspace @apps/server run typecheck:watch",
+    "web": "yarn workspace @apps/web"
+  },
+  "packageManager": "yarn@3.5.0",
   "devDependencies": {
-    "lerna": "^4.0.0",
-    "process": "^0.11.10",
-    "conventional-changelog-conventionalcommits": "^4.6.3"
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4",
+    "rimraf": "^4.4.0",
+    "serverless": "^3.28.1",
+    "serverless-offline": "^12.0.4",
+    "typescript": "^5.0.2"
+  },
+  "dependenciesMeta": {
+    "serverless@3.28.1": {
+      "unplugged": true
+    },
+    "serverless-offline@12.0.4": {
+      "unplugged": true
+    }
   }
 }

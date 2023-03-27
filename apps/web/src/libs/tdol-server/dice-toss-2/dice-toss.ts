@@ -1,5 +1,5 @@
-import { UserVo } from "@packages/shared-types";
-import { authedAxios, ExposedSkillLogType } from "..";
+import { UserVo } from '@packages/shared-types';
+import { ExposedSkillLogType, authedAxios } from '..';
 
 export class DiceTossResult {
   user: UserVo;
@@ -8,6 +8,6 @@ export class DiceTossResult {
 }
 
 export async function tossDice() {
-  const resposne = await authedAxios.post<DiceTossResult>("/dice-toss");
+  const resposne = await authedAxios.post<DiceTossResult>('/dice-toss');
   return resposne.data;
 }

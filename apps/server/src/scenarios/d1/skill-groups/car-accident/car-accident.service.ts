@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
 import {
   calcRandomCashChangeEvent,
-  DynamicValueEventCase,
   selectEventCaseRandomly,
-} from 'apps/server/src/common/random/event-case-processing';
-import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+} from '../../../../common/random/event-case-processing';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
 @Injectable()
 export class CarAccidentService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userService: UserService,
+    private diceTossService: DiceTossService,
+  ) {}
   private safe() {
     return { accident: 'safe', cashDeclineAmount: 0 } as const;
   }
@@ -63,7 +67,7 @@ export class CarAccidentService {
     const accident = calcRandomCashChangeEvent(accidents);
     const { value: cashDeclineAmount } = accident;
 
-    await this.userRepository.changeUserCash(props.userId, -cashDeclineAmount);
+    await this.userService.changeUserCash(props.userId, -cashDeclineAmount);
 
     return {
       accident: accident.eventCase.causeName,
@@ -77,7 +81,7 @@ export class CarAccidentService {
       ACCIDENT = 'accident',
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );

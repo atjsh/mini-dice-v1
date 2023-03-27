@@ -12,7 +12,7 @@ export async function submitTempSignup({
   username,
   countryCode3,
 }: SubmitTempSignupDto): Promise<boolean> {
-  const result = await axios.post(
+  await axios.post(
     '/temp-signup',
     {
       hCaptchaSuccessToken,
@@ -20,7 +20,7 @@ export async function submitTempSignup({
       countryCode3,
     },
     {
-      baseURL: process.env.SERVER_URL,
+      baseURL: import.meta.env.VITE_SERVER_URL,
       withCredentials: true,
     },
   );

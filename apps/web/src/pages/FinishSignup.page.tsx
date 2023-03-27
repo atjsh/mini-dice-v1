@@ -4,7 +4,7 @@ import {
   CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useCompleteSignup } from '../libs';
@@ -59,7 +59,7 @@ function UserCompleteSignupForm() {
   };
 
   return success ? (
-    <Redirect to={ServicePageURL} push={false} />
+    <Navigate to={ServicePageURL} replace />
   ) : (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">
@@ -136,7 +136,7 @@ export function LoginSuccessPage() {
       <div className=" flex flex-col gap-10">
         <div className="text-center">
           <div className="flex-col flex gap-2">
-            <h1 className="text-5xl font-bold">
+            <h1 className="text-4xl md:text-6xl font-extrabold">
               <WordmarkComponent />
             </h1>
             <div className="font-medium text-xl">회원가입 완료하기</div>

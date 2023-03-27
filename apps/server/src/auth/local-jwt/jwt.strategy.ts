@@ -1,23 +1,30 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { jwtConstants } from './constants';
-import { UserJwtDto } from './access-token/dto/user-jwt.dto';
-import { UserRepository } from '../../user/user.repository';
+import { PassportStrategy } from '@nestjs/passport';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import type { Repository } from 'typeorm';
+import { UserEntity } from '../../user/entity/user.entity';
+import type { UserJwtDto } from './access-token/dto/user-jwt.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private userRepository: UserRepository) {
+  constructor(
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: process.env.JWT_SECRET,
     });
   }
 
   async validate(payload: UserJwtDto) {
-    const user = await this.userRepository.findOne(payload.userId, {
+    const user = await this.userRepository.findOne({
       select: ['isTerminated'],
+      where: {
+        id: payload.userId,
+      },
     });
     if (user == undefined || user?.isTerminated) {
       throw new ForbiddenException('User is terminated');

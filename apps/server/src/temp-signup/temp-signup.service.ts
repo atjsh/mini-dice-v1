@@ -1,15 +1,15 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import type { FastifyReply } from 'fastify';
 import { RefreshTokenService } from '../auth/local-jwt/refresh-token/refresh-token.service';
 import { HCaptchaService } from '../h-captcha/h-captcha.service';
-import { UserRepository } from '../user/user.repository';
-import { TemporarySignUpDto } from './temp-signup.controller';
+import { UserService } from '../user/user.service';
+import type { TemporarySignUpDto } from './temp-signup.controller';
 
 @Injectable()
 export class TempSignupService {
   constructor(
     private hCaptchaService: HCaptchaService,
-    private userRepository: UserRepository,
+    private userService: UserService,
     private refreshTokenService: RefreshTokenService,
   ) {}
 
@@ -22,7 +22,7 @@ export class TempSignupService {
     if (!response) {
       throw new ForbiddenException('hcaptcha fail');
     }
-    const user = await this.userRepository.signUpNewUser({
+    const user = await this.userService.signUpNewUser({
       username,
       authProvider: 'hcaptcha',
       signupCompleted: true,

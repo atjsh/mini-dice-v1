@@ -1,4 +1,5 @@
 import { FormMessageType } from './FormMessage.component';
+import { LandCommentsMessageType } from './LandCommentMessage.component';
 import { LinkGroupType } from './LinkGroup.component';
 import { PlainMessageType } from './PlainMessage.component';
 import { UserActivityMessageType } from './UserActivityMessage.component';
@@ -16,6 +17,7 @@ export class MessageResponseType {
     | PlainMessageType[]
     | FormMessageType[]
     | LinkGroupType
+    | LandCommentsMessageType
   )[];
 
   // 메세지들을 보낸 날짜

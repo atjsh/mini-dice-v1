@@ -1,109 +1,102 @@
 import { Helmet } from 'react-helmet';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from 'react-router-dom';
 import 'reflect-metadata';
 import { useUser } from './libs';
 import { IndexSkeletonPage } from './pages/IndexSkeleton';
 import {
   FinishSignupPageURL,
   IndexPageURL,
-  protectedRoutes,
   ServicePageURL,
+  protectedRoutes,
 } from './pages/routes';
 
-function App(props) {
+function App() {
   const { isError: isNotAuthed, data: user, isLoading } = useUser();
+  console.log('app redraw', user);
 
-  return (
-    <>
-      {isLoading ? (
+  const router = createBrowserRouter(
+    protectedRoutes.map((route) => ({
+      path: route.path,
+      element: isLoading ? (
         <IndexSkeletonPage />
+      ) : route.protection == 'notAuthed' ? (
+        isNotAuthed ? (
+          <>
+            <Helmet title={route.title} />
+            <route.component />
+          </>
+        ) : (
+          <Navigate
+            to={{
+              pathname: ServicePageURL,
+            }}
+            replace
+          />
+        )
+      ) : route.protection == 'authed' ? (
+        isNotAuthed ? (
+          <Navigate
+            to={{
+              pathname: ServicePageURL,
+            }}
+            replace
+          />
+        ) : (
+          <>
+            <Helmet title={route.title} />
+            <route.component />
+          </>
+        )
+      ) : route.protection == 'signupCompleted' ? (
+        user?.signupCompleted == true ? (
+          <>
+            <Helmet title={route.title} />
+            <route.component />
+          </>
+        ) : user ? (
+          <Navigate
+            to={{
+              pathname: FinishSignupPageURL,
+            }}
+            replace
+          />
+        ) : (
+          <Navigate
+            to={{
+              pathname: IndexPageURL,
+              search: '?loginRequired=true',
+            }}
+            replace
+          />
+        )
+      ) : route.protection == 'signupNotCompleted' ? (
+        user?.signupCompleted == false ? (
+          <>
+            <Helmet title={route.title} />
+            <route.component />
+          </>
+        ) : (
+          <Navigate
+            to={{
+              pathname: ServicePageURL,
+            }}
+            replace
+          />
+        )
       ) : (
-        <BrowserRouter>
-          <Switch>
-            {protectedRoutes.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                exact={route.exact}
-                render={() =>
-                  route.protection == 'notAuthed' ? (
-                    isNotAuthed ? (
-                      <>
-                        <Helmet title={route.title} />
-                        <route.component />
-                      </>
-                    ) : (
-                      <Redirect
-                        to={{
-                          pathname: ServicePageURL,
-                          state: { from: props.location },
-                        }}
-                      />
-                    )
-                  ) : route.protection == 'authed' ? (
-                    isNotAuthed ? (
-                      <Redirect
-                        to={{
-                          pathname: ServicePageURL,
-                          state: { from: props.location },
-                        }}
-                      />
-                    ) : (
-                      <>
-                        <Helmet title={route.title} />
-                        <route.component />
-                      </>
-                    )
-                  ) : route.protection == 'signupCompleted' ? (
-                    user?.signupCompleted == true ? (
-                      <>
-                        <Helmet title={route.title} />
-                        <route.component />
-                      </>
-                    ) : user ? (
-                      <Redirect
-                        to={{
-                          pathname: FinishSignupPageURL,
-                          state: { from: props.location },
-                        }}
-                      />
-                    ) : (
-                      <Redirect
-                        to={{
-                          pathname: IndexPageURL,
-                          search: '?loginRequired=true',
-                          state: { from: props.location },
-                        }}
-                      />
-                    )
-                  ) : route.protection == 'signupNotCompleted' ? (
-                    user?.signupCompleted == false ? (
-                      <>
-                        <Helmet title={route.title} />
-                        <route.component />
-                      </>
-                    ) : (
-                      <Redirect
-                        to={{
-                          pathname: ServicePageURL,
-                          state: { from: props.location },
-                        }}
-                      />
-                    )
-                  ) : (
-                    <>
-                      <Helmet title={route.title} />
-                      <route.component />
-                    </>
-                  )
-                }
-              />
-            ))}
-          </Switch>
-        </BrowserRouter>
-      )}
-    </>
+        <>
+          <Helmet title={route.title} />
+          <route.component />
+        </>
+      ),
+    })),
   );
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;

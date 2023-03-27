@@ -3,24 +3,20 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import {
+import type {
   CompleteSignupUserDto,
   UpdateUserDto,
-  UserIdType,
   UserVo,
 } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { USER_PROFILE_APIS } from '../common';
-import { UserRepository } from '../user/user.repository';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
 import { PublicProfileService } from './profile.service';
 
@@ -34,14 +30,16 @@ class PageDto {
   @Min(1)
   @Max(10)
   page = 1;
+
+  @Type(() => Date)
+  updatedAfter?: Date;
 }
 
-@ApiTags(USER_PROFILE_APIS)
 @Controller('profile')
 export class PublicProfileController {
   constructor(
     private readonly profileService: PublicProfileService,
-    private userRepository: UserRepository,
+    private userService: UserService,
   ) {}
 
   @JwtAuth()
@@ -59,7 +57,7 @@ export class PublicProfileController {
       };
     }
 
-    return this.userRepository.partialUpdateUser(userJwt.userId, {
+    return this.userService.partialUpdateUser(userJwt.userId, {
       username: user.username,
       countryCode3: user.countryCode3,
     });
@@ -67,8 +65,8 @@ export class PublicProfileController {
 
   @Get('others')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async getOthersProfiles(@Query() { limit, page }: PageDto) {
-    return await this.profileService.getUsers(limit, page);
+  async getOthersProfiles(@Query() { limit, page, updatedAfter }: PageDto) {
+    return await this.profileService.getUsers(limit, page, updatedAfter);
   }
 
   @JwtAuth()
@@ -77,7 +75,7 @@ export class PublicProfileController {
     @UserJwt() userJwt: UserJwtDto,
     @Body() completeSignupUserDto: CompleteSignupUserDto,
   ) {
-    return this.userRepository.completeSignup(
+    return this.userService.completeSignup(
       userJwt.userId,
       completeSignupUserDto,
     );
@@ -86,6 +84,6 @@ export class PublicProfileController {
   @JwtAuth()
   @Delete('')
   terminateUser(@UserJwt() userJwt: UserJwtDto) {
-    return this.userRepository.terminateUser(userJwt.userId);
+    return this.userService.terminateUser(userJwt.userId);
   }
 }

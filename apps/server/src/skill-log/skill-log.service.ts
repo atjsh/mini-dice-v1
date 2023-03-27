@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PickType } from '@nestjs/mapped-types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 import { SkillLogEntity } from './entity/skill-log.entity';
 
@@ -10,12 +9,10 @@ export class GetRecentLogsDto {
   limit: number;
 }
 
-export class CreateLogDto extends PickType(SkillLogEntity, [
-  'userId',
-  'skillRoute',
-  'skillServiceResult',
-  'userActivity',
-]) {}
+export type CreateLogDto = Pick<
+  SkillLogEntity,
+  'userId' | 'skillRoute' | 'skillServiceResult' | 'userActivity'
+>;
 
 @Injectable()
 export class SkillLogService {
@@ -46,7 +43,7 @@ export class SkillLogService {
     });
   }
 
-  private async getLastLog(userId: UserEntity['id']) {
+  async getLastLog(userId: UserEntity['id']) {
     const log = await this.repository.findOne({
       where: {
         userId,

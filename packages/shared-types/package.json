@@ -1,13 +1,29 @@
 {
   "name": "@packages/shared-types",
-  "version": "1.2.0",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "source": "src/index.ts",
+  "private": true,
+  "scripts": {
+    "build:cjs": "yarn g:tsc -b -v tsconfig.cjs.json",
+    "build:esm": "yarn g:tsc -b -v tsconfig.esm.json",
+    "build": "yarn run build:cjs & yarn run build:esm",
+    "watch": "yarn run build:cjs --watch & yarn run build:esm --watch"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/src/index.d.ts",
+        "default": "./dist/esm/src/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/src/index.d.ts",
+        "default": "./dist/cjs/src/index.js"
+      }
+    }
+  },
+  "types": "src/index.ts",
+  "main": "src/index.ts",
+  "sideEffects": false,
   "dependencies": {
-    "@nestjs/common": "^8.4.1",
-    "@nestjs/swagger": "^5.2.0",
-    "chat-element-json-ts": "^3.0.0"
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2"
   }
 }

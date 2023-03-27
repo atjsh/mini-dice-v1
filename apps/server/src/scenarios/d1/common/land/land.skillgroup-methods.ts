@@ -1,4 +1,5 @@
-import { getSkillRoutePath, SkillRouteType } from '@packages/scenario-routing';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
 import {
   cashLocale,
   DataField,
@@ -9,20 +10,15 @@ import {
   strEllipsis,
   UserActivityMessage,
 } from '@packages/shared-types';
-import {
-  drawDiceUserActivityMessage,
-  MethodReturnType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import {
+import type { MethodReturnType } from '../../../../skill-group-lib/skill-service-lib';
+import { drawDiceUserActivityMessage } from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import {
-  CommonLandService,
-  LandBuyableByUserEnum,
-  LandBuyingResult,
-  LandStatus,
-} from './land.service';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
+import { CommonLandService, type LandStatus } from './land.service';
+import { LandBuyableByUserEnum, LandBuyingResult } from './land.service';
 
 export function getCommonLandSkillGroupAlias(
   landStatus: LandStatus,
@@ -147,6 +143,10 @@ export function commonLandSkillGroupWebIndexDraw(
     userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
     actionResultDrawings: [
       PlainMessage({
+        thumbnail: {
+          altName: '토지 칸 일러스트',
+          imageUrl: getStopImageUrl(submitSkillRoute.skillGroupName),
+        },
         title: '토지 칸',
         description: `${
           props.skillServiceResult.landStatus.landName

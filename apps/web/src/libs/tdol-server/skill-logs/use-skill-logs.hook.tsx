@@ -4,4 +4,5 @@ import { getSkillLogs } from './get-skill-logs';
 export const useSkillLogs = () =>
   useQuery(getSkillLogs.name, () => getSkillLogs(10), {
     retry: false,
+    refetchOnMount: false,
   });

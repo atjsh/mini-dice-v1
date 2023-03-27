@@ -1,5 +1,5 @@
 export const StockId = [1, 2, 3, 4] as const;
-export type StockIdType = typeof StockId[number];
+export type StockIdType = (typeof StockId)[number];
 
 export interface StockData {
   id: StockIdType;
@@ -19,6 +19,7 @@ export interface StockStatus {
   stockFallingPrice: StockData['stockFallingPrice'];
   stockAmount: bigint;
   stockCurrentPrice: bigint;
+  stockCashPurchaseSum: bigint;
 }
 
 export type StockStatusJson = Omit<
@@ -28,12 +29,14 @@ export type StockStatusJson = Omit<
   | 'stockAmount'
   | 'stockCurrentPrice'
   | 'stockStartingPrice'
+  | 'stockCashPurchaseSum'
 > & {
   stockRisingPrice: string;
   stockFallingPrice: string;
   stockAmount: string;
   stockCurrentPrice: string;
   stockStartingPrice: string;
+  stockCashPurchaseSum: string;
 };
 
 export type StockInitalDataType = {
@@ -48,7 +51,7 @@ export type StockInitalDataType = {
 export const StockInitialData: StockInitalDataType[] = [
   {
     id: 1,
-    stockName: '미디코프',
+    stockName: '미니다이스',
     stockTicker: 'MIDI',
     stockStartingPrice: BigInt(5000),
     stockRisingPrice: BigInt(110),
@@ -81,13 +84,20 @@ export const StockInitialData: StockInitalDataType[] = [
 ];
 
 export function getStockInitialData(id: StockIdType): StockInitalDataType {
-  return StockInitialData.find((stock) => stock.id === id)!;
+  const result = StockInitialData.find((stock) => stock.id === id);
+
+  if (!result) {
+    throw new Error('Stock Not Found');
+  }
+
+  return result;
 }
 
 export function getStockStatus(
   stockId: StockIdType,
   stockAmount: StockStatus['stockAmount'],
   stockCurrentPrice: StockStatus['stockCurrentPrice'],
+  stockCashPurchaseSum: StockStatus['stockCashPurchaseSum'],
 ): StockStatus {
   const stockInitialData = StockInitialData.find(
     (stock) => stock.id === stockId,
@@ -104,6 +114,7 @@ export function getStockStatus(
     stockFallingPrice: stockInitialData.stockFallingPrice,
     stockAmount,
     stockCurrentPrice,
+    stockCashPurchaseSum,
   };
 }
 
@@ -119,6 +130,7 @@ export function serializeStockStatusToJson(
     stockFallingPrice: stockStatus.stockFallingPrice.toString(),
     stockAmount: stockStatus.stockAmount.toString(),
     stockCurrentPrice: stockStatus.stockCurrentPrice.toString(),
+    stockCashPurchaseSum: stockStatus.stockCashPurchaseSum.toString(),
   };
 }
 

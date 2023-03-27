@@ -2,7 +2,7 @@
 
 ## What is Mini Dice?
 
-- '주사위'를 굴려 맵을 이동하며 가상의 재화를 얻을 수 있고, 랭킹을 통해 다른 유저의 가상 재화 보유 상태를 확인할 수 있도록 하는 웹 서비스
+- '주사위'를 굴려 맵을 이동하며 가상의 재화를 얻을 수 있고, 순위를 통해 다른 유저의 가상 재화 보유 상태를 확인할 수 있도록 하는 웹 서비스
 
 ## Highlights
 
@@ -34,7 +34,7 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
 
 ### Tooling
 
-- Yarn Workspace (Yarn Classic) 사용, Lerna 사용 (기본 제공 커맨드 외 커맨드는 사용 지양)
+- Yarn Berry with PnP
 - Prettier, ESLint 사용
 - @apps/server
   - NestJS CLI로 빌드 / 실행
@@ -43,7 +43,7 @@ mini-dice-v1 리포지토리는 아래와 같은 구조를 가지고 있다.
 
 ## Contributors
 
-이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+이 프로젝트에 직접 기여한 사람들입니다. ([emoji key](https://allcontributors.org/docs/en/emoji-key))
 
 <table>
   <tr>

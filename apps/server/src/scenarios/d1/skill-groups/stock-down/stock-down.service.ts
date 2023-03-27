@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import {
-  calcRandomCashChangeEvent,
-  DynamicValueEventCase,
-} from 'apps/server/src/common/random/event-case-processing';
-import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
+import { calcRandomCashChangeEvent } from '../../../../common/random/event-case-processing';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 import { CommonStockService } from '../../common/stock/stock.service';
@@ -18,31 +17,32 @@ const cashChangeEventValues: DynamicValueEventCase<StockUpAmountEnum>[] = [
   {
     causeName: StockUpAmountEnum.ONE,
     value: {
-      from: 10,
+      from: 5,
       to: 20,
     },
-    weight: 0.7,
+    weight: 0.6,
   },
   {
     causeName: StockUpAmountEnum.TWO,
     value: {
-      from: 40,
-      to: 60,
+      from: 30,
+      to: 50,
     },
-    weight: 0.3,
+    weight: 0.4,
   },
 ];
 
 @Injectable()
 export class StockDownService {
   constructor(
-    private userRepository: UserRepository,
+    private userService: UserService,
     private commonStockService: CommonStockService,
+    private diceTossService: DiceTossService,
   ) {}
 
   async index(props: SkillServiceProps) {
     const { stockAmount, stockId, stockPrice } =
-      await this.userRepository.findUserWithCache(props.userId);
+      await this.userService.findUserWithCache(props.userId);
 
     if (stockId) {
       const cashChangeEvent = calcRandomCashChangeEvent<StockUpAmountEnum>(
@@ -58,6 +58,11 @@ export class StockDownService {
           -stockFalling,
         );
 
+      await this.diceTossService.setUserCanTossDice(
+        props.userId,
+        getUserCanTossDice(SCENARIO_NAMES.D1),
+      );
+
       return {
         originalStockPrice: String(stockPrice),
         falledStockPrice: String(changedStockPrice),
@@ -68,7 +73,7 @@ export class StockDownService {
           forcedSoldCash != false ? String(forcedSoldCash) : false,
       };
     }
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );

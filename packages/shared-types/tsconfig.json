@@ -1,4 +1,16 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": true
+  },
+  "include": ["src"]
 }

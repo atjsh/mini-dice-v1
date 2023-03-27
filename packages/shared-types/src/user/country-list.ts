@@ -411,7 +411,7 @@ export const countryMetadataIsoList = [
   { code2: 'AX', code3: 'ALA', name: 'Åland Islands', number: '248' },
 ] as const;
 
-export type CountryCode3Type = typeof countryMetadataIsoList[number]['code3'];
+export type CountryCode3Type = (typeof countryMetadataIsoList)[number]['code3'];
 
 export const countryCode3List = countryMetadataIsoList.map(
   ({ code3 }) => code3,

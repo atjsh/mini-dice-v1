@@ -1,5 +1,5 @@
 import { CountryCode3Type } from './country-list';
-import { StockStatus, StockStatusJson } from './stock';
+import { StockStatusJson } from './stock';
 
 export type UserIdType = string;
 
@@ -102,6 +102,8 @@ export class UserVo {
   updatedAt: Date;
 
   rank: number;
+
+  canAddLandComment: boolean;
 }
 
 /**
@@ -113,8 +115,10 @@ export type UserEntityJson = Omit<UserVo, 'cash' | 'rank'> & {
 };
 
 export type PublicProfileVo = Omit<
-  Pick<UserVo, 'id' | 'username' | 'cash' | 'createdAt' | 'rank'>,
+  Pick<UserVo, 'id' | 'username' | 'cash' | 'createdAt' | 'rank' | 'updatedAt'>,
   'cash'
 > & {
   cash: string;
+
+  stockCash: string;
 };

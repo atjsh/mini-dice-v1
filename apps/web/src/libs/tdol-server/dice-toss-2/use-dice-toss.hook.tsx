@@ -1,39 +1,62 @@
+import { UserVo } from '@packages/shared-types';
 import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
+import { ExposedSkillLogType, getMap, getSkillLogs } from '..';
+import { queryClient } from '../../../';
+import {
+  diceTossingDelayTimeMS,
+  getSkillLogMessageAddingDelayTiming,
+  mapMovingDelayTimeMS,
+} from '../../../common/timing';
+import { currentSkillRouteAtom } from '../../../components/map/current-skill-route.atom';
+import {
+  usePageTimeout,
+  useSkillLogMessages,
+} from '../../../components/skill-log-message/use-skill-log-messages.hook';
+import { UseUserHookKey } from '../profile';
 import {
   DiceTossActivityEnum,
   diceTossActivityStatusAtom,
 } from './atoms/dice-toss-activity.atom';
 import { tossDice } from './dice-toss';
-import { useSkillLogMessages } from '../../../components/skill-log-message/use-skill-log-messages.hook';
-import { currentSkillRouteAtom } from '../../../components/map/current-skill-route.atom';
-import { queryClient } from '../../../';
-import { UserVo } from '@packages/shared-types';
-import { UseUserHookKey } from '../profile';
-import { getMap } from '..';
-import {
-  diceTossingDelayTimeMS,
-  getSkillLogMessageAddingDelayTiming,
-  mapMovingDelayTimeMS,
-  sleep,
-} from '../../../common/timing';
+
+function getDelayClosure() {
+  let delay = 0;
+  return function closure(addingDelay: number) {
+    delay += addingDelay;
+    return delay;
+  };
+}
 
 export const useDiceToss = () => {
-  const [diceTossActivityStatus, setDiceTossActivityStatus] = useRecoilState(
+  const [, setDiceTossActivityStatus] = useRecoilState(
     diceTossActivityStatusAtom,
   );
   const { addSkillLogMessages } = useSkillLogMessages();
   const [currentSkillRoute, setCurrentSkillRoute] = useRecoilState(
     currentSkillRouteAtom,
   );
+  const { pushPageTimeout } = usePageTimeout();
 
   return useMutation(tossDice, {
     onMutate: async () => {
-      setDiceTossActivityStatus(DiceTossActivityEnum.Submitted);
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Submitted,
+        reason: null,
+      });
     },
     onSuccess: async (data) => {
-      setDiceTossActivityStatus(DiceTossActivityEnum.Processing);
-      queryClient.refetchQueries([getMap.name]);
+      const delayClosure = getDelayClosure();
+
+      queryClient.setQueryData<ExposedSkillLogType[]>(
+        getSkillLogs.name,
+        (prevData) => [...(prevData ? prevData : []), data.skillLog],
+      );
+
+      setDiceTossActivityStatus({
+        enum: DiceTossActivityEnum.Processing,
+        reason: null,
+      });
 
       addSkillLogMessages(
         data.skillLog.skillDrawResult.userRequestDrawings.map(
@@ -47,38 +70,49 @@ export const useDiceToss = () => {
           }),
         ),
       );
-      if (currentSkillRoute) {
-        await sleep(diceTossingDelayTimeMS);
-      }
 
-      setDiceTossActivityStatus(DiceTossActivityEnum.ResultShowing);
-      await sleep(200);
-
-      setCurrentSkillRoute(data.skillLog.skillRoute);
-      if (currentSkillRoute) {
-        await sleep(mapMovingDelayTimeMS + 200);
-      }
-
-      addSkillLogMessages(
-        data.skillLog.skillDrawResult.actionResultDrawings.map(
-          (actionResultDrawing, index) => ({
-            delay: getSkillLogMessageAddingDelayTiming(index),
-            skillLogMessage: {
-              message: actionResultDrawing,
-              date: new Date(data.skillLog.skillDrawResult.date),
-              skillLogId: data.skillLog.id,
-            },
-          }),
-        ),
-      );
-      await sleep(
-        getSkillLogMessageAddingDelayTiming(
-          data.skillLog.skillDrawResult.actionResultDrawings.length - 1,
-        ),
+      pushPageTimeout(
+        setTimeout(() => {
+          setDiceTossActivityStatus({
+            enum: DiceTossActivityEnum.ResultShowing,
+            reason: null,
+          });
+        }, delayClosure(currentSkillRoute ? diceTossingDelayTimeMS : 0)),
       );
 
-      setDiceTossActivityStatus(DiceTossActivityEnum.Idle);
-      queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
+      pushPageTimeout(
+        setTimeout(() => {
+          queryClient.refetchQueries([getMap.name]);
+          setCurrentSkillRoute(data.skillLog.skillRoute);
+        }, delayClosure(200)),
+      );
+
+      pushPageTimeout(
+        setTimeout(() => {
+          addSkillLogMessages(
+            data.skillLog.skillDrawResult.actionResultDrawings.map(
+              (actionResultDrawing, index) => ({
+                delay: getSkillLogMessageAddingDelayTiming(index),
+                skillLogMessage: {
+                  message: actionResultDrawing,
+                  date: new Date(data.skillLog.skillDrawResult.date),
+                  skillLogId: data.skillLog.id,
+                },
+              }),
+            ),
+          );
+        }, delayClosure(currentSkillRoute ? mapMovingDelayTimeMS + 200 : 0)),
+      );
+
+      pushPageTimeout(
+        setTimeout(() => {
+          setDiceTossActivityStatus({
+            enum: DiceTossActivityEnum.Idle,
+            reason: null,
+          });
+          queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
+        }, delayClosure(getSkillLogMessageAddingDelayTiming(data.skillLog.skillDrawResult.actionResultDrawings.length - 1))),
+      );
     },
   });
 };

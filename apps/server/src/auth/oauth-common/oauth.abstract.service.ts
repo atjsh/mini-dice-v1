@@ -1,15 +1,19 @@
 import { ForbiddenException } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import { InjectRepository } from '@nestjs/typeorm';
+import type { FastifyReply } from 'fastify';
+import type { Repository } from 'typeorm';
 import { getRandomInteger } from '../../common/random/random-number';
 import { getRandomString } from '../../common/random/random-string';
 import { UserEntity } from '../../user/entity/user.entity';
-import { UserRepository } from '../../user/user.repository';
+import { UserService } from '../../user/user.service';
 import { RefreshTokenEntity } from '../local-jwt/refresh-token/entity/refresh-token.entity';
-import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
+import type { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
 
 export abstract class OauthAbstractService {
   constructor(
-    protected userRepository: UserRepository,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+    protected userService: UserService,
     protected refreshTokenService: RefreshTokenService,
   ) {}
 
@@ -32,7 +36,7 @@ export abstract class OauthAbstractService {
     email: string,
     provider: string,
   ) {
-    const user = await this.userRepository.signUpNewUser({
+    const user = await this.userService.signUpNewUser({
       email,
       authProvider: provider,
       username: `유저${getRandomInteger(
@@ -77,7 +81,7 @@ export abstract class OauthAbstractService {
             expressResponse,
             alreadyExistedRefreshToken,
           );
-        anonUser = await this.userRepository.findUserWithCache(
+        anonUser = await this.userService.findUserWithCache(
           refreshTokenEntity.userId,
         );
 
@@ -87,7 +91,7 @@ export abstract class OauthAbstractService {
       } catch (e) {
         // 익명 유저가 아닌 일반 유저이거나, refreshToken에 대응되는 유저가 존재하지 않거나, 유저가 삭제되었을 경우
         // 기존 계정에 로그인을 시도하거나 새로 가입함
-        const existingUsers = await this.userRepository.find({
+        const existingUsers = await this.userRepository.findBy({
           email: email,
           authProvider: provider,
           isTerminated: false,
@@ -102,7 +106,7 @@ export abstract class OauthAbstractService {
       // 정상적인 익명 유저로 확인된 경우
 
       // 기존에 구글 계정으로 가입했는지 체크
-      const existingOAuthProviderUsers = await this.userRepository.find({
+      const existingOAuthProviderUsers = await this.userRepository.findBy({
         email: email,
         authProvider: provider,
       });
@@ -111,7 +115,7 @@ export abstract class OauthAbstractService {
 
       // 기존에 구글 계정으로 가입하지 않았다면: 익명 계정에 구글 계정을 연결함
       if (isNewUser) {
-        const user = await this.userRepository.partialUpdateUser(
+        const user = await this.userService.partialUpdateUser(
           refreshTokenEntity.userId,
           {
             email: email,
@@ -137,7 +141,7 @@ export abstract class OauthAbstractService {
 
         // 익명 계정의 캐시가 20,000 이상인 경우: 기존의 구글 계정에 편입시킴
         if (anonUser.cash > 20000 || anonUser.stockId) {
-          await this.userRepository.changeUserCash(
+          await this.userService.changeUserCash(
             existingOAuthProviderUser.id,
             anonUser.cash,
             existingOAuthProviderUser.cash +
@@ -150,7 +154,7 @@ export abstract class OauthAbstractService {
           existingOAuthProviderUser,
         );
 
-        await this.userRepository.terminateUser(anonUser.id);
+        await this.userService.terminateUser(anonUser.id);
 
         return {
           isSignupFinished: existingOAuthProviderUser.signupCompleted,
@@ -160,7 +164,7 @@ export abstract class OauthAbstractService {
 
     // 로그인하지 않은 유저가 구글 계정 연동 버튼을 누른 경우
 
-    const existingUsers = await this.userRepository.find({
+    const existingUsers = await this.userRepository.findBy({
       email: email,
       authProvider: provider,
       isTerminated: false,

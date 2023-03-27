@@ -1,0 +1,55 @@
+service: ${file(./slsconfig.yml):serviceName}
+
+package:
+  patterns:
+    - '!**/*'
+    - package.json
+    - '.env'
+    - 'dist/**'
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: production
+  region: ${file(./slsconfig.yml):region}
+  runtime: nodejs18.x
+  httpApi:
+    payload: '2.0'
+    cors:
+      allowedOrigins:
+        - ${file(./slsconfig.yml):allowedOrigins}
+      allowedHeaders:
+        - Content-Type
+        - Access-Control-Request-Methods
+        - Access-Control-Request-Headers
+        - Access-Control-Allow-Origin
+        - Authorization
+        - timezone
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowCredentials: true
+      maxAge: 86400
+
+functions:
+  app:
+    handler: dist/index.lambdaHandler
+    events:
+      - httpApi:
+          path: /{proxy+}
+          method: any
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    host: '127.0.0.1'
+    httpPort: 80
+    lambdaPort: 4047
+    noTimeout: true
+    reloadHandler: true

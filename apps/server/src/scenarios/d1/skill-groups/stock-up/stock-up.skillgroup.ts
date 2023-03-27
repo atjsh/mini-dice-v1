@@ -1,20 +1,24 @@
 import {
-  cashLocale,
   MessageResponseFactory,
   PlainMessage,
+  cashLocale,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  SkillGroup,
   Skill,
   SkillDraw,
-  SkillGroup,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+  drawDiceUserActivityMessage,
+} from '../../../../skill-group-lib/skill-service-lib';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import { StockUpService, StockUpAmountEnum } from './stock-up.service';
+import { StockUpService } from './stock-up.service';
+import { StockUpAmountEnum } from './stock-up.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.stockUp)
 export class StockUpSkillGroup implements SkillGroupController {
@@ -41,6 +45,12 @@ export class StockUpSkillGroup implements SkillGroupController {
         userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [
           PlainMessage({
+            thumbnail: {
+              altName: '호황기 칸 일러스트',
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.stockUp.skillGroupName,
+              ),
+            },
             title: `${this.getSkillGroupAlias()} 칸`,
             description: '주식의 가치가 상승합니다.',
           }),
@@ -80,6 +90,12 @@ export class StockUpSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '호황기 칸 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.stockUp.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description: '주식의 가치가 상승합니다.',
         }),

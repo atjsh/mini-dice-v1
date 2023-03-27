@@ -4,19 +4,22 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import {
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   GameStartUserAcitvitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
 import { MapStarterService } from './map-starter.service';
 
@@ -52,7 +55,14 @@ export class MapStarterSkillGroup implements SkillGroupController {
         date: props.date,
         actionResultDrawings: [
           PlainMessage({
-            description: `주사위를 굴려 다음 칸으로 이동하세요.`,
+            thumbnail: {
+              altName: '시작 일러스트',
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
+              ),
+            },
+            title: '미니다이스 인생게임에 오신 것을 환영합니다!',
+            description: `"🎲 주사위 굴리기" 버튼을 계속 눌러 진행하세요!`,
           }),
         ],
       });
@@ -65,7 +75,17 @@ export class MapStarterSkillGroup implements SkillGroupController {
         userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [
           PlainMessage({
-            title: `${this.getSkillGroupAlias()} 칸`,
+            thumbnail: {
+              altName: '시작 일러스트',
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.mapStarter.skillGroupName,
+              ),
+            },
+            title: `시작 칸`,
+            description: '시작 칸에 도착했습니다.',
+          }),
+          PlainMessage({
+            title: '고생했어요',
             description: `기념으로 ${cashLocale(
               props.skillServiceResult?.rewarded_cash,
             )} 받았습니다.`,

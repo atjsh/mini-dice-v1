@@ -2,7 +2,7 @@ import { getRandomInteger } from '../common/random/random-number';
 import { SCENARIO_NAMES } from './scenarios.constants';
 
 export function getUserCanTossDice(
-  scenarioName: typeof SCENARIO_NAMES[keyof typeof SCENARIO_NAMES],
+  scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   alwaysCanTossDice = false,
 ): Date {
   if (alwaysCanTossDice) {
@@ -14,7 +14,8 @@ export function getUserCanTossDice(
       const currentDate = new Date();
       currentDate.setSeconds(
         // currentDate.getSeconds() + getRandomInteger(13, 20),
-        currentDate.getSeconds() + getRandomInteger(3, 4),
+        // currentDate.getSeconds() + getRandomInteger(1, 2),
+        currentDate.getSeconds() + 2,
       );
       return currentDate;
     }
@@ -27,4 +28,8 @@ export function getUserCanTossDice(
       return currentDate;
     }
   }
+}
+
+export function getStopImageUrl(imageName: string) {
+  return `${process.env.WEB_URL}/stop-images/${imageName}.png`;
 }

@@ -1,9 +1,9 @@
 import { Controller, Post } from '@nestjs/common';
-import { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { TimeZone } from '../common/get-timezone';
 import { JwtAuth, UserJwt } from '../profile/decorators/user.decorator';
 import { DiceTossService } from './dice-toss.service';
-import { DiceTossOutputDto } from './interface';
+import type { DiceTossOutputDto } from './interface';
 
 @Controller('dice-toss')
 @JwtAuth()
@@ -15,8 +15,6 @@ export class DiceTossController {
     @UserJwt() userJwt: UserJwtDto,
     @TimeZone() timeZone: string,
   ): Promise<DiceTossOutputDto> {
-    console.log(timeZone);
-
     return await this.diceTossService.tossDiceAndGetWebMessageResponse(
       userJwt,
       timeZone,

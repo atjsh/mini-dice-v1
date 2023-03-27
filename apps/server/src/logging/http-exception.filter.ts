@@ -1,11 +1,9 @@
 import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
+  type ArgumentsHost,
+  type ExceptionFilter,
   HttpException,
-  Injectable,
-  Logger,
 } from '@nestjs/common';
+import { Catch, Injectable, Logger } from '@nestjs/common';
 
 /**
  * HttpException 에러들을 수집하여

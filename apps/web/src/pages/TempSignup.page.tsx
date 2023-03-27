@@ -5,7 +5,7 @@ import {
   CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
@@ -73,7 +73,7 @@ function TempSignupForm() {
   const mutation = useTempSignup();
 
   return success ? (
-    <Redirect to={ServicePageURL} push={false} />
+    <Navigate to={ServicePageURL} replace />
   ) : (
     <div className="flex flex-col items-center gap-5">
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">
@@ -86,7 +86,7 @@ function TempSignupForm() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col items-center gap-2 hidden">
+      <div className=" flex-col items-center gap-2 hidden">
         <div className=" font-medium text-lg text-center">
           당신이 거주중인 국가를 선택하세요.
         </div>
@@ -109,12 +109,12 @@ function TempSignupForm() {
       </div>
       <div className="flex flex-col gap-1 text-center">
         <HCaptcha
-          sitekey={`${process.env.HCAPTCHA_SITE_KEY}`}
+          sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
           onVerify={(token) => setHCaptchaToken(token)}
         />
       </div>
       <a
-        className="inline-block text-base text-blue-600 hover:underline p-5 text-center hidden"
+        className=" text-base text-blue-600 hover:underline p-5 text-center hidden"
         href={getGoogleOAuthPageUrl()}
       >
         <span className=" text-black dark:text-white">
@@ -165,7 +165,7 @@ export const TempSignupPage: React.FC = () => {
       <div className=" flex flex-col gap-10">
         <div className="text-center">
           <div className="flex-col flex gap-2">
-            <h1 className="text-5xl font-bold">
+            <h1 className="text-4xl md:text-6xl font-extrabold">
               <WordmarkComponent />
             </h1>
             <div className="font-medium text-xl">바로 시작 계정 생성</div>

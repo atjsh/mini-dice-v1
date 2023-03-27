@@ -1,5 +1,8 @@
-import { SkillRouteType } from '@packages/scenario-routing';
-import { MessageResponseType, UserEntityJson } from '@packages/shared-types';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import type {
+  MessageResponseType,
+  UserEntityJson,
+} from '@packages/shared-types';
 
 export type ExposedSkillLogType = {
   skillDrawResult: MessageResponseType;

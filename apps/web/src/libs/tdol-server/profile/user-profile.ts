@@ -6,12 +6,10 @@ import {
 import { queryClient } from '../../..';
 import { useMutation } from 'react-query';
 import { authedAxios, UseUserHookKey } from '..';
-import { revokeUserAccessToken } from '../auth';
 
 export async function getUserVo(): Promise<UserEntityJson> {
   const response = await authedAxios.get<UserEntityJson>(`/profile/me`);
-  if (response.status == 403) {
-    revokeUserAccessToken();
+  if (response.status == 403 || response.status == 401) {
     throw Error('User is not authenticated');
   }
   return response.data;
@@ -20,11 +18,15 @@ export async function getUserVo(): Promise<UserEntityJson> {
 export async function getOthersProfiles(
   limit: number,
   page: number,
+  updatedAfterOffset?: number,
 ): Promise<PublicProfileVo[]> {
   const response = await authedAxios.get<PublicProfileVo[]>('profile/others', {
     params: {
       limit,
       page,
+      updatedAfter: updatedAfterOffset
+        ? new Date(Date.now() - updatedAfterOffset)
+        : undefined,
     },
   });
 

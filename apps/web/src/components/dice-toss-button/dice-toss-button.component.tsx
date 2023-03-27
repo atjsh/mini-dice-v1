@@ -31,19 +31,23 @@ export const DiceTossButton: React.FC<{
   const diceButtonState = useRecoilValue(diceTossActivityStatusAtom);
 
   const baseButtonClassNames =
-    'text-white md:px-5 md:py-7 px-5 py-5 max-w-lg w-full rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
+    'text-white md:px-5 md:py-7 px-5 py-4 max-w-2xl w-full rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
 
   if (
-    diceButtonState == DiceTossActivityEnum.Processing ||
-    diceButtonState == DiceTossActivityEnum.Submitted ||
-    diceButtonState == DiceTossActivityEnum.ResultShowing
+    diceButtonState.enum == DiceTossActivityEnum.Processing ||
+    diceButtonState.enum == DiceTossActivityEnum.Submitted ||
+    diceButtonState.enum == DiceTossActivityEnum.ResultShowing
   ) {
     return (
       <button
         className={`${baseButtonClassNames} cursor-default bg-gray-500 select-none`}
         onClick={setisSidebarShowing}
       >
-        🎲 주사위를 굴리는 중 ...
+        {diceButtonState.reason
+          ? diceButtonState.reason
+          : diceButtonState.enum == DiceTossActivityEnum.Submitted
+          ? '📡 서버와 통신 중...'
+          : '🎲 주사위를 굴리는 중 ...'}
       </button>
     );
   } else if (isDiceTossForbidden == true) {

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import {
-  calcRandomCashChangeEvent,
-  DynamicValueEventCase,
-} from 'apps/server/src/common/random/event-case-processing';
-import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+import type { DynamicValueEventCase } from '../../../../common/random/event-case-processing';
+import { calcRandomCashChangeEvent } from '../../../../common/random/event-case-processing';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
 
@@ -17,16 +16,16 @@ const cashChangeEventValues: DynamicValueEventCase<StockUpAmountEnum>[] = [
   {
     causeName: StockUpAmountEnum.ONE,
     value: {
-      from: 30,
-      to: 60,
+      from: 5,
+      to: 30,
     },
     weight: 0.7,
   },
   {
     causeName: StockUpAmountEnum.TWO,
     value: {
-      from: 60,
-      to: 150,
+      from: 50,
+      to: 110,
     },
     weight: 0.3,
   },
@@ -34,11 +33,14 @@ const cashChangeEventValues: DynamicValueEventCase<StockUpAmountEnum>[] = [
 
 @Injectable()
 export class StockUpService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userService: UserService,
+    private diceTossService: DiceTossService,
+  ) {}
 
   async index(props: SkillServiceProps) {
     const { stockAmount, stockId, stockPrice } =
-      await this.userRepository.findUserWithCache(props.userId);
+      await this.userService.findUserWithCache(props.userId);
 
     if (stockId) {
       const cashChangeEvent = calcRandomCashChangeEvent<StockUpAmountEnum>(
@@ -50,9 +52,14 @@ export class StockUpService {
 
       const risedStockPrice = stockRising + stockPrice;
 
-      await this.userRepository.partialUpdateUser(props.userId, {
+      await this.userService.partialUpdateUser(props.userId, {
         stockPrice: risedStockPrice,
       });
+
+      await this.diceTossService.setUserCanTossDice(
+        props.userId,
+        getUserCanTossDice(SCENARIO_NAMES.D1),
+      );
 
       return {
         originalStockPrice: String(stockPrice),
@@ -62,7 +69,7 @@ export class StockUpService {
         eventCase: cashChangeEvent.eventCase.causeName,
       };
     }
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
     );

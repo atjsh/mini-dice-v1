@@ -1,17 +1,25 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SkillRouteType } from '@packages/scenario-routing';
-import { UserIdType } from '@packages/shared-types';
-import { SkillServiceProps } from 'apps/server/src/skill-group-lib/skill-service-lib';
-import {
-  UserCashStrType,
-  UserEntity,
-} from 'apps/server/src/user/entity/user.entity';
-import { UserRepository } from 'apps/server/src/user/user.repository';
-import { Repository } from 'typeorm';
+import type { SkillRouteType } from '@packages/scenario-routing';
+import { getSkillRoutePath } from '@packages/scenario-routing';
+import type { UserIdType } from '@packages/shared-types';
+import type { Repository } from 'typeorm';
+import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
 import { SkillGroupAliasesService } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.service';
+import type { SkillServiceProps } from '../../../../skill-group-lib/skill-service-lib';
+import { UserActivityService } from '../../../../user-activity/user-activity.service';
+import {
+  UserEntity,
+  type UserCashStrType,
+} from '../../../../user/entity/user.entity';
+import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
+import type {
+  RealEstateEarnedLandEventResult,
+  RealEstateTakenOverLandEventResult,
+} from '../../land-event-groups/real-estate/real-estate.land-event';
+import { D1ScenarioRoutes } from '../../routes';
 import { LandEntity } from './entity/land.entity';
 
 export enum LandIdEnum {
@@ -151,12 +159,12 @@ export enum LandBuyingResult {
 @Injectable()
 export class CommonLandService {
   constructor(
-    private userRepository: UserRepository,
-
+    private userService: UserService,
     @InjectRepository(LandEntity)
     private landRepository: Repository<LandEntity>,
-
     private skillGroupAliasesService: SkillGroupAliasesService,
+    private userActivityService: UserActivityService,
+    private diceTossService: DiceTossService,
   ) {}
 
   private async initLand(id: LandEntity['id']): Promise<LandEntity> {
@@ -170,8 +178,10 @@ export class CommonLandService {
     });
   }
 
-  private async getLand(id: LandEntity['id']): Promise<LandEntity | undefined> {
-    return this.landRepository.findOne(id);
+  private async getLand(id: LandEntity['id']): Promise<LandEntity | null> {
+    return this.landRepository.findOneBy({
+      id: id,
+    });
   }
 
   private async getLandOrCreate(id: LandEntity['id']): Promise<LandEntity> {
@@ -205,7 +215,7 @@ export class CommonLandService {
     landStatus: LandStatus,
     userId: UserIdType,
   ): Promise<LandBuyableByUserStatus> {
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
     if (landStatus.landOwnedBy?.id == userId) {
       return {
         status: LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU,
@@ -255,7 +265,7 @@ export class CommonLandService {
       (land) => land.id == landId,
     )!;
 
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
 
     if (user.cash < initalLandData.landPrice) {
       throw new LandTooExpensive({
@@ -279,11 +289,26 @@ export class CommonLandService {
 
     await this.landRepository.save(saveObject);
 
-    await this.userRepository.changeUserCash(
+    await this.userService.changeUserCash(
       userId,
       -initalLandData.landPrice,
       user.cash,
     );
+
+    if (land.userId) {
+      await this.userActivityService.create<RealEstateTakenOverLandEventResult>(
+        {
+          userId: land.userId,
+          skillRoute: getSkillRoutePath(
+            D1ScenarioRoutes.skillGroups.landEventRealEstate.skills.takenOver,
+          ),
+          skillDrawProps: {
+            landName: land.landName,
+            takenOverByUsername: user.username,
+          },
+        },
+      );
+    }
 
     await this.skillGroupAliasesService.invalidateSkillGroupAliasesCache(
       SCENARIO_NAMES.D1,
@@ -300,6 +325,7 @@ export class CommonLandService {
       landSubmitSkillRoute: SkillRouteType;
     }>,
   ) {
+    const { username } = await this.userService.findUserWithCache(props.userId);
     const landStatus = await this.getLandStatusById(props.landId);
     const landBuyableByUserStatus = await this.isLandBuyableByUser(
       landStatus,
@@ -312,23 +338,34 @@ export class CommonLandService {
       ) &&
       landStatus.landOwnedBy != null
     ) {
+      this.userActivityService.create<RealEstateEarnedLandEventResult>({
+        userId: landStatus.landOwnedBy.id,
+        skillRoute: getSkillRoutePath(
+          D1ScenarioRoutes.skillGroups.landEventRealEstate.skills.earned,
+        ),
+        skillDrawProps: {
+          earnedCash: landStatus.tollFee,
+          landName: landStatus.landName,
+          visitorUsername: username,
+        },
+      });
       await Promise.all([
-        this.userRepository.changeUserCash(props.userId, -landStatus.tollFee),
-        this.userRepository.changeUserCash(
+        this.userService.changeUserCash(props.userId, -landStatus.tollFee),
+        this.userService.changeUserCash(
           landStatus.landOwnedBy!.id,
           landStatus.tollFee,
         ),
       ]);
     }
     if (landBuyableByUserStatus.status == LandBuyableByUserEnum.BUYABLE) {
-      await this.userRepository.setUserAllowedSkillRoute(
+      await this.userService.setUserAllowedSkillRoute(
         props.userId,
         props.landSubmitSkillRoute,
         false,
       );
     }
 
-    await this.userRepository.setUserCanTossDice(
+    await this.diceTossService.setUserCanTossDice(
       props.userId,
       getUserCanTossDice(SCENARIO_NAMES.D1),
       false,

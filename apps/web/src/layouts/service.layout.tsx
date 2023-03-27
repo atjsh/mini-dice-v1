@@ -1,11 +1,13 @@
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
+import { HealthCheckComponent } from '../components/health-check/health-check.component';
 
-export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
-  children,
-  hideFooter,
-}) => (
-  <div className="flex min-h-screen w-full justify-center items-center">
-    <div className="flex flex-col gap-14 pt-10">
+export const ServiceLayout: React.FC<{
+  hideFooter?: boolean;
+  children: React.ReactNode;
+}> = ({ children, hideFooter }) => (
+  <>
+    <HealthCheckComponent />
+    <div className="flex flex-col gap-14 md:mt-28 mt-14 mx-auto">
       {/* <div className="flex flex-col select-none">
       <img
         className="object-cover h-32 dark:hidden"
@@ -33,5 +35,5 @@ export const ServiceLayout: React.FC<{ hideFooter?: boolean }> = ({
         <></>
       )}
     </div>
-  </div>
+  </>
 );

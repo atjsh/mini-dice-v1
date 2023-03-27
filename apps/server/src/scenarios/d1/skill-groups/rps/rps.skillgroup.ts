@@ -7,29 +7,28 @@ import {
   PlainMessage,
   UserActivityMessage,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+  SkillPropsType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
+  drawDiceUserActivityMessage,
   Skill,
   SkillDraw,
   SkillGroup,
-  SkillPropsType,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import {
+} from '../../../../skill-group-lib/skill-service-lib';
+import type {
   DiceUserActivitySkillDrawPropsType,
   InteractionUserActivitySkillDrawPropsType,
-} from 'apps/server/src/skill-log/types/skill-draw-props.dto';
-import { InteractionUserActivity } from 'apps/server/src/skill-log/types/user-activity.dto';
-import { UserRepository } from 'apps/server/src/user/user.repository';
+} from '../../../../skill-log/types/skill-draw-props.dto';
+import type { InteractionUserActivity } from '../../../../skill-log/types/user-activity.dto';
+import { UserService } from '../../../../user/user.service';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import {
-  getRpsMoveAsKoreanText,
-  RpsMove,
-  RpsResult,
-  RpsService,
-} from './rps.service';
+import { RpsService } from './rps.service';
+import { getRpsMoveAsKoreanText, RpsMove, RpsResult } from './rps.service';
 
 class RpsSubmitParamType {
   move: RpsMove;
@@ -39,7 +38,7 @@ class RpsSubmitParamType {
 export class RpsSkillGroup implements SkillGroupController {
   constructor(
     private skillService: RpsService,
-    private userRepository: UserRepository,
+    private userService: UserService,
   ) {}
 
   getSkillGroupAlias() {
@@ -62,6 +61,12 @@ export class RpsSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '가위바위보 칸 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.rps.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description: `모르는 사람과 가위바위보 게임을 합니다. 이기면 ${cashLocale(
             5000,
@@ -91,7 +96,7 @@ export class RpsSkillGroup implements SkillGroupController {
     userActivity,
     userId,
   }: SkillPropsType<InteractionUserActivity<RpsSubmitParamType>>) {
-    const user = await this.userRepository.findUserWithCache(userId);
+    const user = await this.userService.findUserWithCache(userId);
     return this.skillService.submit({
       userId: userId,
       rpsMove: userActivity.params.move,

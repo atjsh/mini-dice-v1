@@ -1,7 +1,25 @@
 {
   "name": "@packages/scenario-routing",
-  "version": "1.1.0",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.js"
+  "private": true,
+  "scripts": {
+    "build:cjs": "yarn g:tsc -b -v tsconfig.cjs.json",
+    "build:esm": "yarn g:tsc -b -v tsconfig.esm.json",
+    "build": "yarn run build:cjs & yarn run build:esm",
+    "watch": "yarn run build:cjs --watch & yarn run build:esm --watch"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/src/index.d.ts",
+        "default": "./dist/esm/src/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/src/index.d.ts",
+        "default": "./dist/cjs/src/index.js"
+      }
+    }
+  },
+  "types": "src/index.ts",
+  "main": "src/index.ts",
+  "sideEffects": false
 }

@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from './user.repository';
+import { UserEntity } from './entity/user.entity';
 import { UserService } from './user.service';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository])],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
   providers: [UserService],
   exports: [TypeOrmModule, UserService],
 })

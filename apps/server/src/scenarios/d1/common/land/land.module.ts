@@ -1,15 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SkillGroupAliasesModule } from 'apps/server/src/skill-group-lib/skill-group-aliases/skill-group-aliases.module';
-import { UserModule } from 'apps/server/src/user/user.module';
 import { LandEntity } from './entity/land.entity';
 import { CommonLandService } from './land.service';
+import { SkillGroupAliasesModule } from '../../../../skill-group-lib/skill-group-aliases/skill-group-aliases.module';
+import { UserActivityModule } from '../../../../user-activity/user-activity.module';
+import { UserModule } from '../../../../user/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([LandEntity]),
-    UserModule,
+    forwardRef(() => UserModule),
     SkillGroupAliasesModule,
+    UserActivityModule,
   ],
   providers: [CommonLandService],
   exports: [CommonLandService],

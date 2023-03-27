@@ -1,20 +1,24 @@
 import {
-  cashLocale,
   MessageResponseFactory,
   PlainMessage,
+  cashLocale,
 } from '@packages/shared-types';
-import { SkillGroupController } from 'apps/server/src/skill-group-lib/skill-group-controller-factory';
-import {
-  drawDiceUserActivityMessage,
+import type { SkillGroupController } from '../../../../skill-group-lib/skill-group-controller-factory';
+import type {
   IndexSkillPropsType,
   MethodReturnType,
+} from '../../../../skill-group-lib/skill-service-lib';
+import {
   Skill,
   SkillDraw,
   SkillGroup,
-} from 'apps/server/src/skill-group-lib/skill-service-lib';
-import { DiceUserActivitySkillDrawPropsType } from 'apps/server/src/skill-log/types/skill-draw-props.dto';
+  drawDiceUserActivityMessage,
+} from '../../../../skill-group-lib/skill-service-lib';
+import type { DiceUserActivitySkillDrawPropsType } from '../../../../skill-log/types/skill-draw-props.dto';
+import { getStopImageUrl } from '../../../scenarios.commons';
 import { D1ScenarioRoutes } from '../../routes';
-import { StockDownService, StockUpAmountEnum } from './stock-down.service';
+import { StockDownService } from './stock-down.service';
+import { StockUpAmountEnum } from './stock-down.service';
 
 @SkillGroup(D1ScenarioRoutes.skillGroups.stockDown)
 export class StockDownSkillGroup implements SkillGroupController {
@@ -41,6 +45,12 @@ export class StockDownSkillGroup implements SkillGroupController {
         userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [
           PlainMessage({
+            thumbnail: {
+              altName: '대폭락 칸 일러스트',
+              imageUrl: getStopImageUrl(
+                D1ScenarioRoutes.skillGroups.stockDown.skillGroupName,
+              ),
+            },
             title: `${this.getSkillGroupAlias()} 칸`,
             description: '주식의 가치가 하락합니다.',
           }),
@@ -91,6 +101,12 @@ export class StockDownSkillGroup implements SkillGroupController {
       userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
       actionResultDrawings: [
         PlainMessage({
+          thumbnail: {
+            altName: '대폭락 칸 일러스트',
+            imageUrl: getStopImageUrl(
+              D1ScenarioRoutes.skillGroups.stockDown.skillGroupName,
+            ),
+          },
           title: `${this.getSkillGroupAlias()} 칸`,
           description: '주식의 가치가 하락합니다.',
         }),
