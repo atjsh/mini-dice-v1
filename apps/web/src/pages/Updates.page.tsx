@@ -26,7 +26,7 @@ const Entry: React.FC<{
         })}
         )
       </p>
-      <ul className="list-disc ml-10 leading-10">
+      <ul className="list-disc ml-10 leading-6">
         {updates.map((update) => (
           <li key={update} dangerouslySetInnerHTML={{ __html: update }}></li>
         ))}
@@ -137,7 +137,7 @@ const entries: {
   },
   {
     emoji: '🌏',
-    title: '공식 서비스가 곧 출시됩니다.',
+    title: '공식 서비스가 곧 출시됩니다',
     date: new Date('2023-03-25T00:00:00+09:00'),
     author: 'ATJSH',
     updates: [
