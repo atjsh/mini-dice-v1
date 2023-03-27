@@ -552,12 +552,18 @@ const LandCommentsMessage: React.FC<{
           <div className=" flex gap-x-5">
             <div className=" opacity-50">{user?.username ?? '나'}</div>
             <div className=" break-all">{thisComment}</div>
+            <div className=" opacity-50">방금 전</div>
           </div>
         )}
         {landComments.map((landComment) => (
           <div className=" flex gap-x-5">
             <div className=" opacity-50">{landComment.username}</div>
             <div className=" break-all">{landComment.comment}</div>
+            <div className=" opacity-50">
+              {formatDistance(new Date(landComment.date), new Date(), {
+                locale: ko,
+              }).toString()}
+            </div>
           </div>
         ))}
       </div>

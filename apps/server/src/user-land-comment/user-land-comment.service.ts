@@ -67,7 +67,7 @@ export class UserLandCommentService {
         relations: ['user'],
         where: { landId: getSkillGroupPath(getSkillRouteFromPath(landId)) },
         order: { date: 'DESC' },
-        take: 20,
+        take: 7,
       })
     ).map((result) => ({
       username: result.user.username,
