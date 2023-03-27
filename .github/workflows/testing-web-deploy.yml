@@ -3,7 +3,7 @@ name: '@apps/web (Testing) - Build and Deploy to CloudFlare Pages'
 on:
   push:
     branches:
-      - 'serverless-framework'
+      - workflow_dispatch
 
 jobs:
   deploy:

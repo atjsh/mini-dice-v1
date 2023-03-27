@@ -3,7 +3,7 @@ name: '@apps/server (Beta) - Build and Deploy to AWS Lambda'
 on:
   push:
     branches:
-      - 'develop'
+      - develop
 
 jobs:
   deploy:
