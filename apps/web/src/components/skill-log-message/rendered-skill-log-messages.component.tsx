@@ -562,7 +562,8 @@ const LandCommentsMessage: React.FC<{
             <div className=" opacity-50">
               {formatDistance(new Date(landComment.date), new Date(), {
                 locale: ko,
-              }).toString()}
+              }).toString()}{' '}
+              전
             </div>
           </div>
         ))}
