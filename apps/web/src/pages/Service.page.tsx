@@ -106,6 +106,11 @@ export function Ingame({
               <WordmarkComponent />
             </div>
           </div>
+          <div>
+            <Link className="underline" to={UpdatesPageURL}>
+              공식 서비스가 곧 출시됩니다
+            </Link>
+          </div>
         </div>
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
@@ -198,8 +203,13 @@ export function ServicePage() {
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-900 transition-[right] drop-shadow-none md:right-auto md:w-auto`}
       >
         <div className="font-bold tracking-tight pl-2 text-center md:text-left hidden md:block">
-          <div className="text-5xl">
+          <div className="text-5xl w-fit">
             <WordmarkComponent />
+          </div>
+          <div>
+            <Link className="hover:underline" to={UpdatesPageURL}>
+              공식 서비스가 곧 출시됩니다
+            </Link>
           </div>
         </div>
         <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">

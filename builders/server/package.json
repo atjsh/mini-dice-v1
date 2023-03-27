@@ -3,7 +3,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "yarn g:tsc && node ./dist/build-services.js"
+    "build": "yarn g:tsc && node ./dist/build-services.js",
+    "watch": "yarn g:tsc && node ./dist/watch-build-services.js"
   },
   "devDependencies": {
     "@anatine/esbuild-decorators": "^0.2.19",
