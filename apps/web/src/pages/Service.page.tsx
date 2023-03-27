@@ -100,14 +100,14 @@ export function Ingame({
       className={` flex-1 overflow-y-auto transition-colors duration-300 ${'bg-white dark:bg-black'} md:bg-white md:dark:bg-black md:transition-none`}
     >
       <div className="mx-auto my-0 max-w-7xl">
-        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg md:hidden flex items-center justify-between">
+        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg md:hidden flex items-center justify-between gap-2">
           <div className="text-left">
             <div className="text-lg font-extrabold">
               <WordmarkComponent />
             </div>
           </div>
-          <div>
-            <Link className="underline" to={UpdatesPageURL}>
+          <div className="text-xs text-right">
+            <Link className="underline " to={UpdatesPageURL}>
               공식 서비스가 곧 출시됩니다
             </Link>
           </div>
