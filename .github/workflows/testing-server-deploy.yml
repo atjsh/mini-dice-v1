@@ -1,9 +1,7 @@
 name: '@apps/server (Testing) - Build and Deploy to AWS Lambda'
 
 on:
-  push:
-    branches:
-      - workflow_dispatch
+  - workflow_dispatch
 
 jobs:
   deploy:
