@@ -2,7 +2,7 @@ export const WordmarkComponent: React.FC<{ colored?: boolean }> = ({
   colored,
 }) => (
   <div className="flex gap-2 items-end justify-center w-full">
-    <div className="whitespace-nowrap">Mini</div>{' '}
+    <div className="whitespace-nowrap">빅찬웅</div>{' '}
     <div
       className={`${
         colored == undefined || colored == true ? 'text-minidice_red' : ''
