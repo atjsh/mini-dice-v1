@@ -16,24 +16,6 @@ provider:
   runtime: nodejs18.x
   httpApi:
     payload: '2.0'
-    cors:
-      allowedOrigins:
-        - ${file(./slsconfig.yml):allowedOrigins}
-      allowedHeaders:
-        - Content-Type
-        - Access-Control-Request-Methods
-        - Access-Control-Request-Headers
-        - Access-Control-Allow-Origin
-        - Authorization
-        - timezone
-      allowedMethods:
-        - GET
-        - POST
-        - PUT
-        - DELETE
-        - OPTIONS
-      allowCredentials: true
-      maxAge: 86400
 
 functions:
   app:
