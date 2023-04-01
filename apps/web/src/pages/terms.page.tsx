@@ -425,7 +425,7 @@ export function TermsPage() {
             <SectionListItem>
               서비스는 서비스상에 게재되어 있거나 서비스를 통한 광고주의
               판촉활동에 회원이 참여하거나 교신 또는 거래를 함으로써 발생하는
-              손실과 손해에 대해 책임을 지지 않습니다
+              손실과 손해에 대해 책임을 지지 않습니다.
             </SectionListItem>
           </SectionList>
           <SectionHeader>부칙</SectionHeader>
