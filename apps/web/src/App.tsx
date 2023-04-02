@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet';
 import {
   Navigate,
   RouterProvider,
+  ScrollRestoration,
   createBrowserRouter,
 } from 'react-router-dom';
 import 'reflect-metadata';
@@ -10,13 +11,23 @@ import { IndexSkeletonPage } from './pages/IndexSkeleton';
 import {
   FinishSignupPageURL,
   IndexPageURL,
+  ProtectedRoute,
   ServicePageURL,
   protectedRoutes,
 } from './pages/routes';
 
+const Route: React.FC<{ route: ProtectedRoute }> = ({ route }) => {
+  return (
+    <>
+      <ScrollRestoration />
+      <Helmet title={route.title} />
+      <route.component />
+    </>
+  );
+};
+
 function App() {
   const { isError: isNotAuthed, data: user, isLoading } = useUser();
-  console.log('app redraw', user);
 
   const router = createBrowserRouter(
     protectedRoutes.map((route) => ({
@@ -25,10 +36,7 @@ function App() {
         <IndexSkeletonPage />
       ) : route.protection == 'notAuthed' ? (
         isNotAuthed ? (
-          <>
-            <Helmet title={route.title} />
-            <route.component />
-          </>
+          <Route route={route} />
         ) : (
           <Navigate
             to={{
@@ -46,17 +54,11 @@ function App() {
             replace
           />
         ) : (
-          <>
-            <Helmet title={route.title} />
-            <route.component />
-          </>
+          <Route route={route} />
         )
       ) : route.protection == 'signupCompleted' ? (
         user?.signupCompleted == true ? (
-          <>
-            <Helmet title={route.title} />
-            <route.component />
-          </>
+          <Route route={route} />
         ) : user ? (
           <Navigate
             to={{
@@ -75,10 +77,7 @@ function App() {
         )
       ) : route.protection == 'signupNotCompleted' ? (
         user?.signupCompleted == false ? (
-          <>
-            <Helmet title={route.title} />
-            <route.component />
-          </>
+          <Route route={route} />
         ) : (
           <Navigate
             to={{
@@ -88,10 +87,7 @@ function App() {
           />
         )
       ) : (
-        <>
-          <Helmet title={route.title} />
-          <route.component />
-        </>
+        <Route route={route} />
       ),
     })),
   );
