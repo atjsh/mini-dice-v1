@@ -1,7 +1,7 @@
 import { PublicProfileVo } from '@packages/shared-types';
 import { formatDistance } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useOthersProfiles } from '../libs/tdol-server/profile/use-others-profiles.hook';
@@ -83,18 +83,23 @@ const RankingProfile: React.FC<{ profile: PublicProfileVo; rank: number }> = ({
 const UPDATED_AT_OFFSET_24H = 1000 * 60 * 60 * 24;
 const UPDATED_AT_OFFSET_7DAYS = 1000 * 60 * 60 * 24 * 7;
 const UPDATED_AT_OFFSET_ALLTIME = undefined;
+const RANKING_PAGE_LIMIT = 25;
 
 export function RankingPage() {
-  const limit = 25;
   const [page, setPage] = useState(1);
   const [updatedAtOffset, setupdatedAtOffset] = useState<number | undefined>(
     UPDATED_AT_OFFSET_24H,
   );
   const { data: othersProfiles, isLoading } = useOthersProfiles(
-    limit,
+    RANKING_PAGE_LIMIT,
     page,
     updatedAtOffset,
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page, updatedAtOffset]);
+
   return (
     <ServiceLayout>
       <div className="self-center px-3 max-w-5xl m-auto">
@@ -167,7 +172,8 @@ export function RankingPage() {
                   onClick={() => setPage(page + 1)}
                   disabled={
                     page === 10 ||
-                    (othersProfiles && othersProfiles.length < limit)
+                    (othersProfiles &&
+                      othersProfiles.length < RANKING_PAGE_LIMIT)
                   }
                   className="hover:underline disabled:text-gray-500"
                 >
@@ -189,7 +195,9 @@ export function RankingPage() {
                 <RankingProfile
                   profile={profile}
                   rank={
-                    (page - 1) * limit + othersProfiles.indexOf(profile) + 1
+                    (page - 1) * RANKING_PAGE_LIMIT +
+                    othersProfiles.indexOf(profile) +
+                    1
                   }
                 />
               );
