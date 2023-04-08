@@ -13,7 +13,6 @@ export function IndexPage() {
     <ServiceLayout hideFooter={false}>
       <div className=" flex flex-col gap-10">
         <div className="text-center">
-          <div className="text-4xl mb-6 tracking-widest">🎲🗺💵</div>
           <div className="flex-col flex gap-1">
             <h1 className="text-4xl md:text-6xl font-extrabold">
               <WordmarkComponent />
