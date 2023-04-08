@@ -106,11 +106,13 @@ export function Ingame({
               <WordmarkComponent />
             </div>
           </div>
-          <div className="text-xs text-right">
-            <Link className="underline " to={UpdatesPageURL}>
-              공식 서비스가 곧 출시됩니다
-            </Link>
-          </div>
+          {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
+            <div className="text-xs text-right">
+              <a className="underline " href="https://www.mini-dice.com">
+                공식 서비스로 돌아가기
+              </a>
+            </div>
+          )}
         </div>
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
@@ -206,11 +208,13 @@ export function ServicePage() {
           <div className="text-5xl w-fit">
             <WordmarkComponent />
           </div>
-          <div>
-            <Link className="hover:underline" to={UpdatesPageURL}>
-              공식 서비스가 곧 출시됩니다
-            </Link>
-          </div>
+          {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
+            <div>
+              <a className="hover:underline " href="https://www.mini-dice.com">
+                공식 서비스로 돌아가기
+              </a>
+            </div>
+          )}
         </div>
         <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
           <ConnectWithOauthWidget />

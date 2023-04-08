@@ -137,6 +137,19 @@ const entries: {
       '문의사항이 있으신 경우 <a class="font-bold underline" href="https://discord.gg/2dhUGXwmBq">디스코드</a>나 <a class="font-bold underline" href="mailto:lifegame2021team@gmail.com">이메일 주소</a>로 문의를 남겨주세요. 계정 연동을 도와드리겠습니다.',
     ],
   },
+  {
+    emoji: '🎲',
+    title: '이제 공식 서비스로써 운영됩니다',
+    date: new Date('2023-04-08T00:00:00+09:00'),
+    author: 'ATJSH',
+    updates: [
+      '1년 간의 베타 서비스를 마치고, 이제 공식 서비스로써 운영됩니다.',
+      '공식 서비스는 <a class="font-bold underline" href="https://www.mini-dice.com">www.mini-dice.com</a>에서 접속 가능합니다.',
+      '기존의 베타 서비스는 <a class="font-bold underline" href="https://beta.mini-dice.com">beta.mini-dice.com</a>에서 접속할 수 있습니다.',
+      '베타 서비스에서는 아직 공식 서비스에 반영되지 않은 새로운 기능들을 테스트할 수 있습니다. 베타 서비스에 추가되는 새로운 기능들은 공식 서비스에도 안정화 후에 추가됩니다.',
+      '서비스 업데이트는 계속해서 이루어질 예정입니다.',
+    ],
+  },
 ].reverse();
 
 export function UpdatesPage() {
