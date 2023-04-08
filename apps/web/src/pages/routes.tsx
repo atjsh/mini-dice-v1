@@ -103,7 +103,7 @@ export const protectedRoutes: ProtectedRoute[] = [
     path: RankingPgaeURL,
     component: RankingPage,
     title: getTitle('Ranking'),
-    protection: 'signupCompleted',
+    protection: 'public',
   },
   {
     path: UpdatesPageURL,

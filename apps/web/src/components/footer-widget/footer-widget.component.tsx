@@ -154,6 +154,21 @@ export const FooterWidgetComponent: React.FC = () => {
         },
       ],
     },
+    {
+      label: '서버 선택',
+      links: [
+        {
+          label: 'Mini Dice (공식 서비스)',
+          link: 'https://www.mini-dice.com',
+          type: 'external',
+        },
+        {
+          label: 'Mini Dice Beta (베타 서비스, 불안정할 수 있음)',
+          link: 'https://beta.mini-dice.com',
+          type: 'external',
+        },
+      ],
+    },
   ];
 
   return (
@@ -163,23 +178,6 @@ export const FooterWidgetComponent: React.FC = () => {
         <FooterLinkGroup key={group.label} {...group} />
       ))}
       <div className="text-gray-400">
-        클라이언트 버전:{' '}
-        {strEllipsis(
-          import.meta.env.VITE_VERCEL_GIT_COMMIT_SHA ||
-            import.meta.env.VITE_BUILD_VERSION ||
-            'unknown',
-          6,
-          '+',
-        )}
-        {import.meta.env.VITE_WEB_VERSION_KIND || 'unknown'} -{' '}
-        <a
-          href="/"
-          className=" underline hover:text-black hover:dark:text-white"
-        >
-          새로고침
-        </a>
-        <br />
-        <br />
         일러스트 및 이미지 저작권 © Miyobi (미요비). 모든 권리 보유.
         <br /> Mini Dice 저작권 © 2022 Mini Dice Team. 모든 권리 보유.
       </div>

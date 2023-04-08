@@ -6,6 +6,7 @@ import {
 import { queryClient } from '../../..';
 import { useMutation } from 'react-query';
 import { authedAxios, UseUserHookKey } from '..';
+import axios from 'axios';
 
 export async function getUserVo(): Promise<UserEntityJson> {
   const response = await authedAxios.get<UserEntityJson>(`/profile/me`);
@@ -20,7 +21,7 @@ export async function getOthersProfiles(
   page: number,
   updatedAfterOffset?: number,
 ): Promise<PublicProfileVo[]> {
-  const response = await authedAxios.get<PublicProfileVo[]>('profile/others', {
+  const response = await axios.get<PublicProfileVo[]>('profile/others', {
     params: {
       limit,
       page,
@@ -28,6 +29,7 @@ export async function getOthersProfiles(
         ? new Date(Date.now() - updatedAfterOffset)
         : undefined,
     },
+    baseURL: import.meta.env.VITE_SERVER_URL,
   });
 
   return response.data;
