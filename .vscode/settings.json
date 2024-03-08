@@ -8,6 +8,8 @@
   "eslint.nodePath": ".yarn/sdks",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "rust-analyzer.cargo.buildScripts.invocationLocation": "workspace",
-  "rust-analyzer.linkedProjects": ["apps/server-rest/Cargo.toml"],
+  "rust-analyzer.linkedProjects": [
+    "apps/server-rest/Cargo.toml"
+  ],
   "rust-analyzer.showUnlinkedFileNotification": false
 }
