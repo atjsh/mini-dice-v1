@@ -23,6 +23,11 @@ async fn main() -> Result<(), lambda_http::Error> {
 
     let state = AppState { pg_pool };
 
+    let auth_router = Router::new().route(
+        "/google-oauth",
+        get(routers::auth::google_oauth::get_encrypted_email_by_google_oauth_code::handler),
+    );
+
     let cors = CorsLayer::new()
         .allow_methods([
             http::Method::GET,
@@ -49,6 +54,7 @@ async fn main() -> Result<(), lambda_http::Error> {
 
     let app = Router::new()
         .route("/", get(routers::root::get_hello_world::handler))
+        .merge(auth_router)
         .layer(cors)
         .with_state(state);
 

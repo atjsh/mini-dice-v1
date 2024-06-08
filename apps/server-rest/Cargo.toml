@@ -38,3 +38,5 @@ jsonwebtoken = "9.0.0"
 reqwest = { version = "0.11.22", features = ["json"] }
 openssl = { version = "0.10.64", features = ["vendored"] }
 argon2 = "0.5.3"
+aes-gcm = "0.10.3"
+base64 = "0.22.0"
