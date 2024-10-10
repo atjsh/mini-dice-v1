@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@fastify/aws-lambda": "^3.2.0",
-    "@fastify/cookie": "^8.3.0",
+    "@fastify/cookie": "^9.2.0",
     "@fastify/helmet": "^10.1.0",
     "@golevelup/nestjs-discovery": "^3.0.0",
     "@nestjs/axios": "^2.0.0",
