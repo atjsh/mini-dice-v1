@@ -27,7 +27,7 @@
     "server:typecheck:watch": "yarn workspace @apps/server run typecheck:watch",
     "web": "yarn workspace @apps/web"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.5.3",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
