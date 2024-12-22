@@ -20,8 +20,7 @@ export class MoneyCollectionParticipantsEntity {
   moneyCollectionId: number;
 
   @Column({
-    type: 'char',
-    length: '36',
+    type: 'uuid',
     nullable: true,
     default: null,
   })

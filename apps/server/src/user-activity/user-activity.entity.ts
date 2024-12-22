@@ -1,29 +1,37 @@
 import type { UserIdType } from '@packages/shared-types';
 import { IsNotEmpty } from 'class-validator';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { v7 } from 'uuid';
 import { UserEntity } from '../user/entity/user.entity';
 
-const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
+const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date_ua';
 
 @Entity({ name: 'user_activity_entity', orderBy: { createdAt: 'DESC' } })
 @Index(SEARCH_BY_USER_ID_PAGED_INDEX_NAME, ['userId', 'createdAt'])
 export class UserActivityEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({
+    type: 'uuid',
+  })
   id: string;
+
+  @BeforeInsert()
+  setPk() {
+    this.id = v7();
+  }
 
   @Index()
   @Column({
-    type: 'char',
-    length: '36',
+    type: 'uuid',
     nullable: false,
     default: null,
   })

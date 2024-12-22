@@ -5,7 +5,7 @@ export class MoneyCollectionEntity {
   @PrimaryColumn()
   id: number;
 
-  @Column('mediumtext', {
+  @Column('text', {
     nullable: true,
   })
   usernames: string | null;

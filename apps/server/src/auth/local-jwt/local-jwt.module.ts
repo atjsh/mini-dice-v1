@@ -9,6 +9,8 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalJwtController } from './local-jwt.controller';
 import { LocalJwtService } from './local-jwt.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RefreshTokenV2Entity } from './refresh-token/entity/refresh-token-v2.entity';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
         secret: configService.get(ENV_KEYS.JWT_SECRET),
       }),
     }),
+    TypeOrmModule.forFeature([RefreshTokenV2Entity]),
   ],
   controllers: [AccessTokenController, LocalJwtController],
   providers: [

@@ -1,7 +1,6 @@
 import type { HttpService } from '@nestjs/axios';
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import type { Cache } from 'cache-manager';
 import type {
   UPBIT_TICKER_COUNTRY_CURRENCY,
   UPBIT_TICKER_CRYPTO_CURRENCY,
@@ -12,10 +11,7 @@ const cacheKey = 'upbit:ticker:';
 
 @Injectable()
 export class UpbitApiService {
-  constructor(
-    private httpService: HttpService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  constructor(private httpService: HttpService) {}
   private async getTicker(
     market: `${(typeof UPBIT_TICKER_COUNTRY_CURRENCY)[number]}-${(typeof UPBIT_TICKER_CRYPTO_CURRENCY)[number]}`,
   ): Promise<UpbitTickerInterface> {
@@ -38,17 +34,9 @@ export class UpbitApiService {
     cryptoCurrency: (typeof UPBIT_TICKER_CRYPTO_CURRENCY)[number],
   ): Promise<UpbitTickerInterface['trade_price']> {
     const market = `${countryCurrency}-${cryptoCurrency}` as const;
-    const cachedTickerPrice = await this.cacheManager.get<
-      UpbitTickerInterface['trade_price']
-    >(`${cacheKey}${market}`);
-
-    if (cachedTickerPrice) {
-      return cachedTickerPrice;
-    }
 
     const { trade_price: tickerPrice } = await this.getTicker(market);
 
-    await this.cacheManager.set(`${cacheKey}${market}`, tickerPrice);
     return tickerPrice;
   }
 }

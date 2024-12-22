@@ -310,10 +310,6 @@ export class CommonLandService {
       );
     }
 
-    await this.skillGroupAliasesService.invalidateSkillGroupAliasesCache(
-      SCENARIO_NAMES.D1,
-    );
-
     return {
       landName,
     };

@@ -1,11 +1,10 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import type { SkillRouteType } from '@packages/scenario-routing';
 import {
   SkillGroupMetadataKey,
   getSkillGroupPath,
 } from '@packages/scenario-routing';
-import type { Cache } from 'cache-manager';
 import type { SCENARIO_NAMES } from '../../scenarios/scenarios.constants';
 import type { SkillGroupController } from '../skill-group-controller-factory';
 
@@ -18,10 +17,7 @@ export type SkillGroupAliasesType = {
 
 @Injectable()
 export class SkillGroupAliasesService {
-  constructor(
-    private discoveryService: DiscoveryService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  constructor(private discoveryService: DiscoveryService) {}
 
   private async setSkillGroupAliasesToCache(
     scenarioRoutes: SkillRouteType[],
@@ -54,11 +50,6 @@ export class SkillGroupAliasesService {
       }),
     );
 
-    await this.cacheManager.set(
-      `${cacheKey}${scenarioName}`,
-      skillGroupAliases,
-    );
-
     return skillGroupAliases;
   }
 
@@ -66,21 +57,6 @@ export class SkillGroupAliasesService {
     scenarioRoutes: SkillRouteType[],
     scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
-    // const cachedSkillGroupAliases =
-    //   await this.cacheManager.get<SkillGroupAliasesType>(
-    //     `${cacheKey}${scenarioName}`,
-    //   );
-
-    // if (cachedSkillGroupAliases) {
-    //   return cachedSkillGroupAliases;
-    // }
-
     return this.setSkillGroupAliasesToCache(scenarioRoutes, scenarioName);
-  }
-
-  public async invalidateSkillGroupAliasesCache(
-    scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
-  ): Promise<void> {
-    await this.cacheManager.del(`${cacheKey}${scenarioName}`);
   }
 }

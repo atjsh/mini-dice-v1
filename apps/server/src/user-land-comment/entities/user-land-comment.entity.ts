@@ -1,14 +1,16 @@
 import type { UserIdType } from '@packages/shared-types';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { v7 } from 'uuid';
 import { UserEntity } from '../../user/entity/user.entity';
 
 const SEARCH_BY_LAND_ID_PAGED_INDEX_NAME = 'land_id_date';
@@ -16,12 +18,18 @@ const SEARCH_BY_LAND_ID_PAGED_INDEX_NAME = 'land_id_date';
 @Entity({ name: 'user_land_comment_entity' })
 @Index(SEARCH_BY_LAND_ID_PAGED_INDEX_NAME, ['landId', 'date'])
 export class UserLandCommentEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({
+    type: 'uuid',
+  })
   id: string;
 
+  @BeforeInsert()
+  setPk() {
+    this.id = v7();
+  }
+
   @Column({
-    type: 'char',
-    length: '36',
+    type: 'uuid',
     nullable: false,
   })
   userId: UserIdType;

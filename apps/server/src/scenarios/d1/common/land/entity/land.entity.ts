@@ -22,8 +22,7 @@ export class LandEntity {
   landName: string;
 
   @Column({
-    type: 'char',
-    length: '36',
+    type: 'uuid',
     nullable: true,
     default: null,
   })

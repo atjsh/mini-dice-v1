@@ -1,19 +1,28 @@
 import type { UserIdType } from '@packages/shared-types';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { v7 } from 'uuid';
 import { UserEntity } from '../user/entity/user.entity';
 
 @Entity({ name: 'frontend_error_entity' })
 export class FrontendErrorEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({
+    type: 'uuid',
+  })
   id: string;
+
+  @BeforeInsert()
+  setPk() {
+    this.id = v7();
+  }
 
   @Column({
     type: 'text',
@@ -21,8 +30,7 @@ export class FrontendErrorEntity {
   error: string;
 
   @Column({
-    type: 'char',
-    length: '36',
+    type: 'uuid',
   })
   userId: UserIdType;
 

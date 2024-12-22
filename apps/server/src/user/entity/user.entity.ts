@@ -18,10 +18,11 @@ import {
   Entity,
   OneToMany,
   PrimaryColumn,
-  type Relation,
   UpdateDateColumn,
+  type Relation,
 } from 'typeorm';
-import { getSequentialPk } from '../../common';
+import { v7 } from 'uuid';
+import { RefreshTokenV2Entity } from '../../auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
 import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-error.entity';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
 import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
@@ -37,14 +38,14 @@ export class UserEntity {
    * PK값
    */
   @PrimaryColumn({
-    length: 20,
     name: 'userId',
+    type: 'uuid',
   })
   id: string;
 
   @BeforeInsert()
   setPk() {
-    this.id = getSequentialPk(UserEntityTableName);
+    this.id = v7();
   }
 
   /**
@@ -189,6 +190,9 @@ export class UserEntity {
 
   @OneToMany(() => LandEntity, (land) => land.user)
   frontendErrors: Relation<FrontendErrorEntity>[];
+
+  @OneToMany(() => RefreshTokenV2Entity, (refreshToken) => refreshToken.user)
+  refreshTokens: Relation<RefreshTokenV2Entity>[];
 
   @Column({
     type: 'int',
