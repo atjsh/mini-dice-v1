@@ -51,7 +51,7 @@ import { UserModule } from './user/user.module';
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
           synchronize: false,
-          logging: false,
+          logging: true,
           entities: [
             UserEntity,
             LandEntity,
