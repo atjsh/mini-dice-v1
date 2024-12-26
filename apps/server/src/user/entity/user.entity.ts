@@ -48,6 +48,13 @@ export class UserEntity {
     this.id = v7();
   }
 
+  @Column({
+    name: 'userIdv1',
+    type: 'varchar',
+    length: 20,
+  })
+  userIdv1: string;
+
   /**
    * 유저 이메일값
    *
@@ -55,6 +62,7 @@ export class UserEntity {
    * @memberof UserEntity
    */
   @Column({
+    name: 'plain_email',
     type: 'varchar',
     nullable: true,
     length: 100,
@@ -68,6 +76,7 @@ export class UserEntity {
    * @memberof UserEntity
    */
   @Column({
+    name: 'authProvider',
     type: 'varchar',
     nullable: false,
     length: 10,
@@ -83,6 +92,9 @@ export class UserEntity {
   @MaxLength(20)
   @MinLength(2)
   @Column({
+    name: 'username',
+    type: 'varchar',
+    length: 255,
     nullable: false,
   })
   username: string;
@@ -96,7 +108,11 @@ export class UserEntity {
   @Transform(({ type, value }) =>
     type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
   )
-  @Column('bigint')
+  @Column({
+    name: 'cash',
+    type: 'bigint',
+    nullable: false,
+  })
   cash: bigint;
 
   /**
@@ -108,9 +124,10 @@ export class UserEntity {
    * @memberof UserEntity
    */
   @Column({
+    name: 'submitAllowedMapStop',
+    type: 'varchar',
     nullable: true,
     default: null,
-    type: 'varchar',
     length: 80,
   })
   submitAllowedMapStop: string | null;
@@ -122,6 +139,8 @@ export class UserEntity {
    * @memberof UserEntity
    */
   @Column({
+    name: 'isUserDiceTossForbidden',
+    type: 'boolean',
     default: false,
     nullable: false,
   })
@@ -135,6 +154,7 @@ export class UserEntity {
    * @memberof UserEntity
    */
   @Column({
+    name: 'canTossDiceAfter',
     type: 'timestamp',
     nullable: true,
     default: null,
@@ -149,6 +169,7 @@ export class UserEntity {
    */
   @IsIn(countryCode3List)
   @Column({
+    name: 'countryCode3',
     length: 3,
     nullable: false,
     type: 'varchar',
@@ -162,15 +183,76 @@ export class UserEntity {
    * @memberof UserEntity
    */
   @Column({
+    name: 'signupCompleted',
+    type: 'boolean',
     nullable: false,
     default: false,
   })
   signupCompleted: boolean;
 
   @Column({
+    name: 'isTerminated',
+    type: 'boolean',
     default: false,
+    nullable: false,
   })
   isTerminated: boolean;
+
+  @Column({
+    name: 'stockId',
+    type: 'int',
+    nullable: true,
+    default: null,
+  })
+  stockId: StockIdType | null;
+
+  @Transform(({ type, value }) =>
+    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
+  )
+  @Column({
+    name: 'stockPrice',
+    type: 'bigint',
+    nullable: false,
+    default: 0,
+  })
+  stockPrice: bigint;
+
+  @Transform(({ type, value }) =>
+    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
+  )
+  @Column({
+    name: 'stockAmount',
+    type: 'bigint',
+    nullable: false,
+    default: 0,
+  })
+  stockAmount: bigint;
+
+  @Column({
+    name: 'stockCashPurchaseSum',
+    type: 'bigint',
+    default: null,
+    nullable: true,
+  })
+  stockCashPurchaseSum: bigint | null;
+
+  @Column({
+    name: 'canAddLandComment',
+    type: 'boolean',
+    default: false,
+    nullable: false,
+  })
+  canAddLandComment: boolean;
+
+  @CreateDateColumn({
+    name: 'createdAt',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updatedAt',
+  })
+  updatedAt: Date;
 
   @OneToMany(() => LandEntity, (land) => land.user)
   lands: Relation<LandEntity>[];
@@ -193,47 +275,6 @@ export class UserEntity {
 
   @OneToMany(() => RefreshTokenV2Entity, (refreshToken) => refreshToken.user)
   refreshTokens: Relation<RefreshTokenV2Entity>[];
-
-  @Column({
-    type: 'int',
-    nullable: true,
-  })
-  stockId: StockIdType | null;
-
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
-  @Column('bigint', {
-    default: 0,
-  })
-  stockPrice: bigint;
-
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
-  @Column('bigint', {
-    default: 0,
-  })
-  stockAmount: bigint;
-
-  @Column('bigint', {
-    default: null,
-  })
-  stockCashPurchaseSum: bigint | null;
-
-  @Column({
-    default: false,
-    nullable: false,
-  })
-  canAddLandComment: boolean;
-
-  /** 객체가 생성된 날짜 */
-  @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
-  createdAt: Date;
-
-  /** 객체가 업데이트된 날짜 */
-  @UpdateDateColumn({ type: 'timestamp', comment: '객체가 업데이트된 날짜' })
-  updatedAt: Date;
 }
 
 /**

@@ -37,6 +37,7 @@ export class PgRefreshTokenEntity {
   createdAt: Date;
 
   @Column({
+    name: 'expiresAt',
     type: 'timestamp',
     nullable: false,
   })

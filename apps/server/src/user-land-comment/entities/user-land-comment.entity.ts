@@ -4,19 +4,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
+  UpdateDateColumn,
   type Relation,
 } from 'typeorm';
 import { v7 } from 'uuid';
 import { UserEntity } from '../../user/entity/user.entity';
 
-const SEARCH_BY_LAND_ID_PAGED_INDEX_NAME = 'land_id_date';
-
-@Entity({ name: 'user_land_comment_entity' })
-@Index(SEARCH_BY_LAND_ID_PAGED_INDEX_NAME, ['landId', 'date'])
+@Entity({ name: 'tb_user_land_comment' })
 export class UserLandCommentEntity {
   @PrimaryColumn({
     type: 'uuid',
@@ -43,9 +40,20 @@ export class UserLandCommentEntity {
   @Column({ nullable: false })
   landId: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: false })
+  @Column({
+    type: 'varchar',
+    length: 200,
+    nullable: false,
+  })
   comment: string;
 
-  @CreateDateColumn()
-  date: Date;
+  @CreateDateColumn({
+    name: 'createdAt',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updatedAt',
+  })
+  updatedAt: Date;
 }

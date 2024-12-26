@@ -47,7 +47,7 @@ export class PgUserActivityEntity {
   @Column({
     name: 'skillRoute',
     type: 'varchar',
-    length: 255,
+    length: 80,
     nullable: false,
   })
   skillRoute: string;

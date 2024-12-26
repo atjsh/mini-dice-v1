@@ -56,6 +56,7 @@ export class PgSkillLogEntity {
   userActivity: string;
 
   @Column({
+    name: 'skillServiceResult',
     type: 'json',
     nullable: true,
   })

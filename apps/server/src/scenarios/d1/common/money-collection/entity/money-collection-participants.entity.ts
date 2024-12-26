@@ -1,8 +1,7 @@
-import type { UserIdType } from '@packages/shared-types';
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -10,13 +9,19 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../../../../../user/entity/user.entity';
 
-@Entity({ name: 'money_collection_participants_entity' })
+@Entity({ name: 'tb_money_collection_participant' })
 export class MoneyCollectionParticipantsEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    name: 'id',
+    type: 'int',
+  })
   id: number;
 
-  @Index()
-  @Column()
+  @Column({
+    name: 'moneyCollectionId',
+    type: 'int',
+    nullable: false,
+  })
   moneyCollectionId: number;
 
   @Column({
@@ -24,7 +29,7 @@ export class MoneyCollectionParticipantsEntity {
     nullable: true,
     default: null,
   })
-  userId: UserIdType | null;
+  userId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.moneyCollectionParticipants, {
     onDelete: 'CASCADE',
@@ -32,4 +37,9 @@ export class MoneyCollectionParticipantsEntity {
   })
   @JoinColumn({ name: 'userId' })
   user: Relation<UserEntity | null>;
+
+  @CreateDateColumn({
+    name: 'createdAt',
+  })
+  createdAt: Date;
 }

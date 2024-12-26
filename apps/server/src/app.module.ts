@@ -21,7 +21,6 @@ import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
 import { LandEntity } from './scenarios/d1/common';
 import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
-import { MoneyCollectionEntity } from './scenarios/d1/common/money-collection/entity/money-collection.entity';
 import { RpsgameEntity } from './scenarios/d1/common/rpsgame/rpsgame.entity';
 import { D1Module } from './scenarios/d1/d1.module';
 import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
@@ -55,7 +54,6 @@ import { UserModule } from './user/user.module';
           entities: [
             UserEntity,
             LandEntity,
-            MoneyCollectionEntity,
             MoneyCollectionParticipantsEntity,
             SkillLogEntity,
             UserActivityEntity,
