@@ -19,6 +19,7 @@ import { PgUserEntity } from './pg-user.entity';
 ])
 export class PgMoneyCollectionParticipantEntity {
   @PrimaryColumn({
+    generated: 'increment',
     name: 'id',
     type: 'int',
     primaryKeyConstraintName: 'PK_tb_money_collection_participant_id',

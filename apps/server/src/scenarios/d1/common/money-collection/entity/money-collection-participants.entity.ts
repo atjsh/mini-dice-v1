@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   type Relation,
 } from 'typeorm';
@@ -11,7 +12,8 @@ import { UserEntity } from '../../../../../user/entity/user.entity';
 
 @Entity({ name: 'tb_money_collection_participant' })
 export class MoneyCollectionParticipantsEntity {
-  @PrimaryGeneratedColumn({
+  @PrimaryColumn({
+    generated: 'increment',
     name: 'id',
     type: 'int',
   })

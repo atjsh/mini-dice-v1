@@ -21,6 +21,7 @@ import {
 } from './enviroment-variable-config';
 import { MigratorModule } from './migrator/migrator.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { PgRpsgameEntity } from './entities/postgresql/pg-rpsgame.entity';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
           PgMoneyCollectionParticipantEntity,
           PgUserLandCommentEntity,
           PgRefreshTokenEntity,
+          PgRpsgameEntity,
         ],
       }),
     }),
