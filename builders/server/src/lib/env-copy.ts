@@ -12,6 +12,11 @@ export const envCopy: Plugin = {
         `${projectRoot}/apps/server/.env`,
         `${projectRoot}/apps/server/dist/.env`,
       );
+
+      fs.copyFile(
+        `${projectRoot}/certs/supabase-prod.crt`,
+        `${projectRoot}/apps/server/dist/supabase-prod.crt`,
+      );
     });
   },
 };

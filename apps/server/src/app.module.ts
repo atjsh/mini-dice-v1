@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { readFileSync } from 'fs';
 import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
@@ -49,9 +50,6 @@ import { UserModule } from './user/user.module';
           username: configService.getOrThrow(ENV_KEYS.DB_USER),
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
-          ssl: configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED)
-            ? configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED) === 'true'
-            : undefined,
           synchronize: false,
           logging: true,
           entities: [
@@ -64,6 +62,11 @@ import { UserModule } from './user/user.module';
             RefreshTokenV2Entity,
             RpsgameEntity,
           ],
+          ssl: configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED)
+            ? {
+                ca: readFileSync(__dirname + '/supabase-prod.crt'),
+              }
+            : undefined,
         };
       },
       inject: [ConfigService],
