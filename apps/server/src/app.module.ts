@@ -49,6 +49,9 @@ import { UserModule } from './user/user.module';
           username: configService.getOrThrow(ENV_KEYS.DB_USER),
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
+          ssl: configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED)
+            ? configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED) === 'true'
+            : undefined,
           synchronize: false,
           logging: true,
           entities: [
