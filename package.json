@@ -7,7 +7,10 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "apps/*",
+      "apps/server",
+      "apps/web",
+      "apps/web-next",
+      "apps/mysql-to-postgresql",
       "docs/*",
       "builders/*"
     ]
@@ -16,8 +19,8 @@
     "clean": "rimraf ./**/dist && rimraf ./**/node_modules",
     "g:tsc": "cd $INIT_CWD && tsc",
     "g:serverless": "cd $INIT_CWD && serverless",
-    "packages:build": "yarn workspaces foreach -pvit --from '@packages/*' run build",
-    "packages:watch": "yarn workspaces foreach -pvi --from '@packages/*' run watch",
+    "packages:build": "yarn workspaces foreach -pvitW --from '@packages/*' run build",
+    "packages:watch": "yarn workspaces foreach -pviW --from '@packages/*' run watch",
     "server:dev": "yarn workspace @apps/server run dev",
     "server:build": "yarn workspace @builders/server build",
     "server:build:watch": "yarn workspace @builders/server watch",
@@ -25,7 +28,7 @@
     "server:typecheck:watch": "yarn workspace @apps/server run typecheck:watch",
     "web": "yarn workspace @apps/web"
   },
-  "packageManager": "yarn@3.5.0",
+  "packageManager": "yarn@4.5.3",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",

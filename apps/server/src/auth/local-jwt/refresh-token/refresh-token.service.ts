@@ -1,33 +1,31 @@
-import {
-  CACHE_MANAGER,
-  ForbiddenException,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import type { UserIdType } from '@packages/shared-types';
-import type { Cache } from 'cache-manager';
-import { randomUUID } from 'crypto';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import type { FastifyReply } from 'fastify';
+import { Repository } from 'typeorm';
+import { v7 } from 'uuid';
 import { REFRESH_TOKEN_EXPIRES_IN_MS } from '../constants';
 import type { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
+import { RefreshTokenV2Entity } from './entity/refresh-token-v2.entity';
 import type { RefreshTokenEntity } from './entity/refresh-token.entity';
 
 @Injectable()
 export class RefreshTokenService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
-
-  private getCacheKey(tokenValue: string) {
-    return `rt:${tokenValue}`;
-  }
+  constructor(
+    @InjectRepository(RefreshTokenV2Entity)
+    private readonly refreshTokenRepository: Repository<RefreshTokenV2Entity>,
+  ) {}
 
   async createNewRefreshToken(
     createRefreshTokenDto: CreateRefreshTokenDto,
   ): Promise<RefreshTokenEntity> {
-    const tokenValue = randomUUID();
-    await this.cacheManager.set(
-      this.getCacheKey(tokenValue),
-      createRefreshTokenDto.userId,
-      1000 * REFRESH_TOKEN_EXPIRES_IN_MS,
+    const tokenValue = v7();
+
+    await this.refreshTokenRepository.save(
+      this.refreshTokenRepository.create({
+        id: tokenValue,
+        userId: createRefreshTokenDto.userId,
+        expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN_MS),
+      }),
     );
 
     return {
@@ -53,19 +51,26 @@ export class RefreshTokenService {
 
   async deleteRefreshToken(response: FastifyReply, refreshTokenValue: string) {
     response.clearCookie('refreshToken', { path: '/' });
-    await this.cacheManager.del(this.getCacheKey(refreshTokenValue));
+    await this.refreshTokenRepository.delete(refreshTokenValue);
   }
 
   async findRefreshToken(
     refreshTokenValue: RefreshTokenEntity['value'],
   ): Promise<RefreshTokenEntity> {
-    const refreshTokenUserId = await this.cacheManager.get<UserIdType>(
-      this.getCacheKey(refreshTokenValue),
-    );
-    if (refreshTokenUserId) {
+    const refreshToken = await this.refreshTokenRepository.findOne({
+      where: {
+        id: refreshTokenValue,
+      },
+    });
+
+    if (
+      refreshToken &&
+      refreshToken.userId &&
+      refreshToken.expiresAt > new Date()
+    ) {
       return {
         value: refreshTokenValue,
-        userId: refreshTokenUserId,
+        userId: refreshToken.userId,
       };
     }
 

@@ -39,10 +39,6 @@ export class UserService {
       where: {
         id: userId,
       },
-      cache: {
-        id: getCacheKey(userId),
-        milliseconds: CACHE_DURATION_MS,
-      },
     });
 
     return {

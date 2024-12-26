@@ -1,31 +1,35 @@
 import type { UserIdType } from '@packages/shared-types';
 import { IsNotEmpty } from 'class-validator';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { v7 } from 'uuid';
 import { UserEntity } from '../user/entity/user.entity';
 
-const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
-
-@Entity({ name: 'user_activity_entity', orderBy: { createdAt: 'DESC' } })
-@Index(SEARCH_BY_USER_ID_PAGED_INDEX_NAME, ['userId', 'createdAt'])
+@Entity({ name: 'tb_user_activity', orderBy: { createdAt: 'DESC' } })
 export class UserActivityEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({
+    name: 'id',
+    type: 'uuid',
+  })
   id: string;
 
-  @Index()
+  @BeforeInsert()
+  setPk() {
+    this.id = v7();
+  }
+
   @Column({
-    type: 'char',
-    length: '36',
+    name: 'userId',
+    type: 'uuid',
     nullable: false,
-    default: null,
   })
   userId: UserIdType;
 
@@ -36,19 +40,34 @@ export class UserActivityEntity {
   user: Relation<UserEntity>;
 
   @Column({
+    name: 'skillDrawProps',
     type: 'json',
     nullable: true,
   })
   skillDrawProps: Record<string, any>;
 
   @IsNotEmpty()
-  @Column({ nullable: false })
+  @Column({
+    name: 'skillRoute',
+    type: 'varchar',
+    length: 80,
+    nullable: false,
+  })
   skillRoute: string;
 
-  @Column({ nullable: false, default: false })
+  @Column({
+    name: 'read',
+    type: 'boolean',
+    nullable: false,
+    default: false,
+  })
   read: boolean;
 
   /** 객체가 생성된 날짜 */
-  @CreateDateColumn({ type: 'timestamp', comment: '객체가 생성된 날짜' })
+  @CreateDateColumn({
+    name: 'createdAt',
+    type: 'timestamp',
+    comment: '객체가 생성된 날짜',
+  })
   createdAt: Date;
 }

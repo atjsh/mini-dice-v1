@@ -3,10 +3,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { readFileSync } from 'fs';
 import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
-import { CacheProxyModule } from './cache-proxy/cache-proxy.module';
+import { RefreshTokenV2Entity } from './auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
 import {
   APP_GLOBAL_CONFIG_MODULES,
   ENV_KEYS,
@@ -21,7 +22,7 @@ import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
 import { LandEntity } from './scenarios/d1/common';
 import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
-import { MoneyCollectionEntity } from './scenarios/d1/common/money-collection/entity/money-collection.entity';
+import { RpsgameEntity } from './scenarios/d1/common/rpsgame/rpsgame.entity';
 import { D1Module } from './scenarios/d1/d1.module';
 import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
 import { SkillLogEntity } from './skill-log/entity/skill-log.entity';
@@ -43,28 +44,41 @@ import { UserModule } from './user/user.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          type: 'mysql',
+          type: 'postgres',
           host: configService.getOrThrow(ENV_KEYS.DB_URL),
           port: +configService.getOrThrow(ENV_KEYS.DB_PORT),
           username: configService.getOrThrow(ENV_KEYS.DB_USER),
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
           synchronize: false,
-          logging: false,
+          logging: true,
           entities: [
             UserEntity,
             LandEntity,
-            MoneyCollectionEntity,
             MoneyCollectionParticipantsEntity,
             SkillLogEntity,
             UserActivityEntity,
             UserLandCommentEntity,
+            RefreshTokenV2Entity,
+            RpsgameEntity,
           ],
+          ssl: configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED)
+            ? {
+                ca:
+                  configService.getOrThrow(ENV_KEYS.DB_SSL_CA_FILE_PATH) !==
+                  'null'
+                    ? readFileSync(
+                        `${__dirname}/${configService.getOrThrow(
+                          ENV_KEYS.DB_SSL_CA_FILE_PATH,
+                        )}`,
+                      )
+                    : undefined,
+              }
+            : undefined,
         };
       },
       inject: [ConfigService],
     }),
-    CacheProxyModule,
 
     LocalJwtModule,
     GoogleOAuthModule,
