@@ -2,30 +2,38 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { UserEntity } from '../../../../user/entity/user.entity';
+import { PgUserEntity } from './pg-user.entity';
 
 @Entity({
-  name: 'refresh_token_entity',
+  name: 'tb_refresh_token',
 })
-export class RefreshTokenV2Entity {
+export class PgRefreshTokenEntity {
   @PrimaryColumn({
+    name: 'id',
     type: 'uuid',
   })
   id: string;
 
   @Column({
+    name: 'userId',
     type: 'uuid',
     nullable: false,
   })
   userId: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.refreshTokens)
-  user: UserEntity;
+  @ManyToOne(() => PgUserEntity, (user) => user.refreshTokens)
+  @JoinColumn({
+    name: 'userId',
+  })
+  user: PgUserEntity;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    name: 'createdAt',
+  })
   createdAt: Date;
 
   @Column({
