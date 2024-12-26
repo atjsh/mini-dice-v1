@@ -21,6 +21,7 @@ export class PgMoneyCollectionParticipantEntity {
   @PrimaryColumn({
     name: 'id',
     type: 'int',
+    primaryKeyConstraintName: 'PK_tb_money_collection_participant_id',
   })
   id: number;
 
@@ -42,7 +43,10 @@ export class PgMoneyCollectionParticipantEntity {
     onDelete: 'CASCADE',
     eager: true,
   })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    foreignKeyConstraintName: 'FK_tb_money_collection_participant_userId',
+  })
   user: Relation<PgUserEntity>;
 
   @CreateDateColumn({

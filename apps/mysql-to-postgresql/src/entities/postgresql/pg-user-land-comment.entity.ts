@@ -18,7 +18,9 @@ import { PgUserEntity } from './pg-user.entity';
 @Index('TB_USER_LAND_COMMENT_LAND_ID_IDX', ['landId'])
 export class PgUserLandCommentEntity {
   @PrimaryColumn({
+    name: 'id',
     type: 'uuid',
+    primaryKeyConstraintName: 'PK_tb_user_land_comment_id',
   })
   id: string;
 
@@ -36,7 +38,10 @@ export class PgUserLandCommentEntity {
   @ManyToOne(() => PgUserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    foreignKeyConstraintName: 'FK_tb_user_land_comment_userId',
+  })
   user: Relation<PgUserEntity>;
 
   @Column({

@@ -19,6 +19,7 @@ export class PgSkillLogEntity {
   @PrimaryColumn({
     name: 'id',
     type: 'uuid',
+    primaryKeyConstraintName: 'PK_tb_skill_log_id',
   })
   id: string;
 
@@ -37,7 +38,10 @@ export class PgSkillLogEntity {
   @ManyToOne(() => PgUserEntity, (user) => user.skillLogs, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    foreignKeyConstraintName: 'FK_tb_skill_log_userId',
+  })
   user: Relation<PgUserEntity>;
 
   @Column({

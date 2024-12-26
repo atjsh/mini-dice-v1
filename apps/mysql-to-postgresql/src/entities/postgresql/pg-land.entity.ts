@@ -19,6 +19,7 @@ export class PgLandEntity {
   @PrimaryColumn({
     name: 'id',
     type: 'int',
+    primaryKeyConstraintName: 'PK_tb_land_id',
   })
   id: number;
 
@@ -40,7 +41,10 @@ export class PgLandEntity {
   @ManyToOne(() => PgUserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    foreignKeyConstraintName: 'FK_tb_land_userId',
+  })
   user: Relation<PgUserEntity> | null;
 
   @Column({

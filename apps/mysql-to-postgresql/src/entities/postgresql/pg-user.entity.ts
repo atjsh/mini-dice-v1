@@ -31,6 +31,7 @@ export class PgUserEntity {
   @PrimaryColumn({
     name: 'userId',
     type: 'uuid',
+    primaryKeyConstraintName: 'PK_tb_user_userId',
   })
   id: string;
 

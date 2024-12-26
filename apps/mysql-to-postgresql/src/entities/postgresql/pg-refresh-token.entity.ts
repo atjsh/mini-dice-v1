@@ -15,6 +15,7 @@ export class PgRefreshTokenEntity {
   @PrimaryColumn({
     name: 'id',
     type: 'uuid',
+    primaryKeyConstraintName: 'PK_tb_refresh_token_id',
   })
   id: string;
 
@@ -28,6 +29,7 @@ export class PgRefreshTokenEntity {
   @ManyToOne(() => PgUserEntity, (user) => user.refreshTokens)
   @JoinColumn({
     name: 'userId',
+    foreignKeyConstraintName: 'FK_tb_refresh_token_userId',
   })
   user: PgUserEntity;
 

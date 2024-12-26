@@ -52,7 +52,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
         password: configService.getOrThrow(CONFIG_KEYS.DB_PG_PASSWORD),
         database: configService.getOrThrow(CONFIG_KEYS.DB_PG_DATABASE),
         synchronize: true,
-        logging: false,
+        logging: true,
         entities: [
           PgUserEntity,
           PgUserActivityEntity,

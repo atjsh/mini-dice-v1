@@ -22,6 +22,7 @@ export class PgUserActivityEntity {
   @PrimaryColumn({
     name: 'id',
     type: 'uuid',
+    primaryKeyConstraintName: 'PK_tb_user_activity_id',
   })
   id: string;
 
@@ -63,7 +64,10 @@ export class PgUserActivityEntity {
   @ManyToOne(() => PgUserEntity, (user) => user.userActivityEntities, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    foreignKeyConstraintName: 'FK_tb_user_activity_userId',
+  })
   user: Relation<PgUserEntity>;
 
   @CreateDateColumn({
