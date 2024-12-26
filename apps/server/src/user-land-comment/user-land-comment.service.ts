@@ -66,13 +66,13 @@ export class UserLandCommentService {
       await this.userCommentRepository.find({
         relations: ['user'],
         where: { landId: getSkillGroupPath(getSkillRouteFromPath(landId)) },
-        order: { date: 'DESC' },
+        order: { createdAt: 'DESC' },
         take: 7,
       })
     ).map((result) => ({
       username: result.user.username,
       comment: result.comment,
-      date: result.date,
+      date: result.createdAt,
     }));
   }
 }
