@@ -64,7 +64,15 @@ import { UserModule } from './user/user.module';
           ],
           ssl: configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED)
             ? {
-                ca: readFileSync(__dirname + '/supabase-prod.crt'),
+                ca:
+                  configService.getOrThrow(ENV_KEYS.DB_SSL_CA_FILE_PATH) !==
+                  'null'
+                    ? readFileSync(
+                        `${__dirname}/${configService.getOrThrow(
+                          ENV_KEYS.DB_SSL_CA_FILE_PATH,
+                        )}`,
+                      )
+                    : undefined,
               }
             : undefined,
         };
