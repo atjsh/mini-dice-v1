@@ -1,33 +1,39 @@
-import type { UserIdType } from '@packages/shared-types';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
+  UpdateDateColumn,
   type Relation,
 } from 'typeorm';
 import { UserEntity } from '../../../../../user/entity/user.entity';
 
-@Entity({ name: 'land_entity' })
+@Entity({
+  name: 'tb_land',
+})
 export class LandEntity {
   @PrimaryColumn({
-    nullable: false,
+    name: 'id',
+    type: 'int',
   })
   id: number;
 
   @Column({
+    name: 'landName',
+    type: 'varchar',
+    length: 255,
     nullable: false,
   })
   landName: string;
 
   @Column({
-    type: 'char',
-    length: '36',
+    type: 'uuid',
     nullable: true,
     default: null,
   })
-  userId: UserIdType | null;
+  userId: string | null;
 
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
@@ -42,6 +48,16 @@ export class LandEntity {
     type: 'timestamp',
   })
   expiresAt: Date | null;
+
+  @CreateDateColumn({
+    name: 'createdAt',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updatedAt',
+  })
+  updatedAt: Date;
 
   get isLandExpired(): boolean {
     if (this.expiresAt) {

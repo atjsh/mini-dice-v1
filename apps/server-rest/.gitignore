@@ -1,0 +1,8 @@
+/target
+
+.env
+.envrc
+
+.DS_Store
+
+.aws-sam

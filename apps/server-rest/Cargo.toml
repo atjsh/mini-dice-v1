@@ -1,0 +1,42 @@
+[package]
+name = "server-rest"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+strip = true      # Automatically strip symbols from the binary.
+opt-level = "z"   # Optimize for size.
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[dependencies]
+lambda_http = { version = "0.8.1" }
+axum = { version = "0.6.20", features = [
+    "tracing",
+    "macros",
+    "headers",
+    "query",
+] }
+chrono = { version = "0.4.31", features = ["serde"] }
+serde = { version = "1.0.188", features = ["derive"] }
+serde_json = "1.0.107"
+sqlx = { version = "0.7.1", features = [
+    "postgres",
+    "runtime-tokio-rustls",
+    "any",
+    "macros",
+    "chrono",
+] }
+tokio = { version = "1.32.0", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+axum-macros = "0.3.8"
+tower-http = { version = "0.4.4", features = ["cors"] }
+http = "0.2.9"
+jsonwebtoken = "9.0.0"
+reqwest = { version = "0.11.22", features = ["json"] }
+openssl = { version = "0.10.64", features = ["vendored"] }
+argon2 = "0.5.3"
+aes-gcm = "0.10.3"
+base64 = "0.22.0"

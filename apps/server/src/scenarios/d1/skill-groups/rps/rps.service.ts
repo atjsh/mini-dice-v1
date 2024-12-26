@@ -1,5 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import type { Cache } from 'cache-manager';
+import { Injectable } from '@nestjs/common';
 import { DiceTossService } from '../../../../dice-toss/dice-toss.service';
 import type {
   SkillService,
@@ -8,14 +7,17 @@ import type {
 import { UserService } from '../../../../user/user.service';
 import { getUserCanTossDice } from '../../../scenarios.commons';
 import { SCENARIO_NAMES } from '../../../scenarios.constants';
+import { CommonRpsgameService } from '../../common/rpsgame/common-rpsgame.service';
 import { D1ScenarioRoutes } from '../../routes';
-
-const LAST_RPS_LOG_CACHE_KEY_PREFIX = 'rp:lastRpsLog';
 
 export enum RpsMove {
   Scissors = 'scissors',
   Rock = 'rock',
   Paper = 'paper',
+}
+
+function isRpsMove(value: string): value is RpsMove {
+  return Object.values(RpsMove).includes(value as RpsMove);
 }
 
 export function getRpsMoveAsKoreanText(rpsMove: RpsMove): string {
@@ -63,17 +65,34 @@ export type RpsLog = {
 @Injectable()
 export class RpsService implements SkillService {
   constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private userService: UserService,
     private diceTossService: DiceTossService,
+    private commonRpsgameService: CommonRpsgameService,
   ) {}
 
   private async getLastRpsLog(): Promise<RpsLog | undefined> {
-    return await this.cacheManager.get<RpsLog>(LAST_RPS_LOG_CACHE_KEY_PREFIX);
+    const latestRpsgame = await this.commonRpsgameService.getLatestRpsgame('1');
+
+    if (!latestRpsgame) {
+      return;
+    }
+
+    if (!isRpsMove(latestRpsgame.move)) {
+      return;
+    }
+
+    return {
+      rpsMove: latestRpsgame.move,
+      playerName: latestRpsgame.username,
+    };
   }
 
   private async setRpsLog(rpsLog: RpsLog) {
-    await this.cacheManager.set(LAST_RPS_LOG_CACHE_KEY_PREFIX, rpsLog);
+    await this.commonRpsgameService.setRpsgame(
+      '1',
+      rpsLog.playerName,
+      rpsLog.rpsMove,
+    );
   }
 
   private async getLastRpsLogOrSetOne(): Promise<RpsLog> {

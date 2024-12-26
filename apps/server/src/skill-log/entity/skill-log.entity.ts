@@ -1,35 +1,39 @@
-import type { UserIdType } from '@packages/shared-types';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { v7 } from 'uuid';
 import { UserEntity } from '../../user/entity/user.entity';
 import type { UserActivityType } from '../types/user-activity.dto';
 
-const SEARCH_BY_USER_ID_PAGED_INDEX_NAME = 'user_id_date';
-
-@Entity({ name: 'skill_log_entity' })
-@Index(SEARCH_BY_USER_ID_PAGED_INDEX_NAME, ['userId', 'date'])
+@Entity({ name: 'tb_skill_log' })
 export class SkillLogEntity<
   T extends Record<string, any> | undefined = Record<string, any> | undefined,
 > {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({
+    name: 'id',
+    type: 'uuid',
+  })
   id: string;
 
+  @BeforeInsert()
+  setPk() {
+    this.id = v7();
+  }
+
   @Column({
-    type: 'char',
-    length: '36',
+    name: 'userId',
+    type: 'uuid',
     nullable: false,
-    default: null,
   })
-  userId: UserIdType;
+  userId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.lands, {
     onDelete: 'CASCADE',
@@ -39,21 +43,30 @@ export class SkillLogEntity<
 
   @ValidateNested({ each: true })
   @IsNotEmpty()
-  @Column({})
+  @Column({
+    name: 'skillRoute',
+    type: 'varchar',
+    length: 80,
+    nullable: false,
+  })
   skillRoute: string;
 
   @Column({
+    name: 'userActivity',
     type: 'json',
     nullable: true,
   })
   userActivity: UserActivityType;
 
   @Column({
+    name: 'skillServiceResult',
     type: 'json',
     nullable: true,
   })
   skillServiceResult: T;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    name: 'createdAt',
+  })
   date: Date;
 }

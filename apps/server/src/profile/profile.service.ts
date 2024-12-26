@@ -43,7 +43,7 @@ export class PublicProfileService {
       )
       .where('user.isTerminated = :isTerminated', { isTerminated: false })
 
-      .orderBy('totalCash', 'DESC')
+      .orderBy('user.cash + user.stockAmount * user.stockPrice', 'DESC')
       .take(limit)
       .skip(limit * (page - 1));
 

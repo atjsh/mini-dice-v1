@@ -22,13 +22,15 @@ export class SkillLogService {
   ) {}
 
   async createLog(dto: CreateLogDto) {
-    return await this.repository.save({
-      ...dto,
-      skillServiceResult:
-        (dto.skillServiceResult as any) == ''
-          ? undefined
-          : dto.skillServiceResult,
-    });
+    return await this.repository.save(
+      this.repository.create({
+        ...dto,
+        skillServiceResult:
+          (dto.skillServiceResult as any) == ''
+            ? undefined
+            : dto.skillServiceResult,
+      }),
+    );
   }
 
   async getLatestLog(dto: GetRecentLogsDto) {

@@ -280,7 +280,10 @@ export class CommonLandService {
       new Date().getTime() + initalLandData.landTTLsecs * 1000,
     );
 
-    const saveObject: Omit<LandEntity, 'isLandExpired' | 'user'> = {
+    const saveObject: Omit<
+      LandEntity,
+      'isLandExpired' | 'user' | 'createdAt' | 'updatedAt'
+    > = {
       id: landId,
       userId,
       expiresAt: buyableAt,
@@ -309,10 +312,6 @@ export class CommonLandService {
         },
       );
     }
-
-    await this.skillGroupAliasesService.invalidateSkillGroupAliasesCache(
-      SCENARIO_NAMES.D1,
-    );
 
     return {
       landName,
