@@ -52,8 +52,9 @@ export class UserEntity {
     name: 'userIdv1',
     type: 'varchar',
     length: 20,
+    nullable: true,
   })
-  userIdv1: string;
+  userIdv1: string | null;
 
   /**
    * 유저 이메일값

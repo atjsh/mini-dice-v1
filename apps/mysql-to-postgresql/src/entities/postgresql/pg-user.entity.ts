@@ -44,8 +44,9 @@ export class PgUserEntity {
     name: 'userIdv1',
     type: 'varchar',
     length: 20,
+    nullable: true,
   })
-  userIdv1: string;
+  userIdv1: string | null;
 
   @Column({
     name: 'plain_email',
