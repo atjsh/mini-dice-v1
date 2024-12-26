@@ -1,6 +1,8 @@
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { readFileSync } from 'fs';
 import { DATASOURCE_NAMES } from './common/datasource-names';
 import { MySQLLandEntity } from './entities/mysql/mysql-land.entity';
 import { MySQLMoneyCollectionParticipantsEntity } from './entities/mysql/mysql-money-collection-participants.entity';
@@ -11,6 +13,7 @@ import { MySQLUserEntity } from './entities/mysql/mysql-user.entity';
 import { PgLandEntity } from './entities/postgresql/pg-land.entity';
 import { PgMoneyCollectionParticipantEntity } from './entities/postgresql/pg-money-collection-participants.entity';
 import { PgRefreshTokenEntity } from './entities/postgresql/pg-refresh-token.entity';
+import { PgRpsgameEntity } from './entities/postgresql/pg-rpsgame.entity';
 import { PgSkillLogEntity } from './entities/postgresql/pg-skill-log.entity';
 import { PgUserActivityEntity } from './entities/postgresql/pg-user-activity.entity';
 import { PgUserLandCommentEntity } from './entities/postgresql/pg-user-land-comment.entity';
@@ -20,8 +23,6 @@ import {
   GLOBAL_CONFIG_MODULES,
 } from './enviroment-variable-config';
 import { MigratorModule } from './migrator/migrator.module';
-import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { PgRpsgameEntity } from './entities/postgresql/pg-rpsgame.entity';
 
 @Module({
   imports: [
@@ -64,6 +65,9 @@ import { PgRpsgameEntity } from './entities/postgresql/pg-rpsgame.entity';
           PgRefreshTokenEntity,
           PgRpsgameEntity,
         ],
+        ssl: {
+          ca: readFileSync(`${__dirname}/../supabase-prod.crt`),
+        },
       }),
     }),
 
