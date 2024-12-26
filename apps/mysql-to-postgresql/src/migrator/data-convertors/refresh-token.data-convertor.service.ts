@@ -30,7 +30,7 @@ export class RefreshTokenDataConvertorService {
       'rt:*',
     );
 
-    const redisRefreshTokenValues = [];
+    const redisRefreshTokenValues: Record<string, string> = {};
 
     for (const redisRefreshToken of redisRefreshTokens) {
       const redisRefreshTokenValue = await this.redisRefreshTokenRepository.get(
@@ -38,15 +38,19 @@ export class RefreshTokenDataConvertorService {
       );
 
       const redisRefreshTokenParsed = JSON.parse(redisRefreshTokenValue);
-      redisRefreshTokenValues.push(redisRefreshTokenParsed);
+      redisRefreshTokenValues[redisRefreshToken.substring(3)] =
+        redisRefreshTokenParsed;
     }
 
     const pgRefreshTokens = [];
 
-    for (const redisRefreshTokenParsed of redisRefreshTokenValues) {
+    for (const redisRefreshTokenParsed of Object.keys(
+      redisRefreshTokenValues,
+    )) {
       const pgRefreshToken = new PgRefreshTokenEntity();
-      pgRefreshToken.id = v7();
-      pgRefreshToken.userId = convertedUsersMap[redisRefreshTokenParsed];
+      pgRefreshToken.id = redisRefreshTokenParsed;
+      pgRefreshToken.userId =
+        convertedUsersMap[redisRefreshTokenValues[redisRefreshTokenParsed]];
       if (!pgRefreshToken.userId) {
         // 없는 유저는 토큰도 삭제
         continue;

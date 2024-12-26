@@ -24,19 +24,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: UserJwtDto) {
     const user = await this.userRepository.findOne({
-      select: ['isTerminated'],
-      where: [
-        {
-          id: payload.userId,
-        },
-        {
-          userIdv1: payload.userId,
-        },
-      ],
+      select: ['id', 'isTerminated'],
+      where: payload.userId.startsWith('TU')
+        ? {
+            userIdv1: payload.userId,
+          }
+        : {
+            id: payload.userId,
+          },
     });
     if (user == undefined || user?.isTerminated) {
       throw new ForbiddenException('User is terminated');
     }
-    return { userId: payload.userId };
+    return { userId: user.id };
   }
 }

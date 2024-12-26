@@ -51,7 +51,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
         username: configService.getOrThrow(CONFIG_KEYS.DB_PG_USERNAME),
         password: configService.getOrThrow(CONFIG_KEYS.DB_PG_PASSWORD),
         database: configService.getOrThrow(CONFIG_KEYS.DB_PG_DATABASE),
-        synchronize: true,
+        synchronize: false,
         logging: true,
         entities: [
           PgUserEntity,
