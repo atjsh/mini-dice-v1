@@ -63,10 +63,14 @@ function UserCompleteSignupForm() {
   ) : (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">
-        <div className=" font-medium text-xl">닉네임을 입력하세요.</div>
+        <label className=" font-medium text-xl" htmlFor="username">
+          닉네임을 입력하세요.
+        </label>
         <input
+          id="username"
+          autoFocus={true}
           type="text"
-          className="border-2 border-black rounded-xl p-2 w-10/12 dark:text-black"
+          className="border-2 border-black rounded-xl p-2 w-10/12 dark:text-black bg-white dark:bg-white"
           placeholder="2자 이상, 20자 미만"
           value={username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
