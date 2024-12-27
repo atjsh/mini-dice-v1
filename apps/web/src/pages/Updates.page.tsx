@@ -150,16 +150,6 @@ const entries: {
       '서비스 업데이트는 계속해서 이루어질 예정입니다.',
     ],
   },
-  {
-    emoji: '✅',
-    title: '서버 점검 진행 완료 (12월 26일 오후 11시)',
-    date: new Date('2024-12-26T17:00:00+09:00'),
-    author: 'ATJSH',
-    updates: [
-      '서버 점검 기간: 2024/12/26 11:00 ~ 11:18',
-      '성공적으로 진행 완료하였습니다.',
-    ],
-  },
 ].reverse();
 
 export function UpdatesPage() {
