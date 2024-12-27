@@ -45,9 +45,7 @@ export const DiceTossButton: React.FC<{
       >
         {diceButtonState.reason
           ? diceButtonState.reason
-          : diceButtonState.enum == DiceTossActivityEnum.Submitted
-          ? '📡 서버와 통신 중...'
-          : '🎲 주사위를 굴리는 중 ...'}
+          : '🎲 주사위를 굴리는 중...'}
       </button>
     );
   } else if (isDiceTossForbidden == true) {
