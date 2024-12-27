@@ -62,19 +62,20 @@ import { UserModule } from './user/user.module';
             RefreshTokenV2Entity,
             RpsgameEntity,
           ],
-          ssl: configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED)
-            ? {
-                ca:
-                  configService.getOrThrow(ENV_KEYS.DB_SSL_CA_FILE_PATH) !==
-                  'null'
-                    ? readFileSync(
-                        `${__dirname}/${configService.getOrThrow(
-                          ENV_KEYS.DB_SSL_CA_FILE_PATH,
-                        )}`,
-                      )
-                    : undefined,
-              }
-            : undefined,
+          ssl:
+            configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED) !== 'false'
+              ? {
+                  ca:
+                    configService.getOrThrow(ENV_KEYS.DB_SSL_CA_FILE_PATH) !==
+                    'null'
+                      ? readFileSync(
+                          `${__dirname}/${configService.getOrThrow(
+                            ENV_KEYS.DB_SSL_CA_FILE_PATH,
+                          )}`,
+                        )
+                      : undefined,
+                }
+              : undefined,
         };
       },
       inject: [ConfigService],
