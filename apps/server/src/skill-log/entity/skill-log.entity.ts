@@ -1,4 +1,3 @@
-import { IsNotEmpty, ValidateNested } from 'class-validator';
 import {
   BeforeInsert,
   Column,
@@ -41,8 +40,6 @@ export class SkillLogEntity<
   @JoinColumn({ name: 'userId' })
   user: Relation<UserEntity>;
 
-  @ValidateNested({ each: true })
-  @IsNotEmpty()
   @Column({
     name: 'skillRoute',
     type: 'varchar',

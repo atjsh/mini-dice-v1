@@ -13,8 +13,8 @@ import type { InteractionUserActivity } from '../skill-log/types/user-activity.d
 import { renderRecentLandEventSummary } from '../user-activity/land-event-summary';
 import { UserActivityService } from '../user-activity/user-activity.service';
 import { UserLandCommentService } from '../user-land-comment/user-land-comment.service';
-import { serializeUserToJson } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
+import { serializeUserToJson } from '../user/utils';
 
 @Injectable()
 export class UserInteractionWebService {

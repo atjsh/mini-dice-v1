@@ -1,11 +1,12 @@
 import { fastifyCookie } from '@fastify/cookie';
+import helmet from '@fastify/helmet';
+import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import type { FastifyInstance } from 'fastify';
 import { fastify } from 'fastify';
-import helmet from '@fastify/helmet';
-import { ConfigService } from '@nestjs/config';
 import { ENV_KEYS } from '../config/enviorment-variable-config';
 
 (BigInt.prototype as any).toJSON = function () {
@@ -44,6 +45,12 @@ export async function initNestJSFastifyApp<T>(
       },
     },
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
   app.enableCors({
     credentials: true,

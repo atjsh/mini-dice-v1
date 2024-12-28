@@ -1,5 +1,4 @@
 import type { UserIdType } from '@packages/shared-types';
-import { IsNotEmpty } from 'class-validator';
 import {
   BeforeInsert,
   Column,
@@ -46,7 +45,6 @@ export class UserActivityEntity {
   })
   skillDrawProps: Record<string, any>;
 
-  @IsNotEmpty()
   @Column({
     name: 'skillRoute',
     type: 'varchar',

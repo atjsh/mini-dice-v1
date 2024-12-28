@@ -1,16 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
-import type {
-  CountryCode3Type,
-  StockIdType,
-  UserEntityJson,
-} from '@packages/shared-types';
-import {
-  countryCode3List,
-  getStockStatus,
-  serializeStockStatusToJson,
-} from '@packages/shared-types';
-import { Transform, TransformationType } from 'class-transformer';
-import { IsIn, MaxLength, MinLength } from 'class-validator';
+import type { CountryCode3Type, StockIdType } from '@packages/shared-types';
 import {
   BeforeInsert,
   Column,
@@ -23,7 +11,6 @@ import {
 } from 'typeorm';
 import { v7 } from 'uuid';
 import { RefreshTokenV2Entity } from '../../auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
-import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-error.entity';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
 import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 import { UserActivityEntity } from '../../user-activity/user-activity.entity';
@@ -90,8 +77,6 @@ export class UserEntity {
    * @type {string}
    * @memberof UserEntity
    */
-  @MaxLength(20)
-  @MinLength(2)
   @Column({
     name: 'username',
     type: 'varchar',
@@ -106,9 +91,6 @@ export class UserEntity {
    * @type {bigint}
    * @memberof UserEntity
    */
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
   @Column({
     name: 'cash',
     type: 'bigint',
@@ -168,7 +150,6 @@ export class UserEntity {
    * @type {string}
    * @memberof UserEntity
    */
-  @IsIn(countryCode3List)
   @Column({
     name: 'countryCode3',
     length: 3,
@@ -207,9 +188,6 @@ export class UserEntity {
   })
   stockId: StockIdType | null;
 
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
   @Column({
     name: 'stockPrice',
     type: 'bigint',
@@ -218,9 +196,6 @@ export class UserEntity {
   })
   stockPrice: bigint;
 
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
   @Column({
     name: 'stockAmount',
     type: 'bigint',
@@ -271,44 +246,6 @@ export class UserEntity {
   )
   userActivityEntities: UserActivityEntity[];
 
-  @OneToMany(() => LandEntity, (land) => land.user)
-  frontendErrors: Relation<FrontendErrorEntity>[];
-
   @OneToMany(() => RefreshTokenV2Entity, (refreshToken) => refreshToken.user)
   refreshTokens: Relation<RefreshTokenV2Entity>[];
-}
-
-/**
- * 유저 데이터를 JSON 형태로 변환시킨다. 이 때, 유저의 잔고량을 string으로 변환한다.
- * @param user
- * @returns
- */
-export function serializeUserToJson(user: UserEntity): UserEntityJson {
-  return {
-    ...user,
-    stockStatus:
-      user.stockId == null
-        ? null
-        : serializeStockStatusToJson(
-            getStockStatus(
-              user.stockId,
-              BigInt(user.stockAmount),
-              BigInt(user.stockPrice),
-              BigInt(user.stockCashPurchaseSum || 0),
-            ),
-          ),
-    cash: user.cash.toString(),
-  };
-}
-
-export function isUserThrowingDiceTossAllowedOrThrow(user: UserEntity) {
-  if (
-    user.canTossDiceAfter != null &&
-    !user.isUserDiceTossForbidden &&
-    user.canTossDiceAfter < new Date()
-  ) {
-    return true;
-  }
-
-  throw new ForbiddenException(`user dice toss forbidden; ${user.id}`);
 }

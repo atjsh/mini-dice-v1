@@ -4,8 +4,9 @@ import type { PublicProfileVo, UserEntityJson } from '@packages/shared-types';
 import { randomUUID } from 'crypto';
 import type { Repository } from 'typeorm';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
-import { UserEntity, serializeUserToJson } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
+import { serializeUserToJson } from '../user/utils';
 
 @Injectable()
 export class PublicProfileService {

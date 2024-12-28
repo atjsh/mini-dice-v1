@@ -27,7 +27,7 @@ import { UserLandCommentService } from '../user-land-comment/user-land-comment.s
 import {
   isUserThrowingDiceTossAllowedOrThrow,
   serializeUserToJson,
-} from '../user/entity/user.entity';
+} from '../user/utils';
 import { UserService } from '../user/user.service';
 import type { DiceTossOutputDto } from './interface';
 
