@@ -232,7 +232,7 @@ export function ServicePage() {
             </div>
           )}
         </div>
-        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
+        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-24 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
           <ConnectWithOauthWidget />
           <ProfileWidget />
           <CoupangAdWidget />
