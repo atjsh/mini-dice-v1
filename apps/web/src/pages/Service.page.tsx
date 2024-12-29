@@ -24,7 +24,10 @@ import {
   useSkillLogs,
   useUser,
 } from '../libs';
-import { NewestEntrySummary } from './Updates.page';
+import {
+  NewestEntrySummary,
+  isNewestEntrySummaryOlderThanAExpiration,
+} from './Updates.page';
 import { NotificationPageURL, RankingPgaeURL, UpdatesPageURL } from './routes';
 
 const Messages = () => {
@@ -101,23 +104,12 @@ export function Ingame({
       className={` flex-1 overflow-y-auto transition-colors duration-300 ${'bg-white dark:bg-black'} md:bg-white md:dark:bg-black md:transition-none`}
     >
       <div className="mx-auto my-0 max-w-7xl">
-        <div className="md:hidden sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg  flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <div className="text-left">
-              <div className="text-lg font-extrabold">
-                <WordmarkComponent />
-              </div>
-            </div>
-            {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
-              <div className="text-xs text-right">
-                <a className="underline " href="https://www.mini-dice.com">
-                  공식 서비스로 돌아가기
-                </a>
-              </div>
-            )}
-          </div>
+        <div className="md:hidden sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-2 backdrop-blur-lg px-1">
           <div className=" flex justify-center flex-col items-center gap-1">
-            <div className=" text-xs break-all text-left text-gray-600 dark:text-gray-400 ">
+            <div
+              className=" text-center text-gray-600 dark:text-gray-400 "
+              style={{ fontSize: '0.6rem' }}
+            >
               이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의
               수수료를 제공받습니다.
             </div>
@@ -147,7 +139,7 @@ export function Ingame({
           <div className="flex gap-x-3 items-start max-w-7xl w-full px-1.5">
             <MapStatusBar />
           </div>
-          <div className=" w-full overflow-x-auto whitespace-nowrap px-1.5 box-border text-left sm:text-center">
+          <div className=" w-full overflow-x-auto whitespace-nowrap px-1.5 box-border text-center">
             <button
               onClick={() => {
                 setisSidebarShowing(!isSidebarShowing);
@@ -187,12 +179,14 @@ export function Ingame({
             >
               📨 알림 센터
             </Link>{' '}
-            <Link
-              to={UpdatesPageURL}
-              className="md:hidden inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
-            >
-              🎙️ <NewestEntrySummary />
-            </Link>
+            {isNewestEntrySummaryOlderThanAExpiration() === false && (
+              <Link
+                to={UpdatesPageURL}
+                className="md:hidden inline-block border-gray-300 bg-zinc-100 hover:bg-gray-200 active:bg-gray-400 text-black dark:border-gray-600  dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:active:bg-zinc-600 dark:text-white border-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl transition duration-150 text-sm md:text-base font-normal select-none transform active:scale-95"
+              >
+                🎙️ <NewestEntrySummary />
+              </Link>
+            )}
           </div>
           <div className=" w-full px-1.5 pb-3">
             <DiceTossButton

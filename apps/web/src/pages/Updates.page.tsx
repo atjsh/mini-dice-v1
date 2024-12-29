@@ -203,3 +203,11 @@ export const NewestEntrySummary: React.FC = () => {
     </>
   );
 };
+
+export const isNewestEntrySummaryOlderThanAExpiration = () => {
+  // 1주일 이상 지났으면 true
+  const lastEntry = entries[0];
+  return (
+    new Date().getTime() - lastEntry.date.getTime() > 1000 * 60 * 60 * 24 * 7
+  );
+};
