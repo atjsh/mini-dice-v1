@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
+import { CoupangAdWidget } from '../components/coupang-ad-widget/coupang-ad-widget.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 import { currentSkillRouteAtom } from '../components/map/current-skill-route.atom';
@@ -23,8 +24,8 @@ import {
   useSkillLogs,
   useUser,
 } from '../libs';
-import { NotificationPageURL, RankingPgaeURL, UpdatesPageURL } from './routes';
 import { NewestEntrySummary } from './Updates.page';
+import { NotificationPageURL, RankingPgaeURL, UpdatesPageURL } from './routes';
 
 const Messages = () => {
   const skillLogMessages = useRecoilValue(skillLogMessagesState);
@@ -100,19 +101,34 @@ export function Ingame({
       className={` flex-1 overflow-y-auto transition-colors duration-300 ${'bg-white dark:bg-black'} md:bg-white md:dark:bg-black md:transition-none`}
     >
       <div className="mx-auto my-0 max-w-7xl">
-        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg md:hidden flex items-center justify-between gap-2">
-          <div className="text-left">
-            <div className="text-lg font-extrabold">
-              <WordmarkComponent />
+        <div className="md:hidden sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg  flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-left">
+              <div className="text-lg font-extrabold">
+                <WordmarkComponent />
+              </div>
             </div>
+            {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
+              <div className="text-xs text-right">
+                <a className="underline " href="https://www.mini-dice.com">
+                  공식 서비스로 돌아가기
+                </a>
+              </div>
+            )}
           </div>
-          {import.meta.env.VITE_WEB_VERSION_KIND !== 'prod' && (
-            <div className="text-xs text-right">
-              <a className="underline " href="https://www.mini-dice.com">
-                공식 서비스로 돌아가기
-              </a>
-            </div>
-          )}
+          <div className=" flex justify-center items-center">
+            <iframe
+              src="https://ads-partners.coupang.com/widgets.html?id=828026&template=carousel&trackingCode=AF9847023&subId=&width=400&height=52&tsource="
+              width="400"
+              height="52"
+              frameBorder="0"
+              scrolling="no"
+              referrerPolicy="unsafe-url"
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              browsingtopics="true"
+            ></iframe>
+          </div>
         </div>
         <div className=" px-3">
           <div className="text-center bg-blue-100 dark:bg-slate-600 w-fit mx-auto rounded-2xl py-3 px-6 my-5">
@@ -219,6 +235,7 @@ export function ServicePage() {
         <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
           <ConnectWithOauthWidget />
           <ProfileWidget />
+          <CoupangAdWidget />
           <WalletWidget />
           <UpdatesWidget />
           <FooterWidgetComponent />
