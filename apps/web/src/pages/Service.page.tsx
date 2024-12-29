@@ -116,7 +116,11 @@ export function Ingame({
               </div>
             )}
           </div>
-          <div className=" flex justify-center items-center">
+          <div className=" flex justify-center flex-col items-center gap-1">
+            <div className=" text-xs break-all text-left text-gray-600 dark:text-gray-400 ">
+              이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의
+              수수료를 제공받습니다.
+            </div>
             <iframe
               src="https://ads-partners.coupang.com/widgets.html?id=828026&template=carousel&trackingCode=AF9847023&subId=&width=400&height=52&tsource="
               width="400"
