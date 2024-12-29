@@ -122,8 +122,8 @@ export function Ingame({
               수수료를 제공받습니다.
             </div>
             <iframe
-              src="https://ads-partners.coupang.com/widgets.html?id=828026&template=carousel&trackingCode=AF9847023&subId=&width=400&height=52&tsource="
-              width="400"
+              src="https://ads-partners.coupang.com/widgets.html?id=828026&template=carousel&trackingCode=AF9847023&subId=&width=350&height=52&tsource="
+              width="350"
               height="52"
               frameBorder="0"
               scrolling="no"
