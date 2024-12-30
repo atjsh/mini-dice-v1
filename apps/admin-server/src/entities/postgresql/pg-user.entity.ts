@@ -15,6 +15,8 @@ import { PgRefreshTokenEntity } from './pg-refresh-token.entity';
 import { PgMoneyCollectionParticipantEntity } from './pg-money-collection-participants.entity';
 import { PgUserActivityEntity } from './pg-user-activity.entity';
 import { PgSkillLogEntity } from './pg-skill-log.entity';
+import { PgStatCashTimeSeriesEntity } from './pg-stat-cash-time-series.entity';
+import { PgStatStockTimeSeriesEntity } from './pg-stat-stock-time-series.entity';
 
 @Entity({
   name: 'tb_user',
@@ -189,6 +191,18 @@ export class PgUserEntity {
 
   @OneToMany(() => PgSkillLogEntity, (skillLog) => skillLog.user)
   skillLogs: Relation<PgSkillLogEntity>[];
+
+  @OneToMany(
+    () => PgStatCashTimeSeriesEntity,
+    (statCashTimeSeries) => statCashTimeSeries.user,
+  )
+  statCashTimeSeriesDatas: Relation<PgStatCashTimeSeriesEntity>[];
+
+  @OneToMany(
+    () => PgStatStockTimeSeriesEntity,
+    (statStockTimeSeries) => statStockTimeSeries.user,
+  )
+  statStockTimeSeriesDatas: Relation<PgStatStockTimeSeriesEntity>[];
 
   @CreateDateColumn({
     name: 'createdAt',

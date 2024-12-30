@@ -10,7 +10,7 @@
       "apps/server",
       "apps/web",
       "apps/web-next",
-      "apps/mysql-to-postgresql",
+      "apps/admin-server",
       "docs/*",
       "builders/*"
     ]

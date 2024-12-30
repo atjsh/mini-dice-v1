@@ -1,5 +1,5 @@
 {
-  "name": "@apps/mysql-to-postgresql",
+  "name": "@apps/admin-server",
   "private": true,
   "scripts": {
     "start:dev": "nest start --watch"

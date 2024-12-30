@@ -27,6 +27,8 @@ import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-er
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
 import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 import { UserActivityEntity } from '../../user-activity/user-activity.entity';
+import { PgStatCashTimeSeriesEntity } from '../../stat/entities/pg-stat-cash-time-series.entity';
+import { PgStatStockTimeSeriesEntity } from '../../stat/entities/pg-stat-stock-time-series.entity';
 
 const UserEntityTableName = 'tb_user';
 
@@ -276,6 +278,18 @@ export class UserEntity {
 
   @OneToMany(() => RefreshTokenV2Entity, (refreshToken) => refreshToken.user)
   refreshTokens: Relation<RefreshTokenV2Entity>[];
+
+  @OneToMany(
+    () => PgStatCashTimeSeriesEntity,
+    (statCashTimeSeries) => statCashTimeSeries.user,
+  )
+  statCashTimeSeriesDatas: Relation<PgStatCashTimeSeriesEntity>[];
+
+  @OneToMany(
+    () => PgStatStockTimeSeriesEntity,
+    (statStockTimeSeries) => statStockTimeSeries.user,
+  )
+  statStockTimeSeriesDatas: Relation<PgStatStockTimeSeriesEntity>[];
 }
 
 /**

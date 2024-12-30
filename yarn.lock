@@ -96,9 +96,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apps/mysql-to-postgresql@workspace:apps/mysql-to-postgresql":
+"@apps/admin-server@workspace:apps/admin-server":
   version: 0.0.0-use.local
-  resolution: "@apps/mysql-to-postgresql@workspace:apps/mysql-to-postgresql"
+  resolution: "@apps/admin-server@workspace:apps/admin-server"
   dependencies:
     "@liaoliaots/nestjs-redis": "npm:^10.0.0"
     "@nestjs/cli": "npm:^10.4.9"

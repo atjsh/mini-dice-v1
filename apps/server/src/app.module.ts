@@ -35,6 +35,8 @@ import { UserLandCommentEntity } from './user-land-comment/entities/user-land-co
 import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserEntity } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
+import { PgStatCashTimeSeriesEntity } from './stat/entities/pg-stat-cash-time-series.entity';
+import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-series.entity';
 
 @Module({
   imports: [
@@ -61,6 +63,9 @@ import { UserModule } from './user/user.module';
             UserLandCommentEntity,
             RefreshTokenV2Entity,
             RpsgameEntity,
+
+            PgStatCashTimeSeriesEntity,
+            PgStatStockTimeSeriesEntity,
           ],
           ssl:
             configService.getOrThrow(ENV_KEYS.DB_SSL_MODE_REQUIRED) !== 'false'
