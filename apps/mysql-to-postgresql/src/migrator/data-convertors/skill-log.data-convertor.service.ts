@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MySQLSkillLogEntity } from '../../entities/mysql/mysql-skill-log.entity';
 import { Repository } from 'typeorm';
 import { DATASOURCE_NAMES } from '../../common/datasource-names';
+import { MySQLSkillLogEntity } from '../../entities/mysql/mysql-skill-log.entity';
 import { PgSkillLogEntity } from '../../entities/postgresql/pg-skill-log.entity';
 import { ConvertedUsersMap } from './user.data-convertor.service';
 
@@ -21,19 +21,34 @@ export class SkillLogDataConvertorService {
   public async convertSkillLogs(
     convertedUsersMap: ConvertedUsersMap,
   ): Promise<void> {
-    let offset = 0;
-
     const totalCount = await this.mysqlSkillLogRepository.count();
+    let offset = 0;
+    let done = 0;
 
-    while (offset < totalCount) {
+    while (done < totalCount) {
       const skillLogs = await this.getSkillLogsBatch(offset);
+
       await this.convertAndInsertSkillLogsPerBatch(
         skillLogs,
         convertedUsersMap,
       );
 
+      done += skillLogs.length;
       offset += CONVERT_SKILL_LOGS_BATCH_SIZE;
+
+      console.log({
+        done,
+        offset,
+        totalCount,
+      });
     }
+
+    console.log('Skill logs migrated');
+    console.log({
+      done,
+      offset,
+      totalCount,
+    });
   }
 
   private async getSkillLogsBatch(offset: number) {
@@ -65,7 +80,7 @@ export class SkillLogDataConvertorService {
     newSkillLog.skillRoute = skillLog.skillRoute;
     newSkillLog.userActivity = skillLog.userActivity;
     newSkillLog.skillServiceResult = skillLog.skillServiceResult;
-    newSkillLog.skillServiceResult = skillLog.skillServiceResult;
+    newSkillLog.createdAt = skillLog.date;
 
     return newSkillLog;
   }

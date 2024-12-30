@@ -23,6 +23,7 @@ import { UserDataConvertorService } from './data-convertors/user.data-convertor.
 import { MigratorController } from './migrator.controller';
 import { MigratorServicce } from './migrator.service';
 import { UserLandCommentDataConvertor } from './data-convertors/user-land-comment.data-convertor.service';
+import { IssueSpecificSkillLogDataConvertorService } from './issue-specific/skill-log.data-convertor.service';
 
 @Module({
   imports: [
@@ -59,6 +60,8 @@ import { UserLandCommentDataConvertor } from './data-convertors/user-land-commen
       LandDataConvertorService,
       UserLandCommentDataConvertor,
       RefreshTokenDataConvertorService,
+
+      IssueSpecificSkillLogDataConvertorService,
     ],
     MigratorServicce,
   ],

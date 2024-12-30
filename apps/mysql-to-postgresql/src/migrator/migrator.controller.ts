@@ -9,4 +9,9 @@ export class MigratorController {
   public async migrateData() {
     await this.migratorService.migrateData();
   }
+
+  @Get('issue-specific/skill-log')
+  public async migrateIssueSpecificSkillLog() {
+    await this.migratorService.migrateIssueSpecificData();
+  }
 }

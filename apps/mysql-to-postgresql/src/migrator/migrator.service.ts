@@ -6,6 +6,7 @@ import { LandDataConvertorService } from './data-convertors/land.data-convertor.
 import { MoneyCollectionParticipantDataConvertorService } from './data-convertors/money-collection-participant.data-convertor.service';
 import { RefreshTokenDataConvertorService } from './data-convertors/refresh-token.data-convertor.service';
 import { UserLandCommentDataConvertor } from './data-convertors/user-land-comment.data-convertor.service';
+import { IssueSpecificSkillLogDataConvertorService } from './issue-specific/skill-log.data-convertor.service';
 
 @Injectable()
 export class MigratorServicce {
@@ -21,6 +22,8 @@ export class MigratorServicce {
     private readonly userLandCommentDataConvertor: UserLandCommentDataConvertor,
 
     private readonly refreshTokenDataConvertorService: RefreshTokenDataConvertorService,
+
+    private readonly issueSpecificSkillLogDataConvertorService: IssueSpecificSkillLogDataConvertorService,
   ) {}
 
   public async migrateData() {
@@ -49,5 +52,9 @@ export class MigratorServicce {
     );
 
     console.timeEnd('Migration time');
+  }
+
+  public async migrateIssueSpecificData() {
+    await this.issueSpecificSkillLogDataConvertorService.convertSkillLogs();
   }
 }
