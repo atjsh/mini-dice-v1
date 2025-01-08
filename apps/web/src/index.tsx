@@ -12,7 +12,7 @@ export const queryClient = new QueryClient({
       refetchOnMount: true,
       refetchOnReconnect: true,
       retry: 2,
-      retryDelay: 100,
+      retryDelay: 10,
     },
   },
 });
