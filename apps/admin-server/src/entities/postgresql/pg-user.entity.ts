@@ -5,6 +5,7 @@ import {
   Entity,
   Index,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
   Relation,
   UpdateDateColumn,
@@ -17,6 +18,7 @@ import { PgUserActivityEntity } from './pg-user-activity.entity';
 import { PgSkillLogEntity } from './pg-skill-log.entity';
 import { PgStatCashTimeSeriesEntity } from './pg-stat-cash-time-series.entity';
 import { PgStatStockTimeSeriesEntity } from './pg-stat-stock-time-series.entity';
+import { PgStatCashAggrigationEntity } from './pg-stat-cash-aggrigation.entity';
 
 @Entity({
   name: 'tb_user',
@@ -197,6 +199,12 @@ export class PgUserEntity {
     (statCashTimeSeries) => statCashTimeSeries.user,
   )
   statCashTimeSeriesDatas: Relation<PgStatCashTimeSeriesEntity>[];
+
+  @OneToOne(
+    () => PgStatCashAggrigationEntity,
+    (statCashAggrigation) => statCashAggrigation.user,
+  )
+  statCashAggrigation: Relation<PgStatCashTimeSeriesEntity>;
 
   @OneToMany(
     () => PgStatStockTimeSeriesEntity,

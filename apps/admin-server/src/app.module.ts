@@ -25,6 +25,7 @@ import {
 import { MigratorModule } from './migrator/migrator.module';
 import { PgStatCashTimeSeriesEntity } from './entities/postgresql/pg-stat-cash-time-series.entity';
 import { PgStatStockTimeSeriesEntity } from './entities/postgresql/pg-stat-stock-time-series.entity';
+import { StatModule } from './stat/stat.module';
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { PgStatStockTimeSeriesEntity } from './entities/postgresql/pg-stat-stock
     }),
 
     MigratorModule,
+    StatModule,
   ],
 })
 export class AppModule {}

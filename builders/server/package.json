@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "yarn g:tsc && node ./dist/build-services.js",
-    "watch": "yarn g:tsc && node ./dist/watch-build-services.js"
+    "watch": "yarn g:tsc && node ./dist/watch-build-services.js",
+    "minify": "yarn g:tsc && node ./dist/minify-service.js"
   },
   "devDependencies": {
     "@anatine/esbuild-decorators": "^0.2.19",
@@ -13,5 +14,8 @@
     "chalk": "^5.2.0",
     "esbuild": "^0.17.10",
     "ora": "^6.1.2"
+  },
+  "dependencies": {
+    "@swc/core": "^1.10.6"
   }
 }

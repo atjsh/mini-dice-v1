@@ -6,11 +6,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
   Relation,
 } from 'typeorm';
 import { v7 } from 'uuid';
 import { PgUserEntity } from './pg-user.entity';
+import { PgStatCashAggrigationEntity } from './pg-stat-cash-aggrigation.entity';
 
 @Entity({ name: 'tb_skill_log' })
 @Index('TB_SKILL_LOG_USER_ID_IDX', ['userId'])
@@ -70,4 +72,10 @@ export class PgSkillLogEntity {
     name: 'createdAt',
   })
   createdAt: Date;
+
+  @OneToOne(
+    () => PgStatCashAggrigationEntity,
+    (statCashAggrigation) => statCashAggrigation.lastSkillLog,
+  )
+  statCashAggrigation: PgStatCashAggrigationEntity;
 }
