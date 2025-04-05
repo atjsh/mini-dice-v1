@@ -2,7 +2,7 @@
 
 [![Mini Dice Logo](./md/logo.png)](https://www.mini-dice.com)
 
-[mini-dice.com](https://www.mini-dice.com)에서 바로 플레이 가능.
+[mini-dice.com](https://www.mini-dice.com)에서 지금 바로 플레이 가능.
 
 ## What is Mini Dice?
 
