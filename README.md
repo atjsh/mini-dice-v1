@@ -25,6 +25,6 @@ Copyright (c) 2022-2025 전성훈 (Sunghoon Jeon) All rights reserved.
 
 Copyright (c) 2022-2025 Miyobi All rights reserved.
 
-Copyright (c) 2022-2025 Mini Dice Contributors All rights reserved.
+Copyright (c) 2022-2025 Mini Dice Contributors All rights reserved. See more at [contributors graph](https://github.com/atjsh/mini-dice-v1/graphs/contributors).
 
 Other copyrights are the property of their respective owners. You can check the original author of the code in the source code & commit history.
