@@ -19,6 +19,8 @@
 - Github Actions를 통한 CI/CD 파이프라인 구축
 - 모노리포 구조로 관리되는 코드베이스
 
+[더 알아보기](https://blog.atj.sh/post/8)
+
 # Copyright
 
 Copyright (c) 2022-2025 전성훈 (Sunghoon Jeon) All rights reserved.
