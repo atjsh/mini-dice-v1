@@ -12,6 +12,7 @@ import {
   validateUsername,
   ValidationError,
 } from '../libs/tdol-server/profile/validations';
+import { usePasskeyRegister } from '../libs/tdol-server/passkey';
 import {
   LogoutPageURL,
   PrivacyPolicyPageURL,
@@ -21,6 +22,7 @@ import {
 
 function UserCompleteSignupForm() {
   const completeSignupMutattion = useCompleteSignup();
+  const passkeyRegister = usePasskeyRegister();
   const [username, setUsername] = useState('');
   const [country, setCountry] = useState(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
@@ -28,6 +30,8 @@ function UserCompleteSignupForm() {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showPasskeySetup, setShowPasskeySetup] = useState(false);
+  const [passkeyRegistered, setPasskeyRegistered] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,7 +51,8 @@ function UserCompleteSignupForm() {
         { username, countryCode3: country },
         {
           onSuccess: () => {
-            setSuccess(true);
+            setShowPasskeySetup(true);
+            setDisabled(false);
           },
           onError: () => {
             setError('오류가 발생했습니다. 다시 시도해 주세요.');
@@ -58,9 +63,60 @@ function UserCompleteSignupForm() {
     }
   };
 
-  return success ? (
-    <Navigate to={ServicePageURL} replace />
-  ) : (
+  const handlePasskeySetup = async () => {
+    setError('');
+    setDisabled(true);
+    try {
+      await passkeyRegister.mutateAsync('내 패스키');
+      setPasskeyRegistered(true);
+      setSuccess(true);
+    } catch (error: any) {
+      setError('패스키 등록에 실패했습니다. 다시 시도해 주세요.');
+      setDisabled(false);
+      console.error('Passkey registration failed:', error);
+    }
+  };
+
+  if (success && passkeyRegistered) {
+    return <Navigate to={ServicePageURL} replace />;
+  }
+
+  if (showPasskeySetup) {
+    return (
+      <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-col items-center gap-4 max-w-xl w-full text-center">
+          <h2 className="font-bold text-2xl">패스키 등록</h2>
+          <p className="text-base">
+            안전한 로그인을 위해 패스키를 등록해주세요.
+            <br />
+            패스키는 비밀번호 없이 지문, 얼굴 인식 또는 PIN으로 로그인할 수
+            있는 안전한 방법입니다.
+          </p>
+        </div>
+
+        {error && <div className="text-red-500 italic">{error}</div>}
+
+        <button
+          onClick={handlePasskeySetup}
+          disabled={disabled}
+          className={
+            'inline-block px-5 py-5 max-w-xs w-full rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
+            (disabled
+              ? 'text-white bg-gray-600 cursor-progress'
+              : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700')
+          }
+        >
+          {disabled ? '등록 중...' : '패스키 등록하기'}
+        </button>
+
+        <div className="text-sm text-gray-400">
+          패스키를 등록하면 다음부터 빠르고 안전하게 로그인할 수 있습니다.
+        </div>
+      </div>
+    );
+  }
+
+  return (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">
         <label className=" font-medium text-xl" htmlFor="username">
@@ -111,10 +167,10 @@ function UserCompleteSignupForm() {
             : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700 transform active:scale-95')
         }
       >
-        시작
+        다음
       </button>
       <div className=" text-sm text-gray-400">
-        위 '시작' 버튼을 누르는 것은{' '}
+        위 '다음' 버튼을 누르는 것은{' '}
         <Link
           to={PrivacyPolicyPageURL}
           className="hover:underline text-gray-600"
