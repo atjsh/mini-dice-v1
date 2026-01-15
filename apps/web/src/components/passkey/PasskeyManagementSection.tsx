@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { PasskeyListItemDto } from '@packages/shared-types';
 import {
   usePasskeyList,
   usePasskeyRegister,
@@ -17,10 +18,12 @@ export function PasskeyManagementSection() {
     text: string;
   } | null>(null);
 
+  const passkeysList = (passkeys || []) as PasskeyListItemDto[];
+
   const handleAddPasskey = async () => {
     try {
       setMessage(null);
-      await registerMutation.mutateAsync();
+      await registerMutation.mutateAsync(undefined);
       setMessage({ type: 'success', text: '패스키가 성공적으로 추가되었습니다!' });
       refetch();
     } catch (error: any) {
@@ -87,9 +90,9 @@ export function PasskeyManagementSection() {
         <div className="text-center py-8 text-gray-600 dark:text-gray-400">
           로딩 중...
         </div>
-      ) : passkeys && passkeys.length > 0 ? (
+      ) : passkeysList && passkeysList.length > 0 ? (
         <div className="space-y-3 mb-4">
-          {passkeys.map((passkey) => (
+          {passkeysList.map((passkey) => (
             <PasskeyItem
               key={passkey.id}
               passkey={passkey}
