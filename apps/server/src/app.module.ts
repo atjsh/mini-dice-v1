@@ -35,6 +35,8 @@ import { UserLandCommentEntity } from './user-land-comment/entities/user-land-co
 import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
 import { UserEntity } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
+import { UserPreferenceEntity } from './user-preference/entity/user-preference.entity';
+import { UserPreferenceModule } from './user-preference/user-preference.module';
 import { PgStatCashTimeSeriesEntity } from './stat/entities/pg-stat-cash-time-series.entity';
 import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-series.entity';
 
@@ -56,6 +58,7 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
           logging: true,
           entities: [
             UserEntity,
+            UserPreferenceEntity,
             LandEntity,
             MoneyCollectionParticipantsEntity,
             SkillLogEntity,
@@ -96,6 +99,7 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
     FrontendErrorModule,
 
     UserModule,
+    UserPreferenceModule,
     UserLandCommentModule,
     UserActivityModule,
     ProfileModule,

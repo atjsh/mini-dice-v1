@@ -3,6 +3,8 @@ export * from './user/complete-signup.user.dto';
 export * from './user/update.user.dto';
 export * from './user/country-list';
 export * from './user/stock';
+export * from './user-preference/user-preference.vo';
+export * from './user-preference/update-user-preference.dto';
 export * from './minidice-web-ui-ts';
 export * from './locale/bigint-locale';
 export * from './locale/str-ellipsis';
