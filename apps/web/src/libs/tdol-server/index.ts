@@ -5,3 +5,4 @@ export * from './dice-toss-2';
 export * from './map';
 export * from './notifications';
 export * from './user-land-comment';
+export * from './user-preference';
