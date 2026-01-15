@@ -24,6 +24,10 @@ interface NotificationPayload {
   navigateUrl: string;
 }
 
+// Constants
+const DECLARATIVE_PUSH_VERSION = '8030';
+const USER_ONLINE_THRESHOLD_MS = 2 * 60 * 1000; // 2 minutes
+
 @Injectable()
 export class PushNotificationService {
   constructor(
@@ -130,9 +134,9 @@ export class PushNotificationService {
       return false;
     }
 
-    // User is online if heartbeat received within last 2 minutes
-    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
-    return session.lastHeartbeat > twoMinutesAgo;
+    // User is online if heartbeat received within the threshold
+    const thresholdDate = new Date(Date.now() - USER_ONLINE_THRESHOLD_MS);
+    return session.lastHeartbeat > thresholdDate;
   }
 
   async sendNotificationToUser(
@@ -171,7 +175,7 @@ export class PushNotificationService {
     notification: NotificationPayload,
   ): Promise<void> {
     const payload = JSON.stringify({
-      web_push: '8030',
+      web_push: DECLARATIVE_PUSH_VERSION,
       notification: {
         title: notification.title,
         body: notification.body,
@@ -180,22 +184,23 @@ export class PushNotificationService {
     });
 
     try {
-      // For declarative push, we still use web-push library
-      // but the payload format is different
-      // Declarative push doesn't require keys
+      // For declarative push, the browser handles the notification display
+      // We still use web-push library to send to the endpoint
+      // Note: Declarative push may not require keys in the same way,
+      // but the web-push library requires them in the structure
       await webpush.sendNotification(
         {
           endpoint: subscription.endpoint,
           keys: {
-            p256dh: '',
-            auth: '',
+            p256dh: subscription.p256dhKey || '',
+            auth: subscription.authKey || '',
           },
         },
         payload,
       );
     } catch (error) {
       console.error('Failed to send declarative push:', error);
-      // Optionally deactivate subscription on error
+      // Deactivate subscription on error
       if (
         error instanceof Error &&
         (error.message.includes('410') || error.message.includes('404'))

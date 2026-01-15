@@ -37,16 +37,24 @@ export class PushNotificationManager {
 
   /**
    * Check if declarative web push is supported
+   * Note: Declarative Web Push is primarily supported in Safari 18.4+
+   * This detection is best-effort and may be updated as standards evolve
    */
   isDeclarativePushSupported(): boolean {
-    // Declarative Web Push is supported in Safari 18.4+
-    // Check for the presence of the declarative push API
+    // For now, we use user agent detection as there's no reliable feature detection
+    // This is a known limitation until a better detection method becomes available
     if ('PushManager' in window && 'subscribe' in PushManager.prototype) {
       const userAgent = navigator.userAgent.toLowerCase();
-      // Safari 18.4+ supports declarative push
-      if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
-        return true;
-      }
+      // Check for Safari (but not Chrome which also includes 'safari' in UA)
+      const isSafari = userAgent.includes('safari') && !userAgent.includes('chrome');
+      
+      // Additional check for iOS/iPadOS/macOS
+      const isAppleDevice = 
+        userAgent.includes('macintosh') || 
+        userAgent.includes('iphone') || 
+        userAgent.includes('ipad');
+      
+      return isSafari && isAppleDevice;
     }
     return false;
   }
@@ -135,13 +143,14 @@ export class PushNotificationManager {
 
   /**
    * Subscribe using declarative web push
+   * Note: Even for declarative push, we still need a service worker registration
+   * and use the standard PushManager.subscribe() API. The difference is in the
+   * payload format sent from the server (web_push: "8030")
    */
   private async subscribeDeclarativePush(): Promise<{
     success: boolean;
     pushType: 'declarative';
   }> {
-    // For declarative push, we use the Push API directly
-    // without service worker subscription
     const vapidPublicKey = await this.getVapidPublicKey();
 
     // Convert VAPID key to Uint8Array

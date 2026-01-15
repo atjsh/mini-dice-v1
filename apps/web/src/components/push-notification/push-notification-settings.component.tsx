@@ -49,12 +49,12 @@ export function PushNotificationSettings({
             새로운 이벤트 발생 시 알림을 받습니다
           </p>
           {permission === 'denied' && (
-            <p className="text-sm text-red-600 mt-2">
+            <p className="text-sm text-red-600 mt-2" role="alert" aria-live="polite">
               알림 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해주세요.
             </p>
           )}
           {error && (
-            <p className="text-sm text-red-600 mt-2">
+            <p className="text-sm text-red-600 mt-2" role="alert" aria-live="polite">
               오류: {error}
             </p>
           )}
