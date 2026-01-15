@@ -22,9 +22,6 @@ export async function getUserPreference(): Promise<UserPreference> {
 export async function updateUserPreference(
   updateDto: UpdateUserPreferenceDto
 ): Promise<UserPreference> {
-  const response = await authedAxios.patch<UserPreference>(
-    '/user-preference/me',
-    updateDto
-  );
-  return response.data;
+  const response = await authedAxios.patch('/user-preference/me', updateDto);
+  return response.data as UserPreference;
 }

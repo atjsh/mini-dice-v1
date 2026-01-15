@@ -4,7 +4,7 @@ const HEARTBEAT_INTERVAL = 60 * 1000; // 60 seconds
 
 export class OnlineStatusTracker {
   private static instance: OnlineStatusTracker;
-  private heartbeatInterval: NodeJS.Timeout | null = null;
+  private heartbeatInterval: number | null = null;
   private sessionId: string;
   private isTracking = false;
 
@@ -53,7 +53,7 @@ export class OnlineStatusTracker {
     this.sendHeartbeat();
 
     // Set up interval for periodic heartbeats
-    this.heartbeatInterval = setInterval(() => {
+    this.heartbeatInterval = window.setInterval(() => {
       this.sendHeartbeat();
     }, HEARTBEAT_INTERVAL);
 
@@ -75,7 +75,7 @@ export class OnlineStatusTracker {
     this.isTracking = false;
 
     if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
+      window.clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
     }
 

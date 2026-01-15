@@ -182,9 +182,14 @@ export class PushNotificationService {
     try {
       // For declarative push, we still use web-push library
       // but the payload format is different
+      // Declarative push doesn't require keys
       await webpush.sendNotification(
         {
           endpoint: subscription.endpoint,
+          keys: {
+            p256dh: '',
+            auth: '',
+          },
         },
         payload,
       );
