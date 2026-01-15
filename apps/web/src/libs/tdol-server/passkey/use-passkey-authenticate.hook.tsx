@@ -7,7 +7,7 @@ import {
 
 export const usePasskeyAuthenticate = () => {
   return useMutation(async () => {
-    const options = await getAuthenticationOptions();
+    const options: any = await getAuthenticationOptions();
     const credential = await startAuthentication(options);
     return await verifyAuthentication(options.challengeId, credential);
   });

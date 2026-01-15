@@ -17,7 +17,7 @@ export function IndexPage() {
   const handlePasskeyLogin = async () => {
     setError('');
     try {
-      const result = await passkeyAuth.mutateAsync();
+      const result: any = await passkeyAuth.mutateAsync();
       if (result.success) {
         setAuthSuccess(true);
       }
