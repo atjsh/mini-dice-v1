@@ -4,6 +4,7 @@ export class UserPreferenceVo {
   id: string;
   userId: UserIdType;
   alwaysHideComments: boolean;
+  pushNotificationsEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

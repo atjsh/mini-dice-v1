@@ -46,6 +46,14 @@ export class UserPreferenceEntity {
   })
   alwaysHideComments: boolean;
 
+  @Column({
+    name: 'pushNotificationsEnabled',
+    type: 'boolean',
+    default: false,
+    nullable: false,
+  })
+  pushNotificationsEnabled: boolean;
+
   @CreateDateColumn({
     name: 'createdAt',
   })

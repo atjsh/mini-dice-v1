@@ -39,6 +39,9 @@ import { UserPreferenceEntity } from './user-preference/entity/user-preference.e
 import { UserPreferenceModule } from './user-preference/user-preference.module';
 import { PgStatCashTimeSeriesEntity } from './stat/entities/pg-stat-cash-time-series.entity';
 import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-series.entity';
+import { PushSubscriptionEntity } from './push-notification/entities/push-subscription.entity';
+import { UserOnlineSessionEntity } from './push-notification/entities/user-online-session.entity';
+import { PushNotificationModule } from './push-notification/push-notification.module';
 
 @Module({
   imports: [
@@ -66,6 +69,8 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
             UserLandCommentEntity,
             RefreshTokenV2Entity,
             RpsgameEntity,
+            PushSubscriptionEntity,
+            UserOnlineSessionEntity,
 
             PgStatCashTimeSeriesEntity,
             PgStatStockTimeSeriesEntity,
@@ -106,6 +111,7 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
     UserInteractionWebModule,
     DiceTossModule,
     RecentSkillLogsModule,
+    PushNotificationModule,
 
     D1Module,
 
