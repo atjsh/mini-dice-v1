@@ -1,4 +1,4 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Turnstile } from '@marsidev/react-turnstile';
 import {
   CountryCode3Type,
   countryMetadataIsoList,
@@ -23,7 +23,7 @@ import {
 
 function TempSignupForm() {
   const [username, setUsername] = useState('');
-  const [hCaptchaToken, setHCaptchaToken] = useState<false | string>(false);
+  const [turnstileToken, setTurnstileToken] = useState<false | string>(false);
   const [country, setCountry] = useState(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
   );
@@ -37,7 +37,7 @@ function TempSignupForm() {
   const handleSubmit = async () => {
     const usernameValidationResult = validateUsername(username);
 
-    if (hCaptchaToken == false) {
+    if (turnstileToken == false) {
       setError("'사람입니다' 테스트를 먼저 완료해 주세요.");
     } else if (usernameValidationResult == ValidationError.TOOSHORT) {
       setError(
@@ -53,7 +53,7 @@ function TempSignupForm() {
       setDisabled(true);
       mutation.mutate(
         {
-          hCaptchaSuccessToken: hCaptchaToken,
+          turnstileToken: turnstileToken,
           username,
           countryCode3: country,
         },
@@ -112,9 +112,9 @@ function TempSignupForm() {
         </select>
       </div>
       <div className="flex flex-col gap-1 text-center">
-        <HCaptcha
-          sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
-          onVerify={(token) => setHCaptchaToken(token)}
+        <Turnstile
+          siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+          onSuccess={(token) => setTurnstileToken(token)}
         />
       </div>
       <a

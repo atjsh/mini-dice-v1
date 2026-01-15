@@ -11,7 +11,7 @@
 ## Highlights
 
 - HTTP 기반 웹 서비스
-- 유저 인증: 소셜 계정 기반 OAuth, 또는 HCaptcha 검사 통과자의 익명 계정 허용
+- 유저 인증: 소셜 계정 기반 OAuth, 또는 CloudFlare Turnstile 검사 통과자의 익명 계정 허용
 - NestJS, Fastify로 구축된 API 서버.
 - React, Tailwind CSS, Recoil로 구축된 웹 애플리케이션
 - PostgreSQL 데이터베이스 사용

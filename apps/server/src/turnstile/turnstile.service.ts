@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 import { ENV_KEYS } from '../config/enviorment-variable-config';
 
 @Injectable()
-export class HCaptchaService {
+export class TurnstileService {
   constructor(
     private httpService: HttpService,
     private configService: ConfigService,
@@ -15,10 +15,10 @@ export class HCaptchaService {
   async verify(clientResponse: string) {
     const response = await lastValueFrom(
       this.httpService.post<{ success: true }>(
-        'https://hcaptcha.com/siteverify',
+        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
         stringify({
           response: clientResponse,
-          secret: this.configService.getOrThrow(ENV_KEYS.HCAPTCHA_SECRET_KEY),
+          secret: this.configService.getOrThrow(ENV_KEYS.TURNSTILE_SECRET_KEY),
         }),
       ),
     );

@@ -73,7 +73,7 @@ export class UserEntity {
   email: string;
 
   /**
-   * 유저 인증 크리덴셜 제공자 ('google', 'apple', 'hcaptcha')
+   * 유저 인증 크리덴셜 제공자 ('google', 'apple', 'turnstile')
    *
    * @type {string}
    * @memberof UserEntity
