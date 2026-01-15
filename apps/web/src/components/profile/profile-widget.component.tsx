@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../libs';
-import { NotificationPageURL, RankingPgaeURL } from '../../pages/routes';
+import {
+  NotificationPageURL,
+  PreferencesPageURL,
+  RankingPgaeURL,
+} from '../../pages/routes';
 
 export const ProfileWidget: React.FC = () => {
   const { data: user } = useUser();
@@ -54,6 +58,14 @@ export const ProfileWidget: React.FC = () => {
                   📨 알림 센터→
                 </Link>
               </div>
+            </div>
+            <div>
+              <Link
+                className="text-blue-600 dark:text-white hover:underline"
+                to={PreferencesPageURL}
+              >
+                ⚙️ 설정→
+              </Link>
             </div>
           </div>
         </div>
