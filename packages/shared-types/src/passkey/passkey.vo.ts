@@ -1,4 +1,4 @@
-export class PasskeyVo {
+export interface PasskeyVo {
   id: string;
   userId: string;
   credentialId: string;

@@ -9,7 +9,7 @@ import {
 import { PasskeyItem } from './PasskeyItem';
 
 export function PasskeyManagementSection() {
-  const { data: passkeys, refetch, isLoading } = usePasskeyList();
+  const { data: passkeys, isLoading } = usePasskeyList();
   const registerMutation = usePasskeyRegister();
   const deleteMutation = usePasskeyDelete();
   const renameMutation = usePasskeyRename();
@@ -25,7 +25,6 @@ export function PasskeyManagementSection() {
       setMessage(null);
       await registerMutation.mutateAsync(undefined);
       setMessage({ type: 'success', text: '패스키가 성공적으로 추가되었습니다!' });
-      refetch();
     } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ||
@@ -40,7 +39,6 @@ export function PasskeyManagementSection() {
       setMessage(null);
       await deleteMutation.mutateAsync(id);
       setMessage({ type: 'success', text: '패스키가 삭제되었습니다.' });
-      refetch();
     } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ||
@@ -55,7 +53,6 @@ export function PasskeyManagementSection() {
       setMessage(null);
       await renameMutation.mutateAsync({ id, name });
       setMessage({ type: 'success', text: '패스키 이름이 변경되었습니다.' });
-      refetch();
     } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ||
