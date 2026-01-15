@@ -1,4 +1,5 @@
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
@@ -8,6 +9,8 @@ import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { RefreshTokenV2Entity } from './auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
+import { PasskeyEntity } from './auth/passkey/entity/passkey.entity';
+import { PasskeyModule } from './auth/passkey/passkey.module';
 import {
   APP_GLOBAL_CONFIG_MODULES,
   ENV_KEYS,
@@ -42,6 +45,11 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
   imports: [
     ...APP_GLOBAL_CONFIG_MODULES,
 
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 300000, // 5 minutes in milliseconds
+    }),
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
@@ -63,6 +71,7 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
             UserLandCommentEntity,
             RefreshTokenV2Entity,
             RpsgameEntity,
+            PasskeyEntity,
 
             PgStatCashTimeSeriesEntity,
             PgStatStockTimeSeriesEntity,
@@ -88,6 +97,7 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
 
     LocalJwtModule,
     GoogleOAuthModule,
+    PasskeyModule,
     TempSignupModule,
 
     UpbitApiModule,

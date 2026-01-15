@@ -25,7 +25,7 @@ export class TempSignupService {
     const user = await this.userService.signUpNewUser({
       username,
       authProvider: 'hcaptcha',
-      signupCompleted: true,
+      signupCompleted: false,
       countryCode3,
     });
 
@@ -39,5 +39,12 @@ export class TempSignupService {
     );
 
     return true;
+  }
+
+  async finalizeSignup(userId: string) {
+    await this.userService.partialUpdateUser(userId, {
+      signupCompleted: true,
+    });
+    return { success: true };
   }
 }

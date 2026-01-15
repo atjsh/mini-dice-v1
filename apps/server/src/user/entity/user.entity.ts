@@ -23,6 +23,7 @@ import {
 } from 'typeorm';
 import { v7 } from 'uuid';
 import { RefreshTokenV2Entity } from '../../auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
+import { PasskeyEntity } from '../../auth/passkey/entity/passkey.entity';
 import { FrontendErrorEntity } from '../../frontend-error-collection/frontend-error.entity';
 import { LandEntity } from '../../scenarios/d1/common/land/entity/land.entity';
 import { MoneyCollectionParticipantsEntity } from '../../scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
@@ -278,6 +279,9 @@ export class UserEntity {
 
   @OneToMany(() => RefreshTokenV2Entity, (refreshToken) => refreshToken.user)
   refreshTokens: Relation<RefreshTokenV2Entity>[];
+
+  @OneToMany(() => PasskeyEntity, (passkey) => passkey.user)
+  passkeys: Relation<PasskeyEntity>[];
 
   @OneToMany(
     () => PgStatCashTimeSeriesEntity,
