@@ -6,7 +6,6 @@ import { PushNotificationService } from './push-notification.service';
 
 interface SubscribeRequestDto {
   endpoint: string;
-  pushType: 'declarative' | 'service-worker';
   keys?: {
     p256dh: string;
     auth: string;
@@ -44,7 +43,6 @@ export class PushNotificationController {
     await this.pushNotificationService.subscribe({
       userId,
       endpoint: body.endpoint,
-      pushType: body.pushType,
       p256dhKey: body.keys?.p256dh,
       authKey: body.keys?.auth,
       expirationTime: body.expirationTime,

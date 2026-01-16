@@ -47,14 +47,6 @@ export class PushSubscriptionEntity {
   endpoint: string;
 
   @Column({
-    name: 'pushType',
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-  })
-  pushType: 'declarative' | 'service-worker';
-
-  @Column({
     name: 'p256dhKey',
     type: 'text',
     nullable: true,
@@ -67,13 +59,6 @@ export class PushSubscriptionEntity {
     nullable: true,
   })
   authKey: string | null;
-
-  @Column({
-    name: 'userAgent',
-    type: 'text',
-    nullable: true,
-  })
-  userAgent: string | null;
 
   @Column({
     name: 'expirationTime',

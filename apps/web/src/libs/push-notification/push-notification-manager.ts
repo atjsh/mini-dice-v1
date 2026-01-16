@@ -7,7 +7,6 @@ interface PushSubscriptionKeys {
 
 interface SubscriptionData {
   endpoint: string;
-  pushType: 'declarative' | 'service-worker';
   keys?: PushSubscriptionKeys;
   expirationTime?: number | null;
 }
@@ -33,30 +32,6 @@ export class PushNotificationManager {
       'serviceWorker' in navigator &&
       'PushManager' in window
     );
-  }
-
-  /**
-   * Check if declarative web push is supported
-   * Note: Declarative Web Push is primarily supported in Safari 18.4+
-   * This detection is best-effort and may be updated as standards evolve
-   */
-  isDeclarativePushSupported(): boolean {
-    // For now, we use user agent detection as there's no reliable feature detection
-    // This is a known limitation until a better detection method becomes available
-    if ('PushManager' in window && 'subscribe' in PushManager.prototype) {
-      const userAgent = navigator.userAgent.toLowerCase();
-      // Check for Safari (but not Chrome which also includes 'safari' in UA)
-      const isSafari = userAgent.includes('safari') && !userAgent.includes('chrome');
-      
-      // Additional check for iOS/iPadOS/macOS
-      const isAppleDevice = 
-        userAgent.includes('macintosh') || 
-        userAgent.includes('iphone') || 
-        userAgent.includes('ipad');
-      
-      return isSafari && isAppleDevice;
-    }
-    return false;
   }
 
   /**
@@ -108,12 +83,12 @@ export class PushNotificationManager {
   }
 
   /**
-   * Subscribe to push notifications
-   * Try declarative push first, fallback to service worker push
+   * Subscribe to push notifications.
+   * Uses a unified subscription method that works with both declarative and service worker push.
+   * The browser will automatically handle the appropriate format based on its capabilities.
    */
   async subscribeToPushNotifications(): Promise<{
     success: boolean;
-    pushType?: 'declarative' | 'service-worker';
   }> {
     if (!this.isSupported()) {
       throw new Error('Push notifications not supported');
@@ -125,63 +100,6 @@ export class PushNotificationManager {
       throw new Error('Notification permission denied');
     }
 
-    // Try declarative push first
-    if (this.isDeclarativePushSupported()) {
-      try {
-        const result = await this.subscribeDeclarativePush();
-        if (result.success) {
-          return result;
-        }
-      } catch (error) {
-        console.warn('Declarative push failed, falling back to service worker:', error);
-      }
-    }
-
-    // Fallback to service worker push
-    return await this.subscribeServiceWorkerPush();
-  }
-
-  /**
-   * Subscribe using declarative web push
-   * Note: Even for declarative push, we still need a service worker registration
-   * and use the standard PushManager.subscribe() API. The difference is in the
-   * payload format sent from the server (web_push: "8030")
-   */
-  private async subscribeDeclarativePush(): Promise<{
-    success: boolean;
-    pushType: 'declarative';
-  }> {
-    const vapidPublicKey = await this.getVapidPublicKey();
-
-    // Convert VAPID key to Uint8Array
-    const convertedVapidKey = this.urlBase64ToUint8Array(vapidPublicKey);
-
-    const registration = await this.registerServiceWorker();
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: convertedVapidKey,
-    });
-
-    const subscriptionJson = subscription.toJSON();
-
-    // Send to server
-    await authedAxios.post('/push/subscribe', {
-      endpoint: subscriptionJson.endpoint,
-      pushType: 'declarative',
-      keys: subscriptionJson.keys,
-      expirationTime: subscriptionJson.expirationTime,
-    });
-
-    return { success: true, pushType: 'declarative' };
-  }
-
-  /**
-   * Subscribe using service worker push
-   */
-  private async subscribeServiceWorkerPush(): Promise<{
-    success: boolean;
-    pushType: 'service-worker';
-  }> {
     const vapidPublicKey = await this.getVapidPublicKey();
     const convertedVapidKey = this.urlBase64ToUint8Array(vapidPublicKey);
 
@@ -193,15 +111,14 @@ export class PushNotificationManager {
 
     const subscriptionJson = subscription.toJSON();
 
-    // Send to server
+    // Send to server - server will send unified payload format
     await authedAxios.post('/push/subscribe', {
       endpoint: subscriptionJson.endpoint,
-      pushType: 'service-worker',
       keys: subscriptionJson.keys,
       expirationTime: subscriptionJson.expirationTime,
     });
 
-    return { success: true, pushType: 'service-worker' };
+    return { success: true };
   }
 
   /**

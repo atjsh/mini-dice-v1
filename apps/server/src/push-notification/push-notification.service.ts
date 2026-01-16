@@ -11,21 +11,19 @@ import { UserOnlineSessionEntity } from './entities/user-online-session.entity';
 interface SubscribeInputDto {
   userId: UserIdType;
   endpoint: string;
-  pushType: 'declarative' | 'service-worker';
   p256dhKey?: string;
   authKey?: string;
-  userAgent?: string;
   expirationTime?: number;
 }
 
 interface NotificationPayload {
   title: string;
   body: string;
-  navigateUrl: string;
+  navigate: string;
 }
 
 // Constants
-const DECLARATIVE_PUSH_VERSION = '8030';
+const DECLARATIVE_PUSH_VERSION = 8030; // Integer as per spec
 const USER_ONLINE_THRESHOLD_MS = 2 * 60 * 1000; // 2 minutes
 
 @Injectable()
@@ -65,10 +63,8 @@ export class PushNotificationService {
     const subscription = this.pushSubscriptionRepository.create({
       userId: input.userId,
       endpoint: input.endpoint,
-      pushType: input.pushType,
       p256dhKey: input.p256dhKey || null,
       authKey: input.authKey || null,
-      userAgent: input.userAgent || null,
       expirationTime: input.expirationTime
         ? new Date(input.expirationTime)
         : null,
@@ -158,75 +154,39 @@ export class PushNotificationService {
       },
     });
 
-    // Send push to all subscriptions
+    // Send push to all subscriptions with unified payload format
     await Promise.allSettled(
-      subscriptions.map((subscription) => {
-        if (subscription.pushType === 'declarative') {
-          return this.sendDeclarativePush(subscription, notification);
-        } else {
-          return this.sendServiceWorkerPush(subscription, notification);
-        }
-      }),
+      subscriptions.map((subscription) =>
+        this.sendPushNotification(subscription, notification),
+      ),
     );
   }
 
-  private async sendDeclarativePush(
+  /**
+   * Send push notification with unified payload format.
+   * Uses Declarative Web Push spec (RFC 8030) which is compatible with all browsers.
+   * Browsers that support declarative push will display the notification automatically.
+   * Browsers that don't support it will receive the push event in the service worker.
+   */
+  private async sendPushNotification(
     subscription: PushSubscriptionEntity,
     notification: NotificationPayload,
   ): Promise<void> {
+    // Use Declarative Web Push format as per spec
+    // https://pr-preview.s3.amazonaws.com/w3c/push-api/pull/385.html
     const payload = JSON.stringify({
-      web_push: DECLARATIVE_PUSH_VERSION,
+      web_push: DECLARATIVE_PUSH_VERSION, // Integer 8030 as per spec
       notification: {
         title: notification.title,
         body: notification.body,
-        navigate_url: notification.navigateUrl,
+        navigate: notification.navigate, // 'navigate' not 'navigate_url'
       },
     });
 
-    try {
-      // For declarative push, the browser handles the notification display
-      // We still use web-push library to send to the endpoint
-      // Note: Declarative push may not require keys in the same way,
-      // but the web-push library requires them in the structure
-      await webpush.sendNotification(
-        {
-          endpoint: subscription.endpoint,
-          keys: {
-            p256dh: subscription.p256dhKey || '',
-            auth: subscription.authKey || '',
-          },
-        },
-        payload,
-      );
-    } catch (error) {
-      console.error('Failed to send declarative push:', error);
-      // Deactivate subscription on error
-      if (
-        error instanceof Error &&
-        (error.message.includes('410') || error.message.includes('404'))
-      ) {
-        await this.pushSubscriptionRepository.update(
-          { id: subscription.id },
-          { isActive: false },
-        );
-      }
-    }
-  }
-
-  private async sendServiceWorkerPush(
-    subscription: PushSubscriptionEntity,
-    notification: NotificationPayload,
-  ): Promise<void> {
     if (!subscription.p256dhKey || !subscription.authKey) {
-      console.error('Missing keys for service worker push');
+      console.error('Missing encryption keys for push subscription');
       return;
     }
-
-    const payload = JSON.stringify({
-      title: notification.title,
-      body: notification.body,
-      url: notification.navigateUrl,
-    });
 
     try {
       await webpush.sendNotification(
@@ -240,7 +200,7 @@ export class PushNotificationService {
         payload,
       );
     } catch (error) {
-      console.error('Failed to send service worker push:', error);
+      console.error('Failed to send push notification:', error);
       // Deactivate subscription on error
       if (
         error instanceof Error &&

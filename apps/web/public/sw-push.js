@@ -8,27 +8,39 @@ self.addEventListener('push', (event) => {
   try {
     const data = event.data.json();
 
-    // Check if this is a declarative push notification
-    // If it has web_push field, it will be handled by the browser automatically
-    if (data.web_push) {
-      // Skip manual notification display for declarative push
+    // Check if this is a declarative push notification (RFC 8030 format)
+    // If it has web_push field with value 8030, it may be handled automatically by the browser
+    if (data.web_push === 8030 && data.notification) {
+      // For browsers that support declarative push, the notification is displayed automatically
+      // For browsers that don't, we need to display it manually
+      // Since we can't reliably detect support, we'll display it for non-Safari browsers
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      
+      if (isSafari) {
+        // Safari likely handles this automatically, skip manual display
+        return;
+      }
+      
+      // For other browsers, display the notification manually
+      const notification = data.notification;
+      const title = notification.title || 'Mini Dice';
+      const options = {
+        body: notification.body || '새로운 알림이 있습니다',
+        icon: '/logo192.png',
+        badge: '/logo192.png',
+        data: {
+          url: notification.navigate || '/notification-center',
+        },
+        tag: 'mini-dice-notification',
+        requireInteraction: false,
+      };
+
+      event.waitUntil(self.registration.showNotification(title, options));
       return;
     }
 
-    // Handle service worker push notification
-    const title = data.title || 'Mini Dice';
-    const options = {
-      body: data.body || '새로운 알림이 있습니다',
-      icon: '/logo192.png',
-      badge: '/logo192.png',
-      data: {
-        url: data.url || '/notification-center',
-      },
-      tag: 'mini-dice-notification',
-      requireInteraction: false,
-    };
-
-    event.waitUntil(self.registration.showNotification(title, options));
+    // Fallback for any other format (shouldn't happen with our implementation)
+    console.warn('Received push notification in unexpected format:', data);
   } catch (error) {
     console.error('Error handling push event:', error);
   }

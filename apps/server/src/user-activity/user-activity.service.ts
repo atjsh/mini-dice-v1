@@ -73,7 +73,7 @@ export class UserActivityService {
       await this.pushNotificationService.sendNotificationToUser(userId, {
         title: 'Mini Dice - 새로운 알림',
         body: '새로운 이벤트가 발생했습니다!',
-        navigateUrl: notificationCenterUrl,
+        navigate: notificationCenterUrl,
       });
     } catch (error) {
       console.error('Error sending push notification:', error);
