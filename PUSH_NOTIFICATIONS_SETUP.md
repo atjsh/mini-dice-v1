@@ -51,8 +51,8 @@ Create the required database tables by running a migration. The entities are alr
 
 1. **`tb_push_subscriptions`**
    - Stores push notification subscriptions
-   - Tracks subscription type (declarative vs service-worker)
    - Stores endpoint and encryption keys
+   - No user agent or push type tracking for privacy
 
 2. **`tb_user_online_sessions`**
    - Tracks user online status via heartbeat
@@ -69,10 +69,8 @@ CREATE TABLE tb_push_subscriptions (
   id UUID PRIMARY KEY,
   "userId" UUID NOT NULL,
   endpoint TEXT NOT NULL,
-  "pushType" VARCHAR(50) NOT NULL,
   "p256dhKey" TEXT,
   "authKey" TEXT,
-  "userAgent" TEXT,
   "expirationTime" TIMESTAMP,
   "isActive" BOOLEAN DEFAULT true NOT NULL,
   "createdAt" TIMESTAMP DEFAULT NOW() NOT NULL,
@@ -162,21 +160,23 @@ To manually send a push notification:
 await this.pushNotificationService.sendNotificationToUser(userId, {
   title: 'Mini Dice - 새로운 알림',
   body: '새로운 이벤트가 발생했습니다!',
-  navigateUrl: '/notification-center',
+  navigate: '/notification-center',
 });
 ```
 
 ## Features
 
-### Declarative Web Push (Primary)
-- Supported in Safari 18.4+ on iOS/iPadOS/Mac
-- Uses `web_push: "8030"` JSON format
-- Automatically handled by the browser
+### Unified Push Format
+- Uses Declarative Web Push specification (RFC 8030)
+- Single payload format works with all browsers
+- `web_push: 8030` (integer) with `navigate` field per spec
+- Safari 18.4+ displays notifications automatically
+- Other browsers handle via service worker
 
-### Service Worker Push (Fallback)
-- Supported in Chrome, Firefox, Edge, and other browsers
-- Traditional VAPID-based push subscription
-- Handled by the service worker
+### Privacy-Focused Design
+- No user agent tracking
+- No push type differentiation
+- Minimal data collection
 
 ### Smart Delivery Logic
 - **Online Detection**: Push notifications are only sent to offline users
@@ -209,9 +209,10 @@ await this.pushNotificationService.sendNotificationToUser(userId, {
 
 ### Browser Support Testing
 
-Test on different browsers to verify fallback behavior:
-- **Safari 18.4+**: Should use declarative push
-- **Chrome/Firefox/Edge**: Should use service worker push
+All browsers receive the same unified payload format:
+- **Safari 18.4+**: Displays notifications automatically (declarative)
+- **Chrome/Firefox/Edge**: Service worker displays notification manually
+- Both use the same RFC 8030 payload format
 
 ## Troubleshooting
 

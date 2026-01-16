@@ -1,14 +1,14 @@
 # Web Push Notifications Implementation Summary
 
 ## Overview
-This PR successfully implements Web Push & Web Notifications API support for the Mini Dice "Notification Center" (알림 센터) feature. The implementation includes full support for both Declarative Web Push (Safari 18.4+) and traditional Service Worker-based push notifications with smart delivery logic.
+This PR implements Web Push & Web Notifications API support using the Declarative Web Push specification (RFC 8030). The implementation uses a unified payload format that works with all browsers, with automatic handling by Safari 18.4+ and service worker-based display for other browsers.
 
 ## Changes Made
 
 ### 1. Database Layer (2 new tables + 1 updated)
 - **`tb_push_subscriptions`**: Stores push notification subscriptions
-  - Supports both declarative and service-worker push types
-  - Tracks subscription status and encryption keys
+  - Stores endpoint and encryption keys only
+  - No push type or user agent tracking (privacy-focused)
   - Auto-deactivates on delivery errors (410/404)
 
 - **`tb_user_online_sessions`**: Tracks user online status
@@ -25,13 +25,13 @@ This PR successfully implements Web Push & Web Notifications API support for the
 
 **Modules Created:**
 - `PushNotificationModule` - Main module with service and controller
-- `PushNotificationService` - Core push notification logic
+- `PushNotificationService` - Core push notification logic with unified payload
 - `PushNotificationController` - REST API endpoints
 
 **Key Features:**
 - VAPID authentication for secure push delivery
 - Smart delivery: Only sends to offline users (2-minute threshold)
-- Declarative vs Service Worker push support
+- Unified Declarative Web Push format (RFC 8030)
 - Automatic subscription error handling
 - Integration with UserActivityService
 
@@ -46,14 +46,15 @@ This PR successfully implements Web Push & Web Notifications API support for the
 
 **Service Worker:**
 - `public/sw-push.js` - Handles push events and notification clicks
-- Supports both declarative and service worker push formats
+- Detects RFC 8030 format and handles display appropriately
+- Safari detection for automatic vs manual display
 - Auto-focus or open notification center on click
 
 **Libraries Created:**
 - `push-notification-manager.ts` - Subscription management
-  - Declarative push detection for Safari
-  - Service worker fallback for other browsers
+  - Simplified unified subscription method
   - VAPID key conversion and subscription handling
+  - No browser-specific detection needed
 
 - `online-status-tracker.ts` - Online status tracking
   - 60-second heartbeat intervals
@@ -101,27 +102,24 @@ if (isOnline) {
 }
 ```
 
-### Declarative Push Format
+### Unified Push Format (RFC 8030)
 ```json
 {
-  "web_push": "8030",
+  "web_push": 8030,
   "notification": {
     "title": "Mini Dice - 새로운 알림",
     "body": "새로운 이벤트가 발생했습니다!",
-    "navigate_url": "/notification-center"
+    "navigate": "/notification-center"
   }
 }
 ```
 
-### Browser Detection
-```typescript
-// Detect Safari on Apple devices for declarative push
-const isSafari = userAgent.includes('safari') && !userAgent.includes('chrome');
-const isAppleDevice = 
-  userAgent.includes('macintosh') || 
-  userAgent.includes('iphone') || 
-  userAgent.includes('ipad');
-```
+**Key differences from previous implementation:**
+- `web_push` is integer `8030`, not string `"8030"`
+- Uses `navigate` field, not `navigate_url`
+- Same format sent to all browsers
+- Safari 18.4+ displays automatically
+- Other browsers display via service worker
 
 ## Code Quality
 
