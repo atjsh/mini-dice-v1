@@ -9,7 +9,6 @@
       "packages/*",
       "apps/server",
       "apps/web",
-      "apps/web-next",
       "apps/admin-server",
       "docs/*",
       "builders/*"
