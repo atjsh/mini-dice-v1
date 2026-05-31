@@ -4,7 +4,6 @@ import { PushSubscriptionEntity } from './entities/push-subscription.entity';
 import { UserOnlineSessionEntity } from './entities/user-online-session.entity';
 import { PushNotificationController } from './push-notification.controller';
 import { PushNotificationService } from './push-notification.service';
-import { UserPreferenceModule } from '../user-preference/user-preference.module';
 
 @Module({
   imports: [
@@ -12,7 +11,6 @@ import { UserPreferenceModule } from '../user-preference/user-preference.module'
       PushSubscriptionEntity,
       UserOnlineSessionEntity,
     ]),
-    UserPreferenceModule,
   ],
   controllers: [PushNotificationController],
   providers: [PushNotificationService],

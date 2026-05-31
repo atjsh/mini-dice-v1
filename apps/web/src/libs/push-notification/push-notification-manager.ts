@@ -11,6 +11,10 @@ interface SubscriptionData {
   expirationTime?: number | null;
 }
 
+interface CurrentSubscriptionStatusResponse {
+  subscribed: boolean;
+}
+
 export class PushNotificationManager {
   private static instance: PushNotificationManager;
 
@@ -70,6 +74,39 @@ export class PushNotificationManager {
     }
   }
 
+  private async getCurrentSubscription(): Promise<PushSubscription | null> {
+    if (!this.isSupported()) {
+      return null;
+    }
+
+    const registration = await navigator.serviceWorker.getRegistration('/');
+    if (!registration) {
+      return null;
+    }
+
+    return await registration.pushManager.getSubscription();
+  }
+
+  private async saveSubscriptionToServer(
+    subscription: PushSubscription,
+  ): Promise<void> {
+    const subscriptionJson = subscription.toJSON() as SubscriptionData;
+
+    if (!subscriptionJson.endpoint) {
+      throw new Error('푸시 알림 정보를 확인하지 못했습니다.');
+    }
+
+    const response = await authedAxios.post('/push/subscribe', {
+      endpoint: subscriptionJson.endpoint,
+      keys: subscriptionJson.keys,
+      expirationTime: subscriptionJson.expirationTime,
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error('푸시 알림 등록을 저장하지 못했습니다.');
+    }
+  }
+
   /**
    * Request notification permission
    */
@@ -100,23 +137,26 @@ export class PushNotificationManager {
       throw new Error('알림 권한이 거부되었습니다.');
     }
 
+    const registration = await this.registerServiceWorker();
+    const existingSubscription =
+      await registration.pushManager.getSubscription();
+    if (existingSubscription) {
+      await this.saveSubscriptionToServer(existingSubscription);
+      return { success: true };
+    }
+
     const vapidPublicKey = await this.getVapidPublicKey();
     const convertedVapidKey = this.urlBase64ToUint8Array(vapidPublicKey);
+    const subscription =
+      await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey,
+      });
 
-    const registration = await this.registerServiceWorker();
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: convertedVapidKey,
-    });
-
-    const subscriptionJson = subscription.toJSON();
-
-    // Send to server - server will send unified payload format
-    await authedAxios.post('/push/subscribe', {
-      endpoint: subscriptionJson.endpoint,
-      keys: subscriptionJson.keys,
-      expirationTime: subscriptionJson.expirationTime,
-    });
+    // Send to server - server will send unified payload format.
+    // If this browser endpoint belonged to a previous account, the server
+    // transfers it to the current authenticated user.
+    await this.saveSubscriptionToServer(subscription);
 
     return { success: true };
   }
@@ -130,13 +170,24 @@ export class PushNotificationManager {
     }
 
     try {
-      const registration = await navigator.serviceWorker.getRegistration('/');
-      if (!registration) {
+      const subscription = await this.getCurrentSubscription();
+      if (!subscription) {
         return false;
       }
 
-      const subscription = await registration.pushManager.getSubscription();
-      return subscription !== null;
+      const subscriptionJson = subscription.toJSON() as SubscriptionData;
+      if (!subscriptionJson.endpoint) {
+        return false;
+      }
+
+      const response = await authedAxios.post<
+        { endpoint: string },
+        { data: CurrentSubscriptionStatusResponse; status: number }
+      >('/push/current-subscription-status', {
+        endpoint: subscriptionJson.endpoint,
+      });
+
+      return response.status === 200 && response.data.subscribed === true;
     } catch (error) {
       console.error('Error checking subscription:', error);
       return false;
@@ -147,30 +198,46 @@ export class PushNotificationManager {
    * Unsubscribe from push notifications
    */
   async unsubscribeFromPushNotifications(): Promise<void> {
+    await this.unsubscribeCurrentDevice();
+  }
+
+  /**
+   * Remove only this browser/device subscription for the current user.
+   */
+  async unsubscribeCurrentDevice(): Promise<void> {
     if (!this.isSupported()) {
       return;
     }
 
     try {
-      const registration = await navigator.serviceWorker.getRegistration('/');
-      if (!registration) {
-        return;
-      }
-
-      const subscription = await registration.pushManager.getSubscription();
+      const subscription = await this.getCurrentSubscription();
       if (subscription) {
-        const subscriptionJson = subscription.toJSON();
+        const subscriptionJson = subscription.toJSON() as SubscriptionData;
+        let serverError: Error | null = null;
 
-        // Unsubscribe locally
+        if (subscriptionJson.endpoint) {
+          try {
+            const response = await authedAxios.delete('/push/unsubscribe', {
+              data: {
+                endpoint: subscriptionJson.endpoint,
+              },
+            });
+
+            if (response.status !== 200 && response.status !== 201) {
+              serverError = new Error('푸시 알림 해제를 저장하지 못했습니다.');
+            }
+          } catch (error) {
+            serverError =
+              error instanceof Error
+                ? error
+                : new Error('푸시 알림 해제를 저장하지 못했습니다.');
+          }
+        }
+
         await subscription.unsubscribe();
 
-        // Notify server
-        if (subscriptionJson.endpoint) {
-          await authedAxios.delete('/push/unsubscribe', {
-            data: {
-              endpoint: subscriptionJson.endpoint,
-            },
-          });
+        if (serverError) {
+          throw serverError;
         }
       }
     } catch (error) {

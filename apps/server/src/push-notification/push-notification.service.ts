@@ -5,7 +5,6 @@ import type { UserIdType } from '@packages/shared-types';
 import * as webpush from 'web-push';
 import { Repository } from 'typeorm';
 import { ENV_KEYS } from '../config/enviorment-variable-config';
-import { UserPreferenceService } from '../user-preference/user-preference.service';
 import { PushSubscriptionEntity } from './entities/push-subscription.entity';
 import { UserOnlineSessionEntity } from './entities/user-online-session.entity';
 
@@ -35,7 +34,6 @@ export class PushNotificationService {
     @InjectRepository(UserOnlineSessionEntity)
     private userOnlineSessionRepository: Repository<UserOnlineSessionEntity>,
     private configService: ConfigService,
-    private userPreferenceService: UserPreferenceService,
   ) {
     // Initialize web-push with VAPID keys
     webpush.setVapidDetails(
@@ -50,10 +48,10 @@ export class PushNotificationService {
   }
 
   async subscribe(input: SubscribeInputDto): Promise<PushSubscriptionEntity> {
-    // Deactivate existing subscriptions with same endpoint
+    // A browser push endpoint can only represent one active account session.
+    // Re-subscribing transfers ownership of this device/browser to the current user.
     await this.pushSubscriptionRepository.update(
       {
-        userId: input.userId,
         endpoint: input.endpoint,
       },
       {
@@ -73,12 +71,22 @@ export class PushNotificationService {
       isActive: true,
     });
 
-    const saved = await this.pushSubscriptionRepository.save(subscription);
-    await this.userPreferenceService.updateUserPreference(input.userId, {
-      pushNotificationsEnabled: true,
+    return await this.pushSubscriptionRepository.save(subscription);
+  }
+
+  async isCurrentSubscriptionActive(
+    userId: UserIdType,
+    endpoint: string,
+  ): Promise<boolean> {
+    const activeCount = await this.pushSubscriptionRepository.count({
+      where: {
+        userId,
+        endpoint,
+        isActive: true,
+      },
     });
 
-    return saved;
+    return activeCount > 0;
   }
 
   async unsubscribe(userId: UserIdType, endpoint: string): Promise<void> {
@@ -91,7 +99,6 @@ export class PushNotificationService {
         isActive: false,
       },
     );
-    await this.disablePreferenceWhenNoActiveSubscriptions(userId);
   }
 
   async unsubscribeAll(userId: UserIdType): Promise<void> {
@@ -103,26 +110,6 @@ export class PushNotificationService {
         isActive: false,
       },
     );
-    await this.userPreferenceService.updateUserPreference(userId, {
-      pushNotificationsEnabled: false,
-    });
-  }
-
-  private async disablePreferenceWhenNoActiveSubscriptions(
-    userId: UserIdType,
-  ) {
-    const activeCount = await this.pushSubscriptionRepository.count({
-      where: {
-        userId,
-        isActive: true,
-      },
-    });
-
-    if (activeCount === 0) {
-      await this.userPreferenceService.updateUserPreference(userId, {
-        pushNotificationsEnabled: false,
-      });
-    }
   }
 
   async updateHeartbeat(
@@ -167,13 +154,6 @@ export class PushNotificationService {
     userId: UserIdType,
     notification: NotificationPayload,
   ): Promise<void> {
-    const preference =
-      await this.userPreferenceService.getUserPreference(userId);
-
-    if (!preference.pushNotificationsEnabled) {
-      return;
-    }
-
     // Check if user is online
     const isOnline = await this.isUserOnline(userId);
     if (isOnline) {

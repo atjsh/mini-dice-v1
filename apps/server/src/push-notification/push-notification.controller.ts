@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { JwtAuthGuard } from '../auth/local-jwt/jwt.guard';
 import { UserJwt } from '../profile/decorators/user.decorator';
@@ -15,6 +23,10 @@ interface SubscribeRequestDto {
 
 interface UnsubscribeRequestDto {
   endpoint: string;
+}
+
+interface CurrentSubscriptionStatusRequestDto {
+  endpoint?: string;
 }
 
 interface HeartbeatRequestDto {
@@ -49,6 +61,25 @@ export class PushNotificationController {
     });
 
     return { success: true };
+  }
+
+  @Post('current-subscription-status')
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  async getCurrentSubscriptionStatus(
+    @UserJwt() userJwt: UserJwtDto,
+    @Body() body?: CurrentSubscriptionStatusRequestDto,
+  ): Promise<{ subscribed: boolean }> {
+    if (!body?.endpoint) {
+      return { subscribed: false };
+    }
+
+    return {
+      subscribed: await this.pushNotificationService.isCurrentSubscriptionActive(
+        userJwt.userId,
+        body.endpoint,
+      ),
+    };
   }
 
   @Delete('unsubscribe')
