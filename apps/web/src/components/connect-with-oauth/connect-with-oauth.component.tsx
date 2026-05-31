@@ -1,13 +1,42 @@
 import { useState } from 'react';
 import { getGoogleOAuthPageUrl } from '../../google-oauth';
 import { useUser } from '../../libs';
+import { usePasskeyList } from '../../libs/tdol-server/passkey';
+import {
+  SettingsActionLink,
+  SettingsCard,
+  SettingsHeader,
+} from '../settings';
+
+export const GoogleAccountLinkSection: React.FC = () => {
+  const { data: user } = useUser();
+
+  return user && user.email == null ? (
+    <SettingsCard>
+      <SettingsHeader
+        title="구글 계정 연결"
+        description="구글 계정을 연결하면 패스키를 사용할 수 없는 브라우저에서도 계정을 계속 사용할 수 있습니다."
+        className="mb-4"
+      />
+      <SettingsActionLink href={getGoogleOAuthPageUrl()}>
+        구글 계정 연결하기
+      </SettingsActionLink>
+    </SettingsCard>
+  ) : null;
+};
 
 export const ConnectWithOauthWidget: React.FC = () => {
   const { data: user } = useUser();
+  const { data: passkeys, isLoading: isPasskeysLoading } = usePasskeyList();
 
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const hasPasskey = (passkeys || []).length > 0;
 
-  return user && user.email == null ? (
+  if (!user || user.email != null || isPasskeysLoading || hasPasskey) {
+    return null;
+  }
+
+  return (
     isCollapsed ? (
       <button
         className="bg-white dark:md:bg-zinc-800 dark:bg-black rounded-3xl flex flex-col gap-3 px-5 py-5 hover:bg-gray-200 active:bg-gray-300 transition-colors border border-white hover:border-gray-400 font-bold dark:hover:bg-zinc-700 dark:active:bg-zinc-600 dark:border-black dark:hover:border-zinc-500"
@@ -46,7 +75,5 @@ export const ConnectWithOauthWidget: React.FC = () => {
         </div>
       </div>
     )
-  ) : (
-    <></>
   );
 };

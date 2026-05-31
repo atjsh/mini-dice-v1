@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
+import { GoogleAccountLinkSection } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { PasskeyManagementSection } from '../components/passkey/PasskeyManagementSection';
 import { PushNotificationSettings } from '../components/push-notification';
 import {
@@ -65,6 +66,7 @@ export function PreferencesPage() {
         </div>
 
         <div className="flex flex-col gap-8">
+          <GoogleAccountLinkSection />
           <PasskeyManagementSection />
           <PushNotificationSettings />
           <CommentPreferenceSection />

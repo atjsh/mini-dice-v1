@@ -5,6 +5,7 @@ import {
   IndexPageURL,
   LogoutPageURL,
   NotificationPageURL,
+  PreferencesPageURL,
   PrivacyPolicyPageURL,
   RankingPgaeURL,
   TerminatePageURL,
@@ -117,6 +118,11 @@ export const FooterWidgetComponent: React.FC = () => {
       label: '관리',
       isHidden: accessToken ? false : true,
       links: [
+        {
+          label: '설정',
+          link: PreferencesPageURL,
+          type: 'internal',
+        },
         {
           label: '로그아웃',
           link: LogoutPageURL,
