@@ -60,14 +60,14 @@ export class PasskeyService {
 
     // Enforce 100 passkey limit
     if (existingPasskeys.length >= this.MAX_PASSKEYS_PER_USER) {
-      throw new BadRequestException('Maximum passkey limit (100) reached');
+      throw new BadRequestException('패스키는 최대 100개까지 등록할 수 있습니다.');
     }
 
     const rpID = this.configService.get('WEBAUTHN_RP_ID');
     const rpName = this.configService.get('WEBAUTHN_RP_NAME', 'Mini Dice');
 
     if (!rpID) {
-      throw new BadRequestException('WebAuthn is not configured');
+      throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
     }
 
     const options = await generateRegistrationOptions({
@@ -106,14 +106,16 @@ export class PasskeyService {
     );
 
     if (!expectedChallenge) {
-      throw new BadRequestException('Challenge not found or expired');
+      throw new BadRequestException(
+        '패스키 요청이 만료되었습니다. 다시 시도해 주세요.',
+      );
     }
 
     const rpID = this.configService.get('WEBAUTHN_RP_ID');
     const origin = this.configService.get('WEBAUTHN_ORIGIN');
 
     if (!rpID || !origin) {
-      throw new BadRequestException('WebAuthn is not configured');
+      throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
     }
 
     let verification: Awaited<ReturnType<typeof verifyRegistrationResponse>>;
@@ -126,11 +128,15 @@ export class PasskeyService {
         requireUserVerification: false,
       });
     } catch {
-      throw new BadRequestException('Passkey verification failed');
+      throw new BadRequestException(
+        '패스키 확인에 실패했습니다. 다시 시도해 주세요.',
+      );
     }
 
     if (!verification.verified || !verification.registrationInfo) {
-      throw new BadRequestException('Passkey verification failed');
+      throw new BadRequestException(
+        '패스키 확인에 실패했습니다. 다시 시도해 주세요.',
+      );
     }
 
     const { credentialID, credentialPublicKey, counter, aaguid } =
@@ -180,7 +186,7 @@ export class PasskeyService {
 
     const result = await this.passkeyRepository.delete({ id: passkeyId, userId });
     if (result.affected === 0) {
-      throw new NotFoundException('Passkey not found');
+      throw new NotFoundException('패스키를 찾을 수 없습니다.');
     }
 
     return { success: true };
@@ -203,7 +209,7 @@ export class PasskeyService {
     );
 
     if (result.affected === 0) {
-      throw new NotFoundException('Passkey not found');
+      throw new NotFoundException('패스키를 찾을 수 없습니다.');
     }
 
     return { success: true };
@@ -213,7 +219,7 @@ export class PasskeyService {
     const rpID = this.configService.get('WEBAUTHN_RP_ID');
 
     if (!rpID) {
-      throw new BadRequestException('WebAuthn is not configured');
+      throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
     }
 
     const options = await generateAuthenticationOptions({
@@ -249,7 +255,9 @@ export class PasskeyService {
     );
 
     if (!expectedChallenge) {
-      throw new UnauthorizedException('Challenge not found or expired');
+      throw new UnauthorizedException(
+        '패스키 요청이 만료되었습니다. 다시 시도해 주세요.',
+      );
     }
 
     const legacyCredentialId = Buffer.from(credential.id).toString('base64url');
@@ -261,14 +269,14 @@ export class PasskeyService {
     });
 
     if (!passkey) {
-      throw new UnauthorizedException('Passkey not found');
+      throw new UnauthorizedException('패스키를 찾을 수 없습니다.');
     }
 
     const rpID = this.configService.get('WEBAUTHN_RP_ID');
     const origin = this.configService.get('WEBAUTHN_ORIGIN');
 
     if (!rpID || !origin) {
-      throw new BadRequestException('WebAuthn is not configured');
+      throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
     }
 
     let verification: Awaited<ReturnType<typeof verifyAuthenticationResponse>>;
@@ -286,11 +294,15 @@ export class PasskeyService {
         },
       });
     } catch {
-      throw new UnauthorizedException('Authentication failed');
+      throw new UnauthorizedException(
+        '패스키 로그인에 실패했습니다. 다시 시도해 주세요.',
+      );
     }
 
     if (!verification.verified) {
-      throw new UnauthorizedException('Authentication failed');
+      throw new UnauthorizedException(
+        '패스키 로그인에 실패했습니다. 다시 시도해 주세요.',
+      );
     }
 
     // Update counter and lastUsedAt

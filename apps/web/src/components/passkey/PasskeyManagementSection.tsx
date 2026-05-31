@@ -6,6 +6,7 @@ import {
   usePasskeyDelete,
   usePasskeyRename,
 } from '../../libs/tdol-server/passkey';
+import { normalizePasskeyErrorMessage } from '../../libs/tdol-server/passkey/passkey-error-message';
 import {
   SettingsActionButton,
   SettingsCard,
@@ -32,10 +33,10 @@ export function PasskeyManagementSection() {
       await registerMutation.mutateAsync(undefined);
       setMessage({ type: 'success', text: '패스키가 성공적으로 추가되었습니다!' });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        '패스키 추가에 실패했습니다.';
+      const errorMessage = normalizePasskeyErrorMessage(
+        error,
+        '패스키 등록에 실패했습니다. 브라우저 권한을 확인한 뒤 다시 시도해 주세요.',
+      );
       setMessage({ type: 'error', text: errorMessage });
     }
   };
@@ -46,10 +47,10 @@ export function PasskeyManagementSection() {
       await deleteMutation.mutateAsync(id);
       setMessage({ type: 'success', text: '패스키가 삭제되었습니다.' });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        '패스키 삭제에 실패했습니다.';
+      const errorMessage = normalizePasskeyErrorMessage(
+        error,
+        '패스키 삭제에 실패했습니다. 다시 시도해 주세요.',
+      );
       setMessage({ type: 'error', text: errorMessage });
     }
   };
@@ -60,10 +61,10 @@ export function PasskeyManagementSection() {
       await renameMutation.mutateAsync({ id, name });
       setMessage({ type: 'success', text: '패스키 이름이 변경되었습니다.' });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        '패스키 이름 변경에 실패했습니다.';
+      const errorMessage = normalizePasskeyErrorMessage(
+        error,
+        '패스키 이름 변경에 실패했습니다. 다시 시도해 주세요.',
+      );
       setMessage({ type: 'error', text: errorMessage });
     }
   };

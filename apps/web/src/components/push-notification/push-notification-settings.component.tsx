@@ -12,6 +12,10 @@ interface PushNotificationSettingsProps {
 }
 
 function getPushErrorMessage(error: string) {
+  if (/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(error)) {
+    return error;
+  }
+
   if (/applicationServerKey|P-256|VAPID/i.test(error)) {
     return '푸시 알림 서버 키가 올바르지 않습니다. 잠시 후 다시 시도해 주세요.';
   }

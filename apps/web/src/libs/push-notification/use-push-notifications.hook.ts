@@ -42,7 +42,11 @@ export function usePushNotifications(): UsePushNotificationsResult {
         }
       } catch (err) {
         console.error('Error checking push notification status:', err);
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(
+          err instanceof Error
+            ? err.message
+            : '푸시 알림 상태를 확인하지 못했습니다.',
+        );
       } finally {
         setIsLoading(false);
       }
@@ -73,7 +77,9 @@ export function usePushNotifications(): UsePushNotificationsResult {
       }
     } catch (err) {
       console.error('Error subscribing to push notifications:', err);
-      setError(err instanceof Error ? err.message : 'Failed to subscribe');
+      setError(
+        err instanceof Error ? err.message : '푸시 알림을 등록하지 못했습니다.',
+      );
       throw err;
     } finally {
       setIsLoading(false);
@@ -92,7 +98,9 @@ export function usePushNotifications(): UsePushNotificationsResult {
       onlineStatusTracker.stopTracking();
     } catch (err) {
       console.error('Error unsubscribing from push notifications:', err);
-      setError(err instanceof Error ? err.message : 'Failed to unsubscribe');
+      setError(
+        err instanceof Error ? err.message : '푸시 알림을 해제하지 못했습니다.',
+      );
       throw err;
     } finally {
       setIsLoading(false);

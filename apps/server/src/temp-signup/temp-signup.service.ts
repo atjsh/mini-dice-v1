@@ -20,7 +20,9 @@ export class TempSignupService {
     const response = await this.turnstileService.verify(turnstileToken);
 
     if (!response) {
-      throw new ForbiddenException('turnstile verification failed');
+      throw new ForbiddenException(
+        '사람입니다 확인에 실패했습니다. 다시 시도해 주세요.',
+      );
     }
     const user = await this.userService.signUpNewUser({
       username,

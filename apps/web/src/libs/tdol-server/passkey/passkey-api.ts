@@ -4,7 +4,9 @@ import { authedAxios } from '../auth/access-token';
 function throwIfRequestFailed(response: any) {
   if (response.status !== 200 && response.status !== 201) {
     const message =
-      response?.data?.message || response?.statusText || 'Request failed';
+      response?.data?.message ||
+      response?.statusText ||
+      '요청을 처리하지 못했습니다. 다시 시도해 주세요.';
     throw new Error(message);
   }
 }

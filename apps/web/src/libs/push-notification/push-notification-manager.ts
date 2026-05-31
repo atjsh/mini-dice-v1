@@ -49,7 +49,7 @@ export class PushNotificationManager {
    */
   async registerServiceWorker(): Promise<ServiceWorkerRegistration> {
     if (!('serviceWorker' in navigator)) {
-      throw new Error('Service Worker not supported');
+      throw new Error('서비스 워커를 지원하지 않는 브라우저입니다.');
     }
 
     try {
@@ -75,7 +75,7 @@ export class PushNotificationManager {
    */
   async requestPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-      throw new Error('Notifications not supported');
+      throw new Error('알림을 지원하지 않는 브라우저입니다.');
     }
 
     const permission = await Notification.requestPermission();
@@ -91,13 +91,13 @@ export class PushNotificationManager {
     success: boolean;
   }> {
     if (!this.isSupported()) {
-      throw new Error('Push notifications not supported');
+      throw new Error('푸시 알림을 지원하지 않는 브라우저입니다.');
     }
 
     // Request permission
     const permission = await this.requestPermission();
     if (permission !== 'granted') {
-      throw new Error('Notification permission denied');
+      throw new Error('알림 권한이 거부되었습니다.');
     }
 
     const vapidPublicKey = await this.getVapidPublicKey();
