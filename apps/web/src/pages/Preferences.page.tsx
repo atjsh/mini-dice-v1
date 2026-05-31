@@ -6,13 +6,13 @@ import {
   useUpdateUserPreference,
   useUserPreference,
 } from '../libs/tdol-server/user-preference';
-import { ServicePageURL } from './routes';
+import { IndexPageURL } from './routes';
 
 function CommentPreferenceSection() {
   const { data: preference, isLoading } = useUserPreference();
   const updatePreference = useUpdateUserPreference();
 
-  const isEnabled = preference?.alwaysHideComments ?? false;
+  const commentsVisible = !(preference?.alwaysHideComments ?? false);
 
   return (
     <section className="border border-gray-300 dark:border-gray-600 rounded-xl p-6 bg-white dark:bg-zinc-800">
@@ -22,28 +22,28 @@ function CommentPreferenceSection() {
             댓글 표시
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            게임 화면에서 칸 댓글과 댓글 작성 버튼을 숨깁니다.
+            게임 화면에서 칸 댓글과 댓글 작성 버튼을 표시합니다.
           </p>
         </div>
         <button
           onClick={() =>
             updatePreference.mutate({
-              alwaysHideComments: !isEnabled,
+              alwaysHideComments: commentsVisible,
             })
           }
           disabled={isLoading || updatePreference.isLoading}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-            isEnabled ? 'bg-blue-600' : 'bg-gray-200'
+            commentsVisible ? 'bg-blue-600' : 'bg-gray-200'
           } ${
             isLoading || updatePreference.isLoading
               ? 'opacity-50 cursor-not-allowed'
               : 'cursor-pointer'
           }`}
-          aria-label="댓글 숨기기 토글"
+          aria-label="댓글 표시 토글"
         >
           <span
             className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              isEnabled ? 'translate-x-6' : 'translate-x-1'
+              commentsVisible ? 'translate-x-6' : 'translate-x-1'
             }`}
           />
         </button>
@@ -64,9 +64,9 @@ export function PreferencesPage() {
         <div className="flex flex-col gap-2 mb-6">
           <Link
             className="text-lg text-blue-500 hover:underline"
-            to={ServicePageURL}
+            to={IndexPageURL}
           >
-            ← 게임으로 돌아가기
+            ← Mini Dice로 돌아가기
           </Link>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
             설정

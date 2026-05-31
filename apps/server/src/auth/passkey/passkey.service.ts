@@ -174,7 +174,7 @@ export class PasskeyService {
     // Prevent deletion if this is the only passkey and no linked login account
     if (passkeyCount === 1 && !hasLinkedAccount) {
       throw new BadRequestException(
-        'Cannot remove your only passkey without a linked Google account',
+        '연결된 Google 계정 없이 마지막 패스키를 삭제할 수 없습니다.',
       );
     }
 

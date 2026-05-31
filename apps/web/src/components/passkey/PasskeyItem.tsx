@@ -43,9 +43,11 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
   };
 
   return (
-    <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 flex items-center justify-between gap-4">
-      <div className="flex items-center gap-3 flex-1 min-w-0">
-        <div className="text-2xl">{getDeviceIcon(passkey.deviceType)}</div>
+    <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 flex flex-wrap items-start justify-between gap-4">
+      <div className="flex items-start gap-3 flex-1 basis-72 min-w-0">
+        <div className="text-2xl shrink-0">
+          {getDeviceIcon(passkey.deviceType)}
+        </div>
         <div className="flex-1 min-w-0">
           {isEditing ? (
             <input
@@ -65,17 +67,17 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
               maxLength={100}
             />
           ) : (
-            <div className="font-semibold text-gray-900 dark:text-gray-100 truncate">
+            <div className="font-semibold text-gray-900 dark:text-gray-100 break-all whitespace-normal">
               {passkey.name}
             </div>
           )}
-          <div className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-sm text-gray-500 dark:text-gray-400 break-words">
             등록: {formatDate(passkey.createdAt)} | 마지막 사용:{' '}
             {formatDate(passkey.lastUsedAt)}
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-end gap-2 ml-auto">
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
@@ -85,7 +87,7 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
           </button>
         )}
         {showDeleteConfirm ? (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             <button
               onClick={handleDeleteConfirm}
               className="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700"
