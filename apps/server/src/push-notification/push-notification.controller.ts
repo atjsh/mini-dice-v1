@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
-import type { UserIdType } from '@packages/shared-types';
+import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { JwtAuthGuard } from '../auth/local-jwt/jwt.guard';
 import { UserJwt } from '../profile/decorators/user.decorator';
 import { PushNotificationService } from './push-notification.service';
@@ -37,11 +37,11 @@ export class PushNotificationController {
   @Post('subscribe')
   @UseGuards(JwtAuthGuard)
   async subscribe(
-    @UserJwt('userId') userId: UserIdType,
+    @UserJwt() userJwt: UserJwtDto,
     @Body() body: SubscribeRequestDto,
   ): Promise<{ success: boolean }> {
     await this.pushNotificationService.subscribe({
-      userId,
+      userId: userJwt.userId,
       endpoint: body.endpoint,
       p256dhKey: body.keys?.p256dh,
       authKey: body.keys?.auth,
@@ -54,30 +54,33 @@ export class PushNotificationController {
   @Delete('unsubscribe')
   @UseGuards(JwtAuthGuard)
   async unsubscribe(
-    @UserJwt('userId') userId: UserIdType,
+    @UserJwt() userJwt: UserJwtDto,
     @Body() body: UnsubscribeRequestDto,
   ): Promise<{ success: boolean }> {
-    await this.pushNotificationService.unsubscribe(userId, body.endpoint);
+    await this.pushNotificationService.unsubscribe(
+      userJwt.userId,
+      body.endpoint,
+    );
     return { success: true };
   }
 
   @Delete('unsubscribe-all')
   @UseGuards(JwtAuthGuard)
   async unsubscribeAll(
-    @UserJwt('userId') userId: UserIdType,
+    @UserJwt() userJwt: UserJwtDto,
   ): Promise<{ success: boolean }> {
-    await this.pushNotificationService.unsubscribeAll(userId);
+    await this.pushNotificationService.unsubscribeAll(userJwt.userId);
     return { success: true };
   }
 
   @Post('heartbeat')
   @UseGuards(JwtAuthGuard)
   async heartbeat(
-    @UserJwt('userId') userId: UserIdType,
+    @UserJwt() userJwt: UserJwtDto,
     @Body() body: HeartbeatRequestDto,
   ): Promise<{ success: boolean }> {
     await this.pushNotificationService.updateHeartbeat(
-      userId,
+      userJwt.userId,
       body.sessionId,
     );
     return { success: true };
