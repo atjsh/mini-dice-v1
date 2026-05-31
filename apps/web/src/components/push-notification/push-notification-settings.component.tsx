@@ -32,8 +32,10 @@ export function PushNotificationSettings({
 
   if (!isSupported) {
     return (
-      <div className={`p-4 bg-gray-100 rounded-lg ${className}`}>
-        <p className="text-sm text-gray-600">
+      <div
+        className={`p-4 bg-gray-100 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-gray-600 ${className}`}
+      >
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           푸시 알림이 이 브라우저에서 지원되지 않습니다.
         </p>
       </div>
@@ -41,20 +43,32 @@ export function PushNotificationSettings({
   }
 
   return (
-    <div className={`p-4 bg-white rounded-lg border ${className}`}>
+    <div
+      className={`p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-gray-600 ${className}`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold mb-1">푸시 알림</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-gray-100">
+            푸시 알림
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             새로운 이벤트 발생 시 알림을 받습니다
           </p>
           {permission === 'denied' && (
-            <p className="text-sm text-red-600 mt-2" role="alert" aria-live="polite">
+            <p
+              className="text-sm text-red-600 dark:text-red-400 mt-2"
+              role="alert"
+              aria-live="polite"
+            >
               알림 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해주세요.
             </p>
           )}
           {error && (
-            <p className="text-sm text-red-600 mt-2" role="alert" aria-live="polite">
+            <p
+              className="text-sm text-red-600 dark:text-red-400 mt-2"
+              role="alert"
+              aria-live="polite"
+            >
               오류: {error}
             </p>
           )}
@@ -69,7 +83,7 @@ export function PushNotificationSettings({
               ${
                 isSubscribed
                   ? 'bg-blue-600'
-                  : 'bg-gray-200'
+                  : 'bg-gray-200 dark:bg-gray-600'
               }
               ${
                 isLoading || permission === 'denied'
@@ -89,12 +103,12 @@ export function PushNotificationSettings({
         </div>
       </div>
       {isLoading && (
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
           처리 중...
         </p>
       )}
       {isSubscribed && !isLoading && (
-        <p className="text-sm text-green-600 mt-2">
+        <p className="text-sm text-green-600 dark:text-green-400 mt-2">
           ✓ 푸시 알림이 활성화되었습니다
         </p>
       )}
