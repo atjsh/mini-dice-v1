@@ -4,6 +4,7 @@ import { LoginSuccessPage } from './FinishSignup.page';
 import { IndexPage } from './Index.page';
 import { LogoutPage } from './Logout.page';
 import { NotificationPage } from './NotificationCenter.page';
+import { PreferencesPage } from './Preferences.page';
 import { PrivaryPage } from './Privacy.page';
 import { RankingPage } from './Ranking.page';
 import { ServicePage } from './Service.page';
@@ -37,6 +38,7 @@ export const TerminatePageURL = '/terminate';
 export const RankingPgaeURL = '/ranking';
 export const UpdatesPageURL = '/updates';
 export const NotificationPageURL = '/notifications';
+export const PreferencesPageURL = '/preferences';
 
 function getTitle(subTitle?: string) {
   return `미니다이스 인생게임 | Mini Dice ${subTitle ? '-' : ''} ${
@@ -121,6 +123,12 @@ export const protectedRoutes: ProtectedRoute[] = [
     path: NotificationPageURL,
     component: NotificationPage,
     title: getTitle('Notification'),
+    protection: 'signupCompleted',
+  },
+  {
+    path: PreferencesPageURL,
+    component: PreferencesPage,
+    title: getTitle('설정'),
     protection: 'signupCompleted',
   },
 ];

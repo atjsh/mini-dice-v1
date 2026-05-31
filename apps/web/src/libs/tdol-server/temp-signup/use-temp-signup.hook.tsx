@@ -3,9 +3,17 @@ import { submitTempSignup } from './submit-temp-signup';
 import { queryClient } from '../../..';
 import { UseUserHookKey } from '..';
 
-export const useTempSignup = () =>
+interface UseTempSignupOptions {
+  refetchUserOnSuccess?: boolean;
+}
+
+export const useTempSignup = ({
+  refetchUserOnSuccess = true,
+}: UseTempSignupOptions = {}) =>
   useMutation(submitTempSignup, {
     onSuccess: () => {
-      queryClient.refetchQueries([UseUserHookKey]);
+      if (refetchUserOnSuccess) {
+        queryClient.refetchQueries(UseUserHookKey);
+      }
     },
   });

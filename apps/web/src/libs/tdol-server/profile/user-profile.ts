@@ -63,6 +63,6 @@ export async function terminateUser() {
 export const useCompleteSignup = () =>
   useMutation(userCompleteSignup, {
     onSuccess: () => {
-      queryClient.refetchQueries([UseUserHookKey]);
+      queryClient.refetchQueries(UseUserHookKey);
     },
   });

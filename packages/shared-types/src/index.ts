@@ -8,3 +8,6 @@ export * from './locale/bigint-locale';
 export * from './locale/str-ellipsis';
 export * from './land-comment/user-land-comment.input.dto';
 export * from './land-comment/land-comment.vo';
+export * from './passkey/passkey.vo';
+export * from './passkey/passkey-list.dto';
+export * from './passkey/rename-passkey.dto';
