@@ -85,9 +85,9 @@ const settingsActionButtonVariantClassNames: Record<
   danger:
     'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 disabled:bg-gray-400 disabled:text-white dark:disabled:bg-zinc-700',
   ghost:
-    'text-blue-600 hover:bg-blue-50 active:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-950 dark:active:bg-blue-900',
+    'text-blue-600 hover:bg-blue-50 active:bg-blue-100 dark:text-blue-400 dark:hover:bg-zinc-800 dark:active:bg-zinc-700',
   dangerGhost:
-    'text-red-600 hover:bg-red-50 active:bg-red-100 dark:text-red-400 dark:hover:bg-red-950 dark:active:bg-red-900',
+    'text-red-600 hover:bg-red-50 active:bg-red-100 dark:text-red-400 dark:hover:bg-zinc-800 dark:active:bg-zinc-700',
 };
 
 export function SettingsActionButton({
@@ -119,9 +119,9 @@ export function SettingsNotice({
 } & HTMLAttributes<HTMLDivElement>) {
   const toneClassNames = {
     success:
-      'border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200',
+      'border-green-200 bg-green-50 text-green-800 dark:border-green-700 dark:bg-green-900 dark:text-green-100',
     error:
-      'border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200',
+      'border-red-200 bg-red-50 text-red-800 dark:border-red-700 dark:bg-red-900 dark:text-red-100',
     neutral:
       'border-gray-200 bg-gray-50 text-gray-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-400',
   }[tone];
