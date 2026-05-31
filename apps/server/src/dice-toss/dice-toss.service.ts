@@ -165,6 +165,11 @@ export class DiceTossService {
             timezone: timezone,
           },
         );
+      const landCommentsMessage =
+        await this.userCommentService.getLandCommentsMessage(
+          userJwt.userId,
+          lastSkillLog.log.skillRoute,
+        );
 
       return {
         user: serializeUserToJson(
@@ -175,12 +180,7 @@ export class DiceTossService {
             ...skillDrawResult,
             actionResultDrawings: [
               ...skillDrawResult.actionResultDrawings,
-              {
-                type: 'landComments',
-                landComments: await this.userCommentService.getLandComments(
-                  lastSkillLog.log.skillRoute,
-                ),
-              },
+              ...(landCommentsMessage ? [landCommentsMessage] : []),
             ],
           },
           skillRoute: getSkillRouteFromPath(lastSkillLog.log.skillRoute),
@@ -258,6 +258,11 @@ export class DiceTossService {
         renderRecentLandEventSummary(landEventSummaries),
       );
     }
+    const landCommentsMessage =
+      await this.userCommentService.getLandCommentsMessage(
+        userJwt.userId,
+        skillServiceLog.skillRoute,
+      );
 
     return {
       user: serializeUserToJson(
@@ -268,12 +273,7 @@ export class DiceTossService {
           ...skillDrawResult,
           actionResultDrawings: [
             ...skillDrawResult.actionResultDrawings,
-            {
-              type: 'landComments',
-              landComments: await this.userCommentService.getLandComments(
-                skillServiceLog.skillRoute,
-              ),
-            },
+            ...(landCommentsMessage ? [landCommentsMessage] : []),
           ],
         },
         skillRoute: movedLandCode,

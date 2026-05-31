@@ -15,7 +15,7 @@ import { ko } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
-import { mutateUserLandComment, useUser } from '../../libs';
+import { mutateUserLandComment, useUser, useUserPreference } from '../../libs';
 import {
   DiceTossActivityEnum,
   diceTossActivityStatusAtom,
@@ -536,8 +536,13 @@ const LandCommentsMessage: React.FC<{
   const thisComment = addedComments[messageKey];
 
   const { data: user } = useUser();
+  const { data: preference } = useUserPreference();
 
   const canAddComment = user?.canAddLandComment == true && isLast;
+
+  if (preference?.alwaysHideComments) {
+    return <></>;
+  }
 
   return (isLast && user?.canAddLandComment == true) ||
     ((landComments.length > 0 || thisComment != undefined) &&

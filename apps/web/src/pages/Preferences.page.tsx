@@ -1,7 +1,61 @@
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../layouts/service.layout';
 import { PasskeyManagementSection } from '../components/passkey/PasskeyManagementSection';
+import { PushNotificationSettings } from '../components/push-notification';
+import {
+  useUpdateUserPreference,
+  useUserPreference,
+} from '../libs/tdol-server/user-preference';
 import { ServicePageURL } from './routes';
+
+function CommentPreferenceSection() {
+  const { data: preference, isLoading } = useUserPreference();
+  const updatePreference = useUpdateUserPreference();
+
+  const isEnabled = preference?.alwaysHideComments ?? false;
+
+  return (
+    <section className="border border-gray-300 dark:border-gray-600 rounded-xl p-6 bg-white dark:bg-zinc-800">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+            댓글 표시
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            게임 화면에서 칸 댓글과 댓글 작성 버튼을 숨깁니다.
+          </p>
+        </div>
+        <button
+          onClick={() =>
+            updatePreference.mutate({
+              alwaysHideComments: !isEnabled,
+            })
+          }
+          disabled={isLoading || updatePreference.isLoading}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+            isEnabled ? 'bg-blue-600' : 'bg-gray-200'
+          } ${
+            isLoading || updatePreference.isLoading
+              ? 'opacity-50 cursor-not-allowed'
+              : 'cursor-pointer'
+          }`}
+          aria-label="댓글 숨기기 토글"
+        >
+          <span
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+              isEnabled ? 'translate-x-6' : 'translate-x-1'
+            }`}
+          />
+        </button>
+      </div>
+      {updatePreference.isError && (
+        <p className="text-sm text-red-600 mt-2" role="alert">
+          설정을 저장하지 못했습니다. 다시 시도해 주세요.
+        </p>
+      )}
+    </section>
+  );
+}
 
 export function PreferencesPage() {
   return (
@@ -21,8 +75,8 @@ export function PreferencesPage() {
 
         <div className="flex flex-col gap-8">
           <PasskeyManagementSection />
-
-          {/* Future sections will be added here by #70 and #71 */}
+          <PushNotificationSettings />
+          <CommentPreferenceSection />
         </div>
       </div>
     </ServiceLayout>

@@ -96,6 +96,12 @@ export class UserInteractionWebService {
         );
       }
     }
+    const landCommentsMessage =
+      await this.userLandCommentService.getLandCommentsMessage(
+        userJwt.userId,
+        skillServiceLog.skillRoute,
+      );
+
     return {
       user: serializeUserToJson(updatedUser),
       skillLog: {
@@ -105,12 +111,7 @@ export class UserInteractionWebService {
           ...skillDrawResult,
           actionResultDrawings: [
             ...skillDrawResult.actionResultDrawings,
-            {
-              type: 'landComments',
-              landComments: await this.userLandCommentService.getLandComments(
-                skillServiceLog.skillRoute,
-              ),
-            },
+            ...(landCommentsMessage ? [landCommentsMessage] : []),
           ],
         },
       },

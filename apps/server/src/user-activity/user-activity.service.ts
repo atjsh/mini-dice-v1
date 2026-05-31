@@ -5,6 +5,9 @@ import {
 } from '@packages/scenario-routing';
 import type { NotificationMessageType } from '@packages/shared-types';
 import * as _ from 'lodash';
+import { ConfigService } from '@nestjs/config';
+import { ENV_KEYS } from '../config/enviorment-variable-config';
+import { PushNotificationService } from '../push-notification/push-notification.service';
 import { ScenarioRouteCallService } from '../scenario-route-call/scenario-route-call.service';
 import type { LandEventsSummarizeResultType } from '../skill-log/types/skill-draw-props.dto';
 import {
@@ -37,14 +40,34 @@ export class UserActivityService {
   constructor(
     private userActivityRepository: LandEventRepository,
     private scenarioRouteCallService: ScenarioRouteCallService,
+    private pushNotificationService: PushNotificationService,
+    private configService: ConfigService,
   ) {}
 
   async create<LandEventResult extends Record<string, any>>(
     createUserActivityInputDto: CreateUserActivityInputDto<LandEventResult>,
   ) {
-    return await this.userActivityRepository.createLandEvent(
+    const landEvent = await this.userActivityRepository.createLandEvent(
       createUserActivityInputDto,
     );
+
+    this.sendPushNotificationForLandEvent(
+      createUserActivityInputDto.userId,
+    ).catch((error) => {
+      console.error('Failed to send push notification:', error);
+    });
+
+    return landEvent;
+  }
+
+  private async sendPushNotificationForLandEvent(userId: string) {
+    const webUrl = this.configService.getOrThrow(ENV_KEYS.WEB_URL);
+
+    await this.pushNotificationService.sendNotificationToUser(userId, {
+      title: 'Mini Dice - 새로운 알림',
+      body: '새로운 이벤트가 발생했습니다!',
+      navigate: `${webUrl}/notifications`,
+    });
   }
 
   async renderRecentLandEvent(

@@ -169,11 +169,10 @@ export class PasskeyService {
     const passkeyCount = await this.passkeyRepository.count({
       where: { userId },
     });
-    const hasGoogleAccount =
-      user.authProvider === 'google' && user.email != null;
+    const hasLinkedAccount = user.email != null;
 
-    // Prevent deletion if this is the only passkey and no Google account
-    if (passkeyCount === 1 && !hasGoogleAccount) {
+    // Prevent deletion if this is the only passkey and no linked login account
+    if (passkeyCount === 1 && !hasLinkedAccount) {
       throw new BadRequestException(
         'Cannot remove your only passkey without a linked Google account',
       );

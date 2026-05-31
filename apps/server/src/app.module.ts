@@ -23,6 +23,9 @@ import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-lo
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
 import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
+import { PushNotificationModule } from './push-notification/push-notification.module';
+import { PushSubscriptionEntity } from './push-notification/entities/push-subscription.entity';
+import { UserOnlineSessionEntity } from './push-notification/entities/user-online-session.entity';
 import { LandEntity } from './scenarios/d1/common';
 import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 import { RpsgameEntity } from './scenarios/d1/common/rpsgame/rpsgame.entity';
@@ -36,6 +39,8 @@ import { UserActivityModule } from './user-activity/user-activity.module';
 import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
 import { UserLandCommentEntity } from './user-land-comment/entities/user-land-comment.entity';
 import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
+import { UserPreferenceEntity } from './user-preference/entity/user-preference.entity';
+import { UserPreferenceModule } from './user-preference/user-preference.module';
 import { UserEntity } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 import { PgStatCashTimeSeriesEntity } from './stat/entities/pg-stat-cash-time-series.entity';
@@ -69,9 +74,12 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
             SkillLogEntity,
             UserActivityEntity,
             UserLandCommentEntity,
+            UserPreferenceEntity,
             RefreshTokenV2Entity,
             RpsgameEntity,
             PasskeyEntity,
+            PushSubscriptionEntity,
+            UserOnlineSessionEntity,
 
             PgStatCashTimeSeriesEntity,
             PgStatStockTimeSeriesEntity,
@@ -107,11 +115,13 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
 
     UserModule,
     UserLandCommentModule,
+    UserPreferenceModule,
     UserActivityModule,
     ProfileModule,
     UserInteractionWebModule,
     DiceTossModule,
     RecentSkillLogsModule,
+    PushNotificationModule,
 
     D1Module,
 

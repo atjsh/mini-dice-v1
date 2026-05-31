@@ -6,7 +6,12 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import 'reflect-metadata';
+import { useEffect } from 'react';
 import { useUser } from './libs';
+import {
+  onlineStatusTracker,
+  pushNotificationManager,
+} from './libs/push-notification';
 import { IndexSkeletonPage } from './pages/IndexSkeleton';
 import {
   FinishSignupPageURL,
@@ -28,6 +33,24 @@ const Route: React.FC<{ route: ProtectedRoute }> = ({ route }) => {
 
 function App() {
   const { isError: isNotAuthed, data: user, isLoading } = useUser();
+
+  useEffect(() => {
+    if (!user) {
+      onlineStatusTracker.stopTracking();
+      return;
+    }
+
+    pushNotificationManager
+      .isPushSubscribed()
+      .then((isSubscribed) => {
+        if (isSubscribed) {
+          onlineStatusTracker.startTracking();
+        }
+      })
+      .catch(() => {
+        onlineStatusTracker.stopTracking();
+      });
+  }, [user?.id]);
 
   const router = createBrowserRouter(
     protectedRoutes.map((route) => ({

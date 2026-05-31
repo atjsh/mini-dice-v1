@@ -11,3 +11,5 @@ export * from './land-comment/land-comment.vo';
 export * from './passkey/passkey.vo';
 export * from './passkey/passkey-list.dto';
 export * from './passkey/rename-passkey.dto';
+export * from './user-preference/user-preference.vo';
+export * from './user-preference/update-user-preference.dto';
