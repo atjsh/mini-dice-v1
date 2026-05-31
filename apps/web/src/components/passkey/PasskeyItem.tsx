@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { PasskeyListItemDto } from '@packages/shared-types';
+import { SettingsActionButton } from '../settings';
 
 interface PasskeyItemProps {
   passkey: PasskeyListItemDto;
@@ -43,7 +44,7 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
   };
 
   return (
-    <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 flex flex-wrap items-start justify-between gap-4">
+    <div className="flex flex-wrap items-start justify-between gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-zinc-700 dark:bg-zinc-800">
       <div className="flex items-start gap-3 flex-1 basis-72 min-w-0">
         <div className="text-2xl shrink-0">
           {getDeviceIcon(passkey.deviceType)}
@@ -62,7 +63,7 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
                   setIsEditing(false);
                 }
               }}
-              className="w-full px-2 py-1 border border-blue-500 rounded dark:bg-gray-800"
+              className="w-full rounded-lg border border-blue-500 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-zinc-900 dark:text-gray-100"
               autoFocus
               maxLength={100}
             />
@@ -79,35 +80,39 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
       </div>
       <div className="flex flex-wrap items-center justify-end gap-2 ml-auto">
         {!isEditing && (
-          <button
+          <SettingsActionButton
             onClick={() => setIsEditing(true)}
-            className="px-3 py-1.5 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            variant="ghost"
+            className="px-3 py-1.5 text-sm"
           >
             이름 변경
-          </button>
+          </SettingsActionButton>
         )}
         {showDeleteConfirm ? (
           <div className="flex flex-wrap justify-end gap-2">
-            <button
+            <SettingsActionButton
               onClick={handleDeleteConfirm}
-              className="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+              variant="danger"
+              className="px-3 py-1.5 text-sm"
             >
               확인
-            </button>
-            <button
+            </SettingsActionButton>
+            <SettingsActionButton
               onClick={() => setShowDeleteConfirm(false)}
-              className="px-3 py-1.5 text-sm bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+              variant="secondary"
+              className="px-3 py-1.5 text-sm"
             >
               취소
-            </button>
+            </SettingsActionButton>
           </div>
         ) : (
-          <button
+          <SettingsActionButton
             onClick={() => setShowDeleteConfirm(true)}
-            className="px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:underline"
+            variant="dangerGhost"
+            className="px-3 py-1.5 text-sm"
           >
             삭제
-          </button>
+          </SettingsActionButton>
         )}
       </div>
     </div>

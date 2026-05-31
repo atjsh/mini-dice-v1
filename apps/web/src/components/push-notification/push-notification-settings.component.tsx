@@ -1,5 +1,11 @@
 import React from 'react';
 import { usePushNotifications } from '../../libs/push-notification';
+import {
+  SettingsCard,
+  SettingsHeader,
+  SettingsNotice,
+  SettingsToggle,
+} from '../settings';
 
 interface PushNotificationSettingsProps {
   className?: string;
@@ -48,86 +54,59 @@ export function PushNotificationSettings({
 
   if (!isSupported) {
     return (
-      <div
-        className={`p-4 bg-gray-100 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-gray-600 ${className}`}
-      >
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+      <SettingsCard className={className}>
+        <p className="text-base leading-7 text-gray-600 dark:text-gray-400">
           푸시 알림이 이 브라우저에서 지원되지 않습니다.
         </p>
-      </div>
+      </SettingsCard>
     );
   }
 
   return (
-    <div
-      className={`p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-gray-600 ${className}`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-gray-100">
-            푸시 알림
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            새로운 이벤트 발생 시 알림을 받습니다
-          </p>
-          {permission === 'denied' && (
-            <p
-              className="text-sm text-red-600 dark:text-red-400 mt-2"
-              role="alert"
-              aria-live="polite"
-            >
-              알림 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해주세요.
-            </p>
-          )}
-          {error && (
-            <p
-              className="text-sm text-red-600 dark:text-red-400 mt-2"
-              role="alert"
-              aria-live="polite"
-            >
-              오류: {getPushErrorMessage(error)}
-            </p>
-          )}
-        </div>
-        <div className="ml-4">
-          <button
-            onClick={handleToggle}
-            disabled={isLoading || permission === 'denied'}
-            className={`
-              relative inline-flex h-6 w-11 items-center rounded-full
-              transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-              ${
-                isSubscribed
-                  ? 'bg-blue-600'
-                  : 'bg-gray-200 dark:bg-gray-600'
-              }
-              ${
-                isLoading || permission === 'denied'
-                  ? 'opacity-50 cursor-not-allowed'
-                  : 'cursor-pointer'
-              }
-            `}
-            aria-label="푸시 알림 토글"
-          >
-            <span
-              className={`
-                inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                ${isSubscribed ? 'translate-x-6' : 'translate-x-1'}
-              `}
-            />
-          </button>
-        </div>
+    <SettingsCard className={className}>
+      <div className="flex items-center justify-between gap-5">
+        <SettingsHeader
+          title="푸시 알림"
+          description="새로운 이벤트 발생 시 알림을 받습니다"
+          className="flex-1"
+        />
+        <SettingsToggle
+          checked={isSubscribed}
+          onChange={handleToggle}
+          disabled={isLoading || permission === 'denied'}
+          ariaLabel="푸시 알림 토글"
+        />
       </div>
+      {permission === 'denied' && (
+        <SettingsNotice
+          tone="error"
+          className="mt-4"
+          role="alert"
+          aria-live="polite"
+        >
+          알림 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해주세요.
+        </SettingsNotice>
+      )}
+      {error && (
+        <SettingsNotice
+          tone="error"
+          className="mt-4"
+          role="alert"
+          aria-live="polite"
+        >
+          오류: {getPushErrorMessage(error)}
+        </SettingsNotice>
+      )}
       {isLoading && (
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+        <SettingsNotice tone="neutral" className="mt-4">
           처리 중...
-        </p>
+        </SettingsNotice>
       )}
       {isSubscribed && !isLoading && (
-        <p className="text-sm text-green-600 dark:text-green-400 mt-2">
-          ✓ 푸시 알림이 활성화되었습니다
-        </p>
+        <SettingsNotice tone="success" className="mt-4">
+          푸시 알림이 활성화되었습니다
+        </SettingsNotice>
       )}
-    </div>
+    </SettingsCard>
   );
 }

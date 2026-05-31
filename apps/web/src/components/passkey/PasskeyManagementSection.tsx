@@ -6,6 +6,12 @@ import {
   usePasskeyDelete,
   usePasskeyRename,
 } from '../../libs/tdol-server/passkey';
+import {
+  SettingsActionButton,
+  SettingsCard,
+  SettingsHeader,
+  SettingsNotice,
+} from '../settings';
 import { PasskeyItem } from './PasskeyItem';
 
 export function PasskeyManagementSection() {
@@ -63,30 +69,23 @@ export function PasskeyManagementSection() {
   };
 
   return (
-    <section className="border border-gray-300 dark:border-gray-600 rounded-xl p-6 bg-white dark:bg-zinc-800">
-      <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-        패스키 관리
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400 mb-4">
-        패스키를 사용하면 비밀번호 없이 안전하게 로그인할 수 있습니다.
-      </p>
+    <SettingsCard>
+      <SettingsHeader
+        title="패스키 관리"
+        description="패스키를 사용하면 비밀번호 없이 안전하게 로그인할 수 있습니다."
+        className="mb-4"
+      />
 
       {message && (
-        <div
-          className={`mb-4 p-3 rounded ${
-            message.type === 'success'
-              ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-              : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-          }`}
-        >
+        <SettingsNotice tone={message.type} className="mb-4" role="status">
           {message.text}
-        </div>
+        </SettingsNotice>
       )}
 
       {isLoading ? (
-        <div className="text-center py-8 text-gray-600 dark:text-gray-400">
+        <SettingsNotice tone="neutral" className="mb-4 text-center">
           로딩 중...
-        </div>
+        </SettingsNotice>
       ) : passkeysList && passkeysList.length > 0 ? (
         <div className="space-y-3 mb-4">
           {passkeysList.map((passkey) => (
@@ -99,7 +98,7 @@ export function PasskeyManagementSection() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-8 text-gray-600 dark:text-gray-400 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg mb-4">
+        <div className="mb-4 rounded-lg border border-dashed border-gray-300 px-4 py-8 text-center text-gray-600 dark:border-zinc-700 dark:text-gray-400">
           <p className="text-lg mb-2">등록된 패스키가 없습니다</p>
           <p className="text-sm">
             패스키를 추가하면 더 쉽고 안전하게 로그인할 수 있습니다.
@@ -107,13 +106,13 @@ export function PasskeyManagementSection() {
         </div>
       )}
 
-      <button
+      <SettingsActionButton
         onClick={handleAddPasskey}
         disabled={registerMutation.isLoading}
-        className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed font-semibold transition duration-150"
+        className="w-full py-3"
       >
-        {registerMutation.isLoading ? '추가 중...' : '🔑 새 패스키 추가'}
-      </button>
-    </section>
+        {registerMutation.isLoading ? '추가 중...' : '새 패스키 추가'}
+      </SettingsActionButton>
+    </SettingsCard>
   );
 }
