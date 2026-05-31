@@ -5,6 +5,22 @@ interface PushNotificationSettingsProps {
   className?: string;
 }
 
+function getPushErrorMessage(error: string) {
+  if (/applicationServerKey|P-256|VAPID/i.test(error)) {
+    return '푸시 알림 서버 키가 올바르지 않습니다. 잠시 후 다시 시도해 주세요.';
+  }
+
+  if (/permission denied|Notification permission denied/i.test(error)) {
+    return '알림 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해 주세요.';
+  }
+
+  if (/ServiceWorker|service worker/i.test(error)) {
+    return '푸시 알림 준비에 실패했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.';
+  }
+
+  return '푸시 알림을 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.';
+}
+
 export function PushNotificationSettings({
   className = '',
 }: PushNotificationSettingsProps) {
@@ -69,7 +85,7 @@ export function PushNotificationSettings({
               role="alert"
               aria-live="polite"
             >
-              오류: {error}
+              오류: {getPushErrorMessage(error)}
             </p>
           )}
         </div>
