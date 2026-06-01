@@ -10,6 +10,8 @@
       "apps/server",
       "apps/web",
       "apps/admin-server",
+      "apps/admin-dashboard-server",
+      "apps/admin-dashboard-web",
       "docs/*",
       "builders/*"
     ]
@@ -26,7 +28,9 @@
     "server:build:watch": "yarn workspace @builders/server watch",
     "server:typecheck": "yarn workspace @apps/server run typecheck",
     "server:typecheck:watch": "yarn workspace @apps/server run typecheck:watch",
-    "web": "yarn workspace @apps/web"
+    "web": "yarn workspace @apps/web",
+    "admin-dashboard-server": "yarn workspace @apps/admin-dashboard-server",
+    "admin-dashboard-web": "yarn workspace @apps/admin-dashboard-web"
   },
   "packageManager": "yarn@4.5.3",
   "devDependencies": {

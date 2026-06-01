@@ -1,0 +1,31 @@
+{
+  "name": "@apps/admin-dashboard-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 1244",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 1244"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.1",
+    "@simplewebauthn/browser": "^10.0.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.468.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "tailwindcss": "3.0.23",
+    "typescript": "^5.0.2",
+    "vite": "^4.2.0"
+  }
+}
