@@ -57,11 +57,7 @@ export class PasskeyController {
     @Body() dto: VerifyAuthenticationDto,
     @Res({ passthrough: true }) response: FastifyReply,
   ) {
-    return this.passkeyService.verifyAuthentication(
-      dto.challengeId,
-      dto.credential,
-      response,
-    );
+    return this.passkeyService.verifyAuthentication(dto.credential, response);
   }
 
   @Get('list')

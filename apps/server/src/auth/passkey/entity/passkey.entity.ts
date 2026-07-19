@@ -44,7 +44,7 @@ export class PasskeyEntity {
   transports: string[]; // ['internal', 'usb', 'ble', 'nfc']
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  aaguid: string;
+  aaguid: string | null;
 
   @Column({ type: 'varchar', length: 100, default: 'Passkey' })
   name: string; // User-friendly name

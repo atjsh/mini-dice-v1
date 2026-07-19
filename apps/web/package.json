@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 1234",
-    "build": "yarn g:tsc --noEmit && vite build",
+    "dev": "git -C ../.. submodule update --init --depth 1 apps/web/vendor/passkey-authenticator-aaguids && vite --host 127.0.0.1 --port 1234",
+    "build": "git -C ../.. submodule update --init --depth 1 apps/web/vendor/passkey-authenticator-aaguids && yarn g:tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 1234"
   },
   "dependencies": {

@@ -71,7 +71,7 @@ export function PushNotificationSettings({
       <div className="flex items-center justify-between gap-5">
         <SettingsHeader
           title="푸시 알림"
-          description="새로운 이벤트 발생 시 알림을 받습니다"
+          description="웹 브라우저를 통해 푸시 알림을 전송받을 수 있습니다."
           className="flex-1"
         />
         <SettingsToggle

@@ -82,12 +82,12 @@ export function IndexPage() {
               {loginRequired ? '바로 시작 계정 생성' : '바로 시작'}
             </Link>
           </div>
-          <div>
+          <div className="flex flex-row gap-3 mx-auto">
             <button
               onClick={handlePasskeyLogin}
               disabled={passkeyAuth.isLoading}
               className={
-                'inline-block text-xl px-5 py-5 hover:underline ' +
+                'block text-xl px-5 py-5 hover:underline ' +
                 (passkeyAuth.isLoading ? 'text-gray-400' : 'text-blue-600')
               }
             >
@@ -95,10 +95,8 @@ export function IndexPage() {
                 ? '패스키 확인 중...'
                 : '패스키로 로그인 →'}
             </button>
-          </div>
-          <div>
             <a
-              className="inline-block text-xl text-blue-600 hover:underline p-5"
+              className="block text-xl text-blue-600 hover:underline p-5"
               href={getGoogleOAuthPageUrl()}
             >
               {loginRequired
@@ -106,6 +104,7 @@ export function IndexPage() {
                 : '구글 계정으로 시작 →'}
             </a>
           </div>
+
           {error && <div className="text-red-500 text-sm italic">{error}</div>}
         </div>
       </div>

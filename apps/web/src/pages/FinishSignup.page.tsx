@@ -66,10 +66,21 @@ function UserCompleteSignupForm() {
     setError('');
     setDisabled(true);
     try {
-      await passkeyRegister.mutateAsync('내 패스키');
+      const result = await passkeyRegister.mutateAsync();
+      if (result.namingOutcome === 'rename-failed') {
+        try {
+          window.alert(
+            '패스키는 추가되었지만 이름을 저장하지 못했습니다. 설정에서 다시 변경해 주세요.',
+          );
+        } catch {
+          // The passkey is valid even when the browser cannot show this notice.
+        }
+      }
       setSuccess(true);
     } catch (error: any) {
-      setError('패스키 등록에 실패했습니다. 나중에 설정에서 다시 추가할 수 있습니다.');
+      setError(
+        '패스키 등록에 실패했습니다. 나중에 설정에서 다시 추가할 수 있습니다.',
+      );
       setDisabled(false);
       console.error('Passkey registration failed:', error);
     }
@@ -87,8 +98,8 @@ function UserCompleteSignupForm() {
           <p className="text-base">
             안전한 로그인을 위해 패스키를 등록해주세요.
             <br />
-            패스키는 비밀번호 없이 지문, 얼굴 인식 또는 PIN으로 로그인할 수
-            있는 안전한 방법입니다.
+            패스키는 비밀번호 없이 지문, 얼굴 인식 또는 PIN으로 로그인할 수 있는
+            안전한 방법입니다.
             <br />
             지금 건너뛰어도 설정에서 언제든 추가할 수 있습니다.
           </p>

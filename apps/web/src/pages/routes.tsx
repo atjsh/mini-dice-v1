@@ -5,7 +5,6 @@ import { IndexPage } from './Index.page';
 import { LogoutPage } from './Logout.page';
 import { NotificationPage } from './NotificationCenter.page';
 import { AuthenticationPreferencePage } from './PreferencePages/Authentication.page';
-import { ProfilePreferencePage } from './PreferencePages/Profile.page';
 import { ServicePreferencePage } from './PreferencePages/Service.page';
 import { TerminatePage } from './PreferencePages/Terminate.page';
 import { UsernamePreferencePage } from './PreferencePages/Username.page';
@@ -43,7 +42,6 @@ export const RankingPgaeURL = '/ranking';
 export const UpdatesPageURL = '/updates';
 export const NotificationPageURL = '/notifications';
 export const PreferencesPageURL = '/preferences';
-export const ProfilePreferencePageURL = '/preferences/profile';
 export const UsernamePreferencePageURL = '/preferences/profile/username';
 export const AuthenticationPreferencePageURL =
   '/preferences/profile/authentication';
@@ -141,12 +139,6 @@ export const protectedRoutes: ProtectedRoute[] = [
     path: PreferencesPageURL,
     component: PreferencesPage,
     title: getTitle('설정'),
-    protection: 'signupCompleted',
-  },
-  {
-    path: ProfilePreferencePageURL,
-    component: ProfilePreferencePage,
-    title: getTitle('프로필 설정'),
     protection: 'signupCompleted',
   },
   {

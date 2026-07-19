@@ -3,6 +3,7 @@ export interface PasskeyVo {
   userId: string;
   credentialId: string;
   name: string;
+  aaguid: string | null;
   deviceType: string | null;
   transports: string[] | null;
   createdAt: Date;

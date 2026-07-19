@@ -1,120 +1,208 @@
-import { useState } from 'react';
 import type { PasskeyListItemDto } from '@packages/shared-types';
-import { SettingsActionButton } from '../settings';
+import type { PasskeyAaguidMetadata } from '../../libs/tdol-server/passkey/passkey-metadata';
+import { SettingsGroupedItem, SettingsPopover } from '../settings';
 
 interface PasskeyItemProps {
-  passkey: PasskeyListItemDto;
+  passkey: PasskeyListItemDto & {
+    metadata: PasskeyAaguidMetadata | null;
+  };
   onDelete: () => void;
   onRename: (newName: string) => void;
 }
 
-export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(passkey.name);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+function toDate(date: Date | null) {
+  if (!date) {
+    return null;
+  }
 
-  const handleRenameSubmit = () => {
-    if (editedName.trim() && editedName !== passkey.name) {
-      onRename(editedName);
-    }
-    setIsEditing(false);
-  };
+  const parsedDate = new Date(date);
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
 
-  const handleDeleteConfirm = () => {
-    onDelete();
-    setShowDeleteConfirm(false);
-  };
+function formatDate(date: Date) {
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
 
-  const getDeviceIcon = (deviceType: string | null) => {
-    if (deviceType === 'platform') {
-      return '📱';
-    } else if (deviceType === 'cross-platform') {
-      return '🔑';
-    }
-    return '🔐';
-  };
+function getPasskeyIconSources(
+  metadata: PasskeyAaguidMetadata | null | undefined,
+) {
+  if (!metadata) {
+    return null;
+  }
 
-  const formatDate = (date: Date | null) => {
-    if (!date) return '사용 안 함';
-    return new Date(date).toLocaleDateString('ko-kr', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
+  const lightSource = metadata.icon_light ?? metadata.icon_dark;
+  const darkSource = metadata.icon_dark ?? metadata.icon_light;
+
+  if (!lightSource || !darkSource) {
+    return null;
+  }
+
+  return { lightSource, darkSource };
+}
+
+function PasskeyMetadataIcon({
+  lightSource,
+  darkSource,
+}: {
+  lightSource: string;
+  darkSource: string;
+}) {
+  return (
+    <picture className="flex h-9 w-9 items-center justify-center">
+      {darkSource !== lightSource && (
+        <source media="(prefers-color-scheme: dark)" srcSet={darkSource} />
+      )}
+      <img
+        src={lightSource}
+        alt=""
+        className="max-h-9 max-w-9 object-contain"
+      />
+    </picture>
+  );
+}
+
+function PasskeySubtitle({
+  createdAt,
+  kindLabel,
+}: {
+  createdAt: Date | null;
+  kindLabel: string;
+}) {
+  const parsedDate = toDate(createdAt);
 
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-zinc-700 dark:bg-zinc-800">
-      <div className="flex items-start gap-3 flex-1 basis-72 min-w-0">
-        <div className="text-2xl shrink-0">
-          {getDeviceIcon(passkey.deviceType)}
-        </div>
-        <div className="flex-1 min-w-0">
-          {isEditing ? (
-            <input
-              type="text"
-              value={editedName}
-              onChange={(e) => setEditedName(e.target.value)}
-              onBlur={handleRenameSubmit}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleRenameSubmit();
-                if (e.key === 'Escape') {
-                  setEditedName(passkey.name);
-                  setIsEditing(false);
-                }
-              }}
-              className="w-full rounded-lg border border-blue-500 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-zinc-900 dark:text-gray-100"
-              autoFocus
-              maxLength={100}
-            />
-          ) : (
-            <div className="font-semibold text-gray-900 dark:text-gray-100 break-all whitespace-normal">
-              {passkey.name}
-            </div>
+    <span className="flex flex-wrap items-center gap-x-1.5">
+      <span>{kindLabel}</span>
+      <span aria-hidden="true">·</span>
+      {parsedDate ? (
+        <span>
+          <time dateTime={parsedDate.toISOString()}>
+            {formatDate(parsedDate)}
+          </time>{' '}
+          등록
+        </span>
+      ) : (
+        <span>등록일 알 수 없음</span>
+      )}
+    </span>
+  );
+}
+
+export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
+  const manageLabel = `${passkey.name} 패스키 관리`;
+  const metadataLabel = passkey.metadata?.name;
+  const subtitleLabel =
+    metadataLabel && metadataLabel !== passkey.name ? metadataLabel : '패스키';
+  const iconSources = getPasskeyIconSources(passkey.metadata);
+
+  return (
+    <SettingsGroupedItem
+      title={passkey.name}
+      subtitle={
+        <PasskeySubtitle
+          createdAt={passkey.createdAt}
+          kindLabel={subtitleLabel}
+        />
+      }
+      leading={
+        iconSources ? <PasskeyMetadataIcon {...iconSources} /> : undefined
+      }
+      action={
+        <SettingsPopover
+          ariaLabel={manageLabel}
+          panelClassName="w-44"
+          trigger={({ ref: triggerRef, props: triggerProps }) => (
+            <button
+              ref={triggerRef}
+              {...triggerProps}
+              aria-label={manageLabel}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:active:bg-zinc-700"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-5 w-5"
+              >
+                <circle cx="4" cy="10" r="1.4" />
+                <circle cx="10" cy="10" r="1.4" />
+                <circle cx="16" cy="10" r="1.4" />
+              </svg>
+            </button>
           )}
-          <div className="text-sm text-gray-500 dark:text-gray-400 break-words">
-            등록: {formatDate(passkey.createdAt)} | 마지막 사용:{' '}
-            {formatDate(passkey.lastUsedAt)}
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-wrap items-center justify-end gap-2 ml-auto">
-        {!isEditing && (
-          <SettingsActionButton
-            onClick={() => setIsEditing(true)}
-            variant="ghost"
-            className="px-3 py-1.5 text-sm"
-          >
-            이름 변경
-          </SettingsActionButton>
-        )}
-        {showDeleteConfirm ? (
-          <div className="flex flex-wrap justify-end gap-2">
-            <SettingsActionButton
-              onClick={handleDeleteConfirm}
-              variant="danger"
-              className="px-3 py-1.5 text-sm"
-            >
-              확인
-            </SettingsActionButton>
-            <SettingsActionButton
-              onClick={() => setShowDeleteConfirm(false)}
-              variant="secondary"
-              className="px-3 py-1.5 text-sm"
-            >
-              취소
-            </SettingsActionButton>
-          </div>
-        ) : (
-          <SettingsActionButton
-            onClick={() => setShowDeleteConfirm(true)}
-            variant="dangerGhost"
-            className="px-3 py-1.5 text-sm"
-          >
-            삭제
-          </SettingsActionButton>
-        )}
-      </div>
-    </div>
+        >
+          {({ close, restoreFocusIfUnclaimed }) => (
+            <ul className="flex flex-col gap-1">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    close(false);
+                    requestAnimationFrame(() => {
+                      const nextName = window.prompt(
+                        '패스키 이름을 입력하세요. (최대 100자)',
+                        passkey.name,
+                      );
+
+                      if (nextName === null) {
+                        restoreFocusIfUnclaimed();
+                        return;
+                      }
+
+                      const normalizedName = nextName.trim();
+                      if (normalizedName.length === 0) {
+                        window.alert('패스키 이름을 입력해 주세요.');
+                        restoreFocusIfUnclaimed();
+                        return;
+                      }
+                      if (normalizedName.length > 100) {
+                        window.alert('패스키 이름은 100자 이하여야 합니다.');
+                        restoreFocusIfUnclaimed();
+                        return;
+                      }
+                      if (normalizedName === passkey.name) {
+                        restoreFocusIfUnclaimed();
+                        return;
+                      }
+
+                      restoreFocusIfUnclaimed();
+                      onRename(normalizedName);
+                    });
+                  }}
+                  className="min-h-[44px] w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-gray-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-700"
+                >
+                  이름 변경
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    close(false);
+                    requestAnimationFrame(() => {
+                      const shouldDelete = window.confirm(
+                        `“${passkey.name}” 패스키를 삭제할까요?\n이 작업은 되돌릴 수 없습니다.`,
+                      );
+
+                      restoreFocusIfUnclaimed();
+                      if (shouldDelete) {
+                        onDelete();
+                      }
+                    });
+                  }}
+                  className="min-h-[44px] w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 active:bg-red-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-500 dark:text-red-400 dark:hover:bg-zinc-800 dark:active:bg-zinc-700"
+                >
+                  삭제
+                </button>
+              </li>
+            </ul>
+          )}
+        </SettingsPopover>
+      }
+    />
   );
 }

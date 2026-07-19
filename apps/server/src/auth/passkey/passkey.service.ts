@@ -2,7 +2,6 @@ import './webauthn-webcrypto';
 
 import {
   BadRequestException,
-  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,25 +10,30 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { FastifyReply } from 'fastify';
 import { Repository } from 'typeorm';
-import { v7 } from 'uuid';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import type { Cache } from 'cache-manager';
 import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
   generateAuthenticationOptions,
   verifyAuthenticationResponse,
 } from '@simplewebauthn/server';
-import { isoBase64URL } from '@simplewebauthn/server/helpers';
+import {
+  decodeClientDataJSON,
+  isoBase64URL,
+} from '@simplewebauthn/server/helpers';
 import type {
   PublicKeyCredentialCreationOptionsJSON,
   RegistrationResponseJSON,
   AuthenticationResponseJSON,
   AuthenticatorTransportFuture,
 } from '@simplewebauthn/server/script/deps';
+import type {
+  PasskeyListItemDto,
+  PasskeyRegistrationResultDto,
+} from '@packages/shared-types';
 import { PasskeyEntity } from './entity/passkey.entity';
 import { UserService } from '../../user/user.service';
 import { RefreshTokenService } from '../local-jwt/refresh-token/refresh-token.service';
+import { PasskeyChallengeService } from './passkey-challenge.service';
 
 @Injectable()
 export class PasskeyService {
@@ -41,13 +45,31 @@ export class PasskeyService {
     private userService: UserService,
     private refreshTokenService: RefreshTokenService,
     private configService: ConfigService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private passkeyChallengeService: PasskeyChallengeService,
   ) {}
 
   private credentialIdToBase64URL(credentialId: string | Uint8Array) {
     return typeof credentialId === 'string'
       ? credentialId
       : Buffer.from(credentialId).toString('base64url');
+  }
+
+  private extractExpectedChallenge(
+    credential: RegistrationResponseJSON | AuthenticationResponseJSON,
+  ): string | undefined {
+    try {
+      const clientDataJSON = credential?.response?.clientDataJSON;
+      if (typeof clientDataJSON !== 'string') {
+        return undefined;
+      }
+
+      const { challenge } = decodeClientDataJSON(clientDataJSON);
+      return typeof challenge === 'string' && challenge.length > 0
+        ? challenge
+        : undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   async generateRegistrationOptions(
@@ -60,7 +82,9 @@ export class PasskeyService {
 
     // Enforce 100 passkey limit
     if (existingPasskeys.length >= this.MAX_PASSKEYS_PER_USER) {
-      throw new BadRequestException('패스키는 최대 100개까지 등록할 수 있습니다.');
+      throw new BadRequestException(
+        '패스키는 최대 100개까지 등록할 수 있습니다.',
+      );
     }
 
     const rpID = this.configService.get('WEBAUTHN_RP_ID');
@@ -86,11 +110,9 @@ export class PasskeyService {
       },
     });
 
-    // Store challenge in cache for verification
-    await this.cacheManager.set(
-      `webauthn:register:${userId}`,
+    await this.passkeyChallengeService.storeRegistrationChallenge(
       options.challenge,
-      300000,
+      userId,
     );
 
     return options;
@@ -100,22 +122,30 @@ export class PasskeyService {
     userId: string,
     credential: RegistrationResponseJSON,
     name?: string,
-  ) {
-    const expectedChallenge = await this.cacheManager.get<string>(
-      `webauthn:register:${userId}`,
-    );
-
-    if (!expectedChallenge) {
-      throw new BadRequestException(
-        '패스키 요청이 만료되었습니다. 다시 시도해 주세요.',
-      );
-    }
-
+  ): Promise<PasskeyRegistrationResultDto> {
     const rpID = this.configService.get('WEBAUTHN_RP_ID');
     const origin = this.configService.get('WEBAUTHN_ORIGIN');
 
     if (!rpID || !origin) {
       throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
+    }
+
+    const expectedChallenge = this.extractExpectedChallenge(credential);
+    if (!expectedChallenge) {
+      throw new BadRequestException(
+        '패스키 확인에 실패했습니다. 다시 시도해 주세요.',
+      );
+    }
+
+    const challengeConsumed =
+      await this.passkeyChallengeService.consumeRegistrationChallenge(
+        expectedChallenge,
+        userId,
+      );
+    if (!challengeConsumed) {
+      throw new BadRequestException(
+        '패스키 요청이 만료되었습니다. 다시 시도해 주세요.',
+      );
     }
 
     let verification: Awaited<ReturnType<typeof verifyRegistrationResponse>>;
@@ -141,20 +171,21 @@ export class PasskeyService {
 
     const { credentialID, credentialPublicKey, counter, aaguid } =
       verification.registrationInfo;
+    const persistedAaguid = aaguid || null;
+    const passkeyName = name?.trim() || 'Passkey';
 
     const passkey = this.passkeyRepository.create({
       userId,
       credentialId: this.credentialIdToBase64URL(credentialID),
       publicKey: Buffer.from(credentialPublicKey).toString('base64url'),
       counter,
-      aaguid,
+      aaguid: persistedAaguid,
       transports: credential.response.transports || [],
       deviceType: verification.registrationInfo.credentialDeviceType,
-      name: name || 'Passkey',
+      name: passkeyName,
     });
 
     await this.passkeyRepository.save(passkey);
-    await this.cacheManager.del(`webauthn:register:${userId}`);
 
     // If this is the first passkey for a captcha-based user, finalize signup.
     const user = await this.userService.findUserWithCache(userId);
@@ -167,7 +198,12 @@ export class PasskeyService {
       });
     }
 
-    return { success: true, passkeyId: passkey.id };
+    return {
+      success: true,
+      passkeyId: passkey.id,
+      name: passkey.name,
+      aaguid: passkey.aaguid,
+    };
   }
 
   async deletePasskey(userId: string, passkeyId: string) {
@@ -184,7 +220,10 @@ export class PasskeyService {
       );
     }
 
-    const result = await this.passkeyRepository.delete({ id: passkeyId, userId });
+    const result = await this.passkeyRepository.delete({
+      id: passkeyId,
+      userId,
+    });
     if (result.affected === 0) {
       throw new NotFoundException('패스키를 찾을 수 없습니다.');
     }
@@ -192,14 +231,21 @@ export class PasskeyService {
     return { success: true };
   }
 
-  async listPasskeys(userId: string) {
+  async listPasskeys(userId: string): Promise<PasskeyListItemDto[]> {
     const passkeys = await this.passkeyRepository.find({
       where: { userId },
-      select: ['id', 'name', 'createdAt', 'lastUsedAt', 'deviceType'],
+      select: ['id', 'name', 'aaguid', 'createdAt', 'lastUsedAt', 'deviceType'],
       order: { createdAt: 'DESC' },
     });
 
-    return passkeys;
+    return passkeys.map((passkey) => ({
+      id: passkey.id,
+      name: passkey.name,
+      aaguid: passkey.aaguid,
+      deviceType: passkey.deviceType,
+      createdAt: passkey.createdAt,
+      lastUsedAt: passkey.lastUsedAt,
+    }));
   }
 
   async renamePasskey(userId: string, passkeyId: string, name: string) {
@@ -229,34 +275,55 @@ export class PasskeyService {
         ? [
             {
               id: credentialId,
-              transports: ['internal', 'usb', 'ble', 'nfc'] as AuthenticatorTransportFuture[],
+              transports: [
+                'internal',
+                'usb',
+                'ble',
+                'nfc',
+              ] as AuthenticatorTransportFuture[],
             },
           ]
         : undefined,
     });
 
-    const challengeId = v7();
-    await this.cacheManager.set(
-      `webauthn:auth:${challengeId}`,
+    await this.passkeyChallengeService.storeAuthenticationChallenge(
       options.challenge,
-      300000,
     );
 
-    return { ...options, challengeId };
+    return options;
   }
 
   async verifyAuthentication(
-    challengeId: string,
     credential: AuthenticationResponseJSON,
     response: FastifyReply,
   ) {
-    const expectedChallenge = await this.cacheManager.get<string>(
-      `webauthn:auth:${challengeId}`,
-    );
+    const rpID = this.configService.get('WEBAUTHN_RP_ID');
+    const origin = this.configService.get('WEBAUTHN_ORIGIN');
 
+    if (!rpID || !origin) {
+      throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
+    }
+
+    const expectedChallenge = this.extractExpectedChallenge(credential);
     if (!expectedChallenge) {
       throw new UnauthorizedException(
+        '패스키 로그인에 실패했습니다. 다시 시도해 주세요.',
+      );
+    }
+
+    const challengeConsumed =
+      await this.passkeyChallengeService.consumeAuthenticationChallenge(
+        expectedChallenge,
+      );
+    if (!challengeConsumed) {
+      throw new UnauthorizedException(
         '패스키 요청이 만료되었습니다. 다시 시도해 주세요.',
+      );
+    }
+
+    if (typeof credential.id !== 'string') {
+      throw new UnauthorizedException(
+        '패스키 로그인에 실패했습니다. 다시 시도해 주세요.',
       );
     }
 
@@ -270,13 +337,6 @@ export class PasskeyService {
 
     if (!passkey) {
       throw new UnauthorizedException('패스키를 찾을 수 없습니다.');
-    }
-
-    const rpID = this.configService.get('WEBAUTHN_RP_ID');
-    const origin = this.configService.get('WEBAUTHN_ORIGIN');
-
-    if (!rpID || !origin) {
-      throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
     }
 
     let verification: Awaited<ReturnType<typeof verifyAuthenticationResponse>>;
@@ -316,8 +376,6 @@ export class PasskeyService {
       userId: passkey.userId,
     });
     this.refreshTokenService.setRefreshTokenOnCookie(response, refreshToken);
-
-    await this.cacheManager.del(`webauthn:auth:${challengeId}`);
 
     const user = await this.userService.findUserWithCache(passkey.userId);
     return { success: true, isSignupFinished: user.signupCompleted };

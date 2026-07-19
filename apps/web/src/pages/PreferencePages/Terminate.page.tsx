@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ServiceLayout } from '../../layouts/service.layout';
-import { useUser } from '../../libs';
 import { useTerminateUser } from '../../libs/tdol-server/profile/use-terminate-user.hook';
-import { ProfilePreferencePageURL } from '../routes';
+import { PreferencesPageURL } from '../routes';
 
 export function TerminatePage() {
-  const { data: user } = useUser();
   const terminateUserMutation = useTerminateUser();
 
   return (
@@ -14,9 +12,9 @@ export function TerminatePage() {
         <div className="flex flex-col gap-2 mb-6">
           <Link
             className="break-all text-lg text-blue-500 hover:underline"
-            to={ProfilePreferencePageURL}
+            to={PreferencesPageURL}
           >
-            ← {user ? `프로필: ${user.username}` : '프로필'}
+            ← 설정
           </Link>
           <h1 className=" text-4xl font-bold">회원 탈퇴</h1>
         </div>

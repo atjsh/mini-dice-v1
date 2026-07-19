@@ -1,5 +1,8 @@
-import axios from 'axios';
-import type { PasskeyListItemDto } from '@packages/shared-types';
+import axios, { AxiosResponse } from 'axios';
+import type {
+  PasskeyListItemDto,
+  PasskeyRegistrationResultDto,
+} from '@packages/shared-types';
 import { authedAxios } from '../auth/access-token';
 
 function throwIfRequestFailed(response: any) {
@@ -18,11 +21,13 @@ export async function getRegistrationOptions() {
   return response.data;
 }
 
-export async function verifyRegistration(credential: any, name?: string) {
-  const response = await authedAxios.post('/auth/passkey/register/verify', {
-    credential,
-    name,
-  });
+export async function verifyRegistration(
+  credential: any,
+): Promise<PasskeyRegistrationResultDto> {
+  const response = await authedAxios.post<
+    any,
+    AxiosResponse<PasskeyRegistrationResultDto>
+  >('/auth/passkey/register/verify', { credential });
   throwIfRequestFailed(response);
   return response.data;
 }
@@ -35,13 +40,10 @@ export async function getAuthenticationOptions() {
   return response.data;
 }
 
-export async function verifyAuthentication(
-  challengeId: string,
-  credential: any,
-) {
+export async function verifyAuthentication(credential: any) {
   const response = await axios.post(
     `${import.meta.env.VITE_SERVER_URL}/auth/passkey/authenticate/verify`,
-    { challengeId, credential },
+    { credential },
     { withCredentials: true },
   );
   return response.data;

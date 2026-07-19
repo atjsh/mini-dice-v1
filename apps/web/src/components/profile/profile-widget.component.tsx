@@ -27,28 +27,28 @@ export const ProfileWidget: React.FC = () => {
             <div className=" flex gap-4">
               <div>
                 <Link
-                  className="text-blue-600 dark:text-white hover:underline"
+                  className="text-blue-500 dark:text-white hover:underline"
                   to={RankingPgaeURL}
                 >
-                  🏆 순위 확인하기→
+                  🏆 순위→
                 </Link>
               </div>
               <div>
                 <Link
-                  className="text-blue-600 dark:text-white hover:underline"
+                  className="text-blue-500 dark:text-white hover:underline"
                   to={NotificationPageURL}
                 >
                   📨 알림 센터→
                 </Link>
               </div>
-            </div>
-            <div>
-              <Link
-                className="text-blue-600 dark:text-white hover:underline"
-                to={PreferencesPageURL}
-              >
-                ⚙️ 설정→
-              </Link>
+              <div>
+                <Link
+                  className="text-blue-500 dark:text-white hover:underline"
+                  to={PreferencesPageURL}
+                >
+                  ⚙️ 설정→
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
@@ -10,6 +9,7 @@ import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { RefreshTokenV2Entity } from './auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
 import { PasskeyModule } from './auth/passkey/passkey.module';
+import { PasskeyChallengeEntity } from './auth/passkey/entity/passkey-challenge.entity';
 import { PasskeyEntity } from './auth/passkey/entity/passkey.entity';
 import {
   APP_GLOBAL_CONFIG_MODULES,
@@ -50,11 +50,6 @@ import { UserEntity } from './user/entity/user.entity';
   imports: [
     ...APP_GLOBAL_CONFIG_MODULES,
 
-    CacheModule.register({
-      isGlobal: true,
-      ttl: 300000, // 5 minutes in milliseconds
-    }),
-
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
@@ -65,7 +60,7 @@ import { UserEntity } from './user/entity/user.entity';
           username: configService.getOrThrow(ENV_KEYS.DB_USER),
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
-          synchronize: false,
+          synchronize: true,
           entities: [
             UserEntity,
             LandEntity,
@@ -77,6 +72,7 @@ import { UserEntity } from './user/entity/user.entity';
             RefreshTokenV2Entity,
             RpsgameEntity,
             PasskeyEntity,
+            PasskeyChallengeEntity,
             PushSubscriptionEntity,
             UserOnlineSessionEntity,
             PgStatCashTimeSeriesEntity,

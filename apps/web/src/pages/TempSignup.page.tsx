@@ -90,7 +90,16 @@ function TempSignupForm() {
     setError('');
     setDisabled(true);
     try {
-      await passkeyRegister.mutateAsync('내 패스키');
+      const result = await passkeyRegister.mutateAsync();
+      if (result.namingOutcome === 'rename-failed') {
+        try {
+          window.alert(
+            '패스키는 추가되었지만 이름을 저장하지 못했습니다. 설정에서 다시 변경해 주세요.',
+          );
+        } catch {
+          // The passkey is valid even when the browser cannot show this notice.
+        }
+      }
       await goToService();
     } catch (error: any) {
       setError(
@@ -184,7 +193,7 @@ function TempSignupForm() {
           ))}
         </select>
       </div>
-      <div className="flex flex-col gap-1 text-center">
+      <div className="flex flex-col gap-1 text-center w-[300px] h-[78px]">
         <Turnstile
           siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
           onSuccess={(token) => setTurnstileToken(token)}

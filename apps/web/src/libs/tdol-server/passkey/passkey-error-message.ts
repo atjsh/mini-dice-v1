@@ -39,7 +39,7 @@ export function normalizePasskeyErrorMessage(error: any, fallback: string) {
       normalized,
     )
   ) {
-    return '패스키 요청이 취소되었거나 브라우저에서 허용되지 않았습니다. 권한을 확인한 뒤 다시 시도해 주세요.';
+    return '패스키 요청이 취소되었거나 브라우저에서 허용되지 않았습니다.';
   }
 
   if (/aborterror|aborted|cancel/i.test(normalized)) {

@@ -11,7 +11,7 @@ import {
   validateUsername,
   ValidationError,
 } from '../../libs/tdol-server/profile/validations';
-import { ProfilePreferencePageURL } from '../routes';
+import { PreferencesPageURL } from '../routes';
 
 function getUsernameError(username: string) {
   if (username.length === 0) {
@@ -52,7 +52,7 @@ export function UsernamePreferencePage() {
       { username: normalizedUsername },
       {
         onSuccess: () => {
-          navigate(ProfilePreferencePageURL, { replace: true });
+          navigate(PreferencesPageURL, { replace: true });
         },
       },
     );
@@ -64,9 +64,9 @@ export function UsernamePreferencePage() {
         <div className="mb-6 flex flex-col gap-2">
           <Link
             className="break-all text-lg text-blue-500 hover:underline"
-            to={ProfilePreferencePageURL}
+            to={PreferencesPageURL}
           >
-            ← {currentUsername ? `프로필: ${currentUsername}` : '프로필'}
+            ← 설정
           </Link>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
             닉네임 변경
