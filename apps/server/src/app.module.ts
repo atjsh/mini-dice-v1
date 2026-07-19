@@ -60,7 +60,7 @@ import { UserEntity } from './user/entity/user.entity';
           username: configService.getOrThrow(ENV_KEYS.DB_USER),
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
-          synchronize: true,
+          synchronize: false,
           entities: [
             UserEntity,
             LandEntity,
