@@ -1,0 +1,17 @@
+{
+  "name": "@packages/skill-log-codec",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "yarn g:tsc && mkdir -p dist/generated && cp src/generated/*.json dist/generated/",
+    "watch": "yarn build && yarn g:tsc --watch"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^3.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2"
+  }
+}

@@ -9,8 +9,8 @@ import { AppController } from './app.controller';
 import { GoogleOAuthModule } from './auth/google-oauth/google-oauth.module';
 import { LocalJwtModule } from './auth/local-jwt/local-jwt.module';
 import { RefreshTokenV2Entity } from './auth/local-jwt/refresh-token/entity/refresh-token-v2.entity';
-import { PasskeyEntity } from './auth/passkey/entity/passkey.entity';
 import { PasskeyModule } from './auth/passkey/passkey.module';
+import { PasskeyEntity } from './auth/passkey/entity/passkey.entity';
 import {
   APP_GLOBAL_CONFIG_MODULES,
   ENV_KEYS,
@@ -22,29 +22,29 @@ import { HttpExceptionLoggingFilter } from './logging/http-exception.filter';
 import { HttpRequestResponseLoggingInterceptor } from './logging/http-req-res-logger.interceptor';
 import { LoggingModule } from './logging/logging.module';
 import { ProfileModule } from './profile/profile.module';
-import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
-import { PushNotificationModule } from './push-notification/push-notification.module';
 import { PushSubscriptionEntity } from './push-notification/entities/push-subscription.entity';
 import { UserOnlineSessionEntity } from './push-notification/entities/user-online-session.entity';
-import { LandEntity } from './scenarios/d1/common';
+import { RecentSkillLogsModule } from './recent-skill-logs/recent-skill-logs.module';
+import { PushNotificationModule } from './push-notification/push-notification.module';
+import { D1Module } from './scenarios/d1/d1.module';
+import { LandEntity } from './scenarios/d1/common/land/entity/land.entity';
 import { MoneyCollectionParticipantsEntity } from './scenarios/d1/common/money-collection/entity/money-collection-participants.entity';
 import { RpsgameEntity } from './scenarios/d1/common/rpsgame/rpsgame.entity';
-import { D1Module } from './scenarios/d1/d1.module';
-import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
 import { SkillLogEntity } from './skill-log/entity/skill-log.entity';
+import { SkillGroupAliasesModule } from './skill-group-lib/skill-group-aliases/skill-group-aliases.module';
 import { TempSignupModule } from './temp-signup/temp-signup.module';
-import { UpbitApiModule } from './upbit-api/upbit-api.module';
-import { UserActivityEntity } from './user-activity/user-activity.entity';
-import { UserActivityModule } from './user-activity/user-activity.module';
-import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
-import { UserLandCommentEntity } from './user-land-comment/entities/user-land-comment.entity';
-import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
-import { UserPreferenceEntity } from './user-preference/entity/user-preference.entity';
-import { UserPreferenceModule } from './user-preference/user-preference.module';
-import { UserEntity } from './user/entity/user.entity';
-import { UserModule } from './user/user.module';
 import { PgStatCashTimeSeriesEntity } from './stat/entities/pg-stat-cash-time-series.entity';
 import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-series.entity';
+import { UpbitApiModule } from './upbit-api/upbit-api.module';
+import { UserActivityModule } from './user-activity/user-activity.module';
+import { UserActivityEntity } from './user-activity/user-activity.entity';
+import { UserInteractionWebModule } from './user-interaction-web/user-interaction-web.module';
+import { UserLandCommentModule } from './user-land-comment/user-land-comment.module';
+import { UserLandCommentEntity } from './user-land-comment/entities/user-land-comment.entity';
+import { UserPreferenceModule } from './user-preference/user-preference.module';
+import { UserPreferenceEntity } from './user-preference/entity/user-preference.entity';
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/entity/user.entity';
 
 @Module({
   imports: [
@@ -66,7 +66,6 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
           password: configService.getOrThrow(ENV_KEYS.DB_PASSWORD),
           database: configService.getOrThrow(ENV_KEYS.DB_DATABASE),
           synchronize: false,
-          logging: true,
           entities: [
             UserEntity,
             LandEntity,
@@ -80,7 +79,6 @@ import { PgStatStockTimeSeriesEntity } from './stat/entities/pg-stat-stock-time-
             PasskeyEntity,
             PushSubscriptionEntity,
             UserOnlineSessionEntity,
-
             PgStatCashTimeSeriesEntity,
             PgStatStockTimeSeriesEntity,
           ],

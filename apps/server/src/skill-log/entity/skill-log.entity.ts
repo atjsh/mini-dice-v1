@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
@@ -14,6 +15,7 @@ import { UserEntity } from '../../user/entity/user.entity';
 import type { UserActivityType } from '../types/user-activity.dto';
 
 @Entity({ name: 'tb_skill_log' })
+@Index('TB_SKILL_LOG_USER_ID_CREATED_AT_IDX', ['userId', 'date'])
 export class SkillLogEntity<
   T extends Record<string, any> | undefined = Record<string, any> | undefined,
 > {
@@ -56,14 +58,28 @@ export class SkillLogEntity<
     type: 'json',
     nullable: true,
   })
-  userActivity: UserActivityType;
+  userActivity: UserActivityType | null;
 
   @Column({
     name: 'skillServiceResult',
     type: 'json',
     nullable: true,
   })
-  skillServiceResult: T;
+  skillServiceResult: T | null;
+
+  @Column({
+    name: 'payload',
+    type: 'bytea',
+    nullable: true,
+  })
+  payload: Buffer | null;
+
+  @Column({
+    name: 'payloadCodec',
+    type: 'smallint',
+    nullable: true,
+  })
+  payloadCodec: number | null;
 
   @CreateDateColumn({
     name: 'createdAt',

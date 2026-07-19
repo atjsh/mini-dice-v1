@@ -10,7 +10,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": []
   },
   "include": ["src"]
 }

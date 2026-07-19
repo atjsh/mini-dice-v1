@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  decodeSkillLogPayload,
+  encodeSkillLogPayload,
+} from '@packages/skill-log-codec';
 import type { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 import { SkillLogEntity } from './entity/skill-log.entity';
@@ -21,28 +25,55 @@ export class SkillLogService {
     private repository: Repository<SkillLogEntity>,
   ) {}
 
+  private hydratePayload<T extends SkillLogEntity>(log: T): T {
+    if (log.payload && log.payloadCodec) {
+      const decodedPayload = decodeSkillLogPayload(
+        log.payload,
+        log.payloadCodec,
+      );
+
+      log.userActivity = decodedPayload.userActivity as any;
+      log.skillServiceResult = decodedPayload.skillServiceResult as any;
+    }
+
+    return log;
+  }
+
   async createLog(dto: CreateLogDto) {
-    return await this.repository.save(
+    const skillServiceResult =
+      (dto.skillServiceResult as any) == '' ? null : dto.skillServiceResult;
+    const encodedPayload = encodeSkillLogPayload({
+      userActivity: dto.userActivity ?? null,
+      skillServiceResult: skillServiceResult ?? null,
+    });
+    const savedLog = await this.repository.save(
       this.repository.create({
         ...dto,
-        skillServiceResult:
-          (dto.skillServiceResult as any) == ''
-            ? undefined
-            : dto.skillServiceResult,
+        ...encodedPayload,
+        userActivity: null,
+        skillServiceResult: null,
       }),
     );
+
+    return Object.assign(savedLog, {
+      userActivity: dto.userActivity,
+      skillServiceResult,
+    });
   }
 
   async getLatestLog(dto: GetRecentLogsDto) {
-    return await this.repository.find({
+    const logs = await this.repository.find({
       take: dto.limit,
       where: {
         userId: dto.userId,
       },
       order: {
         date: 'DESC',
+        id: 'DESC',
       },
     });
+
+    return logs.map((log) => this.hydratePayload(log));
   }
 
   async getLastLog(userId: UserEntity['id']) {
@@ -52,10 +83,11 @@ export class SkillLogService {
       },
       order: {
         date: 'DESC',
+        id: 'DESC',
       },
     });
 
-    return log;
+    return log ? this.hydratePayload(log) : null;
   }
 
   async getLastLogOrCreateOne(dto: CreateLogDto) {

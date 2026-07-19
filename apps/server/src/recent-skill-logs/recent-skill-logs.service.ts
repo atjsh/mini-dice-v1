@@ -29,7 +29,7 @@ export class RecentSkillLogsService {
             {
               date: skillLog.date,
               skillServiceResult: skillLog.skillServiceResult,
-              userActivity: skillLog.userActivity,
+              userActivity: skillLog.userActivity!,
               timezone: timezone,
             },
           ),
