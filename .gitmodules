@@ -1,0 +1,4 @@
+[submodule "vendor/passkey-authenticator-aaguids"]
+	path = apps/web/vendor/passkey-authenticator-aaguids
+	url = https://github.com/passkeydeveloper/passkey-authenticator-aaguids.git
+	shallow = true
