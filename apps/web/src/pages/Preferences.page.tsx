@@ -1,55 +1,21 @@
 import { Link } from 'react-router-dom';
-import { ServiceLayout } from '../layouts/service.layout';
-import { GoogleAccountLinkSection } from '../components/connect-with-oauth/connect-with-oauth.component';
-import { PasskeyManagementSection } from '../components/passkey/PasskeyManagementSection';
-import { PushNotificationSettings } from '../components/push-notification';
 import {
-  SettingsCard,
-  SettingsHeader,
-  SettingsNotice,
-  SettingsToggle,
+  SettingsList,
+  SettingsNavigationLabel,
+  SettingsNavigationLink,
 } from '../components/settings';
+import { ServiceLayout } from '../layouts/service.layout';
+import { useUser } from '../libs';
 import {
-  useUpdateUserPreference,
-  useUserPreference,
-} from '../libs/tdol-server/user-preference';
-import { IndexPageURL } from './routes';
-
-function CommentPreferenceSection() {
-  const { data: preference, isLoading } = useUserPreference();
-  const updatePreference = useUpdateUserPreference();
-
-  const commentsVisible = !(preference?.alwaysHideComments ?? false);
-
-  return (
-    <SettingsCard>
-      <div className="flex items-center justify-between gap-5">
-        <SettingsHeader
-          title="댓글 표시"
-          description="게임 화면에서 칸 댓글과 댓글 작성 버튼을 표시합니다."
-          className="flex-1"
-        />
-        <SettingsToggle
-          onChange={() =>
-            updatePreference.mutate({
-              alwaysHideComments: commentsVisible,
-            })
-          }
-          disabled={isLoading || updatePreference.isLoading}
-          checked={commentsVisible}
-          ariaLabel="댓글 표시 토글"
-        />
-      </div>
-      {updatePreference.isError && (
-        <SettingsNotice tone="error" className="mt-4" role="alert">
-          설정을 저장하지 못했습니다. 다시 시도해 주세요.
-        </SettingsNotice>
-      )}
-    </SettingsCard>
-  );
-}
+  IndexPageURL,
+  ProfilePreferencePageURL,
+  ServicePreferencePageURL,
+  WebNotificationPreferencePageURL,
+} from './routes';
 
 export function PreferencesPage() {
+  const { data: user } = useUser();
+
   return (
     <ServiceLayout>
       <div className="self-center max-w-2xl m-auto">
@@ -65,12 +31,24 @@ export function PreferencesPage() {
           </h1>
         </div>
 
-        <div className="flex flex-col gap-8">
-          <GoogleAccountLinkSection />
-          <PasskeyManagementSection />
-          <PushNotificationSettings />
-          <CommentPreferenceSection />
-        </div>
+        <nav aria-label="설정 항목" className="flex flex-col gap-4">
+          <SettingsList>
+            <SettingsNavigationLink to={ProfilePreferencePageURL}>
+              <SettingsNavigationLabel
+                title={user?.username ?? '프로필'}
+                subtitle="내 프로필"
+              />
+            </SettingsNavigationLink>
+          </SettingsList>
+          <SettingsList>
+            <SettingsNavigationLink to={ServicePreferencePageURL}>
+              일반
+            </SettingsNavigationLink>
+            <SettingsNavigationLink to={WebNotificationPreferencePageURL}>
+              푸시 알림
+            </SettingsNavigationLink>
+          </SettingsList>
+        </nav>
       </div>
     </ServiceLayout>
   );

@@ -10,8 +10,6 @@ import {
 export const ProfileWidget: React.FC = () => {
   const { data: user } = useUser();
 
-  const [isEmailShowing, setisEmailShowing] = useState(false);
-
   return (
     <div>
       {user ? (
@@ -24,21 +22,6 @@ export const ProfileWidget: React.FC = () => {
               </div>
               <div className="font-bold text-base text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
                 {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
-              </div>
-              <div
-                className={`w-fit ${
-                  user.email ? 'cursor-pointer hover:underline' : ''
-                }`}
-                onClick={() => setisEmailShowing(!isEmailShowing)}
-              >
-                {user.email ? (
-                  <>
-                    내 이메일 {isEmailShowing ? '닫기: ' : '보기'}
-                    {isEmailShowing ? user.email : ''}
-                  </>
-                ) : (
-                  '등록된 이메일 없음'
-                )}
               </div>
             </div>
             <div className=" flex gap-4">

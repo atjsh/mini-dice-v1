@@ -1,5 +1,6 @@
 import {
   PublicProfileVo,
+  UpdateUserDto,
   UserEntityJson,
   UserVo,
 } from '@packages/shared-types';
@@ -36,13 +37,15 @@ export async function getOthersProfiles(
 }
 
 export async function updateUserVo(
-  partialUser: Partial<UserVo>,
-): Promise<UserVo> {
-  const response = await authedAxios.patch<Partial<UserVo>, UserVo>(
-    `/profile/me`,
-    partialUser,
-  );
-  return response;
+  partialUser: UpdateUserDto,
+): Promise<UpdateUserDto> {
+  const response = await authedAxios.patch(`/profile/me`, partialUser);
+
+  if (response.status < 200 || response.status >= 300) {
+    throw new Error(`Failed to update user (${response.status})`);
+  }
+
+  return partialUser;
 }
 
 export async function userCompleteSignup(

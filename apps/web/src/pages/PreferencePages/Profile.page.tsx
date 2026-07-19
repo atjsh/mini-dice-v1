@@ -1,0 +1,115 @@
+import { Link } from 'react-router-dom';
+import {
+  SettingsList,
+  SettingsNavigationLabel,
+  SettingsNavigationLink,
+} from '../../components/settings';
+import { ServiceLayout } from '../../layouts/service.layout';
+import { useUser } from '../../libs';
+import { usePasskeyList } from '../../libs/tdol-server/passkey';
+import {
+  AuthenticationPreferencePageURL,
+  PreferencesPageURL,
+  TerminatePageURL,
+  UsernamePreferencePageURL,
+} from '../routes';
+
+const registrationDateFormatter = new Intl.DateTimeFormat('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+export function ProfilePreferencePage() {
+  const { data: user } = useUser();
+  const { data: passkeys, isLoading: arePasskeysLoading } = usePasskeyList();
+
+  if (!user) {
+    return null;
+  }
+
+  const authenticationSummary =
+    arePasskeysLoading || passkeys === undefined
+      ? undefined
+      : [
+          user.email != null && '구글 계정 등록됨',
+          passkeys.length > 0 && `패스키 ${passkeys.length}개 등록됨`,
+        ]
+          .filter(Boolean)
+          .join(' · ');
+  const authenticationSubtitle =
+    authenticationSummary === undefined ? undefined : authenticationSummary ? (
+      authenticationSummary
+    ) : (
+      <span className="text-orange-700 dark:text-orange-400">
+        로그인 수단 추가
+      </span>
+    );
+
+  const registrationDate = new Date(user.createdAt);
+  const registrationDateTime = Number.isNaN(registrationDate.getTime())
+    ? undefined
+    : registrationDate.toISOString();
+
+  return (
+    <ServiceLayout>
+      <div className="self-center m-auto w-full max-w-2xl">
+        <div className="mb-6 flex flex-col gap-2">
+          <Link
+            className="text-lg text-blue-500 hover:underline"
+            to={PreferencesPageURL}
+          >
+            ← 설정
+          </Link>
+          <h1 className="break-all text-4xl font-bold text-gray-900 dark:text-gray-100">
+            프로필: {user.username}
+          </h1>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <dl className="divide-y divide-gray-200 overflow-hidden rounded-xl bg-gray-50 shadow-sm dark:divide-zinc-700 dark:bg-zinc-900">
+            <div className="flex min-h-[52px] flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+              <dt className="shrink-0 font-medium text-gray-900 dark:text-gray-100">
+                사용자 ID
+              </dt>
+              <dd className="min-w-0 select-all break-all text-sm text-gray-600 dark:text-gray-400 sm:text-right">
+                <code>{user.id}</code>
+              </dd>
+            </div>
+            <div className="flex min-h-[52px] flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+              <dt className="shrink-0 font-medium text-gray-900 dark:text-gray-100">
+                가입일
+              </dt>
+              <dd className="text-gray-600 dark:text-gray-400 sm:text-right">
+                <time dateTime={registrationDateTime}>
+                  {registrationDateTime
+                    ? registrationDateFormatter.format(registrationDate)
+                    : '알 수 없음'}
+                </time>
+              </dd>
+            </div>
+          </dl>
+
+          <nav aria-label="프로필 설정" className="flex flex-col gap-4">
+            <SettingsList>
+              <SettingsNavigationLink to={UsernamePreferencePageURL}>
+                닉네임 변경
+              </SettingsNavigationLink>
+              <SettingsNavigationLink to={AuthenticationPreferencePageURL}>
+                <SettingsNavigationLabel
+                  title="로그인 및 보안"
+                  subtitle={authenticationSubtitle}
+                />
+              </SettingsNavigationLink>
+            </SettingsList>
+            <SettingsList>
+              <SettingsNavigationLink to={TerminatePageURL}>
+                회원 탈퇴
+              </SettingsNavigationLink>
+            </SettingsList>
+          </nav>
+        </div>
+      </div>
+    </ServiceLayout>
+  );
+}

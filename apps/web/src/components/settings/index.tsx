@@ -4,6 +4,73 @@ import type {
   HTMLAttributes,
   ReactNode,
 } from 'react';
+import { Link } from 'react-router-dom';
+import type { LinkProps } from 'react-router-dom';
+
+export function SettingsList({
+  className = '',
+  ...props
+}: HTMLAttributes<HTMLUListElement>) {
+  return (
+    <ul
+      {...props}
+      className={`divide-y divide-gray-200 overflow-hidden rounded-xl bg-gray-50 shadow-sm dark:divide-zinc-700 dark:bg-zinc-900 ${className}`}
+    />
+  );
+}
+
+export function SettingsNavigationLabel({
+  title,
+  subtitle,
+}: {
+  title: ReactNode;
+  subtitle?: ReactNode;
+}) {
+  return (
+    <span className="flex min-w-0 flex-col gap-0.5">
+      <span className="break-words leading-6">{title}</span>
+      {subtitle !== undefined && (
+        <span className="break-words text-sm font-normal leading-5 text-gray-500 dark:text-zinc-400">
+          {subtitle}
+        </span>
+      )}
+    </span>
+  );
+}
+
+export function SettingsNavigationLink({
+  children,
+  className = '',
+  ...props
+}: Omit<LinkProps, 'children'> & {
+  children: ReactNode;
+}) {
+  return (
+    <li>
+      <Link
+        {...props}
+        className={`flex min-h-[52px] w-full items-center gap-3 px-4 py-2.5 font-medium text-gray-900 hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-gray-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-700 ${className}`}
+      >
+        <span className="min-w-0 flex-1">{children}</span>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 20 20"
+          fill="none"
+          className="h-5 w-5 shrink-0 text-gray-400 dark:text-zinc-500"
+        >
+          <path
+            d="m7.5 4 6 6-6 6"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </Link>
+    </li>
+  );
+}
 
 export function SettingsCard({
   children,
@@ -14,7 +81,7 @@ export function SettingsCard({
 }) {
   return (
     <section
-      className={`rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 ${className}`}
+      className={`rounded-lg bg-gray-50 p-3 shadow-sm  dark:bg-zinc-900 ${className}`}
     >
       {children}
     </section>
@@ -32,11 +99,11 @@ export function SettingsHeader({
 }) {
   return (
     <div className={`min-w-0 ${className}`}>
-      <h2 className="text-xl font-semibold leading-7 text-gray-900 dark:text-gray-100">
+      <h2 className="text-lg font-semibold leading-7 text-gray-900 dark:text-gray-100">
         {title}
       </h2>
       {description && (
-        <p className="mt-2 text-base leading-7 text-gray-600 dark:text-gray-400">
+        <p className="text-base leading-7 text-gray-600 dark:text-gray-400">
           {description}
         </p>
       )}
@@ -66,7 +133,9 @@ export function SettingsToggle({
       aria-pressed={checked}
       className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 ${
         checked ? 'bg-blue-600' : 'bg-gray-200 dark:bg-zinc-700'
-      } ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} ${className}`}
+      } ${
+        disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+      } ${className}`}
     >
       <span
         className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-sm transition-transform ${
@@ -77,7 +146,12 @@ export function SettingsToggle({
   );
 }
 
-type SettingsActionButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'dangerGhost';
+type SettingsActionButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'ghost'
+  | 'dangerGhost';
 
 const settingsActionButtonVariantClassNames: Record<
   SettingsActionButtonVariant,

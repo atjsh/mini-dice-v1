@@ -1,10 +1,11 @@
 import { startRegistration } from '@simplewebauthn/browser';
 import { useMutation, useQueryClient } from 'react-query';
 import { getRegistrationOptions, verifyRegistration } from './passkey-api';
+import { PasskeyListQueryKey } from './use-passkey-list.hook';
 
 export const usePasskeyRegister = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation(
     async (name?: string) => {
       const options = await getRegistrationOptions();
@@ -12,9 +13,7 @@ export const usePasskeyRegister = () => {
       return await verifyRegistration(credential, name);
     },
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries('passkeys');
-      },
-    }
+      onSuccess: () => queryClient.invalidateQueries(PasskeyListQueryKey),
+    },
   );
 };

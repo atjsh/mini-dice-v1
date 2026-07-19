@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { PasskeyListItemDto } from '@packages/shared-types';
 import { authedAxios } from '../auth/access-token';
 
 function throwIfRequestFailed(response: any) {
@@ -46,8 +47,10 @@ export async function verifyAuthentication(
   return response.data;
 }
 
-export async function listPasskeys() {
-  const response = await authedAxios.get('/auth/passkey/list');
+export async function listPasskeys(): Promise<PasskeyListItemDto[]> {
+  const response = await authedAxios.get<PasskeyListItemDto[]>(
+    '/auth/passkey/list',
+  );
   throwIfRequestFailed(response);
   return response.data;
 }

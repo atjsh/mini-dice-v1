@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import 'reflect-metadata';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useUser } from './libs';
 import {
   onlineStatusTracker,
@@ -52,67 +52,71 @@ function App() {
       });
   }, [user?.id]);
 
-  const router = createBrowserRouter(
-    protectedRoutes.map((route) => ({
-      path: route.path,
-      element: isLoading ? (
-        <IndexSkeletonPage />
-      ) : route.protection == 'notAuthed' ? (
-        isNotAuthed ? (
-          <Route route={route} />
-        ) : (
-          <Navigate
-            to={{
-              pathname: ServicePageURL,
-            }}
-            replace
-          />
-        )
-      ) : route.protection == 'authed' ? (
-        isNotAuthed ? (
-          <Navigate
-            to={{
-              pathname: ServicePageURL,
-            }}
-            replace
-          />
-        ) : (
-          <Route route={route} />
-        )
-      ) : route.protection == 'signupCompleted' ? (
-        user?.signupCompleted == true ? (
-          <Route route={route} />
-        ) : user ? (
-          <Navigate
-            to={{
-              pathname: FinishSignupPageURL,
-            }}
-            replace
-          />
-        ) : (
-          <Navigate
-            to={{
-              pathname: IndexPageURL,
-              search: '?loginRequired=true',
-            }}
-            replace
-          />
-        )
-      ) : route.protection == 'signupNotCompleted' ? (
-        user?.signupCompleted == false ? (
-          <Route route={route} />
-        ) : (
-          <Navigate
-            to={{
-              pathname: ServicePageURL,
-            }}
-            replace
-          />
-        )
-      ) : (
-        <Route route={route} />
+  const router = useMemo(
+    () =>
+      createBrowserRouter(
+        protectedRoutes.map((route) => ({
+          path: route.path,
+          element: isLoading ? (
+            <IndexSkeletonPage />
+          ) : route.protection == 'notAuthed' ? (
+            isNotAuthed ? (
+              <Route route={route} />
+            ) : (
+              <Navigate
+                to={{
+                  pathname: ServicePageURL,
+                }}
+                replace
+              />
+            )
+          ) : route.protection == 'authed' ? (
+            isNotAuthed ? (
+              <Navigate
+                to={{
+                  pathname: ServicePageURL,
+                }}
+                replace
+              />
+            ) : (
+              <Route route={route} />
+            )
+          ) : route.protection == 'signupCompleted' ? (
+            user?.signupCompleted == true ? (
+              <Route route={route} />
+            ) : user ? (
+              <Navigate
+                to={{
+                  pathname: FinishSignupPageURL,
+                }}
+                replace
+              />
+            ) : (
+              <Navigate
+                to={{
+                  pathname: IndexPageURL,
+                  search: '?loginRequired=true',
+                }}
+                replace
+              />
+            )
+          ) : route.protection == 'signupNotCompleted' ? (
+            user?.signupCompleted == false ? (
+              <Route route={route} />
+            ) : (
+              <Navigate
+                to={{
+                  pathname: ServicePageURL,
+                }}
+                replace
+              />
+            )
+          ) : (
+            <Route route={route} />
+          ),
+        })),
       ),
-    })),
+    [isLoading, isNotAuthed, user?.signupCompleted],
   );
 
   return <RouterProvider router={router} />;

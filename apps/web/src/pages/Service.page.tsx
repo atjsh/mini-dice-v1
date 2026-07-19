@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 import { currentSkillRouteAtom } from '../components/map/current-skill-route.atom';
@@ -217,7 +216,6 @@ export function ServicePage() {
           )}
         </div>
         <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
-          <ConnectWithOauthWidget />
           <ProfileWidget />
           <WalletWidget />
           <UpdatesWidget />

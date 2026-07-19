@@ -1,4 +1,3 @@
-import { strEllipsis } from '@packages/shared-types';
 import { Link } from 'react-router-dom';
 import { useAccessToken } from '../../libs';
 import {
@@ -8,7 +7,6 @@ import {
   PreferencesPageURL,
   PrivacyPolicyPageURL,
   RankingPgaeURL,
-  TerminatePageURL,
   TermsPageURL,
   UpdatesPageURL,
 } from '../../pages/routes';
@@ -126,11 +124,6 @@ export const FooterWidgetComponent: React.FC = () => {
         {
           label: '로그아웃',
           link: LogoutPageURL,
-          type: 'internal',
-        },
-        {
-          label: '회원탈퇴',
-          link: TerminatePageURL,
           type: 'internal',
         },
       ],

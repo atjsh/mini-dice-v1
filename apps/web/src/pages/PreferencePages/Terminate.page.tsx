@@ -1,20 +1,22 @@
 import { Link } from 'react-router-dom';
-import { ServiceLayout } from '../layouts/service.layout';
-import { useTerminateUser } from '../libs/tdol-server/profile/use-terminate-user.hook';
-import { IndexPageURL } from './routes';
+import { ServiceLayout } from '../../layouts/service.layout';
+import { useUser } from '../../libs';
+import { useTerminateUser } from '../../libs/tdol-server/profile/use-terminate-user.hook';
+import { ProfilePreferencePageURL } from '../routes';
 
 export function TerminatePage() {
+  const { data: user } = useUser();
   const terminateUserMutation = useTerminateUser();
 
   return (
     <ServiceLayout>
-      <div className=" max-w-4xl px-3 self-center m-auto">
-        <div className=" mb-10">
+      <div className="self-center max-w-2xl m-auto">
+        <div className="flex flex-col gap-2 mb-6">
           <Link
-            className=" text-lg text-blue-500 hover:underline p-6 inline-block pl-0"
-            to={IndexPageURL}
+            className="break-all text-lg text-blue-500 hover:underline"
+            to={ProfilePreferencePageURL}
           >
-            ← Mini Dice로 돌아가기
+            ← {user ? `프로필: ${user.username}` : '프로필'}
           </Link>
           <h1 className=" text-4xl font-bold">회원 탈퇴</h1>
         </div>
