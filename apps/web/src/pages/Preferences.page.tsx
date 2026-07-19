@@ -17,12 +17,6 @@ import {
   WebNotificationPreferencePageURL,
 } from './routes';
 
-const registrationDateFormatter = new Intl.DateTimeFormat('ko-KR', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
-
 export function PreferencesPage() {
   const { data: user } = useUser();
   const { data: passkeys, isLoading: arePasskeysLoading } = usePasskeyList();
@@ -95,7 +89,7 @@ export function PreferencesPage() {
                 <dd className="text-gray-600 dark:text-gray-400 sm:text-right">
                   <time dateTime={registrationDateTime}>
                     {registrationDateTime
-                      ? registrationDateFormatter.format(registrationDate)
+                      ? registrationDate.toLocaleDateString('ko-kr')
                       : '알 수 없음'}
                   </time>
                 </dd>

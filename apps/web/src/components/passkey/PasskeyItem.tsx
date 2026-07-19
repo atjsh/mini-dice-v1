@@ -20,11 +20,7 @@ function toDate(date: Date | null) {
 }
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  return date.toLocaleDateString('ko-kr');
 }
 
 function getPasskeyIconSources(
@@ -78,15 +74,13 @@ function PasskeySubtitle({
     <span className="flex flex-wrap items-center gap-x-1.5">
       <span>{kindLabel}</span>
       <span aria-hidden="true">·</span>
-      {parsedDate ? (
+      {parsedDate && (
         <span>
+          등록일자:{' '}
           <time dateTime={parsedDate.toISOString()}>
             {formatDate(parsedDate)}
-          </time>{' '}
-          등록
+          </time>
         </span>
-      ) : (
-        <span>등록일 알 수 없음</span>
       )}
     </span>
   );
@@ -96,7 +90,9 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
   const manageLabel = `${passkey.name} 패스키 관리`;
   const metadataLabel = passkey.metadata?.name;
   const subtitleLabel =
-    metadataLabel && metadataLabel !== passkey.name ? metadataLabel : '패스키';
+    metadataLabel && metadataLabel !== passkey.name
+      ? `패스키 · ${metadataLabel}`
+      : '패스키';
   const iconSources = getPasskeyIconSources(passkey.metadata);
 
   return (
