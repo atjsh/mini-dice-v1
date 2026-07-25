@@ -1,6 +1,6 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../../query-client';
 import { submitTempSignup } from './submit-temp-signup';
-import { queryClient } from '../../..';
 import { UseUserHookKey } from '..';
 
 interface UseTempSignupOptions {
@@ -10,10 +10,10 @@ interface UseTempSignupOptions {
 export const useTempSignup = ({
   refetchUserOnSuccess = true,
 }: UseTempSignupOptions = {}) =>
-  useMutation(submitTempSignup, {
-    onSuccess: () => {
-      if (refetchUserOnSuccess) {
-        queryClient.refetchQueries(UseUserHookKey);
-      }
-    },
+  useMutation({
+    mutationFn: submitTempSignup,
+    onSuccess: () =>
+      refetchUserOnSuccess
+        ? queryClient.refetchQueries({ queryKey: UseUserHookKey })
+        : undefined,
   });

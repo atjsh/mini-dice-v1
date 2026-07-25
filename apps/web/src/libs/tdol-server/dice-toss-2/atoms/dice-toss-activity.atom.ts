@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
 export enum DiceTossActivityEnum {
   // ready to dice toss, or waiting for diceTossUntil
@@ -18,9 +18,6 @@ export const diceTossActivityStatusAtom = atom<{
   enum: DiceTossActivityEnum;
   reason: string | null;
 }>({
-  key: 'diceTossActivity',
-  default: {
-    enum: DiceTossActivityEnum.Idle,
-    reason: null,
-  },
+  enum: DiceTossActivityEnum.Idle,
+  reason: null,
 });

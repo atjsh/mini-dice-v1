@@ -139,8 +139,8 @@ export class RpsService implements SkillService {
       rpsResult == RpsResult.Lose
         ? -5000
         : rpsResult == RpsResult.Win
-        ? 5000
-        : 0;
+          ? 5000
+          : 0;
 
     if (cashChangingAmount != 0) {
       await this.userService.changeUserCash(props.userId, cashChangingAmount);

@@ -1,7 +1,25 @@
-function getErrorMessage(error: any) {
-  const responseMessage = error?.response?.data?.message;
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
 
-  if (Array.isArray(responseMessage)) {
+function getResponseMessage(error: unknown): unknown {
+  if (!isRecord(error) || !isRecord(error.response)) {
+    return undefined;
+  }
+
+  const responseData = error.response.data;
+  return isRecord(responseData) ? responseData.message : undefined;
+}
+
+function getErrorMessage(error: unknown): string {
+  const responseMessage = getResponseMessage(error);
+
+  if (
+    Array.isArray(responseMessage) &&
+    responseMessage.every(
+      (message): message is string => typeof message === 'string',
+    )
+  ) {
     return responseMessage.join(' ');
   }
 
@@ -9,7 +27,7 @@ function getErrorMessage(error: any) {
     return responseMessage;
   }
 
-  if (typeof error?.message === 'string') {
+  if (isRecord(error) && typeof error.message === 'string') {
     return error.message;
   }
 
@@ -24,14 +42,18 @@ function alreadyKorean(message: string) {
   return /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(message);
 }
 
-export function normalizePasskeyErrorMessage(error: any, fallback: string) {
+export function normalizePasskeyErrorMessage(
+  error: unknown,
+  fallback: string,
+): string {
   const message = getErrorMessage(error).trim();
 
   if (message && alreadyKorean(message)) {
     return message;
   }
 
-  const name = typeof error?.name === 'string' ? error.name : '';
+  const name =
+    isRecord(error) && typeof error.name === 'string' ? error.name : '';
   const normalized = `${name} ${message}`.toLowerCase();
 
   if (

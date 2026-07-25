@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   onlineStatusTracker,
   pushNotificationManager,
@@ -18,4 +18,7 @@ async function logoutCurrentBrowserSession() {
 }
 
 export const useLogout = () =>
-  useQuery(logoutUser.name, logoutCurrentBrowserSession);
+  useQuery({
+    queryKey: [logoutUser.name],
+    queryFn: logoutCurrentBrowserSession,
+  });

@@ -23,7 +23,7 @@ import { BookEventEnum } from './book.service';
 export class BookSkillGroup implements SkillGroupController {
   constructor(private skillService: BookService) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return '책을 내다';
   }
 
@@ -33,7 +33,7 @@ export class BookSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.book.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<BookService, 'index'>
     >,

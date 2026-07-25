@@ -1,4 +1,9 @@
 import { Logger } from '@nestjs/common';
+import type {
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+  Context,
+} from 'aws-lambda';
 import { appendFileSync, readFileSync, writeFileSync } from 'fs';
 import { sign } from 'jsonwebtoken';
 import { performance } from 'perf_hooks';
@@ -18,6 +23,44 @@ function summarize(values: number[]) {
       ? Number(sorted[Math.ceil(values.length * 0.95) - 1].toFixed(2))
       : null,
   };
+}
+
+type ProbeEvent = Pick<
+  APIGatewayProxyEvent,
+  | 'path'
+  | 'httpMethod'
+  | 'headers'
+  | 'queryStringParameters'
+  | 'body'
+  | 'isBase64Encoded'
+>;
+
+type ProbeLambdaHandler = (
+  event: ProbeEvent,
+  context: Partial<Context>,
+) => Promise<APIGatewayProxyResult>;
+
+function hasLambdaHandler(
+  value: unknown,
+): value is { lambdaHandler: ProbeLambdaHandler } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'lambdaHandler' in value &&
+    typeof value.lambdaHandler === 'function'
+  );
+}
+
+function parseResponseBody(body: string): unknown {
+  let value: unknown = body;
+  while (typeof value === 'string') {
+    value = JSON.parse(value) as unknown;
+  }
+  return value;
+}
+
+function getRowCount(value: unknown): number {
+  return Array.isArray(value) ? value.length : 0;
 }
 
 async function main() {
@@ -45,8 +88,12 @@ async function main() {
 
   Logger.overrideLogger(false);
   const serverMainPath = '../../server/src/main';
-  const { lambdaHandler } = await import(serverMainPath);
-  const event = (limit?: string) => ({
+  const serverModule: unknown = await import(serverMainPath);
+  if (!hasLambdaHandler(serverModule)) {
+    throw new TypeError('Server module does not export a Lambda handler');
+  }
+  const { lambdaHandler } = serverModule;
+  const event = (limit?: string): ProbeEvent => ({
     path: '/recent-skill-logs',
     httpMethod: 'GET',
     headers: {
@@ -60,23 +107,19 @@ async function main() {
   });
   const invoke = async (limit?: string) => {
     const started = performance.now();
-    const response = await lambdaHandler(event(limit) as any, {} as any);
-    let body =
-      typeof response.body === 'string'
-        ? response.body
-        : Buffer.from(response.body).toString();
-    while (typeof body === 'string') body = JSON.parse(body);
+    const response = await lambdaHandler(event(limit), {});
     return {
       status: response.statusCode,
-      body,
+      body: parseResponseBody(response.body),
       durationMs: performance.now() - started,
     };
   };
 
   const defaultResponse = await invoke();
-  if (defaultResponse.status !== 200 || defaultResponse.body.length !== 10) {
+  const defaultRows = getRowCount(defaultResponse.body);
+  if (defaultResponse.status !== 200 || defaultRows !== 10) {
     throw new Error(
-      `Default recent-log limit returned status=${defaultResponse.status} rows=${defaultResponse.body.length}`,
+      `Default recent-log limit returned status=${defaultResponse.status} rows=${defaultRows}`,
     );
   }
 
@@ -96,7 +139,7 @@ async function main() {
       summaryPath,
       `${JSON.stringify(
         {
-          defaultRows: defaultResponse.body.length,
+          defaultRows,
           invalidStatuses,
           failures,
           limits: { 10: summarize(samples[10]), 100: summarize(samples[100]) },
@@ -112,7 +155,7 @@ async function main() {
     const phase = readFileSync(phasePath, 'utf8').trim();
     try {
       const response = await invoke(String(limit));
-      const rows = Array.isArray(response.body) ? response.body.length : 0;
+      const rows = getRowCount(response.body);
       appendFileSync(
         csvPath,
         `${timestamp},${phase},${limit},${

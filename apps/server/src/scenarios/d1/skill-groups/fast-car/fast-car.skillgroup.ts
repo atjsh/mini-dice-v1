@@ -23,7 +23,7 @@ import { FastCarEventEnum } from './fast-car.service';
 export class FastCarSkillGroup implements SkillGroupController {
   constructor(private skillService: FastCarService) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return '과속';
   }
 
@@ -33,7 +33,7 @@ export class FastCarSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.fastCar.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<FastCarService, 'index'>
     >,

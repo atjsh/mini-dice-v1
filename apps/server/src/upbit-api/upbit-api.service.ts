@@ -7,8 +7,6 @@ import type {
 } from './constants';
 import type { UpbitTickerInterface } from './interface/ticker.interface';
 
-const cacheKey = 'upbit:ticker:';
-
 @Injectable()
 export class UpbitApiService {
   constructor(private httpService: HttpService) {}

@@ -147,7 +147,7 @@ export const WalletWidget: React.FC = () => {
               value={`${(
                 BigInt(user.stockStatus.stockAmount) *
                   BigInt(user.stockStatus.stockCurrentPrice) -
-                BigInt(user.stockStatus.stockCashPurchaseSum!)
+                BigInt(user.stockStatus.stockCashPurchaseSum)
               ).toLocaleString('ko-kr', {
                 style: 'currency',
                 currency: 'KRW',

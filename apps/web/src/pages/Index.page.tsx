@@ -18,13 +18,13 @@ export function IndexPage() {
   const handlePasskeyLogin = async () => {
     setError('');
     try {
-      const result: any = await passkeyAuth.mutateAsync();
+      const result = await passkeyAuth.mutateAsync();
       if (result.success) {
         setAuthSuccess(true);
       } else {
         setPasskeyUnavailable(true);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setPasskeyUnavailable(true);
       console.error('Passkey authentication failed:', error);
     }
@@ -84,14 +84,18 @@ export function IndexPage() {
           </div>
           <div className="flex flex-row gap-3 mx-auto">
             <button
-              onClick={handlePasskeyLogin}
-              disabled={passkeyAuth.isLoading}
+              onClick={() => {
+                handlePasskeyLogin().catch((error: unknown) => {
+                  console.error('Unexpected passkey login failure:', error);
+                });
+              }}
+              disabled={passkeyAuth.isPending}
               className={
                 'block text-xl px-5 py-5 hover:underline ' +
-                (passkeyAuth.isLoading ? 'text-gray-400' : 'text-blue-600')
+                (passkeyAuth.isPending ? 'text-gray-400' : 'text-blue-600')
               }
             >
-              {passkeyAuth.isLoading
+              {passkeyAuth.isPending
                 ? '패스키 확인 중...'
                 : '패스키로 로그인 →'}
             </button>

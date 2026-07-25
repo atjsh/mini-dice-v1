@@ -1,9 +1,11 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { logoutUser } from '../auth';
 import { terminateUser } from './user-profile';
 
 export const useTerminateUser = () =>
-  useMutation(terminateUser.name, terminateUser, {
+  useMutation({
+    mutationKey: [terminateUser.name],
+    mutationFn: terminateUser,
     onSuccess: async () => {
       await logoutUser();
     },

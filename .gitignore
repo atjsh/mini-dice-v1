@@ -1,5 +1,4 @@
-# Created by https://www.toptal.com/developers/gitignore/api/node,direnv,yarn,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,direnv,yarn,macos
+# Based on https://www.toptal.com/developers/gitignore/api/node,direnv,macos
 
 ### direnv ###
 .direnv
@@ -45,8 +44,6 @@ Temporary Items
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
@@ -112,9 +109,6 @@ web_modules/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
-
 # dotenv environment variable files
 .env
 .env.development.local
@@ -173,17 +167,6 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-### yarn ###
-# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
 ### Serverless ###
 # Ignore build directory
 .serverless
@@ -194,4 +177,4 @@ slsconfig.yml
 
 ads.txt
 
-# End of https://www.toptal.com/developers/gitignore/api/node,direnv,yarn,macos,serverless
+# End of Node, direnv, macOS, and Serverless ignore rules

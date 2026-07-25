@@ -43,7 +43,7 @@ export class PushNotificationManager {
    */
   async getVapidPublicKey(): Promise<string> {
     const response = await authedAxios.get<{ publicKey: string }>(
-      '/push/vapid-public-key'
+      '/push/vapid-public-key',
     );
     return response.data.publicKey;
   }
@@ -61,7 +61,7 @@ export class PushNotificationManager {
         '/sw-push.js',
         {
           scope: '/',
-        }
+        },
       );
 
       // Wait for service worker to be ready
@@ -147,11 +147,10 @@ export class PushNotificationManager {
 
     const vapidPublicKey = await this.getVapidPublicKey();
     const convertedVapidKey = this.urlBase64ToUint8Array(vapidPublicKey);
-    const subscription =
-      await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: convertedVapidKey,
-      });
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: convertedVapidKey,
+    });
 
     // Send to server - server will send unified payload format.
     // If this browser endpoint belonged to a previous account, the server
@@ -261,7 +260,7 @@ export class PushNotificationManager {
   /**
    * Convert VAPID key from base64 to Uint8Array
    */
-  private urlBase64ToUint8Array(base64String: string): Uint8Array {
+  private urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding)
       .replace(/\-/g, '+')

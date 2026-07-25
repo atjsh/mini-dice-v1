@@ -1,9 +1,9 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import {
   Link,
   Navigate,
   Outlet,
-  RouteObject,
+  type RouteObject,
   useLocation,
   useNavigate,
 } from 'react-router-dom';
@@ -16,14 +16,50 @@ import {
   Shield,
   UserRound,
 } from 'lucide-react';
-import { api, type Admin } from './api';
-import { Badge, Button, Card, Input, Table, Td, Textarea, Th } from './components/ui';
+import { api } from './api';
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+  Table,
+  Td,
+  Textarea,
+  Th,
+} from './components/ui';
+import type {
+  ActivityDto,
+  ActivityTrendDto,
+  CommentDto,
+  CommentTrendDto,
+  CreatedInviteDto,
+  InviteDto,
+  JoinTrendDto,
+  ListResponse,
+  PagedResponse,
+  StreakCountDto,
+  UpdatedCommentDto,
+  UpdatedUserDto,
+  UserListDto,
+} from './dto';
 import { cn, formatDate } from './lib/utils';
 
 type LoadState<T> =
   | { loading: true; data?: undefined; error?: undefined }
   | { loading: false; data: T; error?: undefined }
   | { loading: false; data?: undefined; error: Error };
+
+function toError(error: unknown): Error {
+  return error instanceof Error ? error : new Error('요청에 실패했습니다.');
+}
+
+function showActionError(error: unknown): void {
+  window.alert(toError(error).message);
+}
+
+function runAction(action: () => Promise<unknown>): void {
+  action().catch(showActionError);
+}
 
 function useLoad<T>(load: () => Promise<T>, deps: unknown[] = []) {
   const [state, setState] = useState<LoadState<T>>({ loading: true });
@@ -33,8 +69,12 @@ function useLoad<T>(load: () => Promise<T>, deps: unknown[] = []) {
     let active = true;
     setState({ loading: true });
     load()
-      .then((data) => active && setState({ loading: false, data }))
-      .catch((error) => active && setState({ loading: false, error }));
+      .then((data) => {
+        if (active) setState({ loading: false, data });
+      })
+      .catch((error: unknown) => {
+        if (active) setState({ loading: false, error: toError(error) });
+      });
     return () => {
       active = false;
     };
@@ -55,27 +95,38 @@ function AuthPage() {
     setMessage('');
     try {
       await action();
-      navigate('/');
+      await navigate('/');
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : '요청에 실패했습니다.');
+      setMessage(
+        error instanceof Error ? error.message : '요청에 실패했습니다.',
+      );
     } finally {
       setBusy(false);
     }
   }
 
-  async function join(event: FormEvent) {
+  function start(action: () => Promise<unknown>): void {
+    run(action).catch((error: unknown) => {
+      setMessage(toError(error).message);
+      setBusy(false);
+    });
+  }
+
+  function join(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    await run(() => api.join({ inviteToken, displayName }));
+    start(() => api.join({ inviteToken, displayName }));
   }
 
   return (
     <main className="mx-auto grid min-h-screen max-w-5xl items-center gap-6 px-5 py-10 md:grid-cols-[0.9fr_1.1fr]">
       <section>
         <Badge className="mb-4">Mini Dice Backoffice</Badge>
-        <h1 className="text-4xl font-semibold tracking-normal">관리자 대시보드</h1>
+        <h1 className="text-4xl font-semibold tracking-normal">
+          관리자 대시보드
+        </h1>
         <p className="mt-4 max-w-md text-sm leading-6 text-muted-foreground">
-          서비스 댓글, 사용자, 활동, 초대 코드, 집계 지표를 한 곳에서 확인합니다.
-          관리자 로그인과 가입은 패스키로만 진행됩니다.
+          서비스 댓글, 사용자, 활동, 초대 코드, 집계 지표를 한 곳에서
+          확인합니다. 관리자 로그인과 가입은 패스키로만 진행됩니다.
         </p>
       </section>
 
@@ -85,7 +136,11 @@ function AuthPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             등록된 관리자 패스키가 있는 브라우저에서 로그인합니다.
           </p>
-          <Button className="mt-5 w-full" disabled={busy} onClick={() => run(api.login)}>
+          <Button
+            className="mt-5 w-full"
+            disabled={busy}
+            onClick={() => start(() => api.login())}
+          >
             <KeyRound className="mr-2 h-4 w-4" />
             로그인
           </Button>
@@ -127,7 +182,10 @@ function ProtectedLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  if (loading) return <div className="p-8 text-sm text-muted-foreground">불러오는 중...</div>;
+  if (loading)
+    return (
+      <div className="p-8 text-sm text-muted-foreground">불러오는 중...</div>
+    );
   if (error) return <Navigate to="/login" replace />;
 
   const navItems = [
@@ -142,7 +200,7 @@ function ProtectedLayout() {
   async function logout() {
     await api.logout();
     reload();
-    navigate('/login');
+    await navigate('/login');
   }
 
   return (
@@ -183,7 +241,11 @@ function ProtectedLayout() {
               <p className="text-xs text-muted-foreground">관리자</p>
               <p className="font-medium">{data.admin.displayName}</p>
             </div>
-            <Button variant="outline" size="sm" onClick={logout}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => runAction(logout)}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               로그아웃
             </Button>
@@ -200,9 +262,11 @@ function ProtectedLayout() {
 function DashboardPage() {
   const { data, loading, reload } = useLoad(async () => {
     const [users, comments, activity] = await Promise.all([
-      api.list<{ items: any[] }>('/admin/users?limit=10'),
-      api.list<{ items: any[] }>('/admin/comments?limit=10'),
-      api.list<{ items: any[] }>('/admin/analytics/activity-trend'),
+      api.list<PagedResponse<UserListDto>>('/admin/users?limit=10'),
+      api.list<PagedResponse<CommentDto>>('/admin/comments?limit=10'),
+      api.list<ListResponse<ActivityTrendDto>>(
+        '/admin/analytics/activity-trend',
+      ),
     ]);
     return { users, comments, activity };
   }, []);
@@ -235,14 +299,19 @@ function DashboardPage() {
 function CommentsPage() {
   const [q, setQ] = useState('');
   const { data, loading, reload } = useLoad(
-    () => api.list<{ items: any[] }>(`/admin/comments?limit=50&q=${encodeURIComponent(q)}`),
+    () =>
+      api.list<PagedResponse<CommentDto>>(
+        `/admin/comments?limit=50&q=${encodeURIComponent(q)}`,
+      ),
     [q],
   );
 
   async function edit(id: string, current: string) {
     const next = window.prompt('댓글 수정', current);
     if (next == null) return;
-    await api.patch(`/admin/comments/${id}`, { comment: next });
+    await api.patch<{ item: UpdatedCommentDto }>(`/admin/comments/${id}`, {
+      comment: next,
+    });
     reload();
   }
 
@@ -274,10 +343,18 @@ function CommentsPage() {
                 <Td>{item.comment}</Td>
                 <Td>{formatDate(item.createdAt)}</Td>
                 <Td className="space-x-2 whitespace-nowrap">
-                  <Button size="sm" variant="outline" onClick={() => edit(item.id, item.comment)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => runAction(() => edit(item.id, item.comment))}
+                  >
                     수정
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => remove(item.id)}>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => runAction(() => remove(item.id))}
+                  >
                     삭제
                   </Button>
                 </Td>
@@ -292,7 +369,7 @@ function CommentsPage() {
 
 function ActivitiesPage() {
   const { data, loading, reload } = useLoad(
-    () => api.list<{ items: any[] }>('/admin/activities?limit=80'),
+    () => api.list<PagedResponse<ActivityDto>>('/admin/activities?limit=80'),
     [],
   );
   return (
@@ -326,26 +403,36 @@ function ActivitiesPage() {
 function UsersPage() {
   const [q, setQ] = useState('');
   const { data, loading, reload } = useLoad(
-    () => api.list<{ items: any[] }>(`/admin/users?limit=50&q=${encodeURIComponent(q)}`),
+    () =>
+      api.list<PagedResponse<UserListDto>>(
+        `/admin/users?limit=50&q=${encodeURIComponent(q)}`,
+      ),
     [q],
   );
 
-  async function edit(item: any) {
+  async function edit(item: UserListDto) {
     const username = window.prompt('사용자 이름', item.username);
     if (!username) return;
-    const countryCode3 = window.prompt('국가 코드(3자리)', item.countryCode3) ?? item.countryCode3;
-    await api.patch(`/admin/users/${item.userId}`, { username, countryCode3 });
+    const countryCode3 =
+      window.prompt('국가 코드(3자리)', item.countryCode3) ?? item.countryCode3;
+    await api.patch<{ item: UpdatedUserDto }>(`/admin/users/${item.userId}`, {
+      username,
+      countryCode3,
+    });
     reload();
   }
 
-  async function ban(item: any) {
+  async function ban(item: UserListDto) {
     const path = item.isTerminated ? 'unban' : 'ban';
     await api.post(`/admin/users/${item.userId}/${path}`);
     reload();
   }
 
   return (
-    <PageShell title="사용자" description="사용자를 검색하고 정보를 수정하거나 차단합니다.">
+    <PageShell
+      title="사용자"
+      description="사용자를 검색하고 정보를 수정하거나 차단합니다."
+    >
       <Toolbar value={q} onChange={setQ} placeholder="이름 또는 이메일 검색" />
       {!loading && data && (
         <Table>
@@ -368,13 +455,17 @@ function UsersPage() {
                 <Td>{item.isTerminated ? <Badge>차단됨</Badge> : '정상'}</Td>
                 <Td>{formatDate(item.createdAt)}</Td>
                 <Td className="space-x-2 whitespace-nowrap">
-                  <Button size="sm" variant="outline" onClick={() => edit(item)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => runAction(() => edit(item))}
+                  >
                     수정
                   </Button>
                   <Button
                     size="sm"
                     variant={item.isTerminated ? 'secondary' : 'destructive'}
-                    onClick={() => ban(item)}
+                    onClick={() => runAction(() => ban(item))}
                   >
                     {item.isTerminated ? '해제' : '차단'}
                   </Button>
@@ -392,14 +483,17 @@ function InvitesPage() {
   const [hours, setHours] = useState(24);
   const [token, setToken] = useState('');
   const { data, loading, reload } = useLoad(
-    () => api.list<{ items: any[] }>('/admin/invites'),
+    () => api.list<ListResponse<InviteDto>>('/admin/invites'),
     [],
   );
 
   async function createInvite() {
-    const result = await api.post<{ invite: { token: string } }>('/admin/invites', {
-      expiresInHours: hours,
-    });
+    const result = await api.post<{ invite: CreatedInviteDto }>(
+      '/admin/invites',
+      {
+        expiresInHours: hours,
+      },
+    );
     setToken(result.invite.token);
     reload();
   }
@@ -410,7 +504,10 @@ function InvitesPage() {
   }
 
   return (
-    <PageShell title="초대 코드" description="관리자 가입용 JWT 초대 코드를 생성하고 폐기합니다.">
+    <PageShell
+      title="초대 코드"
+      description="관리자 가입용 JWT 초대 코드를 생성하고 폐기합니다."
+    >
       <Card className="mb-5">
         <div className="flex flex-wrap items-end gap-3">
           <label className="block min-w-[180px] flex-1 text-sm font-medium">
@@ -424,7 +521,9 @@ function InvitesPage() {
               onChange={(event) => setHours(Number(event.target.value))}
             />
           </label>
-          <Button onClick={createInvite}>초대 코드 생성</Button>
+          <Button onClick={() => runAction(createInvite)}>
+            초대 코드 생성
+          </Button>
         </div>
         {token ? (
           <Textarea className="mt-4 font-mono text-xs" readOnly value={token} />
@@ -445,7 +544,11 @@ function InvitesPage() {
           </thead>
           <tbody>
             {data.items.map((item) => {
-              const status = item.revokedAt ? '폐기됨' : item.usedAt ? '사용됨' : '사용 가능';
+              const status = item.revokedAt
+                ? '폐기됨'
+                : item.usedAt
+                  ? '사용됨'
+                  : '사용 가능';
               return (
                 <tr key={item.id}>
                   <Td>
@@ -457,7 +560,11 @@ function InvitesPage() {
                   <Td>{formatDate(item.createdAt)}</Td>
                   <Td>
                     {!item.usedAt && !item.revokedAt ? (
-                      <Button size="sm" variant="outline" onClick={() => revoke(item.id)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => runAction(() => revoke(item.id))}
+                      >
                         폐기
                       </Button>
                     ) : null}
@@ -476,10 +583,12 @@ function AnalyticsPage() {
   const [days, setDays] = useState(3);
   const { data, loading, reload } = useLoad(async () => {
     const [activity, joins, comments, streak] = await Promise.all([
-      api.list<{ items: any[] }>('/admin/analytics/activity-trend'),
-      api.list<{ items: any[] }>('/admin/analytics/join-trend'),
-      api.list<{ items: any[] }>('/admin/analytics/comment-trend'),
-      api.list<{ userCount: number }>(`/admin/analytics/streaks?days=${days}`),
+      api.list<ListResponse<ActivityTrendDto>>(
+        '/admin/analytics/activity-trend',
+      ),
+      api.list<ListResponse<JoinTrendDto>>('/admin/analytics/join-trend'),
+      api.list<ListResponse<CommentTrendDto>>('/admin/analytics/comment-trend'),
+      api.list<StreakCountDto>(`/admin/analytics/streaks?days=${days}`),
     ]);
     return { activity, joins, comments, streak };
   }, [days]);
@@ -493,7 +602,7 @@ function AnalyticsPage() {
     <PageShell
       title="분석"
       description="Postgres 사전 집계 테이블을 읽어 추세를 표시합니다."
-      action={<Button onClick={refresh}>집계 새로고침</Button>}
+      action={<Button onClick={() => runAction(refresh)}>집계 새로고침</Button>}
     >
       <div className="mb-5 grid gap-4 md:grid-cols-3">
         <MetricCard
@@ -553,7 +662,9 @@ function PageShell({
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-3xl font-semibold tracking-normal">{title}</h1>
-          {description ? <p className="mt-2 text-sm text-muted-foreground">{description}</p> : null}
+          {description ? (
+            <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+          ) : null}
         </div>
         {action}
       </div>
@@ -573,12 +684,22 @@ function Toolbar({
 }) {
   return (
     <div className="mb-4 max-w-md">
-      <Input value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} />
+      <Input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+      />
     </div>
   );
 }
 
-function MetricCard({ label, value }: { label: string; value: React.ReactNode }) {
+function MetricCard({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <Card>
       <p className="text-sm text-muted-foreground">{label}</p>
@@ -587,13 +708,16 @@ function MetricCard({ label, value }: { label: string; value: React.ReactNode })
   );
 }
 
-function RecentComments({ comments }: { comments: any[] }) {
+function RecentComments({ comments }: { comments: CommentDto[] }) {
   return (
     <Card>
       <h2 className="text-lg font-semibold">최근 댓글</h2>
       <div className="mt-4 space-y-3">
         {comments.map((item) => (
-          <div key={item.id} className="border-b border-border pb-3 last:border-0">
+          <div
+            key={item.id}
+            className="border-b border-border pb-3 last:border-0"
+          >
             <p className="text-sm font-medium">{item.username}</p>
             <p className="mt-1 text-sm text-muted-foreground">{item.comment}</p>
           </div>
@@ -607,7 +731,7 @@ function ActivityBars({
   items,
   title = '활동 추세',
 }: {
-  items: any[];
+  items: ActivityTrendDto[];
   title?: string;
 }) {
   const max = useMemo(

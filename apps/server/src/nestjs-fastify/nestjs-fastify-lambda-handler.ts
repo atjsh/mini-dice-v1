@@ -1,5 +1,6 @@
 import type { PromiseHandler } from '@fastify/aws-lambda';
 import awsLambdaFastify from '@fastify/aws-lambda';
+import type { Type } from '@nestjs/common';
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -7,7 +8,9 @@ import type {
 } from 'aws-lambda';
 import { initNestJSFastifyApp } from './init-nestjs-fastify-app';
 
-export function getNestJSFastifyAppLambdaHandler<T>(appModuleClass: T) {
+export function getNestJSFastifyAppLambdaHandler(
+  appModuleClass: Type<unknown>,
+) {
   let cachedLambdaHandler: PromiseHandler;
 
   const lambdaHandler = async (

@@ -1,6 +1,6 @@
 import { startRegistration } from '@simplewebauthn/browser';
 import type { PasskeyRegistrationResultDto } from '@packages/shared-types';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getRegistrationOptions,
   renamePasskey,
@@ -10,10 +10,7 @@ import { getPasskeyMetadata } from './passkey-metadata';
 import { PasskeyListQueryKey } from './use-passkey-list.hook';
 
 export type PasskeyNamingOutcome =
-  | 'provider'
-  | 'custom'
-  | 'default'
-  | 'rename-failed';
+  'provider' | 'custom' | 'default' | 'rename-failed';
 
 export type PasskeyRegistrationMutationResult = PasskeyRegistrationResultDto & {
   namingOutcome: PasskeyNamingOutcome;
@@ -59,10 +56,10 @@ function promptForPasskeyName(): string | null {
 export const usePasskeyRegister = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async (): Promise<PasskeyRegistrationMutationResult> => {
+  return useMutation({
+    mutationFn: async (): Promise<PasskeyRegistrationMutationResult> => {
       const options = await getRegistrationOptions();
-      const credential = await startRegistration(options);
+      const credential = await startRegistration({ optionsJSON: options });
       const registration = await verifyRegistration(credential);
       const metadata = await getPasskeyMetadata(registration.aaguid);
 
@@ -95,8 +92,7 @@ export const usePasskeyRegister = () => {
         return { ...registration, namingOutcome: 'rename-failed' };
       }
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(PasskeyListQueryKey),
-    },
-  );
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: PasskeyListQueryKey }),
+  });
 };

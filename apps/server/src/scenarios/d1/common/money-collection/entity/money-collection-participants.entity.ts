@@ -5,7 +5,6 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
   type Relation,
 } from 'typeorm';
 import { UserEntity } from '../../../../../user/entity/user.entity';

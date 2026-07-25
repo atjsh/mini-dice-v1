@@ -112,10 +112,7 @@ export class PushNotificationService {
     );
   }
 
-  async updateHeartbeat(
-    userId: UserIdType,
-    sessionId?: string,
-  ): Promise<void> {
+  async updateHeartbeat(userId: UserIdType, sessionId?: string): Promise<void> {
     const existing = await this.userOnlineSessionRepository.findOne({
       where: { userId },
     });

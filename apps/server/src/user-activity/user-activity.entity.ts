@@ -44,7 +44,7 @@ export class UserActivityEntity {
     type: 'json',
     nullable: true,
   })
-  skillDrawProps: Record<string, any>;
+  skillDrawProps: Record<string, unknown>;
 
   @IsNotEmpty()
   @Column({

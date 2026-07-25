@@ -1,6 +1,6 @@
 import { UserVo } from '@packages/shared-types';
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { DiceTossActivityEnum, diceTossActivityStatusAtom } from '../../libs';
 
 export const DateTime = () => {
@@ -19,8 +19,8 @@ export const DateTime = () => {
 export const DiceTossButton: React.FC<{
   isDiceTossForbidden?: UserVo['isUserDiceTossForbidden'];
   canTossDiceAfter?: UserVo['canTossDiceAfter'];
-  onClick: () => any;
-  setisSidebarShowing: () => any;
+  onClick: () => void;
+  setisSidebarShowing: () => void;
 }> = ({
   isDiceTossForbidden,
   onClick,
@@ -28,10 +28,10 @@ export const DiceTossButton: React.FC<{
   setisSidebarShowing,
 }) => {
   const useDateTime = DateTime();
-  const diceButtonState = useRecoilValue(diceTossActivityStatusAtom);
+  const diceButtonState = useAtomValue(diceTossActivityStatusAtom);
 
   const baseButtonClassNames =
-    'text-white md:px-5 md:py-7 px-5 py-4 max-w-2xl w-full rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold flex-shrink-0';
+    'text-white md:px-5 md:py-7 px-5 py-4 max-w-2xl w-full rounded-2xl transition duration-150 text-lg md:text-2xl font-semibold shrink-0';
 
   if (
     diceButtonState.enum == DiceTossActivityEnum.Processing ||

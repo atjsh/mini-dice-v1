@@ -1,7 +1,7 @@
 import {
-  CountryCode3Type,
   countryMetadataIsoList,
-  CountryMetadataType,
+  type CountryCode3Type,
+  type CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ function UserCompleteSignupForm() {
   const completeSignupMutattion = useCompleteSignup();
   const passkeyRegister = usePasskeyRegister();
   const [username, setUsername] = useState('');
-  const [country, setCountry] = useState(
+  const [country, setCountry] = useState<CountryCode3Type | undefined>(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
   );
   const [disabled, setDisabled] = useState(false);
@@ -32,7 +32,7 @@ function UserCompleteSignupForm() {
   const [success, setSuccess] = useState(false);
   const [showPasskeySetup, setShowPasskeySetup] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const usernameValidationResult = validateUsername(username);
 
@@ -77,7 +77,7 @@ function UserCompleteSignupForm() {
         }
       }
       setSuccess(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(
         '패스키 등록에 실패했습니다. 나중에 설정에서 다시 추가할 수 있습니다.',
       );
@@ -108,7 +108,11 @@ function UserCompleteSignupForm() {
         {error && <div className="text-red-500 italic">{error}</div>}
 
         <button
-          onClick={handlePasskeySetup}
+          onClick={() => {
+            handlePasskeySetup().catch((error: unknown) => {
+              console.error('Unexpected passkey setup failure:', error);
+            });
+          }}
           disabled={disabled}
           className={
             'inline-block px-5 py-5 max-w-xs w-full rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +

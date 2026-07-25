@@ -12,9 +12,8 @@ import {
 } from '@packages/shared-types';
 import { formatDistance } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
-import { atom, useRecoilState, useRecoilValue } from 'recoil';
-import { v4 as uuidv4 } from 'uuid';
 import { mutateUserLandComment, useUser, useUserPreference } from '../../libs';
 import {
   DiceTossActivityEnum,
@@ -31,10 +30,7 @@ const UserActivityMessageRadius = 'rounded-xl';
 const UserActivityMessagePadding = 'p-5';
 const UserActivityMessageCommon = `${UserActivityMessagePadding} ${UserActivityMessageRadius} bg-gray-800 text-gray-400 font-bold`;
 
-const addedCommentsAtom = atom<Record<string, string>>({
-  key: 'added-comments',
-  default: {},
-});
+const addedCommentsAtom = atom<Record<string, string>>({});
 
 const Text: React.FC<{ t?: string }> = ({ t: text }) => {
   return (
@@ -60,7 +56,7 @@ const UserActivityMessage: React.FC<{
   date: Date;
   isLast: boolean;
 }> = ({ userActivityMessage, date, isLast }) => {
-  const diceTossActivityStatus = useRecoilValue(diceTossActivityStatusAtom);
+  const diceTossActivityStatus = useAtomValue(diceTossActivityStatusAtom);
 
   const [diceTossingNumbers, setDiceTossingNumbers] = useState([
     getRandomInteger(1, 6),
@@ -152,7 +148,7 @@ const PlainMessage: React.FC<{ plainMessage: PlainMessageType }> = ({
           </div>
         </div>
         {plainMessage.thumbnail && (
-          <div className=" flex-shrink-0">
+          <div className=" shrink-0">
             <img
               src={plainMessage.thumbnail.imageUrl}
               alt={plainMessage.thumbnail.altName}
@@ -171,7 +167,7 @@ export const NotificationPlainMessage: React.FC<{
   return (
     <div className="leading-7 w-full bg-gray-200 dark:bg-zinc-700 px-3 py-3 rounded-xl flex items-center gap-x-3">
       {notificationMessage.thumbnail && (
-        <div className=" flex-shrink-0">
+        <div className=" shrink-0">
           <img
             src={notificationMessage.thumbnail.imageUrl}
             alt={notificationMessage.thumbnail.altName}
@@ -202,7 +198,7 @@ const linkMessageButtonBaseClassName =
 
 const LinkMessage: React.FC<{
   link: LinkType;
-  mutate: any;
+  mutate: ReturnType<typeof useSubmitUserInteraction>;
   isDisabled: boolean;
   isButtonClicked: boolean;
   setIsButtonClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -319,13 +315,24 @@ const DataFieldMessage: React.FC<{ dataField: DataFieldType }> = ({
 const InputFieldMessage: React.FC<{
   inputField: InputFieldType;
 }> = ({ inputField }) => {
-  const id = uuidv4();
+  const id = crypto.randomUUID();
+  const unvalidatedDefaultValue: unknown = inputField.defaultValue;
+  const defaultValue =
+    typeof unvalidatedDefaultValue === 'string' ||
+    typeof unvalidatedDefaultValue === 'number' ||
+    (Array.isArray(unvalidatedDefaultValue) &&
+      unvalidatedDefaultValue.every(
+        (value): value is string => typeof value === 'string',
+      ))
+      ? unvalidatedDefaultValue
+      : undefined;
+
   return (
     <>
       {inputField.isHidden ? (
         <>
           <input
-            defaultValue={inputField.defaultValue}
+            defaultValue={defaultValue}
             id={id}
             name={inputField.name}
             type={inputField.type}
@@ -422,14 +429,16 @@ const FormMessage: React.FC<{
 
   return isLast ? (
     <form
-      className={`w-max min-w ml-1 bg-white dark:bg-zinc-900 px-3 py-4 md:px-5 md:py-6 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 flex-shrink-0 max-w-xs`}
+      className={`w-max min-w ml-1 bg-white dark:bg-zinc-900 px-3 py-4 md:px-5 md:py-6 rounded-3xl border-2 border-gray-300 dark:border-zinc-500 shrink-0 max-w-xs`}
       onSubmit={(e) => {
         e.preventDefault();
         setIsButtonClicked(true);
 
-        const data = {};
-        for (let index = 0; index < (e.target as any).length - 1; index++) {
-          data[e.target[index].name] = e.target[index].value;
+        const data: Record<string, string> = {};
+        for (const [name, value] of new FormData(e.currentTarget)) {
+          if (typeof value === 'string') {
+            data[name] = value;
+          }
         }
 
         mutate.mutate(
@@ -530,7 +539,7 @@ const LandCommentsMessage: React.FC<{
   landComments: LandCommentVo[];
   messageKey: string;
 }> = ({ isLast, landComments, messageKey }) => {
-  const [addedComments, setAddedComments] = useRecoilState(addedCommentsAtom);
+  const [addedComments, setAddedComments] = useAtom(addedCommentsAtom);
   const mutate = mutateUserLandComment();
 
   const thisComment = addedComments[messageKey];
@@ -598,8 +607,8 @@ const LandCommentsMessage: React.FC<{
           {thisComment
             ? '댓글을 달았습니다'
             : canAddComment
-            ? '이 칸에 댓글 달기'
-            : '이 칸에 댓글 달기'}
+              ? '이 칸에 댓글 달기'
+              : '이 칸에 댓글 달기'}
         </button>
       </div>
     </div>
@@ -639,7 +648,7 @@ const RenderedMessageByType: React.FC<{
     return (
       <div className="overflow-x-auto">
         <LinkGroupMessage
-          linkGroup={message as LinkGroupType}
+          linkGroup={message}
           isLast={isLast}
           key={`${messageKey}-linkGroup`}
         />
@@ -649,7 +658,7 @@ const RenderedMessageByType: React.FC<{
     return (
       <div className="overflow-x-auto">
         <FormMessage
-          form={message as FormMessageType}
+          form={message}
           isLast={isLast}
           key={`${messageKey}-form`}
         />
@@ -666,7 +675,7 @@ const RenderedMessageByType: React.FC<{
     );
   }
 
-  return {} as never;
+  return null;
 };
 
 const RenderedSkillLogMessage: React.FC<{
@@ -714,7 +723,7 @@ const RenderedSkillLogMessage: React.FC<{
 };
 
 export const RenderedSkillLogMessages: React.FC = () => {
-  const skillLogMessages = useRecoilValue(skillLogMessagesState);
+  const skillLogMessages = useAtomValue(skillLogMessagesState);
 
   const lastSkillLogId =
     skillLogMessages.length > 0
@@ -731,7 +740,7 @@ export const RenderedSkillLogMessages: React.FC = () => {
             skillLogMessage={message}
             index={index}
             isLastSkillLog={isLastSkillLog}
-            key={`slm${message.skillLogId}${index}${message.date}`}
+            key={`slm${message.skillLogId}${index}${message.date.getTime()}`}
           />
         );
       })}

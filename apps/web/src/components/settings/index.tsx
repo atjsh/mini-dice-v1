@@ -17,7 +17,7 @@ export function SettingsList({
   return (
     <ul
       {...props}
-      className={`divide-y divide-gray-200 overflow-hidden rounded-xl bg-gray-50 shadow-sm dark:divide-zinc-700 dark:bg-zinc-900 ${className}`}
+      className={`divide-y divide-gray-200 overflow-hidden rounded-xl bg-gray-50 shadow-xs dark:divide-zinc-700 dark:bg-zinc-900 ${className}`}
     />
   );
 }
@@ -52,7 +52,7 @@ export function SettingsNavigationLink({
     <li>
       <Link
         {...props}
-        className={`flex min-h-[52px] w-full items-center gap-3 px-4 py-2.5 font-medium text-gray-900 hover:bg-gray-200 active:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-gray-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-700 ${className}`}
+        className={`flex min-h-[52px] w-full items-center gap-3 px-4 py-2.5 font-medium text-gray-900 hover:bg-gray-200 active:bg-gray-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-gray-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-700 ${className}`}
       >
         <span className="min-w-0 flex-1">{children}</span>
         <svg
@@ -125,7 +125,7 @@ export function SettingsCard({
 }) {
   return (
     <section
-      className={`rounded-lg bg-gray-50 p-3 shadow-sm  dark:bg-zinc-900 ${className}`}
+      className={`rounded-lg bg-gray-50 p-3 shadow-xs  dark:bg-zinc-900 ${className}`}
     >
       {children}
     </section>
@@ -175,14 +175,14 @@ export function SettingsToggle({
       disabled={disabled}
       aria-label={ariaLabel}
       aria-pressed={checked}
-      className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 ${
+      className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 ${
         checked ? 'bg-blue-600' : 'bg-gray-200 dark:bg-zinc-700'
       } ${
         disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
       } ${className}`}
     >
       <span
-        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-sm transition-transform ${
+        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-xs transition-transform ${
           checked ? 'translate-x-7' : 'translate-x-1'
         }`}
       />
@@ -191,11 +191,7 @@ export function SettingsToggle({
 }
 
 type SettingsActionButtonVariant =
-  | 'primary'
-  | 'secondary'
-  | 'danger'
-  | 'ghost'
-  | 'dangerGhost';
+  'primary' | 'secondary' | 'danger' | 'ghost' | 'dangerGhost';
 
 const settingsActionButtonVariantClassNames: Record<
   SettingsActionButtonVariant,
@@ -227,7 +223,7 @@ export const SettingsActionButton = forwardRef<
       {...props}
       ref={ref}
       type={type}
-      className={`rounded-lg px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-zinc-900 ${settingsActionButtonVariantClassNames[variant]} ${className}`}
+      className={`rounded-lg px-4 py-2 font-semibold focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-zinc-900 ${settingsActionButtonVariantClassNames[variant]} ${className}`}
     />
   );
 });
@@ -242,7 +238,7 @@ export function SettingsActionLink({
   return (
     <a
       {...props}
-      className={`inline-block rounded-lg px-4 py-2 text-center font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 ${settingsActionButtonVariantClassNames[variant]} ${className}`}
+      className={`inline-block rounded-lg px-4 py-2 text-center font-semibold focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 ${settingsActionButtonVariantClassNames[variant]} ${className}`}
     />
   );
 }

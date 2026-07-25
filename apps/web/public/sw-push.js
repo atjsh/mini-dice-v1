@@ -14,13 +14,15 @@ self.addEventListener('push', (event) => {
       // For browsers that support declarative push, the notification is displayed automatically
       // For browsers that don't, we need to display it manually
       // Since we can't reliably detect support, we'll display it for non-Safari browsers
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent,
+      );
+
       if (isSafari) {
         // Safari likely handles this automatically, skip manual display
         return;
       }
-      
+
       // For other browsers, display the notification manually
       const notification = data.notification;
       const title = notification.title || 'Mini Dice';
@@ -69,7 +71,7 @@ self.addEventListener('notificationclick', (event) => {
         if (clients.openWindow) {
           return clients.openWindow(urlToOpen);
         }
-      })
+      }),
   );
 });
 

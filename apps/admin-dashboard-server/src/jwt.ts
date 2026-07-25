@@ -1,4 +1,5 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { z } from 'zod';
 
 export interface InviteJwtPayload {
   jti: string;
@@ -6,6 +7,13 @@ export interface InviteJwtPayload {
   exp: number;
   iat: number;
 }
+
+const inviteJwtPayloadSchema = z.object({
+  jti: z.string().uuid(),
+  purpose: z.literal('admin-invite'),
+  exp: z.number().int(),
+  iat: z.number().int(),
+});
 
 function base64UrlEncode(input: Buffer | string) {
   return Buffer.from(input).toString('base64url');
@@ -42,7 +50,10 @@ export function createInviteJwt(secret: string, expiresAt: Date) {
   };
 }
 
-export function verifyInviteJwt(token: string, secret: string): InviteJwtPayload {
+export function verifyInviteJwt(
+  token: string,
+  secret: string,
+): InviteJwtPayload {
   const parts = token.split('.');
   if (parts.length !== 3) {
     throw new Error('invalid invite token');
@@ -52,20 +63,16 @@ export function verifyInviteJwt(token: string, secret: string): InviteJwtPayload
   if (signature.length !== expected.length) {
     throw new Error('invalid invite token signature');
   }
-  if (
-    !timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expected),
-    )
-  ) {
+  if (!timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
     throw new Error('invalid invite token signature');
   }
-  const decoded = JSON.parse(base64UrlDecode(payload)) as InviteJwtPayload;
-  if (decoded.purpose !== 'admin-invite') {
-    throw new Error('invalid invite token purpose');
+  const decoded: unknown = JSON.parse(base64UrlDecode(payload));
+  const parsed = inviteJwtPayloadSchema.safeParse(decoded);
+  if (!parsed.success) {
+    throw new Error('invalid invite token payload');
   }
-  if (decoded.exp <= Math.floor(Date.now() / 1000)) {
+  if (parsed.data.exp <= Math.floor(Date.now() / 1000)) {
     throw new Error('invite token expired');
   }
-  return decoded;
+  return parsed.data;
 }

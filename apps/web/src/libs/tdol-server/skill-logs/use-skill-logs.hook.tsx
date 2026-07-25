@@ -1,8 +1,10 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getSkillLogs } from './get-skill-logs';
 
 export const useSkillLogs = () =>
-  useQuery(getSkillLogs.name, () => getSkillLogs(10), {
+  useQuery({
+    queryKey: [getSkillLogs.name],
+    queryFn: () => getSkillLogs(10),
     retry: false,
     refetchOnMount: false,
   });

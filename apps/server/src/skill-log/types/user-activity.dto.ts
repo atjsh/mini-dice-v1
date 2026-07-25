@@ -20,15 +20,13 @@ export class DiceUserActivity implements UserActivityInterface {
   stockPriceChange?: StockPriceChangeResult;
 }
 
-export class InteractionUserActivity<T = Record<string, any>>
-  implements UserActivityInterface
-{
+export class InteractionUserActivity<
+  T extends object = object,
+> implements UserActivityInterface {
   type: 'interaction';
 
   params: T;
 }
 
 export type UserActivityType =
-  | DiceUserActivity
-  | InteractionUserActivity
-  | GameStartUserAcitvity;
+  DiceUserActivity | InteractionUserActivity<object> | GameStartUserAcitvity;

@@ -8,8 +8,6 @@ import {
 import type { SCENARIO_NAMES } from '../../scenarios/scenarios.constants';
 import type { SkillGroupController } from '../skill-group-controller-factory';
 
-const cacheKey = 'scenarios:map:';
-
 export type SkillGroupAliasesType = {
   skillRoute: SkillRouteType;
   alias: string;
@@ -23,6 +21,7 @@ export class SkillGroupAliasesService {
     scenarioRoutes: SkillRouteType[],
     scenarioName: (typeof SCENARIO_NAMES)[keyof typeof SCENARIO_NAMES],
   ): Promise<SkillGroupAliasesType> {
+    const scenarioPath = `scenarios:map:${scenarioName}`;
     const skillGroupAliases = await Promise.all(
       scenarioRoutes.map(async (skillRoute: SkillRouteType) => {
         const skillGroupPath = getSkillGroupPath(skillRoute);
@@ -37,7 +36,9 @@ export class SkillGroupAliasesService {
         );
 
         if (!exactInstance) {
-          throw new Error(`Instance ${skillGroupPath} not found`);
+          throw new Error(
+            `Instance ${skillGroupPath} not found for ${scenarioPath}`,
+          );
         }
 
         const instance = exactInstance.discoveredClass

@@ -9,6 +9,4 @@ export const getGoogleOAuthPageUrl = () =>
     googleOAuthCredential.clientId
   }&redirect_uri=${import.meta.env.VITE_SERVER_URL}${
     googleOAuthCredential.redirectUri
-  }/${btoa(
-    import.meta.env.VITE_WEB_URL!,
-  ).toString()}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`;
+  }/${btoa(import.meta.env.VITE_WEB_URL).toString()}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value`;

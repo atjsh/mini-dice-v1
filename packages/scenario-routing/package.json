@@ -1,11 +1,16 @@
 {
   "name": "@packages/scenario-routing",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build:cjs": "yarn g:tsc -b -v tsconfig.cjs.json",
-    "build:esm": "yarn g:tsc -b -v tsconfig.esm.json",
-    "build": "yarn run build:cjs & yarn run build:esm",
-    "watch": "yarn run build:cjs --watch & yarn run build:esm --watch"
+    "build": "concurrently --kill-others-on-fail \"npm:build:*\"",
+    "build:cjs": "tsc -b -v tsconfig.cjs.json",
+    "build:esm": "tsc -b -v tsconfig.esm.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck:ts6": "tsc6 --noEmit -p tsconfig.json",
+    "watch": "concurrently --kill-others \"npm:watch:*\"",
+    "watch:cjs": "tsc -b -v --watch tsconfig.cjs.json",
+    "watch:esm": "tsc -b -v --watch tsconfig.esm.json"
   },
   "exports": {
     ".": {

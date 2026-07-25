@@ -65,7 +65,7 @@ export function PreferencesPage() {
 
         <section aria-labelledby="profile-settings-heading">
           <div className="flex flex-col gap-4">
-            <dl className="divide-y divide-gray-200 overflow-hidden rounded-xl bg-gray-50 shadow-sm dark:divide-zinc-700 dark:bg-zinc-900">
+            <dl className="divide-y divide-gray-200 overflow-hidden rounded-xl bg-gray-50 shadow-xs dark:divide-zinc-700 dark:bg-zinc-900">
               <div className="flex min-h-[52px] flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                 <dt className="shrink-0 font-medium text-gray-900 dark:text-gray-100">
                   닉네임

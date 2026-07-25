@@ -40,7 +40,7 @@ export class Land3SkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.land3.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<Land3Service, 'index'>
     >,
@@ -65,7 +65,7 @@ export class Land3SkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.land3.skills.submit)
-  async webSubmitDraw(
+  webSubmitDraw(
     props: InteractionUserActivitySkillDrawPropsType<
       MethodReturnType<Land3Service, 'submit'>
     >,

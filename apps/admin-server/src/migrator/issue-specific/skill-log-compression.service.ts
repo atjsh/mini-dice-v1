@@ -8,6 +8,7 @@ import {
 import { setTimeout as sleep } from 'timers/promises';
 import type { DataSource, QueryRunner, Repository } from 'typeorm';
 import { DATASOURCE_NAMES } from '../../common/datasource-names';
+import { queryRunnerRows } from '../../common/query-runner';
 import { PgSkillLogEntity } from '../../entities/postgresql/pg-skill-log.entity';
 
 const COMPRESSION_BATCH_SIZE = 500;
@@ -72,6 +73,36 @@ type EncodedRow = {
   payload: Buffer;
   payloadCodec: number;
 };
+
+type RawSkillLogRow = { skillLog_ctid: string };
+type MigrationStateRow = {
+  database: string;
+  serverVersion: string | number;
+  totalRows: string | number;
+  compressedRows: string | number;
+  uncompressedRows: string | number;
+  invalidRows: string | number;
+  legacyValueRows: string | number;
+  databaseBytes: string | number;
+  tableBytes: string | number;
+  indexBytes: string | number;
+  totalRelationBytes: string | number;
+};
+type IndexStateRow = Omit<IndexState, 'bytes'> & {
+  bytes: string | number;
+};
+
+function getUpdatedRows(result: unknown): unknown[] {
+  if (!Array.isArray(result)) {
+    throw new TypeError('Expected the update query to return rows');
+  }
+
+  if (Array.isArray(result[0]) && typeof result[1] === 'number') {
+    return result[0];
+  }
+
+  return result;
+}
 
 const COMPACTION_FUNCTION_SQL = `
   CREATE OR REPLACE FUNCTION pg_temp.compact_skill_log_pages(
@@ -301,7 +332,7 @@ export class SkillLogCompressionService {
 
       const batch = await query
         .addSelect('"skillLog".ctid', 'skillLog_ctid')
-        .getRawAndEntities();
+        .getRawAndEntities<RawSkillLogRow>();
       const rows = batch.entities;
       if (rows.length === 0) break;
       lastId = rows[rows.length - 1].id;
@@ -312,7 +343,7 @@ export class SkillLogCompressionService {
 
       for (const [index, row] of rows.entries()) {
         try {
-          const ctid = String(batch.raw[index].skillLog_ctid);
+          const ctid = batch.raw[index].skillLog_ctid;
           const block = Number(/^\((\d+),\d+\)$/.exec(ctid)?.[1]);
           if (!Number.isInteger(block)) {
             throw new Error(`Invalid ctid: ${ctid}`);
@@ -447,7 +478,7 @@ export class SkillLogCompressionService {
     await this.dataSource.transaction(async (manager) => {
       await manager.query(`SET LOCAL lock_timeout = '1s'`);
       await manager.query(`SET LOCAL statement_timeout = '30s'`);
-      const updated = await manager.query(
+      const updateResult: unknown = await manager.query(
         `
           UPDATE public.tb_skill_log AS skill_log
           SET
@@ -462,10 +493,7 @@ export class SkillLogCompressionService {
         `,
         parameters,
       );
-      const updatedRows =
-        Array.isArray(updated[0]) && typeof updated[1] === 'number'
-          ? updated[0]
-          : updated;
+      const updatedRows = getUpdatedRows(updateResult);
 
       if (updatedRows.length !== rows.length) {
         throw new Error(
@@ -481,14 +509,19 @@ export class SkillLogCompressionService {
   ) {
     await queryRunner.query(COMPACTION_FUNCTION_SQL);
     const initialPageCount = await this.getPageCount(queryRunner);
-    const [{ maxTuplesPerPage }] = await queryRunner.query(`
-      SELECT ceil(
-        current_setting('block_size')::real / sum(attlen)
-      )::integer AS "maxTuplesPerPage"
-      FROM pg_catalog.pg_attribute
-      WHERE attrelid = 'public.tb_skill_log'::regclass
-        AND attnum < 0
-    `);
+    const [{ maxTuplesPerPage }] = await queryRunnerRows<{
+      maxTuplesPerPage: number;
+    }>(
+      queryRunner,
+      `
+        SELECT ceil(
+          current_setting('block_size')::real / sum(attlen)
+        )::integer AS "maxTuplesPerPage"
+        FROM pg_catalog.pg_attribute
+        WHERE attrelid = 'public.tb_skill_log'::regclass
+          AND attnum < 0
+      `,
+    );
     let toPage = initialPageCount - 1;
     let compactedPages = 0;
     let pagesSinceVacuum = 0;
@@ -503,7 +536,8 @@ export class SkillLogCompressionService {
       try {
         await queryRunner.query(`SET LOCAL lock_timeout = '1s'`);
         await queryRunner.query(`SET LOCAL statement_timeout = '30s'`);
-        const [result] = await queryRunner.query(
+        const [result] = await queryRunnerRows<{ nextPage: number }>(
+          queryRunner,
           `
             SELECT pg_temp.compact_skill_log_pages($1, $2, $3)
               AS "nextPage"
@@ -614,7 +648,7 @@ export class SkillLogCompressionService {
   }
 
   private async getMaxId(): Promise<string | null> {
-    const rows = await this.dataSource.query(`
+    const rows = await this.dataSource.query<{ maxId: string }[]>(`
       SELECT id AS "maxId"
       FROM public.tb_skill_log
       ORDER BY id DESC
@@ -637,7 +671,7 @@ export class SkillLogCompressionService {
   }
 
   private async assertSchema() {
-    const rows = await this.dataSource.query(`
+    const rows = await this.dataSource.query<{ name: string }[]>(`
       SELECT column_name AS name
       FROM information_schema.columns
       WHERE table_schema = 'public'
@@ -650,7 +684,7 @@ export class SkillLogCompressionService {
   }
 
   private async getState(): Promise<MigrationState> {
-    const [row] = await this.dataSource.query(`
+    const [row] = await this.dataSource.query<MigrationStateRow[]>(`
       SELECT
         current_database() AS database,
         current_setting('server_version_num')::integer AS "serverVersion",
@@ -673,16 +707,27 @@ export class SkillLogCompressionService {
       FROM public.tb_skill_log
     `);
 
-    return Object.fromEntries(
-      Object.entries(row).map(([key, value]) => [
-        key,
-        key === 'database' ? value : Number(value),
-      ]),
-    ) as MigrationState;
+    if (!row) {
+      throw new Error('Unable to read the skill-log migration state');
+    }
+
+    return {
+      database: row.database,
+      serverVersion: Number(row.serverVersion),
+      totalRows: Number(row.totalRows),
+      compressedRows: Number(row.compressedRows),
+      uncompressedRows: Number(row.uncompressedRows),
+      invalidRows: Number(row.invalidRows),
+      legacyValueRows: Number(row.legacyValueRows),
+      databaseBytes: Number(row.databaseBytes),
+      tableBytes: Number(row.tableBytes),
+      indexBytes: Number(row.indexBytes),
+      totalRelationBytes: Number(row.totalRelationBytes),
+    };
   }
 
   private async getIndexes(): Promise<IndexState[]> {
-    const rows = await this.dataSource.query(`
+    const rows = await this.dataSource.query<IndexStateRow[]>(`
       SELECT
         index_class.relname AS name,
         pg_index.indisvalid AS valid,
@@ -699,7 +744,7 @@ export class SkillLogCompressionService {
   }
 
   private async getUserTriggers(): Promise<string[]> {
-    const rows = await this.dataSource.query(`
+    const rows = await this.dataSource.query<{ name: string }[]>(`
       SELECT tgname AS name
       FROM pg_catalog.pg_trigger
       WHERE tgrelid = 'public.tb_skill_log'::regclass
@@ -711,7 +756,8 @@ export class SkillLogCompressionService {
   }
 
   private async acquireMigrationLock(queryRunner: QueryRunner) {
-    const [{ locked }] = await queryRunner.query(
+    const [{ locked }] = await queryRunnerRows<{ locked: boolean }>(
+      queryRunner,
       `SELECT pg_try_advisory_lock(hashtextextended($1, 0)) AS locked`,
       [MIGRATION_LOCK],
     );
@@ -751,12 +797,15 @@ export class SkillLogCompressionService {
   }
 
   private async getPageCount(queryRunner: QueryRunner) {
-    const [{ pageCount }] = await queryRunner.query(`
-      SELECT ceil(
-        pg_relation_size('public.tb_skill_log')::numeric /
-        current_setting('block_size')::integer
-      )::integer AS "pageCount"
-    `);
+    const [{ pageCount }] = await queryRunnerRows<{ pageCount: number }>(
+      queryRunner,
+      `
+        SELECT ceil(
+          pg_relation_size('public.tb_skill_log')::numeric /
+          current_setting('block_size')::integer
+        )::integer AS "pageCount"
+      `,
+    );
     return pageCount;
   }
 

@@ -76,7 +76,11 @@ export function PushNotificationSettings({
         />
         <SettingsToggle
           checked={isSubscribed}
-          onChange={handleToggle}
+          onChange={() => {
+            handleToggle().catch((error: unknown) => {
+              console.error('Unexpected push notification failure:', error);
+            });
+          }}
           disabled={isLoading || permission === 'denied'}
           ariaLabel="푸시 알림 토글"
         />

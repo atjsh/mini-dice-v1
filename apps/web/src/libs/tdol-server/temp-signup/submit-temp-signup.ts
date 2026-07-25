@@ -12,7 +12,7 @@ export async function submitTempSignup({
   username,
   countryCode3,
 }: SubmitTempSignupDto): Promise<boolean> {
-  await axios.post(
+  await axios.post<unknown>(
     '/temp-signup',
     {
       turnstileToken,

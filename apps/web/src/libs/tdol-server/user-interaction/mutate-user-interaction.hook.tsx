@@ -1,6 +1,6 @@
 import { UserVo } from '@packages/shared-types';
-import { useMutation } from 'react-query';
-import { useRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
 import { submitUserInteraction } from '.';
 import {
   DiceTossActivityEnum,
@@ -10,7 +10,7 @@ import {
   getSkillLogs,
   UseUserHookKey,
 } from '..';
-import { queryClient } from '../../..';
+import { queryClient } from '../../../query-client';
 import { getSkillLogMessageAddingDelayTiming } from '../../../common/timing';
 import {
   usePageTimeout,
@@ -18,25 +18,24 @@ import {
 } from '../../../components/skill-log-message/use-skill-log-messages.hook';
 
 export const useSubmitUserInteraction = (
-  onErrorCallback?: (error: unknown) => any,
+  onErrorCallback?: (error: unknown) => void,
 ) => {
   const { addSkillLogMessages } = useSkillLogMessages();
-  const [, setDiceTossActivityStatus] = useRecoilState(
-    diceTossActivityStatusAtom,
-  );
+  const [, setDiceTossActivityStatus] = useAtom(diceTossActivityStatusAtom);
   const { pushPageTimeout } = usePageTimeout();
 
-  return useMutation(submitUserInteraction, {
+  return useMutation({
+    mutationFn: submitUserInteraction,
     onError: onErrorCallback,
-    onMutate: async () => {
+    onMutate: () => {
       setDiceTossActivityStatus({
         enum: DiceTossActivityEnum.Submitted,
         reason: '처리 중...',
       });
     },
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
       queryClient.setQueryData<ExposedSkillLogType[]>(
-        getSkillLogs.name,
+        [getSkillLogs.name],
         (prevData) => [...(prevData ? prevData : []), data.skillLog],
       );
 
@@ -44,7 +43,9 @@ export const useSubmitUserInteraction = (
         enum: DiceTossActivityEnum.Processing,
         reason: '처리 중...',
       });
-      queryClient.refetchQueries([getMap.name]);
+      const mapRefreshPromise = queryClient.refetchQueries({
+        queryKey: [getMap.name],
+      });
 
       addSkillLogMessages(
         [
@@ -75,14 +76,23 @@ export const useSubmitUserInteraction = (
       );
 
       pushPageTimeout(
-        setTimeout(() => {
-          setDiceTossActivityStatus({
-            enum: DiceTossActivityEnum.Idle,
-            reason: null,
-          });
-          queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
-        }, getSkillLogMessageAddingDelayTiming(data.skillLog.skillDrawResult.userRequestDrawings.length + data.skillLog.skillDrawResult.actionResultDrawings.length - 1)),
+        setTimeout(
+          () => {
+            setDiceTossActivityStatus({
+              enum: DiceTossActivityEnum.Idle,
+              reason: null,
+            });
+            queryClient.setQueryData<UserVo>(UseUserHookKey, data.user);
+          },
+          getSkillLogMessageAddingDelayTiming(
+            data.skillLog.skillDrawResult.userRequestDrawings.length +
+              data.skillLog.skillDrawResult.actionResultDrawings.length -
+              1,
+          ),
+        ),
       );
+
+      return mapRefreshPromise;
     },
   });
 };

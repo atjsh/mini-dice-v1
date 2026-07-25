@@ -13,9 +13,8 @@ export class AccessTokenService {
   ) {}
 
   async createNewAccessToken(refreshToken: string): Promise<AccessTokenType> {
-    const refreshTokenEntity = await this.refreshTokenService.findRefreshToken(
-      refreshToken,
-    );
+    const refreshTokenEntity =
+      await this.refreshTokenService.findRefreshToken(refreshToken);
 
     const payload: UserJwtDto = {
       userId: refreshTokenEntity.userId,

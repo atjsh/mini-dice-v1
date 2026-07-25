@@ -4,13 +4,14 @@ import * as React from 'react';
 import { cn } from '../lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         secondary: 'bg-muted text-foreground hover:bg-muted/80',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        destructive:
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         ghost: 'hover:bg-muted',
         outline: 'border border-border bg-background hover:bg-muted',
       },
@@ -27,7 +28,8 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
@@ -53,7 +55,7 @@ export const Input = React.forwardRef<
   <input
     ref={ref}
     className={cn(
-      'h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+      'h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
       className,
     )}
     {...props}
@@ -68,7 +70,7 @@ export const Textarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      'min-h-[88px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+      'min-h-[88px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
       className,
     )}
     {...props}
@@ -82,7 +84,10 @@ export function Card({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <section
-      className={cn('rounded-lg border border-border bg-background p-5 shadow-sm', className)}
+      className={cn(
+        'rounded-lg border border-border bg-background p-5 shadow-xs',
+        className,
+      )}
       {...props}
     />
   );
@@ -109,15 +114,22 @@ export function Table({
 }: React.TableHTMLAttributes<HTMLTableElement>) {
   return (
     <div className="overflow-x-auto rounded-md border border-border">
-      <table className={cn('w-full min-w-[720px] text-sm', className)} {...props} />
+      <table
+        className={cn('w-full min-w-[720px] text-sm', className)}
+        {...props}
+      />
     </div>
   );
 }
 
 export function Th(props: React.ThHTMLAttributes<HTMLTableCellElement>) {
-  return <th className="bg-muted px-3 py-2 text-left font-semibold" {...props} />;
+  return (
+    <th className="bg-muted px-3 py-2 text-left font-semibold" {...props} />
+  );
 }
 
 export function Td(props: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className="border-t border-border px-3 py-2 align-top" {...props} />;
+  return (
+    <td className="border-t border-border px-3 py-2 align-top" {...props} />
+  );
 }

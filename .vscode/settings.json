@@ -1,15 +1,6 @@
 {
-  "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
-  },
-  "typescript.tsdk": ".yarn/sdks/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "eslint.nodePath": ".yarn/sdks",
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "js/ts.experimental.useTsgo": true,
   "rust-analyzer.cargo.buildScripts.invocationLocation": "workspace",
-  "rust-analyzer.linkedProjects": [
-    "apps/server-rest/Cargo.toml"
-  ],
+  "rust-analyzer.linkedProjects": ["apps/server-rest/Cargo.toml"],
   "rust-analyzer.showUnlinkedFileNotification": false
 }

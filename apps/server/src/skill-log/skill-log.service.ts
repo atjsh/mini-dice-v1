@@ -7,6 +7,106 @@ import {
 import type { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 import { SkillLogEntity } from './entity/skill-log.entity';
+import type {
+  DiceUserActivity,
+  StockPriceChangeResult,
+  UserActivityType,
+} from './types/user-activity.dto';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isDiceResult(value: unknown): value is number[] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    value.every(
+      (dice: unknown) =>
+        typeof dice === 'number' &&
+        Number.isInteger(dice) &&
+        dice >= 1 &&
+        dice <= 6,
+    )
+  );
+}
+
+function parseBigInt(value: unknown, field: string): bigint {
+  if (typeof value === 'bigint') {
+    return value;
+  }
+
+  if (typeof value === 'number' && Number.isSafeInteger(value)) {
+    return BigInt(value);
+  }
+
+  if (typeof value === 'string' && /^-?\d+$/.test(value)) {
+    return BigInt(value);
+  }
+
+  throw new Error(`Invalid skill log ${field}`);
+}
+
+function parseStockPriceChange(value: unknown): StockPriceChangeResult {
+  if (!isRecord(value)) {
+    throw new Error('Invalid skill log stock price change');
+  }
+
+  return {
+    changedStockPrice: parseBigInt(
+      value.changedStockPrice,
+      'changed stock price',
+    ),
+    stockPriceDifference: parseBigInt(
+      value.stockPriceDifference,
+      'stock price difference',
+    ),
+    forcedSoldCash:
+      value.forcedSoldCash === false
+        ? false
+        : parseBigInt(value.forcedSoldCash, 'forced sold cash'),
+  };
+}
+
+function parseDiceUserActivity(
+  value: Record<string, unknown>,
+): DiceUserActivity {
+  if (!isDiceResult(value.diceResult)) {
+    throw new Error('Invalid skill log dice result');
+  }
+
+  return {
+    type: 'dice',
+    diceResult: value.diceResult,
+    ...(value.stockPriceChange == null
+      ? {}
+      : { stockPriceChange: parseStockPriceChange(value.stockPriceChange) }),
+  };
+}
+
+function parseUserActivity(value: unknown): UserActivityType | null {
+  if (value === null) {
+    return null;
+  }
+
+  if (!isRecord(value)) {
+    throw new Error('Invalid skill log user activity');
+  }
+
+  switch (value.type) {
+    case 'gameStart':
+      return { type: 'gameStart' };
+    case 'dice':
+      return parseDiceUserActivity(value);
+    case 'interaction':
+      if (!isRecord(value.params)) {
+        throw new Error('Invalid skill log interaction parameters');
+      }
+      return { type: 'interaction', params: value.params };
+    default:
+      throw new Error('Invalid skill log user activity type');
+  }
+}
 
 export class GetRecentLogsDto {
   userId: UserEntity['id'];
@@ -32,8 +132,8 @@ export class SkillLogService {
         log.payloadCodec,
       );
 
-      log.userActivity = decodedPayload.userActivity as any;
-      log.skillServiceResult = decodedPayload.skillServiceResult as any;
+      log.userActivity = parseUserActivity(decodedPayload.userActivity);
+      log.skillServiceResult = decodedPayload.skillServiceResult;
     }
 
     return log;
@@ -41,7 +141,7 @@ export class SkillLogService {
 
   async createLog(dto: CreateLogDto) {
     const skillServiceResult =
-      (dto.skillServiceResult as any) == '' ? null : dto.skillServiceResult;
+      dto.skillServiceResult === '' ? null : dto.skillServiceResult;
     const encodedPayload = encodeSkillLogPayload({
       userActivity: dto.userActivity ?? null,
       skillServiceResult: skillServiceResult ?? null,

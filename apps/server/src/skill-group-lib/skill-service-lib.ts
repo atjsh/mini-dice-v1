@@ -28,12 +28,11 @@ export type BaseSkillServiceProps = {
   // userActivity: UserActivityType;
 };
 
-export type SkillServiceProps<
-  T extends Record<string, any> = Record<string, unknown>,
-> = Readonly<BaseSkillServiceProps & T>;
+export type SkillServiceProps<T extends object = Record<string, unknown>> =
+  Readonly<BaseSkillServiceProps & T>;
 
 export interface SkillService {
-  index: (props: SkillServiceProps) => any | Promise<any>;
+  index: (props: SkillServiceProps) => unknown;
 }
 
 export function getBaseSkillServiceProps(
@@ -46,8 +45,8 @@ export function getBaseSkillServiceProps(
 }
 
 export type MethodReturnType<T, M extends keyof T> = T[M] extends (
-  ...arg: any[]
-) => any
+  ...arg: never[]
+) => unknown
   ? Awaited<ReturnType<T[M]>>
   : never;
 

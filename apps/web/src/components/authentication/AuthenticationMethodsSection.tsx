@@ -83,7 +83,7 @@ export function AuthenticationMethodsSection({
           text: '패스키가 성공적으로 추가되었습니다!',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage = normalizePasskeyErrorMessage(
         error,
         '패스키 등록에 실패했습니다.',
@@ -97,7 +97,7 @@ export function AuthenticationMethodsSection({
       setMessage(null);
       await deleteMutation.mutateAsync(id);
       setMessage({ type: 'success', text: '패스키가 삭제되었습니다.' });
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage = normalizePasskeyErrorMessage(
         error,
         '패스키 삭제에 실패했습니다. 다시 시도해 주세요.',
@@ -111,7 +111,7 @@ export function AuthenticationMethodsSection({
       setMessage(null);
       await renameMutation.mutateAsync({ id, name });
       setMessage({ type: 'success', text: '패스키 이름이 변경되었습니다.' });
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage = normalizePasskeyErrorMessage(
         error,
         '패스키 이름 변경에 실패했습니다. 다시 시도해 주세요.',
@@ -121,15 +121,13 @@ export function AuthenticationMethodsSection({
   };
 
   const addMethodOptions: AuthenticationMethodOption[] = [
-    ...availableProviders.map(
-      (provider): AuthenticationMethodOption => ({
-        id: provider.id,
-        kind: 'link',
-        label: provider.label,
-        description: provider.description,
-        href: provider.getConnectionUrl(),
-      }),
-    ),
+    ...availableProviders.map((provider): AuthenticationMethodOption => ({
+      id: provider.id,
+      kind: 'link',
+      label: provider.label,
+      description: provider.description,
+      href: provider.getConnectionUrl(),
+    })),
     {
       id: 'passkey',
       kind: 'button',
@@ -183,8 +181,18 @@ export function AuthenticationMethodsSection({
             <PasskeyItem
               key={passkey.id}
               passkey={passkey}
-              onDelete={() => handleDeletePasskey(passkey.id)}
-              onRename={(newName) => handleRenamePasskey(passkey.id, newName)}
+              onDelete={() => {
+                handleDeletePasskey(passkey.id).catch((error: unknown) => {
+                  console.error('Unexpected passkey deletion failure:', error);
+                });
+              }}
+              onRename={(newName) => {
+                handleRenamePasskey(passkey.id, newName).catch(
+                  (error: unknown) => {
+                    console.error('Unexpected passkey rename failure:', error);
+                  },
+                );
+              }}
             />
           ))
         )}
@@ -203,7 +211,7 @@ export function AuthenticationMethodsSection({
       <div className="mt-4 flex justify-end">
         <AddAuthenticationMethodPopover
           options={addMethodOptions}
-          isBusy={registerMutation.isLoading}
+          isBusy={registerMutation.isPending}
         />
       </div>
     </section>

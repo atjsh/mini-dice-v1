@@ -7,6 +7,16 @@ import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto
 import { UserEntity, serializeUserToJson } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
 
+interface RawPublicProfile {
+  user_username: string;
+  totalCash: string;
+  user_createdAt: Date;
+  rank: string | number;
+  user_stockAmount: string | number;
+  user_stockPrice: string | number;
+  user_updatedAt: Date;
+}
+
 @Injectable()
 export class PublicProfileService {
   constructor(
@@ -52,16 +62,17 @@ export class PublicProfileService {
         updatedAt: updatedAfter,
       });
     }
-    const rawUsers = await rawUsersQuery.getRawMany();
+    const rawUsers = await rawUsersQuery.getRawMany<RawPublicProfile>();
 
     return rawUsers.map((rawResultUser) => ({
       id: randomUUID(),
       username: rawResultUser.user_username,
       cash: rawResultUser.totalCash,
       createdAt: rawResultUser.user_createdAt,
-      rank: rawResultUser.rank,
+      rank: Number(rawResultUser.rank),
       stockCash: String(
-        rawResultUser.user_stockAmount * rawResultUser.user_stockPrice,
+        Number(rawResultUser.user_stockAmount) *
+          Number(rawResultUser.user_stockPrice),
       ),
       updatedAt: rawResultUser.user_updatedAt,
     }));

@@ -18,11 +18,7 @@ import { UpdatesPage } from './Updates.page';
 import { TermsPage } from './terms.page';
 
 export type Protection =
-  | 'public'
-  | 'notAuthed'
-  | 'authed'
-  | 'signupCompleted'
-  | 'signupNotCompleted';
+  'public' | 'notAuthed' | 'authed' | 'signupCompleted' | 'signupNotCompleted';
 
 export interface ProtectedRoute {
   path: string;

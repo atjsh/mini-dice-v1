@@ -12,7 +12,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error('Admin dashboard root element was not found.');
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>,

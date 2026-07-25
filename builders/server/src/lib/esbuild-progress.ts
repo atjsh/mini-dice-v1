@@ -9,7 +9,7 @@ export function esbuildProgressPulgin(options?: { message?: string }): Plugin {
   return {
     name: 'progress',
     setup(build) {
-      build.onStart(async () => {
+      build.onStart(() => {
         console.log(
           chalk.green(
             `🔔 New Build Incoming! ${new Date().toLocaleTimeString()}`,
@@ -20,15 +20,17 @@ export function esbuildProgressPulgin(options?: { message?: string }): Plugin {
         return null;
       });
       build.onEnd((result) => {
-        result.errors.length
-          ? spinner.fail(
-              `Build failed. ${new Date().toLocaleTimeString()}. ${
-                result.errors.length
-              } error${result.errors.length > 1 ? 's' : ''}`,
-            )
-          : spinner.succeed(
-              `Build successful. ${new Date().toLocaleTimeString()}`,
-            );
+        if (result.errors.length) {
+          spinner.fail(
+            `Build failed. ${new Date().toLocaleTimeString()}. ${
+              result.errors.length
+            } error${result.errors.length > 1 ? 's' : ''}`,
+          );
+        } else {
+          spinner.succeed(
+            `Build successful. ${new Date().toLocaleTimeString()}`,
+          );
+        }
       });
     },
   };

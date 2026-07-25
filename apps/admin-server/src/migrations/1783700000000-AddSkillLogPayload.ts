@@ -1,4 +1,5 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
+import { queryRunnerRows } from '../common/query-runner';
 
 export class AddSkillLogPayload1783700000000 implements MigrationInterface {
   name = 'AddSkillLogPayload1783700000000';
@@ -25,11 +26,16 @@ export class AddSkillLogPayload1783700000000 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`SET LOCAL lock_timeout = '1s'`);
-    const [{ compressedRows }] = await queryRunner.query(`
-      SELECT count(*)::integer AS "compressedRows"
-      FROM public.tb_skill_log
-      WHERE "payloadCodec" IS NOT NULL
-    `);
+    const [{ compressedRows }] = await queryRunnerRows<{
+      compressedRows: number;
+    }>(
+      queryRunner,
+      `
+        SELECT count(*)::integer AS "compressedRows"
+        FROM public.tb_skill_log
+        WHERE "payloadCodec" IS NOT NULL
+      `,
+    );
 
     if (compressedRows > 0) {
       throw new Error('Compressed skill logs must be restored before rollback');

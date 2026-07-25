@@ -15,7 +15,6 @@ import { JwtAuthGuard } from '../local-jwt/jwt.guard';
 import { UserJwt } from '../../profile/decorators/user.decorator';
 import type { UserJwtDto } from '../local-jwt/access-token/dto/user-jwt.dto';
 import { PasskeyService } from './passkey.service';
-import { GenerateRegistrationOptionsDto } from './dto/register-options.dto';
 import { VerifyRegistrationDto } from './dto/verify-registration.dto';
 import { GenerateAuthenticationOptionsDto } from './dto/authenticate-options.dto';
 import { VerifyAuthenticationDto } from './dto/verify-authentication.dto';

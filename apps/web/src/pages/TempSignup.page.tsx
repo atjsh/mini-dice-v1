@@ -1,16 +1,16 @@
 import { Turnstile } from '@marsidev/react-turnstile';
 import {
-  CountryCode3Type,
   countryMetadataIsoList,
-  CountryMetadataType,
+  type CountryCode3Type,
+  type CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
-import { queryClient } from '../index';
 import { ServiceLayout } from '../layouts/service.layout';
 import { UseUserHookKey, useQueryString } from '../libs';
+import { queryClient } from '../query-client';
 import { usePasskeyRegister } from '../libs/tdol-server/passkey';
 import {
   validateUsername,
@@ -30,7 +30,7 @@ function TempSignupForm() {
   const passkeyRegister = usePasskeyRegister();
   const [username, setUsername] = useState('');
   const [turnstileToken, setTurnstileToken] = useState<false | string>(false);
-  const [country, setCountry] = useState(
+  const [country, setCountry] = useState<CountryCode3Type | undefined>(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
   );
   const [error, setError] = useState('');
@@ -41,7 +41,7 @@ function TempSignupForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUsername(e.target.value.trim());
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const usernameValidationResult = validateUsername(username);
 
     if (turnstileToken == false) {
@@ -82,8 +82,14 @@ function TempSignupForm() {
 
   const goToService = async () => {
     setDisabled(true);
-    await queryClient.refetchQueries(UseUserHookKey);
-    setReadyForService(true);
+    try {
+      await queryClient.refetchQueries({ queryKey: UseUserHookKey });
+      setReadyForService(true);
+    } catch (error: unknown) {
+      setError('서비스를 준비하지 못했습니다. 다시 시도해 주세요.');
+      setDisabled(false);
+      console.error('Failed to refresh the user before navigation:', error);
+    }
   };
 
   const handlePasskeySetup = async () => {
@@ -101,7 +107,7 @@ function TempSignupForm() {
         }
       }
       await goToService();
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(
         '패스키 등록에 실패했습니다. 나중에 설정에서 다시 추가할 수 있습니다.',
       );
@@ -129,7 +135,11 @@ function TempSignupForm() {
 
       <div className="flex flex-col items-center gap-3 w-full">
         <button
-          onClick={handlePasskeySetup}
+          onClick={() => {
+            handlePasskeySetup().catch((error: unknown) => {
+              console.error('Unexpected passkey setup failure:', error);
+            });
+          }}
           disabled={disabled}
           className={
             'inline-block px-5 py-5 max-w-xs w-full rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
@@ -141,7 +151,11 @@ function TempSignupForm() {
           {disabled ? '등록 중...' : '패스키 등록하기'}
         </button>
         <button
-          onClick={goToService}
+          onClick={() => {
+            goToService().catch((error: unknown) => {
+              console.error('Unexpected service navigation failure:', error);
+            });
+          }}
           disabled={disabled}
           className="inline-block text-blue-600 hover:underline p-3"
         >

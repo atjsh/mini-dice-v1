@@ -43,7 +43,7 @@ export function ServicePreferencePage() {
                   alwaysHideComments: commentsVisible,
                 })
               }
-              disabled={isLoading || updatePreference.isLoading}
+              disabled={isLoading || updatePreference.isPending}
               checked={commentsVisible}
               ariaLabel="댓글 표시 토글"
             />

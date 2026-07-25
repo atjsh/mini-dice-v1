@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   SettingsActionButton,
@@ -39,7 +39,7 @@ export function UsernamePreferencePage() {
   const usernameError = getUsernameError(normalizedUsername);
   const isUnchanged = normalizedUsername === currentUsername;
   const isSubmitDisabled =
-    usernameError !== undefined || isUnchanged || updateUser.isLoading;
+    usernameError !== undefined || isUnchanged || updateUser.isPending;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -52,7 +52,11 @@ export function UsernamePreferencePage() {
       { username: normalizedUsername },
       {
         onSuccess: () => {
-          navigate(PreferencesPageURL, { replace: true });
+          Promise.resolve(
+            navigate(PreferencesPageURL, { replace: true }),
+          ).catch((error: unknown) => {
+            console.error('Failed to navigate after updating username:', error);
+          });
         },
       },
     );
@@ -99,7 +103,7 @@ export function UsernamePreferencePage() {
                     updateUser.reset();
                   }
                 }}
-                className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-lg text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-gray-100"
+                className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-lg text-gray-900 outline-hidden transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-gray-100"
               />
               <p
                 id="username-help"
@@ -127,7 +131,7 @@ export function UsernamePreferencePage() {
               disabled={isSubmitDisabled}
               className="self-start"
             >
-              {updateUser.isLoading ? '변경 중…' : '변경하기'}
+              {updateUser.isPending ? '변경 중…' : '변경하기'}
             </SettingsActionButton>
           </form>
         </SettingsCard>

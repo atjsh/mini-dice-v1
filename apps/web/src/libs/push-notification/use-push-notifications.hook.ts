@@ -16,7 +16,8 @@ export function usePushNotifications(): UsePushNotificationsResult {
   const [isSupported, setIsSupported] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [permission, setPermission] = useState<NotificationPermission>('default');
+  const [permission, setPermission] =
+    useState<NotificationPermission>('default');
   const [error, setError] = useState<string | null>(null);
 
   // Check support and subscription status on mount
@@ -24,7 +25,7 @@ export function usePushNotifications(): UsePushNotificationsResult {
     const checkStatus = async () => {
       try {
         setIsLoading(true);
-        
+
         const supported = pushNotificationManager.isSupported();
         setIsSupported(supported);
 
@@ -52,7 +53,7 @@ export function usePushNotifications(): UsePushNotificationsResult {
       }
     };
 
-    checkStatus();
+    void checkStatus();
 
     // Cleanup on unmount
     return () => {
@@ -66,12 +67,13 @@ export function usePushNotifications(): UsePushNotificationsResult {
       setIsLoading(true);
       setError(null);
 
-      const result = await pushNotificationManager.subscribeToPushNotifications();
-      
+      const result =
+        await pushNotificationManager.subscribeToPushNotifications();
+
       if (result.success) {
         setIsSubscribed(true);
         setPermission('granted');
-        
+
         // Start tracking online status
         onlineStatusTracker.startTracking();
       }
@@ -93,7 +95,7 @@ export function usePushNotifications(): UsePushNotificationsResult {
 
       await pushNotificationManager.unsubscribeFromPushNotifications();
       setIsSubscribed(false);
-      
+
       // Stop tracking online status
       onlineStatusTracker.stopTracking();
     } catch (err) {

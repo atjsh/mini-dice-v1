@@ -1,14 +1,20 @@
 import { UserEntityJson } from '@packages/shared-types';
-import { useMutation, useQuery } from 'react-query';
-import { queryClient } from '../../..';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../../../query-client';
 import { getUserVo, updateUserVo } from './user-profile';
 
-export const UseUserHookKey = getUserVo.name;
+export const UseUserHookKey = [getUserVo.name] as const;
 
-export const useUser = () => useQuery(UseUserHookKey, getUserVo);
+export const useUser = () =>
+  useQuery({
+    queryKey: UseUserHookKey,
+    queryFn: getUserVo,
+  });
 
 export const useMutateUser = () =>
-  useMutation(updateUserVo.name, updateUserVo, {
+  useMutation({
+    mutationKey: [updateUserVo.name],
+    mutationFn: updateUserVo,
     onSuccess: async (normalizedUser) => {
       const currentUser =
         queryClient.getQueryData<UserEntityJson>(UseUserHookKey);
@@ -20,6 +26,6 @@ export const useMutateUser = () =>
         });
       }
 
-      await queryClient.invalidateQueries(UseUserHookKey);
+      await queryClient.invalidateQueries({ queryKey: UseUserHookKey });
     },
   });

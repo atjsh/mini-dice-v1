@@ -172,7 +172,7 @@ export const FooterWidgetComponent: React.FC = () => {
 
   return (
     <div className="self-center mb-10 flex flex-col gap-5 max-w-7xl px-2 text-sm md:text-base">
-      <hr className=" border-gray-300" />
+      <hr className=" border-gray-300 dark:border-zinc-800" />
       {footerLinkGroupData.map((group) => (
         <FooterLinkGroup key={group.label} {...group} />
       ))}

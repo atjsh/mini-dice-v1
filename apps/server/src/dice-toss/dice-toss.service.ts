@@ -220,7 +220,7 @@ export class DiceTossService {
     };
 
     const skillServiceResult =
-      await this.scenarioRouteCallService.callSkill<any>(movedLandCode, {
+      await this.scenarioRouteCallService.callSkill<unknown>(movedLandCode, {
         userActivity: diceUserActivity,
         userId: userJwt.userId,
       });

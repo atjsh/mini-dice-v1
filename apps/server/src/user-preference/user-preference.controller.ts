@@ -6,9 +6,7 @@ import { UserPreferenceService } from './user-preference.service';
 
 @Controller('user-preference')
 export class UserPreferenceController {
-  constructor(
-    private readonly userPreferenceService: UserPreferenceService,
-  ) {}
+  constructor(private readonly userPreferenceService: UserPreferenceService) {}
 
   @JwtAuth()
   @Get('me')

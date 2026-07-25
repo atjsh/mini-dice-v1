@@ -1,7 +1,7 @@
 import './webauthn-webcrypto';
 
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import { Hono } from 'hono';
+import { Hono, type Context, type Next } from 'hono';
 import { cors } from 'hono/cors';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
@@ -10,25 +10,105 @@ import {
   generateRegistrationOptions,
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
+  type AuthenticationResponseJSON,
+  type RegistrationResponseJSON,
 } from '@simplewebauthn/server';
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
 import { v7 as uuidv7 } from 'uuid';
 import { z } from 'zod';
-import { createSql, ensureAdminSchema, ensureBootstrapInvite, type AdminUser } from './db';
+import {
+  createSql,
+  ensureAdminSchema,
+  ensureBootstrapInvite,
+  type AdminUser,
+} from './db';
 import { loadConfig } from './config';
+import type {
+  ActivityDto,
+  ActivityTrendDto,
+  AdminPasskeyRecord,
+  AnalyticsRefreshStateRecord,
+  AnalyticsSourceStartRecord,
+  CommentDto,
+  CommentTrendDto,
+  EditableUserRecord,
+  InviteDto,
+  InviteTokenRecord,
+  JoinChallengeRecord,
+  JoinTrendDto,
+  LoginChallengeRecord,
+  StreakCountDto,
+  UpdatedCommentDto,
+  UpdatedUserDto,
+  UserDetailDto,
+  UserListDto,
+} from './dto';
 import { createInviteJwt, sha256Base64Url, verifyInviteJwt } from './jwt';
-
-type RegistrationResponseJSON = any;
-type AuthenticationResponseJSON = any;
 
 const config = loadConfig();
 const sql = createSql(config);
-const app = new Hono<{ Variables: { admin: AdminUser } }>();
+type AdminEnv = { Variables: { admin: AdminUser } };
+type AdminContext = Context<AdminEnv>;
+
+const app = new Hono<AdminEnv>();
 const SESSION_COOKIE = 'mini_dice_admin_session';
 const SESSION_MAX_AGE_SECONDS = 12 * 60 * 60;
 
+const authenticatorAttachmentSchema = z.enum(['cross-platform', 'platform']);
+const authenticatorTransportSchema = z.enum([
+  'ble',
+  'cable',
+  'hybrid',
+  'internal',
+  'nfc',
+  'smart-card',
+  'usb',
+]);
+const clientExtensionResultsSchema = z
+  .object({
+    appid: z.boolean().optional(),
+    credProps: z.object({ rk: z.boolean().optional() }).optional(),
+    hmacCreateSecret: z.boolean().optional(),
+  })
+  .passthrough();
+const registrationResponseSchema: z.ZodType<RegistrationResponseJSON> =
+  z.object({
+    id: z.string(),
+    rawId: z.string(),
+    response: z.object({
+      clientDataJSON: z.string(),
+      attestationObject: z.string(),
+      authenticatorData: z.string().optional(),
+      transports: z.array(authenticatorTransportSchema).optional(),
+      publicKey: z.string().optional(),
+    }),
+    authenticatorAttachment: authenticatorAttachmentSchema.optional(),
+    clientExtensionResults: clientExtensionResultsSchema,
+    type: z.literal('public-key'),
+  });
+const authenticationResponseSchema: z.ZodType<AuthenticationResponseJSON> =
+  z.object({
+    id: z.string(),
+    rawId: z.string(),
+    response: z.object({
+      clientDataJSON: z.string(),
+      authenticatorData: z.string(),
+      signature: z.string(),
+      userHandle: z.string().optional(),
+    }),
+    authenticatorAttachment: authenticatorAttachmentSchema.optional(),
+    clientExtensionResults: clientExtensionResultsSchema,
+    type: z.literal('public-key'),
+  });
+const joinMetadataSchema = z.object({
+  adminUserId: z.string().uuid(),
+  displayName: z.string().min(2).max(120),
+});
+
 function signCookieValue(value: string) {
-  return createHmac('sha256', config.cookieSecret).update(value).digest('base64url');
+  return createHmac('sha256', config.cookieSecret)
+    .update(value)
+    .digest('base64url');
 }
 
 function encodeSessionCookie(sessionId: string) {
@@ -47,7 +127,11 @@ function decodeSessionCookie(value?: string) {
   return sessionId;
 }
 
-function setAdminSessionCookie(c: Parameters<typeof setCookie>[0], sessionId: string, expiresAt: Date) {
+function setAdminSessionCookie(
+  c: AdminContext,
+  sessionId: string,
+  expiresAt: Date,
+) {
   setCookie(c, SESSION_COOKIE, encodeSessionCookie(sessionId), {
     httpOnly: true,
     secure: config.cookieSecure,
@@ -57,16 +141,32 @@ function setAdminSessionCookie(c: Parameters<typeof setCookie>[0], sessionId: st
   });
 }
 
-function clearAdminSessionCookie(c: Parameters<typeof deleteCookie>[0]) {
+function clearAdminSessionCookie(c: AdminContext) {
   deleteCookie(c, SESSION_COOKIE, { path: '/' });
 }
 
-async function jsonBody<T>(c: any, schema: z.ZodSchema<T>): Promise<T> {
-  const body = await c.req.json().catch(() => ({}));
+async function jsonBody<T>(
+  c: AdminContext,
+  schema: z.ZodSchema<T>,
+): Promise<T> {
+  let body: unknown = {};
+  try {
+    body = await c.req.json<unknown>();
+  } catch {
+    // Preserve the existing empty-object validation path for malformed JSON.
+  }
   return schema.parse(body);
 }
 
-function assertAdmin(admin?: AdminUser) {
+function pathParam(c: AdminContext, name: string): string {
+  const value = c.req.param(name);
+  if (!value) {
+    throw new HTTPException(400, { message: '요청 경로가 올바르지 않습니다.' });
+  }
+  return value;
+}
+
+function assertAdmin(admin?: AdminUser): asserts admin is AdminUser {
   if (!admin) {
     throw new HTTPException(401, { message: '관리자 로그인이 필요합니다.' });
   }
@@ -75,7 +175,7 @@ function assertAdmin(admin?: AdminUser) {
   }
 }
 
-async function authMiddleware(c: any, next: () => Promise<void>) {
+async function authMiddleware(c: AdminContext, next: Next): Promise<void> {
   const sessionId = decodeSessionCookie(getCookie(c, SESSION_COOKIE));
   if (!sessionId) {
     throw new HTTPException(401, { message: '관리자 로그인이 필요합니다.' });
@@ -100,7 +200,10 @@ async function authMiddleware(c: any, next: () => Promise<void>) {
   await next();
 }
 
-async function createSession(c: any, adminUserId: string) {
+async function createSession(
+  c: AdminContext,
+  adminUserId: string,
+): Promise<void> {
   const sessionId = uuidv7();
   const expiresAt = new Date(Date.now() + SESSION_MAX_AGE_SECONDS * 1000);
   await sql`
@@ -108,12 +211,11 @@ async function createSession(c: any, adminUserId: string) {
     VALUES (${sessionId}, ${adminUserId}, ${expiresAt})
   `;
   setAdminSessionCookie(c, sessionId, expiresAt);
-  return sessionId;
 }
 
 async function getInviteForToken(inviteToken: string) {
   const payload = verifyInviteJwt(inviteToken, config.jwtSecret);
-  const rows = await sql`
+  const rows = await sql<InviteTokenRecord[]>`
     SELECT id, "expiresAt"
     FROM tb_admin_invite
     WHERE "jtiHash" = ${sha256Base64Url(payload.jti)}
@@ -124,9 +226,11 @@ async function getInviteForToken(inviteToken: string) {
     LIMIT 1
   `;
   if (!rows[0]) {
-    throw new HTTPException(400, { message: '초대 코드가 만료되었거나 사용할 수 없습니다.' });
+    throw new HTTPException(400, {
+      message: '초대 코드가 만료되었거나 사용할 수 없습니다.',
+    });
   }
-  return rows[0] as { id: string; expiresAt: Date };
+  return rows[0];
 }
 
 async function refreshActivityAggregates(from: Date, to: Date) {
@@ -254,11 +358,11 @@ async function refreshActivityAggregates(from: Date, to: Date) {
 }
 
 async function incrementalRefreshRange() {
-  const rows = await sql`
+  const rows = await sql<AnalyticsRefreshStateRecord[]>`
     SELECT "lastSourceAt" FROM tb_admin_analytics_refresh_state
     WHERE "aggregateName" = 'admin-dashboard'
   `;
-  const fallback = await sql`
+  const fallback = await sql<AnalyticsSourceStartRecord[]>`
     SELECT LEAST(
       COALESCE((SELECT MIN("createdAt") FROM tb_user_activity), NOW()),
       COALESCE((SELECT MIN("createdAt") FROM tb_skill_log), NOW()),
@@ -284,7 +388,10 @@ app.use(
 
 app.onError((err, c) => {
   if (err instanceof z.ZodError) {
-    return c.json({ message: '요청 값이 올바르지 않습니다.', issues: err.issues }, 400);
+    return c.json(
+      { message: '요청 값이 올바르지 않습니다.', issues: err.issues },
+      400,
+    );
   }
   if (err instanceof HTTPException) {
     return c.json({ message: err.message }, err.status);
@@ -340,11 +447,11 @@ app.post('/admin/auth/join/verify', async (c) => {
     c,
     z.object({
       challengeId: z.string().uuid(),
-      credential: z.any(),
+      credential: registrationResponseSchema,
       passkeyName: z.string().max(120).optional(),
     }),
   );
-  const challengeRows = await sql`
+  const challengeRows = await sql<JoinChallengeRecord[]>`
     SELECT id, challenge, "inviteId", metadata
     FROM tb_admin_webauthn_challenge
     WHERE id = ${body.challengeId}
@@ -354,23 +461,27 @@ app.post('/admin/auth/join/verify', async (c) => {
   `;
   const challenge = challengeRows[0];
   if (!challenge) {
-    throw new HTTPException(400, { message: '패스키 등록 요청이 만료되었습니다.' });
+    throw new HTTPException(400, {
+      message: '패스키 등록 요청이 만료되었습니다.',
+    });
   }
 
   const verification = await verifyRegistrationResponse({
-    response: body.credential as RegistrationResponseJSON,
+    response: body.credential,
     expectedChallenge: challenge.challenge,
     expectedOrigin: config.webauthnOrigin,
     expectedRPID: config.webauthnRpId,
     requireUserVerification: false,
   });
   if (!verification.verified || !verification.registrationInfo) {
-    throw new HTTPException(400, { message: '관리자 패스키 등록에 실패했습니다.' });
+    throw new HTTPException(400, {
+      message: '관리자 패스키 등록에 실패했습니다.',
+    });
   }
 
-  const metadata = challenge.metadata as { adminUserId: string; displayName: string };
+  const metadata = joinMetadataSchema.parse(challenge.metadata);
   const registrationInfo = verification.registrationInfo;
-  const { credentialID, credentialPublicKey, counter } = registrationInfo;
+  const { credential: verifiedCredential } = registrationInfo;
   await sql.begin(async (tx) => {
     await tx`
       INSERT INTO tb_admin_user (id, "displayName")
@@ -386,7 +497,9 @@ app.post('/admin/auth/join/verify', async (c) => {
       RETURNING id
     `;
     if (used.length === 0) {
-      throw new HTTPException(400, { message: '초대 코드가 이미 사용되었습니다.' });
+      throw new HTTPException(400, {
+        message: '초대 코드가 이미 사용되었습니다.',
+      });
     }
     await tx`
       INSERT INTO tb_admin_passkey (
@@ -401,11 +514,11 @@ app.post('/admin/auth/join/verify', async (c) => {
       ) VALUES (
         ${uuidv7()},
         ${metadata.adminUserId},
-        ${typeof credentialID === 'string' ? credentialID : Buffer.from(credentialID).toString('base64url')},
-        ${Buffer.from(credentialPublicKey).toString('base64url')},
-        ${counter},
+        ${verifiedCredential.id},
+        ${Buffer.from(verifiedCredential.publicKey).toString('base64url')},
+        ${verifiedCredential.counter},
         ${registrationInfo.credentialDeviceType},
-        ${(body.credential as RegistrationResponseJSON).response.transports?.join(',') ?? null},
+        ${body.credential.response.transports?.join(',') ?? null},
         ${body.passkeyName || 'Admin passkey'}
       )
     `;
@@ -433,10 +546,10 @@ app.post('/admin/auth/login/verify', async (c) => {
     c,
     z.object({
       challengeId: z.string().uuid(),
-      credential: z.any(),
+      credential: authenticationResponseSchema,
     }),
   );
-  const challengeRows = await sql`
+  const challengeRows = await sql<LoginChallengeRecord[]>`
     SELECT id, challenge
     FROM tb_admin_webauthn_challenge
     WHERE id = ${body.challengeId}
@@ -446,10 +559,12 @@ app.post('/admin/auth/login/verify', async (c) => {
   `;
   const challenge = challengeRows[0];
   if (!challenge) {
-    throw new HTTPException(401, { message: '패스키 로그인 요청이 만료되었습니다.' });
+    throw new HTTPException(401, {
+      message: '패스키 로그인 요청이 만료되었습니다.',
+    });
   }
-  const credential = body.credential as AuthenticationResponseJSON;
-  const passkeys = await sql`
+  const credential = body.credential;
+  const passkeys = await sql<AdminPasskeyRecord[]>`
     SELECT p.*, u."isDisabled"
     FROM tb_admin_passkey p
     JOIN tb_admin_user u ON u.id = p."adminUserId"
@@ -458,7 +573,9 @@ app.post('/admin/auth/login/verify', async (c) => {
   `;
   const passkey = passkeys[0];
   if (!passkey || passkey.isDisabled) {
-    throw new HTTPException(401, { message: '등록된 관리자 패스키를 찾을 수 없습니다.' });
+    throw new HTTPException(401, {
+      message: '등록된 관리자 패스키를 찾을 수 없습니다.',
+    });
   }
   const verification = await verifyAuthenticationResponse({
     response: credential,
@@ -466,14 +583,16 @@ app.post('/admin/auth/login/verify', async (c) => {
     expectedOrigin: config.webauthnOrigin,
     expectedRPID: config.webauthnRpId,
     requireUserVerification: false,
-    authenticator: {
-      credentialID: isoBase64URL.toBuffer(credential.id) as any,
-      credentialPublicKey: isoBase64URL.toBuffer(passkey.publicKey) as any,
+    credential: {
+      id: credential.id,
+      publicKey: isoBase64URL.toBuffer(passkey.publicKey),
       counter: passkey.counter,
     },
   });
   if (!verification.verified) {
-    throw new HTTPException(401, { message: '관리자 패스키 로그인에 실패했습니다.' });
+    throw new HTTPException(401, {
+      message: '관리자 패스키 로그인에 실패했습니다.',
+    });
   }
   await sql`
     UPDATE tb_admin_passkey
@@ -501,7 +620,7 @@ app.get('/admin/comments', authMiddleware, async (c) => {
   const limit = Math.min(Math.max(Number(c.req.query('limit') ?? 50), 10), 100);
   const offset = (page - 1) * limit;
   const rows = q
-    ? await sql`
+    ? await sql<CommentDto[]>`
         SELECT c.id, c."userId", u.username, c."landId", c.comment, c."createdAt", c."updatedAt"
         FROM tb_user_land_comment c
         JOIN tb_user u ON u."userId" = c."userId"
@@ -509,7 +628,7 @@ app.get('/admin/comments', authMiddleware, async (c) => {
         ORDER BY c."createdAt" DESC
         LIMIT ${limit} OFFSET ${offset}
       `
-    : await sql`
+    : await sql<CommentDto[]>`
         SELECT c.id, c."userId", u.username, c."landId", c.comment, c."createdAt", c."updatedAt"
         FROM tb_user_land_comment c
         JOIN tb_user u ON u."userId" = c."userId"
@@ -520,26 +639,32 @@ app.get('/admin/comments', authMiddleware, async (c) => {
 });
 
 app.patch('/admin/comments/:id', authMiddleware, async (c) => {
-  const body = await jsonBody(c, z.object({ comment: z.string().min(1).max(200) }));
-  const rows = await sql`
+  const commentId = pathParam(c, 'id');
+  const body = await jsonBody(
+    c,
+    z.object({ comment: z.string().min(1).max(200) }),
+  );
+  const rows = await sql<UpdatedCommentDto[]>`
     UPDATE tb_user_land_comment
     SET comment = ${body.comment}, "updatedAt" = NOW()
-    WHERE id = ${c.req.param('id')}
+    WHERE id = ${commentId}
     RETURNING id, comment, "updatedAt"
   `;
-  if (!rows[0]) throw new HTTPException(404, { message: '댓글을 찾을 수 없습니다.' });
+  if (!rows[0])
+    throw new HTTPException(404, { message: '댓글을 찾을 수 없습니다.' });
   return c.json({ item: rows[0] });
 });
 
 app.delete('/admin/comments/:id', authMiddleware, async (c) => {
-  await sql`DELETE FROM tb_user_land_comment WHERE id = ${c.req.param('id')}`;
+  const commentId = pathParam(c, 'id');
+  await sql`DELETE FROM tb_user_land_comment WHERE id = ${commentId}`;
   return c.json({ success: true });
 });
 
 app.get('/admin/activities', authMiddleware, async (c) => {
   const page = Math.max(Number(c.req.query('page') ?? 1), 1);
   const limit = Math.min(Math.max(Number(c.req.query('limit') ?? 50), 10), 100);
-  const rows = await sql`
+  const rows = await sql<ActivityDto[]>`
     SELECT a.id, a."userId", u.username, a."skillRoute", a."skillDrawProps", a.read, a."createdAt"
     FROM tb_user_activity a
     JOIN tb_user u ON u."userId" = a."userId"
@@ -554,7 +679,7 @@ app.get('/admin/users', authMiddleware, async (c) => {
   const page = Math.max(Number(c.req.query('page') ?? 1), 1);
   const limit = Math.min(Math.max(Number(c.req.query('limit') ?? 50), 10), 100);
   const rows = q
-    ? await sql`
+    ? await sql<UserListDto[]>`
         SELECT "userId", username, plain_email, "authProvider", "countryCode3", "signupCompleted",
           "isTerminated", cash::text, "createdAt", "updatedAt"
         FROM tb_user
@@ -562,7 +687,7 @@ app.get('/admin/users', authMiddleware, async (c) => {
         ORDER BY "createdAt" DESC
         LIMIT ${limit} OFFSET ${(page - 1) * limit}
       `
-    : await sql`
+    : await sql<UserListDto[]>`
         SELECT "userId", username, plain_email, "authProvider", "countryCode3", "signupCompleted",
           "isTerminated", cash::text, "createdAt", "updatedAt"
         FROM tb_user
@@ -573,19 +698,22 @@ app.get('/admin/users', authMiddleware, async (c) => {
 });
 
 app.get('/admin/users/:id', authMiddleware, async (c) => {
-  const rows = await sql`
+  const userId = pathParam(c, 'id');
+  const rows = await sql<UserDetailDto[]>`
     SELECT "userId", username, plain_email, "authProvider", "countryCode3", "signupCompleted",
       "isTerminated", "isUserDiceTossForbidden", "canTossDiceAfter", cash::text,
       "createdAt", "updatedAt"
     FROM tb_user
-    WHERE "userId" = ${c.req.param('id')}
+    WHERE "userId" = ${userId}
     LIMIT 1
   `;
-  if (!rows[0]) throw new HTTPException(404, { message: '사용자를 찾을 수 없습니다.' });
+  if (!rows[0])
+    throw new HTTPException(404, { message: '사용자를 찾을 수 없습니다.' });
   return c.json({ item: rows[0] });
 });
 
 app.patch('/admin/users/:id', authMiddleware, async (c) => {
+  const userId = pathParam(c, 'id');
   const body = await jsonBody(
     c,
     z.object({
@@ -593,43 +721,50 @@ app.patch('/admin/users/:id', authMiddleware, async (c) => {
       countryCode3: z.string().length(3).optional(),
     }),
   );
-  const current = await sql`SELECT username, "countryCode3" FROM tb_user WHERE "userId" = ${c.req.param('id')}`;
-  if (!current[0]) throw new HTTPException(404, { message: '사용자를 찾을 수 없습니다.' });
-  const rows = await sql`
+  const current = await sql<EditableUserRecord[]>`
+    SELECT username, "countryCode3"
+    FROM tb_user
+    WHERE "userId" = ${userId}
+  `;
+  if (!current[0])
+    throw new HTTPException(404, { message: '사용자를 찾을 수 없습니다.' });
+  const rows = await sql<UpdatedUserDto[]>`
     UPDATE tb_user
     SET username = ${body.username ?? current[0].username},
         "countryCode3" = ${body.countryCode3 ?? current[0].countryCode3},
         "updatedAt" = NOW()
-    WHERE "userId" = ${c.req.param('id')}
+    WHERE "userId" = ${userId}
     RETURNING "userId", username, "countryCode3", "updatedAt"
   `;
   return c.json({ item: rows[0] });
 });
 
 app.post('/admin/users/:id/ban', authMiddleware, async (c) => {
+  const userId = pathParam(c, 'id');
   await sql`
     UPDATE tb_user
     SET "isTerminated" = TRUE,
         "isUserDiceTossForbidden" = TRUE,
         "updatedAt" = NOW()
-    WHERE "userId" = ${c.req.param('id')}
+    WHERE "userId" = ${userId}
   `;
   return c.json({ success: true });
 });
 
 app.post('/admin/users/:id/unban', authMiddleware, async (c) => {
+  const userId = pathParam(c, 'id');
   await sql`
     UPDATE tb_user
     SET "isTerminated" = FALSE,
         "isUserDiceTossForbidden" = FALSE,
         "updatedAt" = NOW()
-    WHERE "userId" = ${c.req.param('id')}
+    WHERE "userId" = ${userId}
   `;
   return c.json({ success: true });
 });
 
 app.get('/admin/invites', authMiddleware, async (c) => {
-  const rows = await sql`
+  const rows = await sql<InviteDto[]>`
     SELECT i.id, i."expiresAt", i."usedAt", i."revokedAt", i."createdAt",
       creator."displayName" AS "createdBy", used_by."displayName" AS "usedBy"
     FROM tb_admin_invite i
@@ -643,7 +778,15 @@ app.get('/admin/invites', authMiddleware, async (c) => {
 
 app.post('/admin/invites', authMiddleware, async (c) => {
   const admin = c.get('admin');
-  const body = await jsonBody(c, z.object({ expiresInHours: z.number().min(1).max(24 * 30) }));
+  const body = await jsonBody(
+    c,
+    z.object({
+      expiresInHours: z
+        .number()
+        .min(1)
+        .max(24 * 30),
+    }),
+  );
   const expiresAt = new Date(Date.now() + body.expiresInHours * 60 * 60 * 1000);
   const { token, payload } = createInviteJwt(config.jwtSecret, expiresAt);
   const id = uuidv7();
@@ -658,18 +801,21 @@ app.post('/admin/invites', authMiddleware, async (c) => {
 });
 
 app.post('/admin/invites/:id/revoke', authMiddleware, async (c) => {
+  const inviteId = pathParam(c, 'id');
   await sql`
     UPDATE tb_admin_invite
     SET "revokedAt" = NOW()
-    WHERE id = ${c.req.param('id')} AND "usedAt" IS NULL AND "revokedAt" IS NULL
+    WHERE id = ${inviteId} AND "usedAt" IS NULL AND "revokedAt" IS NULL
   `;
   return c.json({ success: true });
 });
 
 app.get('/admin/analytics/activity-trend', authMiddleware, async (c) => {
-  const from = new Date(c.req.query('from') ?? Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const from = new Date(
+    c.req.query('from') ?? Date.now() - 7 * 24 * 60 * 60 * 1000,
+  );
   const to = new Date(c.req.query('to') ?? Date.now());
-  const rows = await sql`
+  const rows = await sql<ActivityTrendDto[]>`
     SELECT "hourBucket", "activityCount", "activeUserCount", "skillLogCount"
     FROM tb_admin_activity_hourly
     WHERE "hourBucket" >= ${from} AND "hourBucket" < ${to}
@@ -679,9 +825,11 @@ app.get('/admin/analytics/activity-trend', authMiddleware, async (c) => {
 });
 
 app.get('/admin/analytics/join-trend', authMiddleware, async (c) => {
-  const from = new Date(c.req.query('from') ?? Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const from = new Date(
+    c.req.query('from') ?? Date.now() - 7 * 24 * 60 * 60 * 1000,
+  );
   const to = new Date(c.req.query('to') ?? Date.now());
-  const rows = await sql`
+  const rows = await sql<JoinTrendDto[]>`
     SELECT "hourBucket", "authProvider", "countryCode3", "joinCount"
     FROM tb_admin_join_hourly
     WHERE "hourBucket" >= ${from} AND "hourBucket" < ${to}
@@ -691,9 +839,11 @@ app.get('/admin/analytics/join-trend', authMiddleware, async (c) => {
 });
 
 app.get('/admin/analytics/comment-trend', authMiddleware, async (c) => {
-  const from = new Date(c.req.query('from') ?? Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const from = new Date(
+    c.req.query('from') ?? Date.now() - 7 * 24 * 60 * 60 * 1000,
+  );
   const to = new Date(c.req.query('to') ?? Date.now());
-  const rows = await sql`
+  const rows = await sql<CommentTrendDto[]>`
     SELECT "hourBucket", "commentCount", "commentingUserCount"
     FROM tb_admin_comment_hourly
     WHERE "hourBucket" >= ${from} AND "hourBucket" < ${to}
@@ -704,7 +854,7 @@ app.get('/admin/analytics/comment-trend', authMiddleware, async (c) => {
 
 app.get('/admin/analytics/streaks', authMiddleware, async (c) => {
   const days = Math.min(Math.max(Number(c.req.query('days') ?? 3), 1), 365);
-  const rows = await sql`
+  const rows = await sql<StreakCountDto[]>`
     SELECT COUNT(*)::int AS "userCount"
     FROM (
       SELECT "userId"
@@ -734,7 +884,9 @@ app.post('/admin/analytics/backfill', authMiddleware, async (c) => {
   const from = new Date(body.from);
   const to = new Date(body.to);
   if (to <= from) {
-    throw new HTTPException(400, { message: '종료 시간이 시작 시간보다 늦어야 합니다.' });
+    throw new HTTPException(400, {
+      message: '종료 시간이 시작 시간보다 늦어야 합니다.',
+    });
   }
   await refreshActivityAggregates(from, to);
   return c.json({ success: true, from, to });
@@ -744,14 +896,18 @@ await ensureAdminSchema(sql);
 await ensureBootstrapInvite(sql, config);
 
 const runtime = globalThis as typeof globalThis & {
-  Bun?: { serve: (options: { port: number; fetch: typeof app.fetch }) => unknown };
+  Bun?: {
+    serve: (options: { port: number; fetch: typeof app.fetch }) => unknown;
+  };
 };
 
 if (runtime.Bun) {
   runtime.Bun.serve({ port: config.port, fetch: app.fetch });
   console.log(`Mini Dice admin dashboard server listening on ${config.port}`);
 } else if (process.env.NODE_ENV !== 'test') {
-  console.warn('Bun runtime was not found; export app.fetch for tests/builds only.');
+  console.warn(
+    'Bun runtime was not found; export app.fetch for tests/builds only.',
+  );
   await sql.end({ timeout: 1 });
 }
 

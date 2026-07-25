@@ -17,7 +17,7 @@ export class InputFieldType {
 
   isDisabled?: boolean;
 
-  defaultValue?: any;
+  defaultValue?: unknown;
 
   isHidden?: boolean;
 }

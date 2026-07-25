@@ -88,7 +88,7 @@ export abstract class OauthAbstractService {
         if (anonUser.email != null || anonUser.isTerminated) {
           throw new ForbiddenException('FYX');
         }
-      } catch (e) {
+      } catch {
         // 익명 유저가 아닌 일반 유저이거나, refreshToken에 대응되는 유저가 존재하지 않거나, 유저가 삭제되었을 경우
         // 기존 계정에 로그인을 시도하거나 새로 가입함
         const existingUsers = await this.userRepository.findBy({

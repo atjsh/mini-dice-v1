@@ -4,6 +4,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Catch, Injectable, Logger } from '@nestjs/common';
+import type { FastifyReply } from 'fastify';
 
 /**
  * HttpException 에러들을 수집하여
@@ -17,7 +18,7 @@ export class HttpExceptionLoggingFilter implements ExceptionFilter {
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
+    const response = ctx.getResponse<FastifyReply>();
 
     const statusCode = exception.getStatus();
     const errorResponseBody = exception.getResponse();

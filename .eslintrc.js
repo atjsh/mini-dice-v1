@@ -1,31 +1,24 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: './tsconfig.json',
+    projectService: {
+      allowDefaultProject: ['apps/admin-server/tools/*.ts'],
+    },
     sourceType: 'module',
     tsconfigRootDir: __dirname,
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
+  plugins: ['@typescript-eslint'],
+  extends: ['plugin:@typescript-eslint/recommended-type-checked', 'prettier'],
   root: true,
   env: {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
-  rules: {
-    '@typescript-eslint/type-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
-      },
-    ],
-  },
+  ignorePatterns: [
+    '.eslintrc.js',
+    '**/dist/**',
+    '**/node_modules/**',
+    'apps/server-rest/target/**',
+    'apps/web/vendor/**',
+  ],
 };

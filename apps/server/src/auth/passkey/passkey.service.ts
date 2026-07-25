@@ -15,17 +15,15 @@ import {
   verifyRegistrationResponse,
   generateAuthenticationOptions,
   verifyAuthenticationResponse,
+  type AuthenticationResponseJSON,
+  type AuthenticatorTransportFuture,
+  type PublicKeyCredentialCreationOptionsJSON,
+  type RegistrationResponseJSON,
 } from '@simplewebauthn/server';
 import {
   decodeClientDataJSON,
   isoBase64URL,
 } from '@simplewebauthn/server/helpers';
-import type {
-  PublicKeyCredentialCreationOptionsJSON,
-  RegistrationResponseJSON,
-  AuthenticationResponseJSON,
-  AuthenticatorTransportFuture,
-} from '@simplewebauthn/server/script/deps';
 import type {
   PasskeyListItemDto,
   PasskeyRegistrationResultDto,
@@ -47,12 +45,6 @@ export class PasskeyService {
     private configService: ConfigService,
     private passkeyChallengeService: PasskeyChallengeService,
   ) {}
-
-  private credentialIdToBase64URL(credentialId: string | Uint8Array) {
-    return typeof credentialId === 'string'
-      ? credentialId
-      : Buffer.from(credentialId).toString('base64url');
-  }
 
   private extractExpectedChallenge(
     credential: RegistrationResponseJSON | AuthenticationResponseJSON,
@@ -87,8 +79,11 @@ export class PasskeyService {
       );
     }
 
-    const rpID = this.configService.get('WEBAUTHN_RP_ID');
-    const rpName = this.configService.get('WEBAUTHN_RP_NAME', 'Mini Dice');
+    const rpID = this.configService.get<string>('WEBAUTHN_RP_ID');
+    const rpName = this.configService.get<string>(
+      'WEBAUTHN_RP_NAME',
+      'Mini Dice',
+    );
 
     if (!rpID) {
       throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
@@ -123,8 +118,8 @@ export class PasskeyService {
     credential: RegistrationResponseJSON,
     name?: string,
   ): Promise<PasskeyRegistrationResultDto> {
-    const rpID = this.configService.get('WEBAUTHN_RP_ID');
-    const origin = this.configService.get('WEBAUTHN_ORIGIN');
+    const rpID = this.configService.get<string>('WEBAUTHN_RP_ID');
+    const origin = this.configService.get<string>('WEBAUTHN_ORIGIN');
 
     if (!rpID || !origin) {
       throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
@@ -169,19 +164,24 @@ export class PasskeyService {
       );
     }
 
-    const { credentialID, credentialPublicKey, counter, aaguid } =
-      verification.registrationInfo;
+    const {
+      credential: verifiedCredential,
+      credentialDeviceType,
+      aaguid,
+    } = verification.registrationInfo;
     const persistedAaguid = aaguid || null;
     const passkeyName = name?.trim() || 'Passkey';
 
     const passkey = this.passkeyRepository.create({
       userId,
-      credentialId: this.credentialIdToBase64URL(credentialID),
-      publicKey: Buffer.from(credentialPublicKey).toString('base64url'),
-      counter,
+      credentialId: verifiedCredential.id,
+      publicKey: Buffer.from(verifiedCredential.publicKey).toString(
+        'base64url',
+      ),
+      counter: verifiedCredential.counter,
       aaguid: persistedAaguid,
       transports: credential.response.transports || [],
-      deviceType: verification.registrationInfo.credentialDeviceType,
+      deviceType: credentialDeviceType,
       name: passkeyName,
     });
 
@@ -262,7 +262,7 @@ export class PasskeyService {
   }
 
   async generateAuthenticationOptions(credentialId?: string) {
-    const rpID = this.configService.get('WEBAUTHN_RP_ID');
+    const rpID = this.configService.get<string>('WEBAUTHN_RP_ID');
 
     if (!rpID) {
       throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
@@ -297,8 +297,8 @@ export class PasskeyService {
     credential: AuthenticationResponseJSON,
     response: FastifyReply,
   ) {
-    const rpID = this.configService.get('WEBAUTHN_RP_ID');
-    const origin = this.configService.get('WEBAUTHN_ORIGIN');
+    const rpID = this.configService.get<string>('WEBAUTHN_RP_ID');
+    const origin = this.configService.get<string>('WEBAUTHN_ORIGIN');
 
     if (!rpID || !origin) {
       throw new BadRequestException('패스키 서버 설정이 완료되지 않았습니다.');
@@ -347,10 +347,12 @@ export class PasskeyService {
         expectedOrigin: origin,
         expectedRPID: rpID,
         requireUserVerification: false,
-        authenticator: {
-          credentialID: isoBase64URL.toBuffer(credential.id) as any,
-          credentialPublicKey: isoBase64URL.toBuffer(passkey.publicKey) as any,
+        credential: {
+          id: credential.id,
+          publicKey: isoBase64URL.toBuffer(passkey.publicKey),
           counter: passkey.counter,
+          transports: passkey.transports as
+            AuthenticatorTransportFuture[] | undefined,
         },
       });
     } catch {

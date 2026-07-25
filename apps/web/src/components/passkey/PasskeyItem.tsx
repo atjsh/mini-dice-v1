@@ -116,7 +116,7 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
               ref={triggerRef}
               {...triggerProps}
               aria-label={manageLabel}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:active:bg-zinc-700"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:active:bg-zinc-700"
             >
               <svg
                 aria-hidden="true"
@@ -169,7 +169,7 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
                       onRename(normalizedName);
                     });
                   }}
-                  className="min-h-[44px] w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-gray-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-700"
+                  className="min-h-[44px] w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:text-gray-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-700"
                 >
                   이름 변경
                 </button>
@@ -190,7 +190,7 @@ export function PasskeyItem({ passkey, onDelete, onRename }: PasskeyItemProps) {
                       }
                     });
                   }}
-                  className="min-h-[44px] w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 active:bg-red-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-500 dark:text-red-400 dark:hover:bg-zinc-800 dark:active:bg-zinc-700"
+                  className="min-h-[44px] w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 active:bg-red-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-500 dark:text-red-400 dark:hover:bg-zinc-800 dark:active:bg-zinc-700"
                 >
                   삭제
                 </button>

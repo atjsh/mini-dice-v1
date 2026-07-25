@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { renamePasskey } from './passkey-api';
 import { PasskeyListQueryKey } from './use-passkey-list.hook';
 
 export const usePasskeyRename = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    ({ id, name }: { id: string; name: string }) => renamePasskey(id, name),
-    {
-      onSuccess: () => queryClient.invalidateQueries(PasskeyListQueryKey),
-    },
-  );
+  return useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      renamePasskey(id, name),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: PasskeyListQueryKey }),
+  });
 };

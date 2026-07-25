@@ -15,7 +15,7 @@ interface SettingsPopoverControls {
 }
 
 interface SettingsPopoverTrigger {
-  ref: RefObject<HTMLButtonElement>;
+  ref: RefObject<HTMLButtonElement | null>;
   props: ButtonHTMLAttributes<HTMLButtonElement>;
 }
 

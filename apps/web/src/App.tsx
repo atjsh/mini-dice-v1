@@ -1,11 +1,9 @@
-import { Helmet } from 'react-helmet';
 import {
   Navigate,
   RouterProvider,
   ScrollRestoration,
   createBrowserRouter,
 } from 'react-router-dom';
-import 'reflect-metadata';
 import { useEffect, useMemo } from 'react';
 import { useUser } from './libs';
 import {
@@ -16,7 +14,7 @@ import { IndexSkeletonPage } from './pages/IndexSkeleton';
 import {
   FinishSignupPageURL,
   IndexPageURL,
-  ProtectedRoute,
+  type ProtectedRoute,
   ServicePageURL,
   protectedRoutes,
 } from './pages/routes';
@@ -25,7 +23,7 @@ const Route: React.FC<{ route: ProtectedRoute }> = ({ route }) => {
   return (
     <>
       <ScrollRestoration />
-      <Helmet title={route.title} />
+      <title>{route.title}</title>
       <route.component />
     </>
   );

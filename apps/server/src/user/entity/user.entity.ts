@@ -9,7 +9,11 @@ import {
   getStockStatus,
   serializeStockStatusToJson,
 } from '@packages/shared-types';
-import { Transform, TransformationType } from 'class-transformer';
+import {
+  Transform,
+  TransformationType,
+  type TransformFnParams,
+} from 'class-transformer';
 import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
   BeforeInsert,
@@ -34,6 +38,13 @@ import { PgStatStockTimeSeriesEntity } from '../../stat/entities/pg-stat-stock-t
 const UserEntityTableName = 'tb_user';
 
 export type UserCashStrType = string;
+
+function transformBigInt({ type, value }: TransformFnParams): string | bigint {
+  const input: unknown = value;
+  return type === TransformationType.CLASS_TO_PLAIN
+    ? String(input)
+    : BigInt(String(input));
+}
 
 @Entity({ name: UserEntityTableName })
 export class UserEntity {
@@ -109,9 +120,7 @@ export class UserEntity {
    * @type {bigint}
    * @memberof UserEntity
    */
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
+  @Transform(transformBigInt)
   @Column({
     name: 'cash',
     type: 'bigint',
@@ -210,9 +219,7 @@ export class UserEntity {
   })
   stockId: StockIdType | null;
 
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
+  @Transform(transformBigInt)
   @Column({
     name: 'stockPrice',
     type: 'bigint',
@@ -221,9 +228,7 @@ export class UserEntity {
   })
   stockPrice: bigint;
 
-  @Transform(({ type, value }) =>
-    type == TransformationType.CLASS_TO_PLAIN ? String(value) : BigInt(value),
-  )
+  @Transform(transformBigInt)
   @Column({
     name: 'stockAmount',
     type: 'bigint',

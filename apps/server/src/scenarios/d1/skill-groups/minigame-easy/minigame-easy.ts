@@ -57,7 +57,7 @@ export class MinigameEasyService {
 export class MinigameEasySkillGroup implements SkillGroupController {
   constructor(private minigameEasyService: MinigameEasyService) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return MINIGAME_NAME;
   }
 

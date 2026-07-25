@@ -1,7 +1,4 @@
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 import { SkillLogMessageInerface } from '../interfaces/skill-log-message.interface';
 
-export const skillLogMessagesState = atom<SkillLogMessageInerface[]>({
-  key: 'skillLogMessageAtom',
-  default: [],
-});
+export const skillLogMessagesState = atom<SkillLogMessageInerface[]>([]);

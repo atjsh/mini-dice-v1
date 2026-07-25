@@ -1,26 +1,26 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getUserPreference,
   updateUserPreference,
   type UpdateUserPreferenceDto,
 } from './user-preference';
 
-const USER_PREFERENCE_QUERY_KEY = 'user-preference';
+const USER_PREFERENCE_QUERY_KEY = ['user-preference'] as const;
 
 export function useUserPreference() {
-  return useQuery(USER_PREFERENCE_QUERY_KEY, getUserPreference);
+  return useQuery({
+    queryKey: USER_PREFERENCE_QUERY_KEY,
+    queryFn: getUserPreference,
+  });
 }
 
 export function useUpdateUserPreference() {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (updateDto: UpdateUserPreferenceDto) => updateUserPreference(updateDto),
-    {
-      onSuccess: () => {
-        // Invalidate and refetch user preference
-        queryClient.invalidateQueries(USER_PREFERENCE_QUERY_KEY);
-      },
-    }
-  );
+  return useMutation({
+    mutationFn: (updateDto: UpdateUserPreferenceDto) =>
+      updateUserPreference(updateDto),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: USER_PREFERENCE_QUERY_KEY }),
+  });
 }

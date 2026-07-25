@@ -7,13 +7,14 @@ package:
     - '.env'
     - 'dist/**'
 
-frameworkVersion: '3'
+frameworkVersion: '3.40.0'
+configValidationMode: warn
 
 provider:
   name: aws
   stage: production
   region: ${file(./slsconfig.yml):region}
-  runtime: nodejs18.x
+  runtime: nodejs24.x
   httpApi:
     payload: '2.0'
 
@@ -26,6 +27,7 @@ functions:
           method: any
 
 plugins:
+  - ./serverless-offline-cookie-compat.cjs
   - serverless-offline
 
 custom:

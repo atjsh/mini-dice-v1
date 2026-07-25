@@ -25,6 +25,27 @@ export type SkillLogPayload = {
 const OBJECT_MARKER = -1;
 const BROTLI_QUALITY = 6;
 
+function isCompactedObjectEntry(
+  value: unknown,
+): value is [number | string, unknown] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    ((typeof value[0] === 'number' && Number.isSafeInteger(value[0])) ||
+      typeof value[0] === 'string')
+  );
+}
+
+function isCompactedObjectEntries(
+  value: unknown,
+): value is [number | string, unknown][] {
+  return Array.isArray(value) && value.every(isCompactedObjectEntry);
+}
+
+function isSkillLogPayloadTuple(value: unknown): value is [unknown, unknown] {
+  return Array.isArray(value) && value.length === 2;
+}
+
 let manifestCache: DictionaryManifest | undefined;
 const dictionaryCache = new Map<number, PayloadDictionary>();
 
@@ -99,6 +120,10 @@ function compactValue(
     return value.map((item) => compactValue(item, keyToCode));
   }
 
+  if (typeof value === 'bigint') {
+    return value.toString();
+  }
+
   if (value && typeof value === 'object') {
     const pairs = Object.entries(value as Record<string, unknown>).map(
       ([key, child]) => [keyToCode[key] ?? key, compactValue(child, keyToCode)],
@@ -112,11 +137,15 @@ function compactValue(
 
 function expandValue(value: unknown, dictionary: PayloadDictionary): unknown {
   if (Array.isArray(value)) {
-    if (value[0] === OBJECT_MARKER && Array.isArray(value[1])) {
+    if (value[0] === OBJECT_MARKER) {
+      if (value.length !== 2 || !isCompactedObjectEntries(value[1])) {
+        throw new Error('Invalid compacted skill log object');
+      }
+
       return Object.fromEntries(
-        (value[1] as [number | string, unknown][]).map(([key, child]) => [
+        value[1].map(([key, child]) => [
           typeof key === 'number'
-            ? dictionary.keys[String(key)] ?? String(key)
+            ? (dictionary.keys[String(key)] ?? String(key))
             : key,
           expandValue(child, dictionary),
         ]),
@@ -154,13 +183,16 @@ export function encodeSkillLogPayload(payload: SkillLogPayload) {
   };
 }
 
-export function decodeSkillLogPayload(payload: Buffer, payloadCodec: number) {
+export function decodeSkillLogPayload(
+  payload: Buffer,
+  payloadCodec: number,
+): SkillLogPayload {
   const dictionary = getDictionary(payloadCodec);
   const msgpackBuffer = brotliDecompressSync(payload);
   const compactedPayload = decode(msgpackBuffer);
   const expandedPayload = expandValue(compactedPayload, dictionary);
 
-  if (!Array.isArray(expandedPayload)) {
+  if (!isSkillLogPayloadTuple(expandedPayload)) {
     throw new Error(`Invalid skill log payload for codec ${payloadCodec}`);
   }
 

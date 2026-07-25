@@ -7,10 +7,7 @@ import { PushNotificationService } from './push-notification.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      PushSubscriptionEntity,
-      UserOnlineSessionEntity,
-    ]),
+    TypeOrmModule.forFeature([PushSubscriptionEntity, UserOnlineSessionEntity]),
   ],
   controllers: [PushNotificationController],
   providers: [PushNotificationService],

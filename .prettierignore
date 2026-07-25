@@ -1,0 +1,7 @@
+**/dist/
+**/node_modules/
+**/.serverless/
+apps/server-rest/target/
+apps/web/vendor/
+packages/skill-log-codec/src/generated/
+package-lock.json

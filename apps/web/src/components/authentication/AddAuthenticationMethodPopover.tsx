@@ -13,7 +13,7 @@ export type AuthenticationMethodOption =
     })
   | (AuthenticationMethodOptionBase & {
       kind: 'button';
-      onSelect: () => void | Promise<void>;
+      onSelect: () => Promise<void>;
     });
 
 export function AddAuthenticationMethodPopover({
@@ -74,7 +74,7 @@ export function AddAuthenticationMethodPopover({
                 </span>
               );
               const optionClassName =
-                'flex min-h-[56px] w-full items-center rounded-lg px-3 py-2 text-left hover:bg-gray-50 active:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:hover:bg-zinc-800 dark:active:bg-zinc-700';
+                'flex min-h-[56px] w-full items-center rounded-lg px-3 py-2 text-left hover:bg-gray-50 active:bg-gray-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:hover:bg-zinc-800 dark:active:bg-zinc-700';
 
               return (
                 <li key={option.id}>
@@ -89,14 +89,18 @@ export function AddAuthenticationMethodPopover({
                   ) : (
                     <button
                       type="button"
-                      onClick={async () => {
+                      onClick={() => {
                         close(false);
                         focusFallback();
-                        try {
-                          await option.onSelect();
-                        } finally {
-                          restoreFocusIfUnclaimed();
-                        }
+                        option
+                          .onSelect()
+                          .finally(() => restoreFocusIfUnclaimed())
+                          .catch((error: unknown) => {
+                            console.error(
+                              'Authentication method selection failed:',
+                              error,
+                            );
+                          });
                       }}
                       className={optionClassName}
                     >

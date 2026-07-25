@@ -172,18 +172,20 @@ export function commonLandSkillGroupWebIndexDraw(
             submitSkillRoute,
           )
         : props.skillServiceResult.landBuyableByUserStatus.status ==
-          LandBuyableByUserEnum.ALREADY_OWNED_BY_OTHER
-        ? landNotBuyableBCOtherUserAlreadyOwns(
-            props.skillServiceResult.landStatus,
-            props.timezone,
-          )
-        : props.skillServiceResult.landBuyableByUserStatus.status ==
-          LandBuyableByUserEnum.NOT_ENOUGH_MONEY
-        ? landNotBuyableBCNotEnoughMoneey(props.skillServiceResult.landStatus)
-        : props.skillServiceResult.landBuyableByUserStatus.status ==
-          LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU
-        ? landNotBuyableBCUserAlreadyOwns()
-        : []),
+            LandBuyableByUserEnum.ALREADY_OWNED_BY_OTHER
+          ? landNotBuyableBCOtherUserAlreadyOwns(
+              props.skillServiceResult.landStatus,
+              props.timezone,
+            )
+          : props.skillServiceResult.landBuyableByUserStatus.status ==
+              LandBuyableByUserEnum.NOT_ENOUGH_MONEY
+            ? landNotBuyableBCNotEnoughMoneey(
+                props.skillServiceResult.landStatus,
+              )
+            : props.skillServiceResult.landBuyableByUserStatus.status ==
+                LandBuyableByUserEnum.ALREADY_OWNED_BY_YOU
+              ? landNotBuyableBCUserAlreadyOwns()
+              : []),
     ],
   });
 }

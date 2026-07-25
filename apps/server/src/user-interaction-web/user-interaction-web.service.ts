@@ -47,13 +47,11 @@ export class UserInteractionWebService {
       params: callingSkillParam,
     };
 
-    const skillServiceResult = await this.scenarioRoutingService.callSkill<any>(
-      callingSkillRoute,
-      {
+    const skillServiceResult =
+      await this.scenarioRoutingService.callSkill<unknown>(callingSkillRoute, {
         userId: userJwt.userId,
         userActivity: interactionUserActivity,
-      },
-    );
+      });
 
     const lastSkillLog = await this.skillLogService.getLastLog(userJwt.userId);
 

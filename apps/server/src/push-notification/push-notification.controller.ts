@@ -75,10 +75,11 @@ export class PushNotificationController {
     }
 
     return {
-      subscribed: await this.pushNotificationService.isCurrentSubscriptionActive(
-        userJwt.userId,
-        body.endpoint,
-      ),
+      subscribed:
+        await this.pushNotificationService.isCurrentSubscriptionActive(
+          userJwt.userId,
+          body.endpoint,
+        ),
     };
   }
 

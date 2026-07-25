@@ -50,11 +50,11 @@ export class OnlineStatusTracker {
     this.isTracking = true;
 
     // Send initial heartbeat
-    this.sendHeartbeat();
+    void this.sendHeartbeat();
 
     // Set up interval for periodic heartbeats
     this.heartbeatInterval = window.setInterval(() => {
-      this.sendHeartbeat();
+      void this.sendHeartbeat();
     }, HEARTBEAT_INTERVAL);
 
     // Handle visibility changes
@@ -97,7 +97,7 @@ export class OnlineStatusTracker {
   private removeVisibilityHandler(): void {
     document.removeEventListener(
       'visibilitychange',
-      this.handleVisibilityChange
+      this.handleVisibilityChange,
     );
   }
 
@@ -107,7 +107,7 @@ export class OnlineStatusTracker {
   private handleVisibilityChange = (): void => {
     if (document.visibilityState === 'visible') {
       // Send heartbeat when tab becomes visible
-      this.sendHeartbeat();
+      void this.sendHeartbeat();
     }
   };
 
