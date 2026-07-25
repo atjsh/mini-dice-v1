@@ -51,7 +51,7 @@ export class RpsSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.rps.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<RpsService, 'index'>
     >,
@@ -105,7 +105,7 @@ export class RpsSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.rps.skills.submit)
-  async submitDraw(
+  submitDraw(
     props: InteractionUserActivitySkillDrawPropsType<
       MethodReturnType<RpsService, 'submit'>
     >,
@@ -144,14 +144,14 @@ export class RpsSkillGroup implements SkillGroupController {
               description: `${rspGameResultDescription}\n${rpsGameCashChangeDescription}`,
             })
           : props.skillServiceResult.rpsResult == RpsResult.Lose
-          ? PlainMessage({
-              title: '가위바위보 패배!',
-              description: `${rspGameResultDescription}\n${rpsGameCashChangeDescription}`,
-            })
-          : PlainMessage({
-              title: '가위바위보 무승부에요',
-              description: rspGameResultDescription,
-            }),
+            ? PlainMessage({
+                title: '가위바위보 패배!',
+                description: `${rspGameResultDescription}\n${rpsGameCashChangeDescription}`,
+              })
+            : PlainMessage({
+                title: '가위바위보 무승부에요',
+                description: rspGameResultDescription,
+              }),
       ],
     });
   }

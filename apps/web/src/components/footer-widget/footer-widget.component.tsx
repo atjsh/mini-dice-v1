@@ -1,13 +1,12 @@
-import { strEllipsis } from '@packages/shared-types';
 import { Link } from 'react-router-dom';
 import { useAccessToken } from '../../libs';
 import {
   IndexPageURL,
   LogoutPageURL,
   NotificationPageURL,
+  PreferencesPageURL,
   PrivacyPolicyPageURL,
   RankingPgaeURL,
-  TerminatePageURL,
   TermsPageURL,
   UpdatesPageURL,
 } from '../../pages/routes';
@@ -118,13 +117,13 @@ export const FooterWidgetComponent: React.FC = () => {
       isHidden: accessToken ? false : true,
       links: [
         {
-          label: '로그아웃',
-          link: LogoutPageURL,
+          label: '설정',
+          link: PreferencesPageURL,
           type: 'internal',
         },
         {
-          label: '회원탈퇴',
-          link: TerminatePageURL,
+          label: '로그아웃',
+          link: LogoutPageURL,
           type: 'internal',
         },
       ],
@@ -173,7 +172,7 @@ export const FooterWidgetComponent: React.FC = () => {
 
   return (
     <div className="self-center mb-10 flex flex-col gap-5 max-w-7xl px-2 text-sm md:text-base">
-      <hr className=" border-gray-300" />
+      <hr className=" border-gray-300 dark:border-zinc-800" />
       {footerLinkGroupData.map((group) => (
         <FooterLinkGroup key={group.label} {...group} />
       ))}

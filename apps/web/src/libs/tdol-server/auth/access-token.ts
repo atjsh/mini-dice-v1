@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { ReactQueryAccessTokenKey } from './constants';
 import { RefreshTokenNotFoundException } from './exceptions';
 
@@ -12,16 +12,33 @@ export const authedAxios = axios.create({
 
 const TWO_MINUTES = 1000 * 60 * 2;
 
-function isJwtTokenExpired(token: string) {
-  const payloadBase64 = token.split('.')[1];
-  // const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
-  const decodedJson = atob(payloadBase64);
-  const decoded = JSON.parse(decodedJson);
-  const exp = decoded.exp;
+function hasJwtExpiration(value: unknown): value is { exp: number } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'exp' in value &&
+    typeof value.exp === 'number'
+  );
+}
 
-  // exp * 1000 is date value
-  // if exp is less then 2 minutes from now, it is expired
-  return exp * 1000 < Date.now() + TWO_MINUTES;
+function isJwtTokenExpired(token: string): boolean {
+  try {
+    const payloadBase64 = token.split('.')[1];
+    if (!payloadBase64) {
+      return true;
+    }
+
+    const decodedJson = atob(payloadBase64);
+    const decoded: unknown = JSON.parse(decodedJson);
+    if (!hasJwtExpiration(decoded)) {
+      return true;
+    }
+
+    // exp * 1000 is date value. Refresh two minutes before expiration.
+    return decoded.exp * 1000 < Date.now() + TWO_MINUTES;
+  } catch {
+    return true;
+  }
 }
 
 async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
@@ -32,8 +49,8 @@ async function getUserAccessTokenFromServer(): Promise<AccessTokenType> {
     });
 
     return response.data;
-  } catch (error: any) {
-    if (error.response.status == 403) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 403) {
       throw new RefreshTokenNotFoundException('');
     }
 
@@ -67,7 +84,7 @@ export async function getUserAccessToken(): Promise<AccessTokenType> {
 }
 
 async function revokeUserRefreshToken() {
-  const result = await axios.post<any, AxiosResponse<{ success: boolean }>>(
+  const result = await axios.post<{ success: boolean }>(
     `${import.meta.env.VITE_SERVER_URL}/auth/logout`,
     {},
     { withCredentials: true },
@@ -77,20 +94,22 @@ async function revokeUserRefreshToken() {
 
 export async function logoutUser() {
   revokeUserAccessToken();
-  return await revokeUserRefreshToken();
+  return revokeUserRefreshToken();
 }
 
-authedAxios.interceptors.request.use(async (config: any) => {
+authedAxios.interceptors.request.use(async (config) => {
   const accessToken = await getUserAccessToken();
 
-  config.headers.Authorization = `Bearer ${accessToken}`;
-
-  config.headers.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  config.headers.set('Authorization', `Bearer ${accessToken}`);
+  config.headers.set(
+    'timezone',
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+  );
 
   return config;
 });
 
-authedAxios.interceptors.response.use(async (response) => {
+authedAxios.interceptors.response.use((response) => {
   if (response.status != 200 && response.status != 201) {
     revokeUserAccessToken();
   }

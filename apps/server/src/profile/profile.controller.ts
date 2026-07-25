@@ -8,16 +8,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import type {
-  CompleteSignupUserDto,
-  UpdateUserDto,
-  UserVo,
-} from '@packages/shared-types';
+import type { CompleteSignupUserDto, UserVo } from '@packages/shared-types';
 import { Type } from 'class-transformer';
 import { Max, Min } from 'class-validator';
 import type { UserJwtDto } from '../auth/local-jwt/access-token/dto/user-jwt.dto';
 import { UserService } from '../user/user.service';
 import { JwtAuth, UserJwt } from './decorators/user.decorator';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { PublicProfileService } from './profile.service';
 
 class PageDto {
@@ -50,7 +47,11 @@ export class PublicProfileController {
 
   @JwtAuth()
   @Patch('me')
-  updateUserById(@UserJwt() userJwt: UserJwtDto, @Body() user: UpdateUserDto) {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  updateUserById(
+    @UserJwt() userJwt: UserJwtDto,
+    @Body() user: UpdateProfileDto,
+  ) {
     if ((user as UserVo).cash) {
       return {
         error: '치트는 금지됩니다. 당신의 시도는 로그에 남습니다.',

@@ -5,7 +5,7 @@ export const WordmarkComponent: React.FC<{ colored?: boolean }> = ({
     <div className="whitespace-nowrap">Mini</div>{' '}
     <div
       className={`${
-        colored == undefined || colored == true ? 'text-minidice_red' : ''
+        colored == undefined || colored == true ? 'text-minidice-red' : ''
       } whitespace-nowrap`}
     >
       Dice
@@ -25,7 +25,7 @@ export const KoreanWordmarkComponent: React.FC<{ colored?: boolean }> = ({
     <span className="whitespace-nowrap">미니다이스</span>{' '}
     <span
       className={`${
-        colored == undefined || colored == true ? 'text-minidice_red' : ''
+        colored == undefined || colored == true ? 'text-minidice-red' : ''
       } whitespace-nowrap`}
     >
       인생게임

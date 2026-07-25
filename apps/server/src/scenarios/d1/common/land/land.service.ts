@@ -115,7 +115,7 @@ export class LandNotForSaleYet extends HttpException {
     super(
       {
         status: 403,
-        message: `Land is not buyable yet; ${prop}`,
+        message: `Land is not buyable yet; ${JSON.stringify(prop)}`,
       },
       403,
     );
@@ -168,7 +168,9 @@ export class CommonLandService {
   ) {}
 
   private async initLand(id: LandEntity['id']): Promise<LandEntity> {
-    const initalLand = landInitalDataList.find((land) => land.id == id);
+    const initalLand = landInitalDataList.find(
+      (land) => Number(land.id) === id,
+    );
     if (!initalLand) {
       throw new Error(`Land with id ${id} not found`);
     }
@@ -192,11 +194,9 @@ export class CommonLandService {
     return await this.initLand(id);
   }
 
-  private async getLandStatusByLandEntity(
-    landEntity: LandEntity,
-  ): Promise<LandStatus> {
+  private getLandStatusByLandEntity(landEntity: LandEntity): LandStatus {
     const LandInitalData = landInitalDataList.find(
-      (land) => land.id == landEntity.id,
+      (land) => Number(land.id) === landEntity.id,
     )!;
 
     return {
@@ -242,7 +242,7 @@ export class CommonLandService {
 
   public async getLandStatusById(id: LandIdEnum): Promise<LandStatus> {
     const landEntity = await this.getLandOrCreate(id);
-    return await this.getLandStatusByLandEntity(landEntity);
+    return this.getLandStatusByLandEntity(landEntity);
   }
 
   // 토지를 구매한다.
@@ -337,23 +337,21 @@ export class CommonLandService {
       ) &&
       landStatus.landOwnedBy != null
     ) {
-      this.userActivityService.create<RealEstateEarnedLandEventResult>({
-        userId: landStatus.landOwnedBy.id,
-        skillRoute: getSkillRoutePath(
-          D1ScenarioRoutes.skillGroups.landEventRealEstate.skills.earned,
-        ),
-        skillDrawProps: {
-          earnedCash: landStatus.tollFee,
-          landName: landStatus.landName,
-          visitorUsername: username,
-        },
-      });
+      const landOwnerId = landStatus.landOwnedBy.id;
       await Promise.all([
+        this.userActivityService.create<RealEstateEarnedLandEventResult>({
+          userId: landOwnerId,
+          skillRoute: getSkillRoutePath(
+            D1ScenarioRoutes.skillGroups.landEventRealEstate.skills.earned,
+          ),
+          skillDrawProps: {
+            earnedCash: landStatus.tollFee,
+            landName: landStatus.landName,
+            visitorUsername: username,
+          },
+        }),
         this.userService.changeUserCash(props.userId, -landStatus.tollFee),
-        this.userService.changeUserCash(
-          landStatus.landOwnedBy!.id,
-          landStatus.tollFee,
-        ),
+        this.userService.changeUserCash(landOwnerId, landStatus.tollFee),
       ]);
     }
     if (landBuyableByUserStatus.status == LandBuyableByUserEnum.BUYABLE) {

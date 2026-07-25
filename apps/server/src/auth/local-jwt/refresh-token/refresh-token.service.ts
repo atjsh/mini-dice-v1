@@ -40,7 +40,7 @@ export class RefreshTokenService {
     refreshTokenEntity: RefreshTokenEntity,
   ) {
     expressResponse.cookie('refreshToken', refreshTokenEntity.value, {
-      maxAge: REFRESH_TOKEN_EXPIRES_IN_MS,
+      maxAge: REFRESH_TOKEN_EXPIRES_IN_MS / 1000,
       httpOnly: true,
       secure: true,
       sameSite: 'none',

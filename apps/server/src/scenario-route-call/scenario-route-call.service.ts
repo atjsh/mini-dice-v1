@@ -1,4 +1,4 @@
-import { DiscoveryService } from '@golevelup/nestjs-discovery';
+import { DiscoveryService, type MetaKey } from '@golevelup/nestjs-discovery';
 import { Injectable } from '@nestjs/common';
 import type { SkillRouteType } from '@packages/scenario-routing';
 import {
@@ -22,7 +22,10 @@ import type { UserActivityType } from '../skill-log/types/user-activity.dto';
 export class ScenarioRouteCallService {
   constructor(private discoveryService: DiscoveryService) {}
 
-  private async findSkillMethod(skillRoute: SkillRouteType, metadataKey: any) {
+  private async findSkillMethod(
+    skillRoute: SkillRouteType,
+    metadataKey: MetaKey,
+  ) {
     const rawMethods =
       await this.discoveryService.providerMethodsWithMetaAtKey<string>(
         metadataKey,
@@ -40,7 +43,7 @@ export class ScenarioRouteCallService {
 
   public async canCallBySkill(
     skillRoute: SkillRouteType,
-    metadataKey: any,
+    metadataKey: MetaKey,
   ): Promise<boolean> {
     try {
       await this.findSkillMethod(skillRoute, metadataKey);
@@ -52,22 +55,29 @@ export class ScenarioRouteCallService {
 
   private async callBySkill<ReturnType>(
     skillRoute: SkillRouteType,
-    arg: any,
-    metadataKey: any,
-  ) {
+    arg: unknown,
+    metadataKey: MetaKey,
+  ): Promise<ReturnType> {
     const exactMethod = await this.findSkillMethod(skillRoute, metadataKey);
+    const handler: unknown = exactMethod.discoveredMethod.handler;
 
-    return exactMethod.discoveredMethod.handler.call(
+    if (typeof handler !== 'function') {
+      throw new TypeError(`Method ${getSkillRoutePath(skillRoute)} is invalid`);
+    }
+
+    const result: unknown = handler.call(
       exactMethod.discoveredMethod.parentClass.instance,
       arg,
-    ) as ReturnType;
+    );
+
+    return (await result) as ReturnType;
   }
 
   public async callSkill<ReturnType>(
     skillRoute: SkillRouteType,
     skillProps: SkillPropsType<UserActivityType>,
-  ) {
-    return await this.callBySkill<ReturnType>(
+  ): Promise<ReturnType> {
+    return this.callBySkill<ReturnType>(
       skillRoute,
       skillProps,
       SkillMetadataKey,
@@ -76,9 +86,9 @@ export class ScenarioRouteCallService {
 
   public async callSkillDraw<ReturnType>(
     skillRoute: SkillRouteType,
-    skillDrawProps: SkillDrawPropsType<UserActivityType, any>,
-  ) {
-    return await this.callBySkill<ReturnType>(
+    skillDrawProps: SkillDrawPropsType<UserActivityType, unknown>,
+  ): Promise<ReturnType> {
+    return this.callBySkill<ReturnType>(
       skillRoute,
       skillDrawProps,
       SkillDrawMetadataKey,
@@ -89,7 +99,7 @@ export class ScenarioRouteCallService {
     land: SkillRouteType,
     landEventDrawProps: LandEventDrawPropsType<unknown>,
   ): Promise<NotificationMessageType> {
-    return await this.callBySkill<NotificationMessageType>(
+    return this.callBySkill<NotificationMessageType>(
       land,
       landEventDrawProps,
       LandEventDrawMetadataKey,
@@ -100,7 +110,7 @@ export class ScenarioRouteCallService {
     land: SkillRouteType,
     landEventsSummarizeProps: LandEventsSummarizePropsType<unknown>,
   ): Promise<LandEventsSummarizeResultType> {
-    return await this.callBySkill<LandEventsSummarizeResultType>(
+    return this.callBySkill<LandEventsSummarizeResultType>(
       land,
       landEventsSummarizeProps,
       LandEventsSummarizeMetadataKey,

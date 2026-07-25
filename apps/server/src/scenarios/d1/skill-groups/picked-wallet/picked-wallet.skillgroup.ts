@@ -34,7 +34,7 @@ export class PickedWalletSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.pickedWallet.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<PickedWalletService, 'index'>
     >,

@@ -11,15 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: '24.18.0'
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: yarn
+        run: npm ci --strict-peer-deps
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -42,10 +44,11 @@ jobs:
 
       - name: Build the app
         run: |
-          yarn packages:build
-          yarn server:typecheck && yarn server:build
+          npm run packages:build
+          npm run typecheck:ts6
+          npm run server:typecheck
+          npm run server:build
 
       - name: Deploy to AWS with Serverless Framework
         run: |
-          cd apps/server
-          yarn g:serverless deploy
+          npm run server:deploy

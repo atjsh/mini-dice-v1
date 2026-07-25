@@ -1,14 +1,17 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Turnstile } from '@marsidev/react-turnstile';
 import {
-  CountryCode3Type,
   countryMetadataIsoList,
-  CountryMetadataType,
+  type CountryCode3Type,
+  type CountryMetadataType,
 } from '@packages/shared-types';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
+import { UseUserHookKey, useQueryString } from '../libs';
+import { queryClient } from '../query-client';
+import { usePasskeyRegister } from '../libs/tdol-server/passkey';
 import {
   validateUsername,
   ValidationError,
@@ -22,22 +25,26 @@ import {
 } from './routes';
 
 function TempSignupForm() {
+  const suggestedByPasskeyLogin =
+    useQueryString().get('from') === 'passkey-login';
+  const passkeyRegister = usePasskeyRegister();
   const [username, setUsername] = useState('');
-  const [hCaptchaToken, setHCaptchaToken] = useState<false | string>(false);
-  const [country, setCountry] = useState(
+  const [turnstileToken, setTurnstileToken] = useState<false | string>(false);
+  const [country, setCountry] = useState<CountryCode3Type | undefined>(
     countryMetadataIsoList.find((country) => country.code3 === 'USA')?.code3,
   );
   const [error, setError] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [showPasskeySetup, setShowPasskeySetup] = useState(false);
+  const [readyForService, setReadyForService] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUsername(e.target.value.trim());
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const usernameValidationResult = validateUsername(username);
 
-    if (hCaptchaToken == false) {
+    if (turnstileToken == false) {
       setError("'사람입니다' 테스트를 먼저 완료해 주세요.");
     } else if (usernameValidationResult == ValidationError.TOOSHORT) {
       setError(
@@ -53,13 +60,14 @@ function TempSignupForm() {
       setDisabled(true);
       mutation.mutate(
         {
-          hCaptchaSuccessToken: hCaptchaToken,
+          turnstileToken: turnstileToken,
           username,
           countryCode3: country,
         },
         {
           onSuccess: () => {
-            setSuccess(true);
+            setShowPasskeySetup(true);
+            setDisabled(false);
           },
           onError: () => {
             setError('오류가 발생했습니다. 다시 시도해 주세요.');
@@ -70,12 +78,100 @@ function TempSignupForm() {
     }
   };
 
-  const mutation = useTempSignup();
+  const mutation = useTempSignup({ refetchUserOnSuccess: false });
 
-  return success ? (
-    <Navigate to={ServicePageURL} replace />
+  const goToService = async () => {
+    setDisabled(true);
+    try {
+      await queryClient.refetchQueries({ queryKey: UseUserHookKey });
+      setReadyForService(true);
+    } catch (error: unknown) {
+      setError('서비스를 준비하지 못했습니다. 다시 시도해 주세요.');
+      setDisabled(false);
+      console.error('Failed to refresh the user before navigation:', error);
+    }
+  };
+
+  const handlePasskeySetup = async () => {
+    setError('');
+    setDisabled(true);
+    try {
+      const result = await passkeyRegister.mutateAsync();
+      if (result.namingOutcome === 'rename-failed') {
+        try {
+          window.alert(
+            '패스키는 추가되었지만 이름을 저장하지 못했습니다. 설정에서 다시 변경해 주세요.',
+          );
+        } catch {
+          // The passkey is valid even when the browser cannot show this notice.
+        }
+      }
+      await goToService();
+    } catch (error: unknown) {
+      setError(
+        '패스키 등록에 실패했습니다. 나중에 설정에서 다시 추가할 수 있습니다.',
+      );
+      setDisabled(false);
+      console.error('Passkey registration failed:', error);
+    }
+  };
+
+  if (readyForService) {
+    return <Navigate to={ServicePageURL} replace />;
+  }
+
+  return showPasskeySetup ? (
+    <div className="flex flex-col items-center gap-10">
+      <div className="flex flex-col items-center gap-4 max-w-xl w-full text-center">
+        <h2 className="font-bold text-2xl">패스키 등록</h2>
+        <p className="text-base">
+          다음부터 더 빠르게 로그인할 수 있도록 패스키를 저장할 수 있습니다.
+          <br />
+          지금 건너뛰어도 설정에서 언제든 추가할 수 있습니다.
+        </p>
+      </div>
+
+      {error && <div className="text-red-500 italic">{error}</div>}
+
+      <div className="flex flex-col items-center gap-3 w-full">
+        <button
+          onClick={() => {
+            handlePasskeySetup().catch((error: unknown) => {
+              console.error('Unexpected passkey setup failure:', error);
+            });
+          }}
+          disabled={disabled}
+          className={
+            'inline-block px-5 py-5 max-w-xs w-full rounded-2xl transition duration-150 text-2xl font-semibold select-none transform active:scale-95 ' +
+            (disabled
+              ? 'text-white bg-gray-600 cursor-progress'
+              : 'text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-400 active:bg-blue-700')
+          }
+        >
+          {disabled ? '등록 중...' : '패스키 등록하기'}
+        </button>
+        <button
+          onClick={() => {
+            goToService().catch((error: unknown) => {
+              console.error('Unexpected service navigation failure:', error);
+            });
+          }}
+          disabled={disabled}
+          className="inline-block text-blue-600 hover:underline p-3"
+        >
+          나중에 하기
+        </button>
+      </div>
+    </div>
   ) : (
     <div className="flex flex-col items-center gap-5">
+      {suggestedByPasskeyLogin && (
+        <div className="max-w-xl text-center text-sm text-blue-600">
+          이 브라우저에서 사용할 수 있는 패스키를 찾지 못했습니다. 바로 시작
+          계정을 만들고 패스키를 저장하면 다음부터 패스키로 로그인할 수
+          있습니다.
+        </div>
+      )}
       <div className="flex flex-col items-center gap-2 max-w-xl w-full">
         <label className=" font-medium text-xl" htmlFor="username">
           닉네임을 입력하세요.
@@ -111,10 +207,12 @@ function TempSignupForm() {
           ))}
         </select>
       </div>
-      <div className="flex flex-col gap-1 text-center">
-        <HCaptcha
-          sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
-          onVerify={(token) => setHCaptchaToken(token)}
+      <div className="flex flex-col gap-1 text-center w-[300px] h-[78px]">
+        <Turnstile
+          siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onError={() => setTurnstileToken(false)}
+          onExpire={() => setTurnstileToken(false)}
         />
       </div>
       <a

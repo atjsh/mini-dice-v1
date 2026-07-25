@@ -1,18 +1,29 @@
-/* ./src/index.css */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import 'tailwindcss';
 
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@theme {
+  --font-sans:
+    Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
+    'Malgun Gothic', sans-serif;
+  --color-gray-100: #e8eaec;
+  --color-minidice-red: #ea4f43;
+}
 
-@layer utilities {
-  .border-png {
-    filter: drop-shadow(2px 2px 0 white) drop-shadow(-2px 2px 0 white)
-      drop-shadow(2px -2px 0 white) drop-shadow(-2px -2px 0 white);
-  }
+@utility border-png {
+  filter: drop-shadow(2px 2px 0 white) drop-shadow(-2px 2px 0 white)
+    drop-shadow(2px -2px 0 white) drop-shadow(-2px -2px 0 white);
 }
 
 @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
   h1,
   h2,
   h3,

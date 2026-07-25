@@ -32,7 +32,7 @@ export class CarAccidentSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.carAccident.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<CarAccidentService, 'index'>
     >,

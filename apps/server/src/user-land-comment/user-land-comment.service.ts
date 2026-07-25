@@ -5,10 +5,15 @@ import {
   getSkillGroupPath,
   getSkillRouteFromPath,
 } from '@packages/scenario-routing';
-import type { LandCommentVo, UserIdType } from '@packages/shared-types';
+import type {
+  LandCommentsMessageType,
+  LandCommentVo,
+  UserIdType,
+} from '@packages/shared-types';
 import type { Repository } from 'typeorm';
 import { SkillLogService } from '../skill-log/skill-log.service';
 import { UserService } from '../user/user.service';
+import { UserPreferenceService } from '../user-preference/user-preference.service';
 import { UserLandCommentEntity } from './entities/user-land-comment.entity';
 
 @Injectable()
@@ -20,6 +25,7 @@ export class UserLandCommentService {
     private userCommentRepository: Repository<UserLandCommentEntity>,
 
     private skillLogServicec: SkillLogService,
+    private userPreferenceService: UserPreferenceService,
   ) {}
 
   private async isTicketExist(userId: UserIdType): Promise<boolean> {
@@ -74,5 +80,22 @@ export class UserLandCommentService {
       comment: result.comment,
       date: result.createdAt,
     }));
+  }
+
+  async getLandCommentsMessage(
+    userId: UserIdType,
+    landId: SkillRoutePath,
+  ): Promise<LandCommentsMessageType | undefined> {
+    const preference =
+      await this.userPreferenceService.getUserPreference(userId);
+
+    if (preference.alwaysHideComments) {
+      return undefined;
+    }
+
+    return {
+      type: 'landComments',
+      landComments: await this.getLandComments(landId),
+    };
   }
 }

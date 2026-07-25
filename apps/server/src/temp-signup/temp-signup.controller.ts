@@ -4,7 +4,7 @@ import type { FastifyReply } from 'fastify';
 import { TempSignupService } from './temp-signup.service';
 
 export class TemporarySignUpDto {
-  hCaptchaSuccessToken: string;
+  turnstileToken: string;
   username?: string;
   countryCode3: CountryCode3Type;
 }

@@ -88,7 +88,7 @@ export class NightFoodService {
     };
   }
 
-  private async noProfit() {
+  private noProfit() {
     return {
       foodDetail: {
         foodName: selectRandomItemFromList(nightFoods),

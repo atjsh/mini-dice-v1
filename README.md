@@ -13,7 +13,7 @@
 - HTTP 기반 웹 서비스
 - 유저 인증: 소셜 계정 기반 OAuth, 또는 HCaptcha 검사 통과자의 익명 계정 허용
 - NestJS, Fastify로 구축된 API 서버.
-- React, Tailwind CSS, Recoil로 구축된 웹 애플리케이션
+- React, Tailwind CSS, Jotai로 구축된 웹 애플리케이션
 - PostgreSQL 데이터베이스 사용
 - AWS Lambda를 컴퓨팅 인프라스트럭쳐로 사용
 - esbuild를 서버 코드 번들러로 사용하여 서버리스 환경에 최적화된 아티팩트 생성
@@ -24,10 +24,10 @@
 
 # Copyright
 
-Copyright (c) 2022-2025 전성훈 (Sunghoon Jeon) All rights reserved.
+Copyright (c) 2022-2026 전성훈 (Sunghoon Jeon) All rights reserved.
 
-Copyright (c) 2022-2025 Miyobi All rights reserved.
+Copyright (c) 2022-2026 Miyobi All rights reserved.
 
-Copyright (c) 2022-2025 Mini Dice Contributors All rights reserved. See more at [contributors graph](https://github.com/atjsh/mini-dice-v1/graphs/contributors).
+Copyright (c) 2022-2026 Mini Dice Contributors All rights reserved. See more at [contributors graph](https://github.com/atjsh/mini-dice-v1/graphs/contributors).
 
 Other copyrights are the property of their respective owners. You can check the original author of the code in the source code & commit history.

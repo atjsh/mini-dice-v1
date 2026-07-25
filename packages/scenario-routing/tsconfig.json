@@ -5,12 +5,15 @@
     "esModuleInterop": true,
     "declaration": true,
     "declarationMap": true,
-    "target": "ES2020",
-    "moduleResolution": "node",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strict": false,
     "strictPropertyInitialization": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": []
   },
   "include": ["src"]
 }

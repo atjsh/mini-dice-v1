@@ -1,6 +1,6 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { submitUserLandComment } from './submit-user-land-comment';
 
 export const mutateUserLandComment = () => {
-  return useMutation(submitUserLandComment);
+  return useMutation({ mutationFn: submitUserLandComment });
 };

@@ -1,13 +1,47 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import { WordmarkComponent } from '../components/wordmark/wordmark.component';
 import { getGoogleOAuthPageUrl } from '../google-oauth';
 import { ServiceLayout } from '../layouts/service.layout';
 import { useQueryString } from '../libs';
-import { TempSignupPageURL, UpdatesPageURL } from './routes';
+import { usePasskeyAuthenticate } from '../libs/tdol-server/passkey';
+import { TempSignupPageURL, UpdatesPageURL, ServicePageURL } from './routes';
 import { NewestEntrySummary } from './Updates.page';
 
 export function IndexPage() {
   const loginRequired = useQueryString().get('loginRequired') === 'true';
+  const [error, setError] = useState('');
+  const passkeyAuth = usePasskeyAuthenticate();
+  const [authSuccess, setAuthSuccess] = useState(false);
+  const [passkeyUnavailable, setPasskeyUnavailable] = useState(false);
+
+  const handlePasskeyLogin = async () => {
+    setError('');
+    try {
+      const result = await passkeyAuth.mutateAsync();
+      if (result.success) {
+        setAuthSuccess(true);
+      } else {
+        setPasskeyUnavailable(true);
+      }
+    } catch (error: unknown) {
+      setPasskeyUnavailable(true);
+      console.error('Passkey authentication failed:', error);
+    }
+  };
+
+  if (authSuccess) {
+    return <Navigate to={ServicePageURL} replace />;
+  }
+
+  if (passkeyUnavailable) {
+    return (
+      <Navigate
+        to={{ pathname: TempSignupPageURL, search: '?from=passkey-login' }}
+        replace
+      />
+    );
+  }
 
   return (
     <ServiceLayout hideFooter={false}>
@@ -48,9 +82,25 @@ export function IndexPage() {
               {loginRequired ? '바로 시작 계정 생성' : '바로 시작'}
             </Link>
           </div>
-          <div>
+          <div className="flex flex-row gap-3 mx-auto">
+            <button
+              onClick={() => {
+                handlePasskeyLogin().catch((error: unknown) => {
+                  console.error('Unexpected passkey login failure:', error);
+                });
+              }}
+              disabled={passkeyAuth.isPending}
+              className={
+                'block text-xl px-5 py-5 hover:underline ' +
+                (passkeyAuth.isPending ? 'text-gray-400' : 'text-blue-600')
+              }
+            >
+              {passkeyAuth.isPending
+                ? '패스키 확인 중...'
+                : '패스키로 로그인 →'}
+            </button>
             <a
-              className="inline-block text-xl text-blue-600 hover:underline p-5"
+              className="block text-xl text-blue-600 hover:underline p-5"
               href={getGoogleOAuthPageUrl()}
             >
               {loginRequired
@@ -58,6 +108,8 @@ export function IndexPage() {
                 : '구글 계정으로 시작 →'}
             </a>
           </div>
+
+          {error && <div className="text-red-500 text-sm italic">{error}</div>}
         </div>
       </div>
     </ServiceLayout>

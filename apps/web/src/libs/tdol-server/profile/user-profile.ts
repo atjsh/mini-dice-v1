@@ -1,12 +1,13 @@
 import {
   PublicProfileVo,
+  UpdateUserDto,
   UserEntityJson,
   UserVo,
 } from '@packages/shared-types';
-import { queryClient } from '../../..';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { authedAxios, UseUserHookKey } from '..';
 import axios from 'axios';
+import { queryClient } from '../../../query-client';
 
 export async function getUserVo(): Promise<UserEntityJson> {
   const response = await authedAxios.get<UserEntityJson>(`/profile/me`);
@@ -36,33 +37,34 @@ export async function getOthersProfiles(
 }
 
 export async function updateUserVo(
-  partialUser: Partial<UserVo>,
-): Promise<UserVo> {
-  const response = await authedAxios.patch<Partial<UserVo>, UserVo>(
-    `/profile/me`,
-    partialUser,
-  );
-  return response;
+  partialUser: UpdateUserDto,
+): Promise<UpdateUserDto> {
+  const response = await authedAxios.patch<unknown>(`/profile/me`, partialUser);
+
+  if (response.status < 200 || response.status >= 300) {
+    throw new Error(`Failed to update user (${response.status})`);
+  }
+
+  return partialUser;
 }
 
 export async function userCompleteSignup(
   partialUser: Partial<UserVo>,
 ): Promise<UserVo> {
-  const response = await authedAxios.patch<Partial<UserVo>, UserVo>(
+  const response = await authedAxios.patch<UserVo>(
     `/profile/complete-signup`,
     partialUser,
   );
-  return response;
+  return response.data;
 }
 
 export async function terminateUser() {
-  const response = await authedAxios.delete('/profile');
+  const response = await authedAxios.delete<unknown>('/profile');
   return response;
 }
 
 export const useCompleteSignup = () =>
-  useMutation(userCompleteSignup, {
-    onSuccess: () => {
-      queryClient.refetchQueries([UseUserHookKey]);
-    },
+  useMutation({
+    mutationFn: userCompleteSignup,
+    onSuccess: () => queryClient.refetchQueries({ queryKey: UseUserHookKey }),
   });

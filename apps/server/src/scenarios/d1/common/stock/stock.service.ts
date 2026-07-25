@@ -22,7 +22,7 @@ export type StockBuyableByUserStatus = {
 export class CommonStockService {
   constructor(private userService: UserService) {}
 
-  async getStockDatas(): Promise<StockInitalDataType[]> {
+  getStockDatas(): StockInitalDataType[] {
     return StockInitialData;
   }
 

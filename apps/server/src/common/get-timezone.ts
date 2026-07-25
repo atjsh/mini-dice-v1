@@ -10,7 +10,7 @@ function isValidTimeZone(tz: string) {
   try {
     Intl.DateTimeFormat(undefined, { timeZone: tz });
     return true;
-  } catch (ex) {
+  } catch {
     return false;
   }
 }

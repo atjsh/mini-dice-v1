@@ -3,9 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserActivityEntity } from './user-activity.entity';
 
-export type CreateUserActivityInputDto<
-  LandEventResult extends Record<string, any>,
-> = Pick<UserActivityEntity, 'skillRoute' | 'userId'> & {
+export type CreateUserActivityInputDto<LandEventResult extends object> = Pick<
+  UserActivityEntity,
+  'skillRoute' | 'userId'
+> & {
   skillDrawProps: LandEventResult;
 };
 
@@ -42,7 +43,7 @@ export class LandEventRepository {
     private readonly userActivityRepository: Repository<UserActivityEntity>,
   ) {}
 
-  public async createLandEvent<LandEventResult extends Record<string, any>>(
+  public async createLandEvent<LandEventResult extends object>(
     createUserActivityInputDto: CreateUserActivityInputDto<LandEventResult>,
   ): Promise<CreateUserActivityOutputDto> {
     return await this.userActivityRepository.save(

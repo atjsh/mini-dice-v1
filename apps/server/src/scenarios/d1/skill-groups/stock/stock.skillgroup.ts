@@ -45,7 +45,7 @@ class StockBuyMoreSubmitDto {
 @SkillGroup(D1ScenarioRoutes.skillGroups.stock)
 export class StockSkillGroup implements SkillGroupController {
   constructor(private skillService: StockService) {}
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return '주식';
   }
 
@@ -119,7 +119,7 @@ export class StockSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.stock.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<StockService, 'index'>
     >,
@@ -331,7 +331,7 @@ export class StockSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.stock.skills.sell)
-  async drawSell(
+  drawSell(
     props: InteractionUserActivitySkillDrawPropsType<
       MethodReturnType<StockService, 'sell'>
     >,

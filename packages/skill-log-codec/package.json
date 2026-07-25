@@ -1,0 +1,17 @@
+{
+  "name": "@packages/skill-log-codec",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json && mkdir -p dist/generated && cp src/generated/*.json dist/generated/",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck:ts6": "tsc6 --noEmit -p tsconfig.json",
+    "watch": "npm run build && tsc --watch -p tsconfig.json"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^3.1.3"
+  }
+}

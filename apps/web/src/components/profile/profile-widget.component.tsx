@@ -1,12 +1,13 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../libs';
-import { NotificationPageURL, RankingPgaeURL } from '../../pages/routes';
+import {
+  NotificationPageURL,
+  PreferencesPageURL,
+  RankingPgaeURL,
+} from '../../pages/routes';
 
 export const ProfileWidget: React.FC = () => {
   const { data: user } = useUser();
-
-  const [isEmailShowing, setisEmailShowing] = useState(false);
 
   return (
     <div>
@@ -21,37 +22,30 @@ export const ProfileWidget: React.FC = () => {
               <div className="font-bold text-base text-zinc-400 dark:text-zinc-600 md:dark:text-zinc-500">
                 {new Date(user.createdAt).toLocaleDateString('ko-kr')} 시작
               </div>
-              <div
-                className={`w-fit ${
-                  user.email ? 'cursor-pointer hover:underline' : ''
-                }`}
-                onClick={() => setisEmailShowing(!isEmailShowing)}
-              >
-                {user.email ? (
-                  <>
-                    내 이메일 {isEmailShowing ? '닫기: ' : '보기'}
-                    {isEmailShowing ? user.email : ''}
-                  </>
-                ) : (
-                  '등록된 이메일 없음'
-                )}
-              </div>
             </div>
             <div className=" flex gap-4">
               <div>
                 <Link
-                  className="text-blue-600 dark:text-white hover:underline"
+                  className="text-blue-500 dark:text-white hover:underline"
                   to={RankingPgaeURL}
                 >
-                  🏆 순위 확인하기→
+                  🏆 순위→
                 </Link>
               </div>
               <div>
                 <Link
-                  className="text-blue-600 dark:text-white hover:underline"
+                  className="text-blue-500 dark:text-white hover:underline"
                   to={NotificationPageURL}
                 >
                   📨 알림 센터→
+                </Link>
+              </div>
+              <div>
+                <Link
+                  className="text-blue-500 dark:text-white hover:underline"
+                  to={PreferencesPageURL}
+                >
+                  ⚙️ 설정→
                 </Link>
               </div>
             </div>

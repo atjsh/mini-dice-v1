@@ -34,7 +34,7 @@ export class PickedItemSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.pickedItem.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<PickedItemService, 'index'>
     >,

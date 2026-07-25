@@ -37,7 +37,7 @@ export class MapStarterSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.mapStarter.skills.index)
-  async indexDraw(
+  indexDraw(
     props:
       | DiceUserActivitySkillDrawPropsType<
           MethodReturnType<MapStarterService, 'index'>
@@ -67,10 +67,6 @@ export class MapStarterSkillGroup implements SkillGroupController {
         ],
       });
     } else {
-      props as DiceUserActivitySkillDrawPropsType<
-        MethodReturnType<MapStarterService, 'index'>
-      >;
-
       return MessageResponseFactory({
         userRequestDrawings: drawDiceUserActivityMessage(props.userActivity),
         actionResultDrawings: [

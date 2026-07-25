@@ -17,21 +17,39 @@ export const ENV_KEYS = {
   JWT_SECRET: 'JWT_SECRET',
   COOKIE_SIGN_SECRET: 'COOKIE_SIGN_SECRET',
 
-  HCAPTCHA_SECRET_KEY: 'HCAPTCHA_SECRET_KEY',
+  TURNSTILE_SECRET_KEY: 'TURNSTILE_SECRET_KEY',
 
   GOOGLE_OAUTH_CLIENT_ID: 'GOOGLE_OAUTH_CLIENT_ID',
   GOOGLE_OAUTH_CLIENT_SECRET: 'GOOGLE_OAUTH_CLIENT_SECRET',
 
+  WEBAUTHN_RP_ID: 'WEBAUTHN_RP_ID',
+  WEBAUTHN_RP_NAME: 'WEBAUTHN_RP_NAME',
+  WEBAUTHN_ORIGIN: 'WEBAUTHN_ORIGIN',
+
+  VAPID_SUBJECT: 'VAPID_SUBJECT',
+  VAPID_PUBLIC_KEY: 'VAPID_PUBLIC_KEY',
+  VAPID_PRIVATE_KEY: 'VAPID_PRIVATE_KEY',
+
   ADS_TXT: 'ADS_TXT',
 };
 
-const envFileValidationSchema = Joi.object(
-  Object.values(ENV_KEYS)
+const envFileValidationSchema = Joi.object({
+  ...Object.values(ENV_KEYS)
+    .filter(
+      (key) =>
+        key !== 'WEBAUTHN_RP_ID' &&
+        key !== 'WEBAUTHN_RP_NAME' &&
+        key !== 'WEBAUTHN_ORIGIN',
+    )
     .map((variableName) => ({
       [variableName]: Joi.string().required(),
     }))
     .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
-);
+  // WebAuthn variables are optional
+  WEBAUTHN_RP_ID: Joi.string().optional(),
+  WEBAUTHN_RP_NAME: Joi.string().optional(),
+  WEBAUTHN_ORIGIN: Joi.string().optional(),
+});
 
 export const APP_GLOBAL_CONFIG_MODULES = [
   ConfigModule.forRoot({

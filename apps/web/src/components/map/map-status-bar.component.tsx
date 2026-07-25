@@ -1,12 +1,11 @@
 import { SkillRouteType } from '@packages/scenario-routing';
-import * as _ from 'lodash';
+import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { mapMovingDelayTimeMS } from '../../common/timing';
 import { MapBlock, useMap, useSkillLogs } from '../../libs';
 import { currentSkillRouteAtom } from './current-skill-route.atom';
 
-function endlessSlice(arr: any[], from: number, to: number) {
+function endlessSlice<T>(arr: T[], from: number, to: number): T[] {
   if (from >= to) {
     return [...arr, ...arr, ...arr].slice(from, arr.length + to);
   }
@@ -22,12 +21,13 @@ function getSkillRouteIndexBySkillGroup(
   map: MapBlock[],
   findingSkillRoute: SkillRouteType,
 ) {
-  return _.findIndex(
-    map.map((stop) => stop.skillRoute),
-    (skillRoute) =>
-      skillRoute.scenarioName == findingSkillRoute.scenarioName &&
-      skillRoute.skillGroupName == findingSkillRoute.skillGroupName,
-  );
+  return map
+    .map((stop) => stop.skillRoute)
+    .findIndex(
+      (skillRoute) =>
+        skillRoute.scenarioName == findingSkillRoute.scenarioName &&
+        skillRoute.skillGroupName == findingSkillRoute.skillGroupName,
+    );
 }
 
 function getRelativeMovingCount(
@@ -51,13 +51,13 @@ export const MapStatusBar: React.FC = () => {
   const [relativeMovingCount, setRelativeMovingCount] = useState(-1);
   const [zoomedMap, setZoomedMap] = useState<MapBlock[]>([]);
 
-  const measuredRef = useCallback((node) => {
+  const measuredRef = useCallback((node: HTMLDivElement | null) => {
     if (node !== null) {
       setLeft(node.offsetLeft);
     }
   }, []);
 
-  const currentSkillRoute = useRecoilValue(currentSkillRouteAtom);
+  const currentSkillRoute = useAtomValue(currentSkillRouteAtom);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
@@ -144,7 +144,7 @@ export const MapStatusBar: React.FC = () => {
 
   return mapStops && skillLogs ? (
     <div
-      className="relative overflow-x-scroll flex flex-col md:gap-y-1 gap-0 flex-grow leading-none px-2 py-2 rounded-2xl md:px-4 md:py-3 border border-zinc-300 text-black dark:border-zinc-800 dark:text-white select-none"
+      className="relative overflow-x-scroll flex flex-col md:gap-y-1 gap-0 grow leading-none px-2 py-2 rounded-2xl md:px-4 md:py-3 border border-zinc-300 text-black dark:border-zinc-800 dark:text-white select-none"
       ref={mapContainerRef}
     >
       <div
@@ -176,7 +176,7 @@ export const MapStatusBar: React.FC = () => {
             <div
               className={`text-xs ${
                 index === 0
-                  ? ' font-bold text-minidice_red dark:text-zinc-400'
+                  ? ' font-bold text-minidice-red dark:text-zinc-400'
                   : ' dark:text-zinc-600 text-zinc-400'
               }`}
             >

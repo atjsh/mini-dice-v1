@@ -32,7 +32,7 @@ export class PartTimeWorkSkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.partTimeWork.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<PartTimeWorkService, 'index'>
     >,

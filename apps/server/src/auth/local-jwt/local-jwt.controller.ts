@@ -11,11 +11,12 @@ export class LocalJwtController {
     @Res({ passthrough: true }) response: FastifyReply,
     @Req() req: FastifyRequest,
   ) {
-    req.cookies['refreshToken'] &&
-      (await this.refreshTokenService.deleteRefreshToken(
+    if (req.cookies['refreshToken']) {
+      await this.refreshTokenService.deleteRefreshToken(
         response,
         req.cookies['refreshToken'],
-      ));
+      );
+    }
     return {
       success: true,
     };
@@ -26,11 +27,12 @@ export class LocalJwtController {
     @Res({ passthrough: true }) response: FastifyReply,
     @Req() req: FastifyRequest,
   ) {
-    req.cookies['refreshToken'] &&
-      (await this.refreshTokenService.deleteRefreshToken(
+    if (req.cookies['refreshToken']) {
+      await this.refreshTokenService.deleteRefreshToken(
         response,
         req.cookies['refreshToken'],
-      ));
+      );
+    }
     return {
       success: true,
     };

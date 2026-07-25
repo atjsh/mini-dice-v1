@@ -57,7 +57,7 @@ export class MinigameHardService {
 export class MinigameHardSkillGroup implements SkillGroupController {
   constructor(private minigameHardService: MinigameHardService) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return MINIGAME_NAME;
   }
 

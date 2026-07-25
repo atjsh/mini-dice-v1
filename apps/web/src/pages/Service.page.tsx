@@ -1,7 +1,6 @@
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { ConnectWithOauthWidget } from '../components/connect-with-oauth/connect-with-oauth.component';
 import { DiceTossButton } from '../components/dice-toss-button/dice-toss-button.component';
 import { FooterWidgetComponent } from '../components/footer-widget/footer-widget.component';
 import { currentSkillRouteAtom } from '../components/map/current-skill-route.atom';
@@ -27,15 +26,15 @@ import { NotificationPageURL, RankingPgaeURL, UpdatesPageURL } from './routes';
 import { NewestEntrySummary } from './Updates.page';
 
 const Messages = () => {
-  const skillLogMessages = useRecoilValue(skillLogMessagesState);
+  const skillLogMessages = useAtomValue(skillLogMessagesState);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
-    messagesEndRef!.current!.scrollIntoView({ behavior: 'smooth' })!;
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   useEffect(scrollToBottom, [skillLogMessages.length]);
 
   return (
-    <div className="flex-grow md:pb-0 px-2 custom-min-h-screen">
+    <div className="grow md:pb-0 px-2 custom-min-h-screen">
       <RenderedSkillLogMessages />
       <div ref={messagesEndRef} />
     </div>
@@ -47,15 +46,15 @@ export function Ingame({
   setisSidebarShowing,
 }: {
   isSidebarShowing: boolean;
-  setisSidebarShowing: (param: boolean) => any;
+  setisSidebarShowing: (param: boolean) => void;
 }) {
   const { data: user } = useUser();
   const mutation = useDiceToss();
   const { data: skillLogs } = useSkillLogs();
   const { initSkillLogMessages } = useSkillLogMessages();
-  const [, setCurrentSkillRoute] = useRecoilState(currentSkillRouteAtom);
+  const [, setCurrentSkillRoute] = useAtom(currentSkillRouteAtom);
   const { pageTimeouts } = usePageTimeout();
-  const [, setDiceTossActivity] = useRecoilState(diceTossActivityStatusAtom);
+  const [, setDiceTossActivity] = useAtom(diceTossActivityStatusAtom);
 
   useEffect(() => {
     pageTimeouts.map(clearTimeout);
@@ -100,7 +99,7 @@ export function Ingame({
       className={` flex-1 overflow-y-auto transition-colors duration-300 ${'bg-white dark:bg-black'} md:bg-white md:dark:bg-black md:transition-none`}
     >
       <div className="mx-auto my-0 max-w-7xl">
-        <div className=" sticky top-0 bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg md:hidden flex items-center justify-between gap-2">
+        <div className=" sticky top-0 bg-white/25 dark:bg-black/50 backdrop-filter z-40 w-full py-3 px-7 backdrop-blur-lg md:hidden flex items-center justify-between gap-2">
           <div className="text-left">
             <div className="text-lg font-extrabold">
               <WordmarkComponent />
@@ -123,7 +122,7 @@ export function Ingame({
         </div>
         <Messages />
 
-        <div className="pt-1.5 pb-15 text-center sticky w-full bottom-0 mt-1 md:mt-4 backdrop-blur-lg bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-50 backdrop-filter z-40 flex flex-col gap-1.5 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
+        <div className="pt-1.5 pb-15 text-center sticky w-full bottom-0 mt-1 md:mt-4 backdrop-blur-lg bg-white/25 dark:bg-black/50 backdrop-filter z-40 flex flex-col gap-1.5 border-t dark:border-zinc-800 border-gray-300 justify-center items-center">
           <div className="flex gap-x-3 items-start max-w-7xl w-full px-1.5">
             <MapStatusBar />
           </div>
@@ -200,7 +199,7 @@ export function ServicePage() {
   return (
     <div className="custom-h-screen w-screen flex relative overflow-x-hidden">
       <div
-        className={`custom-h-screen px-3 p-3 flex-col gap-1 md:gap-2 flex-shrink-0 flex md:relative absolute w-screen ${
+        className={`custom-h-screen px-3 p-3 md:pr-0 flex-col gap-1 md:gap-2 shrink-0 flex md:relative absolute w-screen ${
           !isSidebarShowing ? ' -right-[100vw]' : 'right-0'
         } z-30 bg-gray-100 md:bg-white dark:md:bg-black dark:bg-zinc-900 transition-[right] drop-shadow-none md:right-auto md:w-auto`}
       >
@@ -216,8 +215,7 @@ export function ServicePage() {
             </div>
           )}
         </div>
-        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-3xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
-          <ConnectWithOauthWidget />
+        <div className="md:bg-gray-100 dark:md:bg-black md:rounded-4xl mt-7 md:mt-auto pt-6 px-0 p-3 pb-60 md:px-3 md:pt-3 md:pb-3 h-full overflow-y-auto md:w-96 flex flex-col gap-3 md:dark:border md:dark:border-zinc-800 box-border">
           <ProfileWidget />
           <WalletWidget />
           <UpdatesWidget />

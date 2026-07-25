@@ -27,7 +27,7 @@ import {
 export class MoneyCollection3SkillGroup implements SkillGroupController {
   constructor(private skillService: MoneyCollection3Service) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return '일확천금 노리기';
   }
 
@@ -37,7 +37,7 @@ export class MoneyCollection3SkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.moneyCollection3.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<MoneyCollection3Service, 'index'>
     >,

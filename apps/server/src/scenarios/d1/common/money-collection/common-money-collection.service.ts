@@ -49,7 +49,9 @@ export class CommonMoneyCollectionService {
       })
     ).reduce(
       (acc, cur) => {
-        cur.user ? acc.usernames.push(cur.user.username) : null;
+        if (cur.user) {
+          acc.usernames.push(cur.user.username);
+        }
         return acc;
       },
       {

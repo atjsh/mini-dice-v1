@@ -1,4 +1,4 @@
-import { atom, useRecoilState } from 'recoil';
+import { atom, useAtom } from 'jotai';
 import { skillLogMessagesState } from './atoms/skill-log-messages.atom';
 import { SkillLogMessageInerface } from './interfaces/skill-log-message.interface';
 
@@ -7,13 +7,10 @@ export interface PushSkillLogMessageInterface {
   delay?: number;
 }
 
-export const pageTimeoutsAtom = atom<ReturnType<typeof setTimeout>[]>({
-  key: 'pageTimeoutsAtom',
-  default: [],
-});
+export const pageTimeoutsAtom = atom<ReturnType<typeof setTimeout>[]>([]);
 
 export const usePageTimeout = () => {
-  const [pageTimeouts, setPageTimeout] = useRecoilState(pageTimeoutsAtom);
+  const [pageTimeouts, setPageTimeout] = useAtom(pageTimeoutsAtom);
 
   const pushPageTimeout = (timeout: ReturnType<typeof setTimeout>) =>
     setPageTimeout((old) => [...(old ? old : []), timeout]);
@@ -22,7 +19,7 @@ export const usePageTimeout = () => {
 };
 
 export const useSkillLogMessages = () => {
-  const [skillLogMessages, setSkillLogMessages] = useRecoilState(
+  const [skillLogMessages, setSkillLogMessages] = useAtom(
     skillLogMessagesState,
   );
   const { pushPageTimeout } = usePageTimeout();

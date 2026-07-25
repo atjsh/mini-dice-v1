@@ -2,20 +2,20 @@ import { CountryCode3Type } from '@packages/shared-types';
 import axios from 'axios';
 
 class SubmitTempSignupDto {
-  hCaptchaSuccessToken: string;
+  turnstileToken: string;
   username: string;
   countryCode3: CountryCode3Type;
 }
 
 export async function submitTempSignup({
-  hCaptchaSuccessToken,
+  turnstileToken,
   username,
   countryCode3,
 }: SubmitTempSignupDto): Promise<boolean> {
-  await axios.post(
+  await axios.post<unknown>(
     '/temp-signup',
     {
-      hCaptchaSuccessToken,
+      turnstileToken,
       username,
       countryCode3,
     },

@@ -13,8 +13,6 @@ function getCacheKey(userId: UserIdType) {
   return 'user:' + userId;
 }
 
-const CACHE_DURATION_MS = 1000 * 60 * 60 * 24;
-
 @Injectable()
 export class UserService {
   constructor(
@@ -22,7 +20,7 @@ export class UserService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  private async isUserCallingSkillAllowed(
+  private isUserCallingSkillAllowed(
     user: UserEntity,
     callingSkillRoute: SkillRouteType,
   ) {
@@ -114,7 +112,7 @@ export class UserService {
             : undefined,
           id: userId,
         },
-        _.isUndefined,
+        (value) => value === undefined,
       ),
     );
   }
@@ -189,7 +187,7 @@ export class UserService {
   ): Promise<boolean> {
     const user = await this.findUserWithCache(userId);
 
-    if (!(await this.isUserCallingSkillAllowed(user, callingSkillRoute))) {
+    if (!this.isUserCallingSkillAllowed(user, callingSkillRoute)) {
       throw new ForbiddenException(
         `${JSON.stringify(user.submitAllowedMapStop)} not in ${JSON.stringify(
           callingSkillRoute,

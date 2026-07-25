@@ -23,7 +23,7 @@ import { LotteryEventEnum } from './lottery.service';
 export class LotterySkillGroup implements SkillGroupController {
   constructor(private skillService: LotteryService) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return '동전 던지기 초급';
   }
 
@@ -33,7 +33,7 @@ export class LotterySkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.lottery.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<LotteryService, 'index'>
     >,

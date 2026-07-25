@@ -1,8 +1,8 @@
-import { esbuildDecorators } from '@anatine/esbuild-decorators';
 import * as esbuild from 'esbuild';
 import path from 'path';
 import { envCopy } from './env-copy.js';
 import { esbuildProgressPulgin } from './esbuild-progress.js';
+import { swcDecorators } from './swc-decorators.js';
 
 const projectRoot = path.resolve(process.cwd(), '..', '..');
 
@@ -17,7 +17,7 @@ export const buildOptions = {
   tsconfig: `${projectRoot}/apps/server/tsconfig.json`,
   format: 'esm',
   platform: 'node',
-  target: 'node19',
+  target: 'node24',
   outExtension: { '.js': '.mjs' },
   bundle: true,
   minify: true,
@@ -39,11 +39,5 @@ export const buildOptions = {
       "import{createRequire}from'module';const require=createRequire(import.meta.url);" +
       "import{fileURLToPath}from'node:url';import{dirname as __pathDirname}from'node:path';const __filename=fileURLToPath(import.meta.url);const __dirname=__pathDirname(__filename);",
   },
-  plugins: [
-    esbuildDecorators({
-      tsconfig: `${projectRoot}/apps/server/tsconfig.json`,
-    }),
-    esbuildProgressPulgin(),
-    envCopy,
-  ],
+  plugins: [swcDecorators, esbuildProgressPulgin(), envCopy],
 } satisfies esbuild.BuildOptions;

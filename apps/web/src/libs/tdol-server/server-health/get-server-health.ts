@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function getServerHealth() {
   try {
-    const response = await axios.get('/health', {
+    const response = await axios.get<unknown>('/health', {
       baseURL: import.meta.env.VITE_SERVER_URL,
     });
 

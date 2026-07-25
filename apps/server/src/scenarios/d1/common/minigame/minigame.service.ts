@@ -41,11 +41,31 @@ export function minigameMoveToKorean(move: MinigameMoveEnum): string {
 }
 
 class MinigameHistory {
-  constructor(public score: number, public id: string) {}
+  constructor(
+    public score: number,
+    public id: string,
+  ) {}
 
   increseScore() {
     this.score++;
   }
+}
+
+function isMinigameHistoryPayload(
+  value: unknown,
+): value is { score: number; id: string } {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+
+  const payload = value as Record<string, unknown>;
+  return (
+    typeof payload.score === 'number' &&
+    Number.isSafeInteger(payload.score) &&
+    payload.score >= 0 &&
+    typeof payload.id === 'string' &&
+    payload.id.length > 0
+  );
 }
 
 export class MinigameEasySubmitParamType {
@@ -89,13 +109,16 @@ export class CommonMinigameService {
   }
 
   verifyMinigameHistory(signedMinigameHistory: string): MinigameHistory {
-    return plainToInstance(
-      MinigameHistory,
-      verifyJWT(
-        signedMinigameHistory,
-        this.configService.getOrThrow(ENV_KEYS.JWT_SECRET),
-      ) as MinigameHistory,
+    const payload: unknown = verifyJWT(
+      signedMinigameHistory,
+      this.configService.getOrThrow(ENV_KEYS.JWT_SECRET),
     );
+
+    if (!isMinigameHistoryPayload(payload)) {
+      throw new Error('Invalid minigame history payload');
+    }
+
+    return plainToInstance(MinigameHistory, payload);
   }
 
   createMinigameHistory(): MinigameHistory {

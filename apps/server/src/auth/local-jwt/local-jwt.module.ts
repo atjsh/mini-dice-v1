@@ -17,8 +17,8 @@ import { RefreshTokenV2Entity } from './refresh-token/entity/refresh-token-v2.en
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get(ENV_KEYS.JWT_SECRET),
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.getOrThrow<string>(ENV_KEYS.JWT_SECRET),
       }),
     }),
     TypeOrmModule.forFeature([RefreshTokenV2Entity]),

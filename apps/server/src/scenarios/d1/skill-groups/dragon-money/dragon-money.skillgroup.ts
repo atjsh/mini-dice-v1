@@ -23,7 +23,7 @@ import { DragonMoneyEventEnum } from './dragon-money.service';
 export class DragonMoneySkillGroup implements SkillGroupController {
   constructor(private skillService: DragonMoneyService) {}
 
-  getSkillGroupAlias(): string | Promise<string> {
+  getSkillGroupAlias(): string {
     return '용돈';
   }
 
@@ -33,7 +33,7 @@ export class DragonMoneySkillGroup implements SkillGroupController {
   }
 
   @SkillDraw(D1ScenarioRoutes.skillGroups.dragonMoney.skills.index)
-  async indexDraw(
+  indexDraw(
     props: DiceUserActivitySkillDrawPropsType<
       MethodReturnType<DragonMoneyService, 'index'>
     >,

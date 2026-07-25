@@ -86,9 +86,11 @@ export type ConvertRawToScenarioRouteType<
       skillGroupName: skillGroupName;
       scenarioName: ScenarioName;
       skills: {
-        [RawSkill in RawSkillGroupMap[skillGroupName][number] as RawSkill extends SkillNameType
-          ? RawSkill
-          : RawSkill[0]]: {
+        [
+          RawSkill in RawSkillGroupMap[skillGroupName][number] as RawSkill extends SkillNameType
+            ? RawSkill
+            : RawSkill[0]
+        ]: {
           /**
            * 스킬 이름.
            */

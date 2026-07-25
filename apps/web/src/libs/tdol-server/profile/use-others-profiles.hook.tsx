@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getOthersProfiles } from './user-profile';
 
 export const useOthersProfiles = (
@@ -6,6 +6,10 @@ export const useOthersProfiles = (
   page: number,
   updatedAfterOffset?: number,
 ) =>
-  useQuery([getOthersProfiles.name, { limit, page, updatedAfterOffset }], () =>
-    getOthersProfiles(limit, page, updatedAfterOffset),
-  );
+  useQuery({
+    queryKey: [
+      getOthersProfiles.name,
+      { limit, page, updatedAfterOffset },
+    ] as const,
+    queryFn: () => getOthersProfiles(limit, page, updatedAfterOffset),
+  });

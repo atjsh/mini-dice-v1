@@ -15,7 +15,6 @@ import { PgUserEntity } from './pg-user.entity';
 import { PgStatCashAggrigationEntity } from './pg-stat-cash-aggrigation.entity';
 
 @Entity({ name: 'tb_skill_log' })
-@Index('TB_SKILL_LOG_USER_ID_IDX', ['userId'])
 @Index('TB_SKILL_LOG_USER_ID_CREATED_AT_IDX', ['userId', 'createdAt'])
 export class PgSkillLogEntity {
   @PrimaryColumn({
@@ -67,6 +66,20 @@ export class PgSkillLogEntity {
     nullable: true,
   })
   skillServiceResult: string;
+
+  @Column({
+    name: 'payload',
+    type: 'bytea',
+    nullable: true,
+  })
+  payload: Buffer | null;
+
+  @Column({
+    name: 'payloadCodec',
+    type: 'smallint',
+    nullable: true,
+  })
+  payloadCodec: number | null;
 
   @CreateDateColumn({
     name: 'createdAt',
