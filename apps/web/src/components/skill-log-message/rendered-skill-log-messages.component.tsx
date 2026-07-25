@@ -363,7 +363,7 @@ const InputFieldMessage: React.FC<{
               inputField.isDisabled != undefined ? inputField.isDisabled : false
             }
             required
-            className={`text-sm md:text-base border-2 border-gray-400 rounded-md p-2 dark:text-black ${
+            className={`text-sm md:text-base border-2 border-gray-400 rounded-md p-2 dark:text-black dark:bg-gray-200 ${
               inputField.isDisabled == true ? 'cursor-not-allowed' : ''
             }`}
           />
