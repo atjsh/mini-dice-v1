@@ -22,50 +22,6 @@
 
 [더 알아보기](https://blog.atj.sh/post/8)
 
-## Development
-
-This repository uses native npm workspaces. Install Node.js 24.18.0 and npm
-11.16.0, then install the workspace from the repository root:
-
-```sh
-npm ci --strict-peer-deps
-```
-
-Common commands:
-
-```sh
-npm run packages:build
-npm run server:dev
-npm run web:dev
-npm run admin-server:dev
-npm run admin-server:build
-npm run admin-dashboard-server:dev
-npm run admin-dashboard-server:build
-npm run admin-dashboard-web:dev
-npm run admin-dashboard-web:build
-npm run admin-dashboard-web:preview
-npm run typecheck
-npm run typecheck:ts6
-npm run lint
-npm run lint:fix
-npm run format
-npm run format:check
-npm run check
-```
-
-`typecheck` uses TypeScript 7. `typecheck:ts6` is the transitional
-compatibility check for tools that still consume the TypeScript compiler API.
-`lint` runs the type-aware typescript-eslint rules, while `format:check` runs
-Prettier independently. `check` runs both checks followed by the TS7 and TS6
-workspace typechecks.
-Run an individual workspace command with
-`npm run <script> --workspace=<workspace-name>`.
-
-These named npm scripts replace the former Yarn workspace wrappers. In
-particular, use `admin-server:*` for the Nest administration service,
-`admin-dashboard-server:*` for the Hono API, and `admin-dashboard-web:*` for
-the administration frontend.
-
 # Copyright
 
 Copyright (c) 2022-2026 전성훈 (Sunghoon Jeon) All rights reserved.
